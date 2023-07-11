@@ -1,1 +1,1 @@
-# MBTI-Agora
+# MBTI 아고라
