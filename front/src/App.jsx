@@ -1,10 +1,11 @@
-import Header from "./components/global/Header";
+import Router from "./routes/Router";
 
 const App = () => {
   return (
     <>
-    <Header />
-        <div>hello!</div>
+      <Router>
+      <div>hello!</div>
+      </Router>
     </>
   );
 };
