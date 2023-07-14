@@ -1,18 +1,10 @@
-import React from "react";
-import { UserCircleIcon } from '@heroicons/react/24/solid'
-
-
+import { UserCircleIcon } from "@heroicons/react/24/solid";
 
 const Header = () => {
   return (
     <nav className="bg-blue-400 border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="https://flowbite.com/" className="flex items-center">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="h-8 mr-3"
-            alt="Flowbite Logo"
-          />
+        <a href="/" className="flex items-center">
           <span className="text-white self-center text-xl font-semibold whitespace-nowrap dark:text-white">
             Damchae
           </span>
@@ -46,7 +38,7 @@ const Header = () => {
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 font-semibold text-white rounded md:bg-transparent md:p-0 hover:text-blue-700"
+                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-blue-700"
                 aria-current="page"
               >
                 대나무숲
@@ -55,7 +47,7 @@ const Header = () => {
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 font-semibold text-white rounded md:bg-transparent md:p-0 hover:text-blue-700"
+                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-blue-700"
               >
                 내 스토리
               </a>
@@ -65,7 +57,7 @@ const Header = () => {
                 href="#"
                 className="block py-2 pl-3 pr-4 font-semibold text-white rounded md:bg-transparent md:p-0 hover:text-blue-700"
               >
-                <UserCircleIcon className="h-6 w-6" />
+                <UserCircleIcon className="h-6" />
               </a>
             </li>
           </ul>
