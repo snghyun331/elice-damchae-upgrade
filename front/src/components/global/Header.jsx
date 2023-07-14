@@ -1,15 +1,10 @@
-import React from "react";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
 
 const Header = () => {
   return (
     <nav className="bg-blue-400 border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="https://flowbite.com/" className="flex items-center">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="h-8 mr-3"
-            alt="Flowbite Logo"
-          />
+        <a href="/" className="flex items-center">
           <span className="text-white self-center text-xl font-semibold whitespace-nowrap dark:text-white">
             Damchae
           </span>
@@ -39,11 +34,11 @@ const Header = () => {
           </svg>
         </button>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul className="font-medium flex flex-col p-8 md:p-0 mt-4 border md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <ul className="font-medium flex flex-col md:p-0 mt-4 border md:flex-row md:space-x-8 md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
+                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-blue-700"
                 aria-current="page"
               >
                 대나무숲
@@ -52,9 +47,17 @@ const Header = () => {
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                className="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 hover:text-blue-700"
               >
                 내 스토리
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="block py-2 pl-3 pr-4 font-semibold text-white rounded md:bg-transparent md:p-0 hover:text-blue-700"
+              >
+                <UserCircleIcon className="h-6" />
               </a>
             </li>
           </ul>
