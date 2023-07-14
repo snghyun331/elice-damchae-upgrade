@@ -1,0 +1,8 @@
+{
+  "name": "yarn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://kdt-gitlab.elice.io/ai_track/class_07/ai_project/team05/mbti-agora.git",
+  "author": "",
+  "license": "MIT"
+}
