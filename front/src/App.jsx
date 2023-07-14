@@ -1,7 +1,10 @@
+import Header from "./components/global/Header";
+
 const App = () => {
   return (
     <>
-      <div>hello</div>
+    <Header />
+        <div>hello!</div>
     </>
   );
 };
