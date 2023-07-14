@@ -3,6 +3,8 @@ import { ROUTE } from "../../routes/routes";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const isLoggedin = true; // 로그인 상태에 따라 true 또는 false로 설정
+
   return (
     <nav className="bg-blue-400 border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -13,7 +15,30 @@ const Header = () => {
           Damchae
         </Link>
         <div className="flex md:order-2">
-            <Link to={ROUTE.MY.link}><UserCircleIcon className="h-6 text-white" /></Link>
+          {isLoggedin ? (
+            <Link to={ROUTE.MY.link}>
+              <UserCircleIcon className="h-6 text-white" />
+            </Link>
+          ) : (
+            <div className="flex space-x-2">
+              <Link
+                to={ROUTE.MY.link}
+                className="text-white hover:underline"
+              >
+                <button className="tracking-wider bg-white hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded">
+                  로그인
+                </button>
+              </Link>
+              <Link
+                to={ROUTE.REGISTER.link}
+                className="text-white hover:underline"
+              >
+                <button className="tracking-wider bg-white hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded">
+                  회원가입
+                </button>
+              </Link>
+            </div>
+          )}
           <button
             data-collapse-toggle="navbar-sticky"
             type="button"
@@ -43,7 +68,7 @@ const Header = () => {
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-sticky"
         >
-          <ul className="flex flex-col text-sm p-4 tracking-wider tracking-widest md:p-0 mt-4 border md:flex-row md:space-x-8 md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <ul className="flex flex-col text-sm p-4 tracking-widest md:p-0 mt-4 border md:flex-row md:space-x-8 md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
               <a
                 href="#"
