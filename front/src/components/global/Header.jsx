@@ -1,13 +1,15 @@
 import { UserCircleIcon } from "@heroicons/react/24/solid";
+import { ROUTE } from "../../routes/routes"
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
     <nav className="bg-blue-400 border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center">
-          <span className="text-white self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+          <Link to={ROUTE.HOME.link} className="text-white self-center text-xl font-semibold whitespace-nowrap dark:text-white">
             Damchae
-          </span>
+          </Link>
         </a>
         <button
           data-collapse-toggle="navbar-default"
