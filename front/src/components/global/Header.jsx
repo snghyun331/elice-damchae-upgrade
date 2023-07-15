@@ -13,7 +13,9 @@ const Header = () => {
           Damchae
         </Link>
         <div className="flex md:order-2">
-            <Link to={ROUTE.MY.link}><UserCircleIcon className="h-6 text-white" /></Link>
+          <Link to={ROUTE.MY.link}>
+            <UserCircleIcon className="h-6 text-white" />
+          </Link>
           <button
             data-collapse-toggle="navbar-sticky"
             type="button"
@@ -53,12 +55,12 @@ const Header = () => {
               </a>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to={ROUTE.STORY.link}
                 className="text-white block py-2 pl-3 pr-4 ml-5 text-gray-900 rounded md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 내 스토리
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
