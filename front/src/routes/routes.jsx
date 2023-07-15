@@ -1,18 +1,14 @@
 import Home from "../components/home/home";
-import Register from "../components/register/Register";
 import My from "../components/my/My";
 import Story from "../components/Story/Story";
+import LoginForm from "../components/User/Loginform";
+import RegisterForm from "../components/User/Registerform";
 
 export const ROUTE = {
   HOME: {
     path: "/",
     link: "/",
     element: Home,
-  },
-  REGISTER: {
-    path: "/register",
-    link: "/register",
-    element: Register,
   },
   MY: {
     path: "/my",
@@ -23,6 +19,16 @@ export const ROUTE = {
     path: "/story",
     link: "/story",
     element: Story,
+  },
+  LOGIN: {
+    path: "/login",
+    link: "/login",
+    element: LoginForm,
+  },
+  REGISTER: {
+    path: "/register",
+    link: "/register",
+    element: RegisterForm,
   },
 };
 
