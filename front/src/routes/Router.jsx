@@ -7,13 +7,19 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Header />
-      <Routes>
-        {ROUTE_ARR.map((route, index) => {
-          return (
-            <Route path={route.path} element={<route.element />} key={index} />
-          );
-        })}
-      </Routes>
+      <div className="mb-20 mx-4 sm:mx-10 md:mx-20 lg:mx-40">
+        <Routes>
+          {ROUTE_ARR.map((route, index) => {
+            return (
+              <Route
+                path={route.path}
+                element={<route.element />}
+                key={index}
+              />
+            );
+          })}
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 };
