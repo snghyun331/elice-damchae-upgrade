@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import Home from '../components/home/Home';
 import MyPage from '../components/MyPage/MyPage';
-import Story from '../components/Story/Story';
+import Stories from '../components/Story/Stories';
 import LoginForm from '../components/User/Loginform';
 import RegisterForm from '../components/User/Registerform';
 
@@ -18,18 +18,17 @@ const Router = () => {
 
 			<Route path="/infochange" element={<MyPage />} />
 
-			<Route path="/stories" element={<Story />}>
-				<Route path=":index" element={<Story />} />
-				<Route path=":storyId" element={<Story />} />
-				<Route path="write" element={<Story />} />
+			<Route path="/stories" element={<Stories />}>
+				<Route path=":index" element={<Stories />} />
+				<Route path=":storyId" element={<Stories />} />
+				<Route path="write" element={<Stories />} />
 			</Route>
 
-			<Route path="/daenamus" element={<Story />}>
-				<Route path=":index" element={<Story />} />
-				<Route path=":daenamuId" element={<Story />} />
-				<Route path="write" element={<Story />} />
+			<Route path="/daenamus" element={<Stories />}>
+				<Route path=":index" element={<Stories />} />
+				<Route path=":daenamuId" element={<Stories />} />
+				<Route path="write" element={<Stories />} />
 			</Route>
-
 		</Routes>
 	);
 };
