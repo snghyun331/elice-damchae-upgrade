@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import StoryCreateModal from './StoryCreateModal'; // Modal 파일 경로에 맞게 수정
 import BannerCarousel from './BannerCarousel';
 import Search from '../Global/Search';
-import OurStories from './OurStories';
+import StoryCardMap from '../Global/StoryCardMap';
 
 const Home = () => {
 	const navigate = useNavigate();
@@ -45,7 +45,8 @@ const Home = () => {
 				<Search />
 			</div>
 			<div>
-				<OurStories />
+				<div className="mb-10 text-3xl font-semibold">우리들의 스토리</div>
+				<StoryCardMap />
 			</div>
 			{/* 모달 렌더링 */}
 			{showStoryCreateModal && (

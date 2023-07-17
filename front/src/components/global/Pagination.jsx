@@ -1,20 +1,16 @@
 // eslint-disable-next-line react/prop-types
 const Pagination = ({ totalPages, currentPage, handlePreviousClick, handleNextClick, handleClick }) => {
     const pageNumbers = [];
-    const maxPages = 5; // Maximum number of pages to be displayed
+    const maxPages = 5;
     let startPage = 1;
     let endPage = totalPages;
 
-    // If total pages is greater than max pages, calculate start and end pages
     if (totalPages > maxPages) {
-        // Determine the current page group
         const pageGroup = Math.ceil(currentPage / maxPages);
 
-        // Calculate start and end page numbers for the page group
         startPage = (pageGroup - 1) * maxPages + 1;
         endPage = startPage + maxPages - 1;
 
-        // Ensure endPage doesn't exceed totalPages
         if (endPage > totalPages) {
             endPage = totalPages;
         }
