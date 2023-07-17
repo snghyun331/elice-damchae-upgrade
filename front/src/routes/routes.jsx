@@ -1,5 +1,5 @@
-import Home from "../components/home/home";
-import My from "../components/my/My";
+import Home from "../components/Home/Home";
+import MyPage from "../components/MyPage/MyPage";
 import Story from "../components/Story/Story";
 import LoginForm from "../components/User/Loginform";
 import RegisterForm from "../components/User/Registerform";
@@ -11,9 +11,9 @@ export const ROUTE = {
     element: Home,
   },
   MY: {
-    path: "/my",
-    link: "/my",
-    element: My,
+    path: "/mypage",
+    link: "/mypage",
+    element: MyPage,
   },
   STORY: {
     path: "/story",
