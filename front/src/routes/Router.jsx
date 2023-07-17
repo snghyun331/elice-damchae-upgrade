@@ -6,23 +6,23 @@ import Story from '../components/Story/Story';
 const Router = () => {
 	return (
 		<Routes>
-            
 			<Route path="/" element={<Home />} />
 
 			<Route path="/mypage" element={<MyPage />} />
 
-			<Route path="/stories" element={<Story />} />
-                <Route path="/stories/:index" element={<Story />} />
-                <Route path="/stories/:storyId" element={<Story />} />
-                <Route path="/stories/write" element={<Story />} />
+			<Route path="/stories" element={<Story />}>
+				<Route path=":index" element={<Story />} />
+				<Route path=":storyId" element={<Story />} />
+				<Route path="write" element={<Story />} />
+			</Route>
 
-			<Route path="/daenamus" element={<Story />} />
-                <Route path="/daenamus/:index" element={<Story />} />
-                <Route path="/daenamus/:daenamuId" element={<Story />} />
-                <Route path="/daenamus/write" element={<Story />} />
+			<Route path="/daenamus" element={<Story />}>
+				<Route path=":index" element={<Story />} />
+				<Route path=":daenamuId" element={<Story />} />
+				<Route path="write" element={<Story />} />
+			</Route>
 
 			<Route path="/infochange" element={<MyPage />} />
-
 		</Routes>
 	);
 };
