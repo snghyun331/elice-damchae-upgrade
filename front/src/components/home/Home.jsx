@@ -17,12 +17,25 @@ const Home = () => {
 		setShowStoryCreateModal(false);
 	};
 
+	const messages = [
+		'행복한 하루 보내세요.',
+		'미소 넘치는 하루 되세요.',
+		'즐거운 순간이 가득하길 바라요.',
+		'사랑 가득한 하루 되세요.',
+		'기분 좋은 하루 되세요.',
+		'희망찬 하루가 되길 바라요.',
+		'오늘은 기쁜 일이 생길거에요.',
+		'산뜻한 하루 되세요.',
+		'빛나는 당신을 응원합니다.',
+	];
+	const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+
 	return (
 		<div>
 			<BannerCarousel />
 			<br />
 			<div className="mt-16 mb-16 flex justify-center items-center flex-col">
-				<span className="text-2xl">대머리독수리 님, 행복한 하루 보내세요.</span>
+				<span className="text-2xl">대머리독수리 님, {randomMessage}</span>
 				<br />
 				<div className="mb-10">
 					<button
@@ -44,7 +57,7 @@ const Home = () => {
 			<div className="items-center">
 				<Search />
 			</div>
-			<hr className='mt-20'/>
+			<hr className="mt-20" />
 			<div>
 				<div className="mt-10 text-3xl font-semibold">우리들의 스토리</div>
 				<StoryCardMap />
