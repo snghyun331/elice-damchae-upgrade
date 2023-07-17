@@ -37,7 +37,7 @@ const MyStories = () => {
 						<button
 							type="button"
 							onClick={handleModalClose}
-							className="fixed inset-0 w-full h-full bg-black opacity-60 cursor-default"
+							className="z-[1] fixed inset-0 w-full h-full bg-black opacity-60 cursor-default"
 							aria-hidden="true"
 						/>
 					</>

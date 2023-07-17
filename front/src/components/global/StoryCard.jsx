@@ -5,7 +5,7 @@ const StoryCard = ({ storyData }) => {
 	return (
 		<>
 			<div
-				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 pr-5 pl-5 my-4 ms-5 relative`}
+				className={`border border-[0.1rem] border-solid rounded-2xl p-5 my-4 ms-5 relative`}
 			>
 				<div className="flex items-center justify-center">
 					<figure className="max-w-lg w-[21rem] h-[16rem] overflow-hidden">
