@@ -1,10 +1,20 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
+import { useState, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
+	const navigate = useNavigate();
 
+	const [user, setUser] = useState({
+		email: '',
+		password: '',
+		nickname: '',
+		mbti: '',
+	});
 	const [user, setUser] = useState({
 		email: '',
 		password: '',
@@ -26,7 +36,19 @@ const RegisterForm = () => {
 		},
 		[setUser],
 	);
+	const handleChangeInput = useCallback(
+		(e) => {
+			setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+		},
+		[setUser],
+	);
 
+	const handleChangeConfirm = useCallback(
+		(e) => {
+			setConfirmPassword(e.target.value);
+		},
+		[setConfirmPassword],
+	);
 	const handleChangeConfirm = useCallback(
 		(e) => {
 			setConfirmPassword(e.target.value);
@@ -65,6 +87,10 @@ const RegisterForm = () => {
 		[user.password, confirmPassword],
 	);
 
+	const isFormValid = useMemo(
+		() => isEmailValid && isPasswordValid && isPasswordSame,
+		[isEmailValid, isPasswordValid, isPasswordSame],
+	);
 	const isFormValid = useMemo(
 		() => isEmailValid && isPasswordValid && isPasswordSame,
 		[isEmailValid, isPasswordValid, isPasswordSame],
