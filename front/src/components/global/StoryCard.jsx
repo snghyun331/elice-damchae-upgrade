@@ -30,7 +30,9 @@ const StoryCard = ({ storyData }) => {
 						</h5>
 						<div className="text-sm text-gray-500">{storyData.username}</div>
 						<p className="text-base mb-3 font-normal text-gray-700 dark:text-gray-400">
-							{storyData.content}
+							{storyData.content.length > 60
+								? `${storyData.content.slice(0, 60)}...`
+								: storyData.content}
 						</p>
 					</div>
 					<div className="flex w-16 items-center text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end">
