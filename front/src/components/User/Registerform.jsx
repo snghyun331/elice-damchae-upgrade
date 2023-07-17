@@ -66,8 +66,13 @@ const RegisterForm = () => {
 	);
 
 	const isFormValid = useMemo(
-		() => isEmailValid && isPasswordValid && isPasswordSame,
-		[isEmailValid, isPasswordValid, isPasswordSame],
+		() =>
+			isEmailValid &&
+			isPasswordValid &&
+			isPasswordSame &&
+			isNicknameValid &&
+			user.mbti,
+		[isEmailValid, isPasswordValid, isPasswordSame, isNicknameValid, user.mbti],
 	);
 
 	const handleEmailCheck = () => {
@@ -118,7 +123,7 @@ const RegisterForm = () => {
 										<button
 											type="button"
 											onClick={handleEmailCheck}
-											disabled={!user.email || isEmailFocused}
+											disabled={!user.email || !isEmailValid}
 											className="self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
 										>
 											이메일인증
@@ -230,7 +235,7 @@ const RegisterForm = () => {
 										<button
 											type="button"
 											onClick={handleNicknameCheck}
-											disabled={!user.nickname || isNicknameFocused}
+											disabled={!isNicknameValid}
 											className="self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
 										>
 											중복 확인
