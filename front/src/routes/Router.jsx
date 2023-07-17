@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
-import Home from '../components/home/Home';
+import Home from '../components/Home/Home';
 import MyPage from '../components/MyPage/MyPage';
+import InfoChange from '../components/User/InfoChange';
 import MyStories from '../components/MyStories/MyStories';
 import LoginForm from '../components/User/Loginform';
 import RegisterForm from '../components/User/Registerform';
@@ -16,7 +17,7 @@ const Router = () => {
 
 			<Route path="/mypage" element={<MyPage />} />
 
-			<Route path="/infochange" element={<MyPage />} />
+			<Route path="/infochange" element={<InfoChange />} />
 
 			<Route path="/stories" element={<MyStories />}>
 				<Route path=":index" element={<MyStories />} />

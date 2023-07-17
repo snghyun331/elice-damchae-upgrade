@@ -1,10 +1,8 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import Select from 'react-select';
 
-const RegisterForm = () => {
-	const navigate = useNavigate();
-
+const InfoChange = () => {
 	const [user, setUser] = useState({
 		email: '',
 		password: '',
@@ -13,13 +11,14 @@ const RegisterForm = () => {
 	});
 
 	const [confirmPassword, setConfirmPassword] = useState('');
-	const [isEmailFocused, setIsEmailFocused] = useState(false);
+
 	const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 	const [isNicknameFocused, setIsNicknameFocused] = useState(false);
 	const [isConfirmFocused, setIsConfirmFocused] = useState(false);
-	const [Code, setCode] = useState('');
-	const [isCodeFocused, setIsCodeFocused] = useState(false);
 
+	const handleSubmit = () => {
+		//수정하기 요청
+	};
 	const handleChangeInput = useCallback(
 		(e) => {
 			setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -34,18 +33,6 @@ const RegisterForm = () => {
 		[setConfirmPassword],
 	);
 
-	const handleChangeCode = useCallback(
-		(e) => {
-			setCode(e.target.value);
-		},
-		[setCode],
-	);
-
-	const validateEmail = () => {
-		const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,255}$/;
-		return emailRegex.test(user.email);
-	};
-
 	const validatePassword = () => {
 		const passwordRegex =
 			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
@@ -57,7 +44,6 @@ const RegisterForm = () => {
 		return nicknameRegex.test(user.nickname);
 	};
 
-	const isEmailValid = useMemo(validateEmail, [validateEmail]);
 	const isPasswordValid = useMemo(validatePassword, [validatePassword]);
 	const isNicknameValid = useMemo(validateNickname, [validateNickname]);
 	const isPasswordSame = useMemo(
@@ -66,24 +52,10 @@ const RegisterForm = () => {
 	);
 
 	const isFormValid = useMemo(
-		() =>
-			isEmailValid &&
-			isPasswordValid &&
-			isPasswordSame &&
-			isNicknameValid &&
-			user.mbti,
-		[isEmailValid, isPasswordValid, isPasswordSame, isNicknameValid, user.mbti],
+		() => isPasswordValid && isPasswordSame && isNicknameValid && user.mbti,
+		[isPasswordValid, isPasswordSame, isNicknameValid, user.mbti],
 	);
 
-	const handleEmailCheck = () => {
-		// Logic for email verification
-		// You can implement your own email verification functionality here
-	};
-
-	const handleCodeCheck = () => {
-		// Logic for verification code verification
-		// You can implement your own verification code verification functionality here
-	};
 	const handleNicknameCheck = () => {
 		// Logic for verification code verification
 		// You can implement your own verification code verification functionality here
@@ -96,9 +68,9 @@ const RegisterForm = () => {
 					<div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 						<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
 							<h1 className="text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-								회원가입
+								회원정보수정
 							</h1>
-							<form className="space-y-4 md:space-y-6" action="#">
+							<form className="space-y-4 md:space-y-6" action={handleSubmit}>
 								<div className="flex flex-col">
 									<label
 										htmlFor="email"
@@ -106,57 +78,10 @@ const RegisterForm = () => {
 									>
 										이메일
 									</label>
-									<div className="flex space-x-2 justify-end">
-										<input
-											value={user.email}
-											onChange={handleChangeInput}
-											type="email"
-											name="email"
-											id="email"
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-											placeholder="name@company.com"
-											required=""
-											onFocus={() => setIsEmailFocused(true)}
-											onBlur={() => setIsEmailFocused(false)}
-										/>
-
-										<button
-											type="button"
-											onClick={handleEmailCheck}
-											disabled={!user.email || !isEmailValid}
-											className="self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
-										>
-											이메일인증
-										</button>
+									<div className="flex space-x-2">
+										<div>elice@gmail.com</div>
+										<div />
 									</div>
-									{!isEmailValid && isEmailFocused && (
-										<p className="text-red-500 text-xs italic">
-											이메일 형식이 올바르지 않습니다.
-										</p>
-									)}
-								</div>
-
-								<div className="flex flex-row space-x-2 justify-end">
-									<input
-										value={Code}
-										onChange={handleChangeCode}
-										type="text"
-										name="Code"
-										id="verification-code"
-										placeholder="인증번호 입력"
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										required=""
-										onFocus={() => setIsCodeFocused(true)}
-										onBlur={() => setIsCodeFocused(false)}
-									/>
-									<button
-										type="button"
-										onClick={handleCodeCheck}
-										disabled={!Code || isCodeFocused}
-										className="justify-self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
-									>
-										확인
-									</button>
 								</div>
 
 								<div>
@@ -228,7 +153,6 @@ const RegisterForm = () => {
 											type="text"
 											name="nickname"
 											id="nickname"
-											placeholder="강아지"
 											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										/>
 
@@ -288,18 +212,8 @@ const RegisterForm = () => {
 										disabled={!isFormValid}
 										className="self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0]"
 									>
-										가입하기
+										수정하기
 									</button>
-									<p className="mt-3 self-center text-sm font-light text-gray-500 dark:text-gray-400">
-										이미 계정이 있습니까?{' '}
-										<a
-											onClick={() => navigate('/login')}
-											href="#"
-											className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-										>
-											로그인하기
-										</a>
-									</p>
 								</div>
 							</form>
 						</div>
@@ -310,4 +224,4 @@ const RegisterForm = () => {
 	);
 };
 
-export default RegisterForm;
+export default InfoChange;
