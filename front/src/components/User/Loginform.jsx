@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
@@ -13,19 +13,17 @@ const LoginForm = () => {
 
   //이메일이 abc@example.com 형태인지 regex를 이용해 확인함.
 
-  const handleChangeInput = useCallback(
-    (e) => {
-      setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    },
-    [setUser]
-  );
+  const handleChangeInput = (e) => {
+    setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-  const validateEmail = useCallback(() => {
+  const validateEmail = () => {
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,255}$/;
     return emailRegex.test(user.email);
-  }, [user.email]);
+  };
 
   const isEmailValid = useMemo(validateEmail, [validateEmail]);
+
   const isPasswordValid = useMemo(
     () => user.password.length > 0,
     [user.password]

@@ -1,5 +1,5 @@
 import { UserCircleIcon } from "@heroicons/react/24/solid";
-import { ROUTE } from "../../../routes/routes";
+import { ROUTE } from "../../../routes/Routes";
 import { Link } from "react-router-dom";
 
 const Header = () => {
