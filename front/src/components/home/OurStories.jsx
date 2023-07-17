@@ -3,28 +3,96 @@ import Pagination from '../global/Pagination';
 const OurStories = () => {
 	const currentPage = 1;
 	const totalPages = 3;
-
+	const dummyStories = [
+		{
+			username: 'Mike',
+			title: 'Story 1',
+			content:
+				'가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요 가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요',
+			storyImg: 'https://picsum.photos/200/300',
+			mood: '😊',
+		},
+		{
+			username: 'Mike',
+			title: 'Story 2',
+			content:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
+			storyImg: 'https://picsum.photos/200/300',
+			mood: '😊',
+		},
+		{
+			username: 'Mike',
+			title: 'Story 3',
+			content:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
+			storyImg: 'https://picsum.photos/200/300',
+			mood: '😊',
+		},
+		{
+			username: 'Mike',
+			title: 'Story 4',
+			content:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
+			storyImg: 'https://picsum.photos/200/300',
+			mood: '😊',
+		},
+		{
+			username: 'Mike',
+			title: 'Story 5',
+			content:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
+			storyImg: 'https://picsum.photos/200/300',
+			mood: '😊',
+		},
+		{
+			username: 'Mike',
+			title: 'Story 6',
+			content:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
+			storyImg: 'https://picsum.photos/200/300',
+			mood: '😊',
+		},
+		{
+			username: 'Mike',
+			title: 'Story 7',
+			content:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
+			storyImg: 'https://picsum.photos/200/300',
+			mood: '😊',
+		},
+		{
+			username: 'Mike',
+			title: 'Story 8',
+			content:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
+			storyImg: 'https://picsum.photos/200/300',
+			mood: '😊',
+		},
+		{
+			username: 'Mike',
+			title: 'Story 9',
+			content:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
+			storyImg: 'https://picsum.photos/200/300',
+			mood: '😊',
+		},
+	];
 	return (
 		<>
 			<div className="font-bold mb-8 md:p-10 block p-6 bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
 				<div className="mb-10 text-3xl font-semibold">우리들의 스토리</div>
 				<div className="mb-10"></div>
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-lg font-medium">
-					<div>
-						<StoryCard />
-					</div>
-					<div>
-						<StoryCard />
-					</div>
-					<div>
-						<StoryCard />
-					</div>
-					<div>
-						<StoryCard />
-					</div>
+					{dummyStories.map((storyData) => (
+						<div key={storyData.title}>
+							<StoryCard
+								storyData={storyData}
+							/>
+						</div>
+					))}
 				</div>
 				<div className="flex justify-center mt-10">
-				<Pagination totalPages={totalPages} currentPage={currentPage} />
+					<Pagination totalPages={totalPages} currentPage={currentPage} />
 				</div>
 			</div>
 		</>
