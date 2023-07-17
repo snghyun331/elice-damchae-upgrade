@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
-const StoryCard = () => {
+const StoryCard = ({ storyData }) => {
 	return (
 		<>
 			<div
@@ -10,7 +11,7 @@ const StoryCard = () => {
 					<figure className="max-w-lg w-[21rem] h-[16rem] overflow-hidden">
 						<img
 							className="w-full h-full object-cover object-center rounded-2xl"
-							src="https://i.insider.com/60638bd66183e1001981966a?width=1136&format=jpeg"
+							src={storyData.storyImg}
 							alt="image description"
 							onError={(e) => {
 								e.target.src =
@@ -18,19 +19,22 @@ const StoryCard = () => {
 							}}
 						/>
 					</figure>
-          <span className="absolute top-48 right-0 text-8xl">😊</span>
+					<span className="absolute top-48 left-48 text-8xl">
+						{storyData.mood}
+					</span>
 				</div>
 				<div className="px-4 py-8 flex flex-col justify-between">
 					<div>
 						<h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-							오늘은 매우 기쁜 하루였어요
+						{storyData.title.length > 25
+								? `${storyData.title.slice(0, 25)}...`
+								: storyData.title}
 						</h5>
-						<div className="text-sm text-gray-500">
-							대머리독수리
-						</div>
-						<p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-							그는 일각에서 제기되는 총선 출마설을 의식한 듯 저의 미래에 대하여
-							근거 없는 상상과 추측으로 소설을 쓰는 분들이 많다며.
+						<div className="text-sm text-gray-500">{storyData.username}</div>
+						<p className="text-base mb-3 font-normal text-gray-700 dark:text-gray-400">
+							{storyData.content.length > 60
+								? `${storyData.content.slice(0, 60)}...`
+								: storyData.content}
 						</p>
 					</div>
 					<div className="flex w-16 items-center text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end">
