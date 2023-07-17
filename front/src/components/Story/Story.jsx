@@ -1,6 +1,5 @@
-import Search from "../global/Search";
-import StoryCard from "../global/StoryCard";
-
+import Search from "../Global/Search";
+import StoryCard from "../Global/StoryCard";
 const Story = () => {
   return (
     <>
