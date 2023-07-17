@@ -1,4 +1,5 @@
 import moment from "moment"; // Import moment.js
+import TextEditor from "../global/TextEditor";
 
 // eslint-disable-next-line react/prop-types
 const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
@@ -48,7 +49,7 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
             </button>
           </div>
           {/* 모달 본문 */}
-          <div className="p-6 space-y-6">{/* ... */}</div>
+          <div className="p-6 space-y-6"><TextEditor /></div>
           {/* 모달 푸터 */}
           <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
             <button
