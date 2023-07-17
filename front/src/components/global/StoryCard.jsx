@@ -19,7 +19,7 @@ const StoryCard = ({ storyData }) => {
 							}}
 						/>
 					</figure>
-					<span className="absolute top-48 right-0 text-8xl">
+					<span className="absolute top-48 left-48 text-8xl">
 						{storyData.mood}
 					</span>
 				</div>
