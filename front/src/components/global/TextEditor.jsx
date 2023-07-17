@@ -1,6 +1,5 @@
-import { Editor } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+import { Editor } from '@toast-ui/react-editor';
+
 
 export default function TextEditor() {
   return (
