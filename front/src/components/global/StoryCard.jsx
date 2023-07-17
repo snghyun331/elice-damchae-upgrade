@@ -26,7 +26,9 @@ const StoryCard = ({ storyData }) => {
 				<div className="px-4 py-8 flex flex-col justify-between">
 					<div>
 						<h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-							{storyData.title}
+						{storyData.title.length > 25
+								? `${storyData.title.slice(0, 25)}...`
+								: storyData.title}
 						</h5>
 						<div className="text-sm text-gray-500">{storyData.username}</div>
 						<p className="text-base mb-3 font-normal text-gray-700 dark:text-gray-400">

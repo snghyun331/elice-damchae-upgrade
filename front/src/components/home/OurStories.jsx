@@ -6,7 +6,7 @@ const OurStories = () => {
 	const dummyStories = [
 		{
 			username: 'Mike',
-			title: 'Story 1',
+			title: '가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요 가장',
 			content:
 				'가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요 가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요',
 			storyImg: 'https://picsum.photos/200/300',
@@ -18,7 +18,7 @@ const OurStories = () => {
 			content:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
 			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
+			mood: '😡',
 		},
 		{
 			username: 'Mike',
@@ -26,7 +26,7 @@ const OurStories = () => {
 			content:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
 			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
+			mood: '😨',
 		},
 		{
 			username: 'Mike',
