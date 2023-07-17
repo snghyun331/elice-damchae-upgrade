@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
       return children;
     } else {
       return (
-        <div className="relative min-h-screen pb-10">
+        <div className="relative min-h-screen">
           <Header />
           {children}
           <Footer />
