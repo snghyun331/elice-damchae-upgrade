@@ -23,8 +23,9 @@ const OurStories = () => {
 						<StoryCard />
 					</div>
 				</div>
-
+				<div className="flex justify-center mt-10">
 				<Pagination totalPages={totalPages} currentPage={currentPage} />
+				</div>
 			</div>
 		</>
 	);
