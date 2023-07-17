@@ -15,10 +15,10 @@ const RegisterForm = () => {
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [isEmailFocused, setIsEmailFocused] = useState(false);
 	const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+	const [isNicknameFocused, setIsNicknameFocused] = useState(false);
 	const [isConfirmFocused, setIsConfirmFocused] = useState(false);
-	const [verificationCode, setVerificationCode] = useState('');
-	const [isVerificationCodeFocused, setIsVerificationCodeFocused] =
-		useState(false);
+	const [Code, setCode] = useState('');
+	const [isCodeFocused, setIsCodeFocused] = useState(false);
 
 	const handleChangeInput = useCallback(
 		(e) => {
@@ -34,26 +34,32 @@ const RegisterForm = () => {
 		[setConfirmPassword],
 	);
 
-	const handleChangeVerificationCode = useCallback(
+	const handleChangeCode = useCallback(
 		(e) => {
-			setVerificationCode(e.target.value);
+			setCode(e.target.value);
 		},
-		[setVerificationCode],
+		[setCode],
 	);
 
-	const validateEmail = useCallback(() => {
+	const validateEmail = () => {
 		const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,255}$/;
 		return emailRegex.test(user.email);
-	}, [user.email]);
+	};
 
-	const validatePassword = useCallback(() => {
+	const validatePassword = () => {
 		const passwordRegex =
 			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
 		return passwordRegex.test(user.password);
-	}, [user.password]);
+	};
+
+	const validateNickname = () => {
+		const nicknameRegex = /^[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,16}$/;
+		return nicknameRegex.test(user.nickname);
+	};
 
 	const isEmailValid = useMemo(validateEmail, [validateEmail]);
 	const isPasswordValid = useMemo(validatePassword, [validatePassword]);
+	const isNicknameValid = useMemo(validateNickname, [validateNickname]);
 	const isPasswordSame = useMemo(
 		() => user.password === confirmPassword,
 		[user.password, confirmPassword],
@@ -64,12 +70,16 @@ const RegisterForm = () => {
 		[isEmailValid, isPasswordValid, isPasswordSame],
 	);
 
-	const handleEmailVerification = () => {
+	const handleEmailCheck = () => {
 		// Logic for email verification
 		// You can implement your own email verification functionality here
 	};
 
-	const handleVerificationCodeVerification = () => {
+	const handleCodeCheck = () => {
+		// Logic for verification code verification
+		// You can implement your own verification code verification functionality here
+	};
+	const handleNicknameCheck = () => {
 		// Logic for verification code verification
 		// You can implement your own verification code verification functionality here
 	};
@@ -85,7 +95,13 @@ const RegisterForm = () => {
 							</h1>
 							<form className="space-y-4 md:space-y-6" action="#">
 								<div className="flex flex-col">
-									<div className="flex flex-row space-x-2 justify-end">
+									<label
+										htmlFor="email"
+										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+									>
+										이메일
+									</label>
+									<div className="flex space-x-2 justify-end">
 										<input
 											value={user.email}
 											onChange={handleChangeInput}
@@ -101,7 +117,7 @@ const RegisterForm = () => {
 
 										<button
 											type="button"
-											onClick={handleEmailVerification}
+											onClick={handleEmailCheck}
 											disabled={!user.email || isEmailFocused}
 											className="self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
 										>
@@ -115,23 +131,23 @@ const RegisterForm = () => {
 									)}
 								</div>
 
-								<div className="flex flex-row space-x-2">
+								<div className="flex flex-row space-x-2 justify-end">
 									<input
-										value={verificationCode}
-										onChange={handleChangeVerificationCode}
+										value={Code}
+										onChange={handleChangeCode}
 										type="text"
-										name="verificationCode"
+										name="Code"
 										id="verification-code"
 										placeholder="인증번호 입력"
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
-										onFocus={() => setIsVerificationCodeFocused(true)}
-										onBlur={() => setIsVerificationCodeFocused(false)}
+										onFocus={() => setIsCodeFocused(true)}
+										onBlur={() => setIsCodeFocused(false)}
 									/>
 									<button
 										type="button"
-										onClick={handleVerificationCodeVerification}
-										disabled={!verificationCode || isVerificationCodeFocused}
+										onClick={handleCodeCheck}
+										disabled={!Code || isCodeFocused}
 										className="justify-self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
 									>
 										확인
@@ -159,8 +175,8 @@ const RegisterForm = () => {
 									/>
 									{!isPasswordValid && isPasswordFocused && (
 										<p className="text-red-500 text-xs italic">
-											비밀번호는 8~20자 이상 영문, 숫자, 특수문자 조합으로
-											설정해 주세요.
+											비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로 설정해
+											주세요.
 										</p>
 									)}
 								</div>
@@ -189,23 +205,44 @@ const RegisterForm = () => {
 										</p>
 									)}
 								</div>
-								<div>
+
+								<div className="flex flex-col">
 									<label
 										htmlFor="nickname"
 										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
 									>
 										닉네임
 									</label>
-									<input
-										value={user.nickname}
-										onChange={handleChangeInput}
-										type="text"
-										name="nickname"
-										id="nickname"
-										placeholder="강아지"
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-									/>
+
+									<div className="flex flex-row space-x-2 justify-end">
+										<input
+											value={user.nickname}
+											onChange={handleChangeInput}
+											onFocus={() => setIsNicknameFocused(true)}
+											onBlur={() => setIsNicknameFocused(false)}
+											type="text"
+											name="nickname"
+											id="nickname"
+											placeholder="강아지"
+											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										/>
+
+										<button
+											type="button"
+											onClick={handleNicknameCheck}
+											disabled={!user.nickname || isNicknameFocused}
+											className="self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
+										>
+											중복 확인
+										</button>
+									</div>
+									{!isNicknameValid && isNicknameFocused && (
+										<p className="text-red-500 text-xs italic">
+											닉네임은 2~16자 사이로 설정해주세요.
+										</p>
+									)}
 								</div>
+
 								<div>
 									<label
 										htmlFor="mbti"
