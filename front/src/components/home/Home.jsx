@@ -44,8 +44,9 @@ const Home = () => {
 			<div className="items-center">
 				<Search />
 			</div>
+			<hr className='mt-20'/>
 			<div>
-				<div className="mb-10 text-3xl font-semibold">우리들의 스토리</div>
+				<div className="mt-10 text-3xl font-semibold">우리들의 스토리</div>
 				<StoryCardMap />
 			</div>
 			{/* 모달 렌더링 */}
