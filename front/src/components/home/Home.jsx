@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import StoryCreateModal from './StoryCreateModal'; // Modal 파일 경로에 맞게 수정
+import StoryCreateModal from "./StoryCreateModal"
 import BannerCarousel from './BannerCarousel';
 import Search from '../Global/Search';
 import StoryCardMap from '../Global/StoryCardMap';
