@@ -1,5 +1,4 @@
 import { UserCircleIcon } from "@heroicons/react/24/solid";
-import { ROUTE } from "../../../routes/Routes";
 import { Link } from "react-router-dom";
 
 const Header = () => {
@@ -7,13 +6,13 @@ const Header = () => {
     <nav className="bg-blue-400 border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
-          to={ROUTE.HOME.link}
+          to='/'
           className="self-center text-2xl text-white font-semibold whitespace-nowrap dark:text-white"
         >
           Damchae
         </Link>
         <div className="flex md:order-2">
-          <Link to={ROUTE.MY.link}>
+          <Link to='/mypage'>
             <UserCircleIcon className="h-6 text-white" />
           </Link>
           <button
@@ -56,7 +55,7 @@ const Header = () => {
             </li>
             <li>
               <Link
-                to={ROUTE.STORY.link}
+                to='/stories'
                 className="text-white block py-2 pl-3 pr-4 ml-5 text-gray-900 rounded md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 내 스토리
