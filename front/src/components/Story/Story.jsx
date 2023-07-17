@@ -1,5 +1,5 @@
 import Search from "../global/Search";
-import StoryCard2 from "../global/StoryCard2";
+import StoryCard from "../global/StoryCard";
 
 const Story = () => {
   return (
@@ -11,16 +11,16 @@ const Story = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-lg font-medium">
           <div>
-            <StoryCard2 />
+            <StoryCard />
           </div>
           <div>
-            <StoryCard2 />
+            <StoryCard />
           </div>
           <div>
-            <StoryCard2 />
+            <StoryCard />
           </div>
           <div>
-            <StoryCard2 />
+            <StoryCard />
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-const StoryCard2 = () => {
+const StoryCard = () => {
   return (
     <>
       <div
@@ -50,4 +50,4 @@ const StoryCard2 = () => {
   );
 };
 
-export default StoryCard2;
+export default StoryCard;
