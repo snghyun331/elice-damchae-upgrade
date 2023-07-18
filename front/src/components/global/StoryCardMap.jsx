@@ -5,7 +5,7 @@ import Pagination from './Pagination';
 
 const StoryCardMap = () => {
 	const [currentPage, setCurrentPage] = useState(1);
-	const dummyStories = [
+	const dummyData = [
 		{
 			username: 'Mike',
 			title:
@@ -82,10 +82,10 @@ const StoryCardMap = () => {
 	];
 
 	const itemsPerPage = 8;
-	const totalPages = Math.ceil(dummyStories.length / itemsPerPage);
+	const totalPages = Math.ceil(dummyData.length / itemsPerPage);
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const endIndex = currentPage * itemsPerPage;
-	const displayedStories = dummyStories.slice(startIndex, endIndex);
+	const displayedData = dummyData.slice(startIndex, endIndex);
 
 	const handlePreviousClick = () => {
 		if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -101,7 +101,7 @@ const StoryCardMap = () => {
 		<>
 			<div className="font-bold mb-8 md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-base font-medium">
-					{displayedStories.map((storyData) => (
+					{displayedData.map((storyData) => (
 						<div key={storyData.title}>
 							<StoryCard storyData={storyData} />
 						</div>
