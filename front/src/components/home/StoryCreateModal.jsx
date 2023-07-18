@@ -17,7 +17,7 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 
 	return (
 		<div
-			className={`fixed inset-0 flex items-center justify-center z-50 ${modalStyle}`}
+			className={`fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur ${modalStyle}`}
 		>
 			<div
 				id="staticModal"
