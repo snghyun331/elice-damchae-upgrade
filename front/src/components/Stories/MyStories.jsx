@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Search from '../Global/Search';
-import StoryCreateModal from '../Home/StoryCreateModal';
+import StoryCreateModal from '../Global/StoryCreateModal';
 import StoryCardMap from '../Global/StoryCardMap';
 
 const MyStories = () => {
