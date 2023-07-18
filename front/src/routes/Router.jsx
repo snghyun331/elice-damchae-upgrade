@@ -22,11 +22,10 @@ const Router = () => {
 				<Route path="infochange" element={<InfoChange />} />
 
 				<Route path="stories" element={<MyStories />}>
-					<Route path="read" element={<StoryRead />} />
 					<Route path=":storyId" element={<StoryRead />} />
 				</Route>
 
-				<Route path="story/read" element={<StoryRead />} />
+				<Route path="/read" element={<StoryRead />} />
 
 				{/* <Route path="/daenamus" element={<Stories />}>
 				<Route path=":index" element={<Stories />} />
