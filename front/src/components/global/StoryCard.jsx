@@ -8,7 +8,7 @@ const StoryCard = ({ storyData }) => {
 				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 pl-5 pr-5 my-4 ms-5 relative`}
 			>
 				<div className="flex items-center justify-center">
-					<figure className="max-w-lg w-[21rem] h-[16rem] overflow-hidden">
+					<figure className="max-w-lg w-[21rem] h-[12rem] overflow-hidden">
 						<img
 							className="w-full h-full object-cover object-center rounded-2xl"
 							src={storyData.storyImg}
@@ -19,7 +19,7 @@ const StoryCard = ({ storyData }) => {
 							}}
 						/>
 					</figure>
-					<span className="absolute top-48 left-48 text-8xl">
+					<span className="absolute top-36 right-2 text-8xl">
 						{storyData.mood}
 					</span>
 				</div>
