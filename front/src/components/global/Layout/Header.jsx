@@ -15,7 +15,6 @@ const Header = () => {
 	const menuItems = [
 		{ title: '마이 페이지', onClick: () => navigate('/mypage') },
 		{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
-		{ title: '로그아웃', onClick: () => navigate('/mypage') },
 	];
 
 	const mobMenuItems = [
