@@ -2,16 +2,20 @@ import { useState } from 'react';
 import Search from '../Global/Search';
 import StoryCreateModal from '../Home/StoryCreateModal';
 import StoryCardMap from '../Global/StoryCardMap';
+
 const MyStories = () => {
 	const [showStoryCreateModal, setShowStoryCreateModal] = useState(false);
 
 	const handleButtonClick = () => {
 		setShowStoryCreateModal(true);
+		document.body.style.overflow = 'hidden'; // 배경 스크롤 막기
 	};
 
 	const handleModalClose = () => {
 		setShowStoryCreateModal(false);
+		document.body.style.overflow = 'auto'; // 배경 스크롤 허용
 	};
+
 	return (
 		<>
 			<div className="font-bold mb-8 md:p-10 block p-6 bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -42,10 +46,10 @@ const MyStories = () => {
 						/>
 					</>
 				)}
-				<div>
+				<div style={{ overflow: showStoryCreateModal ? 'hidden' : 'auto' }}>
 					<Search />
+					<StoryCardMap />
 				</div>
-				<StoryCardMap />
 			</div>
 		</>
 	);

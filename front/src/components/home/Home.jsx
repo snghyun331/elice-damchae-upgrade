@@ -11,10 +11,12 @@ const Home = () => {
 
 	const handleButtonClick = () => {
 		setShowStoryCreateModal(true);
+		document.body.style.overflow = 'hidden';
 	};
 
 	const handleModalClose = () => {
 		setShowStoryCreateModal(false);
+		document.body.style.overflow = 'auto';
 	};
 
 	const messages = [
@@ -54,7 +56,7 @@ const Home = () => {
 					</button>
 				</div>
 			</div>
-			
+
 			<div className="items-center">
 				<Search />
 			</div>
