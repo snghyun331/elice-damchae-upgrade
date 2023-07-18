@@ -25,7 +25,7 @@ const StoryCard = ({ storyData }) => {
 				</div>
 				<div className="px-4 py-8 flex flex-col justify-between">
 					<div>
-						<h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+						<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 							{storyData.title.length > 32
 								? `${storyData.title.slice(0, 32)}...`
 								: storyData.title}
