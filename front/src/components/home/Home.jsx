@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import StoryCreateModal from './StoryCreateModal';
+import StoryCreateModal from '../Global/StoryCreateModal';
 import BannerCarousel from './BannerCarousel';
 import Search from '../Global/Search';
 import StoryCardMap from '../Global/StoryCardMap';

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import moment from 'moment';
-import TextEditor from '../global/TextEditor';
+import TextEditor from './TextEditor';
 import PropTypes from 'prop-types';
+import MusicVideo from '../Stories/MusicVideo';
 
 const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 	const currentDate = moment().format('YYYY년 M월 D일');
@@ -9,10 +10,16 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 	const modalStyle = showStoryCreateModal ? '' : 'hidden';
 
 	const [selectedImage, setSelectedImage] = useState(null);
+	const [videoId, setVideoId] = useState('');
 
 	const handleImageUpload = (event) => {
 		const file = event.target.files[0];
 		setSelectedImage(URL.createObjectURL(file));
+	};
+
+	const handleMusic = () => {
+		// 음악 추천받기 버튼 클릭 시 videoId 설정
+		setVideoId('HClfli9xd3g');
 	};
 
 	return (
@@ -94,11 +101,24 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 							</span>
 						</label>
 					</div>
-					<div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+					<div className="flex flex-col justify-end space-y-2">
 						<button
-							data-modal-hide="staticModal"
+							onClick={handleMusic}
+							className="w-40 self-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+						>
+							음악 추천받기
+						</button>
+					</div>
+					{videoId && (
+						<div className="p-6 border-t border-gray-200 dark:border-gray-600">
+							<MusicVideo videoId={videoId} />
+						</div>
+					)}
+
+					<div className="justify-end flex p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+						<button
 							type="button"
-							className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+							className="self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 						>
 							작성 완료
 						</button>
@@ -106,7 +126,7 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 							onClick={handleModalClose}
 							data-modal-hide="staticModal"
 							type="button"
-							className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-md border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+							className="self-end text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-md border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
 						>
 							닫기
 						</button>
