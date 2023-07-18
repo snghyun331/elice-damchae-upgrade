@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { useState, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
@@ -9,8 +9,11 @@ const classNames = (...classes) => {
 };
 
 const Header = () => {
-	const isLoggedIn = true;
+	const [isLoggedIn, setisLoggedIn] = useState('true');
 	const navigate = useNavigate();
+	const logout = () => {
+		setisLoggedIn(false);
+	};
 
 	const menuItems = [
 		{ title: '마이 페이지', onClick: () => navigate('/mypage') },
@@ -22,7 +25,12 @@ const Header = () => {
 		{ title: '내 스토리', onClick: () => navigate('/stories') },
 		{ title: '마이 페이지', onClick: () => navigate('/mypage') },
 		{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
-		{ title: '로그아웃', onClick: () => navigate('/mypage') },
+		{ title: '로그아웃', onClick: () => logout() },
+	];
+	const mobMenuItemsGuest = [
+		{ title: '대나무숲', onClick: () => navigate('/mypage') },
+		{ title: '내 스토리', onClick: () => navigate('/stories') },
+		{ title: '로그인', onClick: () => navigate('/login') },
 	];
 	return (
 		<nav className="bg-blue-400 border-gray-200 dark:bg-gray-900">
@@ -88,7 +96,7 @@ const Header = () => {
 									</Transition>
 								</Menu>
 								<button
-									onClick={() => navigate('/mypage')}
+									onClick={() => logout()}
 									type="button"
 									className="whitespace-nowrap hidden md:block text-white shadow-inner bg-[#A06763] hover:bg-[#A36560] focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-lg px-4 py-2 pt-3 text-center mr-3 md:mr-0 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
 									style={{
@@ -144,23 +152,25 @@ const Header = () => {
 						>
 							<Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
 								<div className="py-1">
-									{mobMenuItems.map((item) => (
-										<Menu.Item key={item.title}>
-											{({ active }) => (
-												<a
-													onClick={item.onClick}
-													className={classNames(
-														active
-															? 'bg-gray-100 text-blue-900'
-															: 'text-gray-700',
-														'block px-4 py-2 text-lg',
-													)}
-												>
-													{item.title}
-												</a>
-											)}
-										</Menu.Item>
-									))}
+									{(isLoggedIn ? mobMenuItems : mobMenuItemsGuest).map(
+										(item) => (
+											<Menu.Item key={item.title}>
+												{({ active }) => (
+													<a
+														onClick={item.onClick}
+														className={classNames(
+															active
+																? 'bg-gray-100 text-blue-900'
+																: 'text-gray-700',
+															'block px-4 py-2 text-lg',
+														)}
+													>
+														{item.title}
+													</a>
+												)}
+											</Menu.Item>
+										),
+									)}
 								</div>
 							</Menu.Items>
 						</Transition>
