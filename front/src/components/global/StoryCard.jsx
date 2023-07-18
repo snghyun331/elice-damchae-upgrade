@@ -5,7 +5,7 @@ const StoryCard = ({ storyData }) => {
 	return (
 		<>
 			<div
-				className={`border border-[0.1rem] border-solid rounded-2xl p-5 my-4 ms-5 relative`}
+				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 pl-5 pr-5 my-4 ms-5 relative`}
 			>
 				<div className="flex items-center justify-center">
 					<figure className="max-w-lg w-[21rem] h-[16rem] overflow-hidden">
@@ -25,15 +25,15 @@ const StoryCard = ({ storyData }) => {
 				</div>
 				<div className="px-4 py-8 flex flex-col justify-between">
 					<div>
-						<h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-						{storyData.title.length > 25
-								? `${storyData.title.slice(0, 25)}...`
+						<h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+							{storyData.title.length > 32
+								? `${storyData.title.slice(0, 32)}...`
 								: storyData.title}
 						</h5>
 						<div className="text-sm text-gray-500">{storyData.username}</div>
-						<p className="text-base mb-3 font-normal text-gray-700 dark:text-gray-400">
-							{storyData.content.length > 60
-								? `${storyData.content.slice(0, 60)}...`
+						<p className="text-sm mb-3 font-normal text-gray-700 dark:text-gray-400">
+							{storyData.content.length > 90
+								? `${storyData.content.slice(0, 90)}...`
 								: storyData.content}
 						</p>
 					</div>
