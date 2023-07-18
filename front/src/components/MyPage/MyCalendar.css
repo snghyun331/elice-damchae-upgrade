@@ -1,13 +1,13 @@
-.hide-dates .react-calendar__tile--now .react-calendar__tile__num,
-.hide-dates .react-calendar__month-view__days__day abbr {
-	font-size: 0.8em;
-	position: absolute;
+.react-calendar__tile--now .react-calendar__tile__num,
+.react-calendar__month-view__days__day abbr {
+	font-size: 0.7em;
+    position: inherit;
 }
 
 .react-calendar {
 	width: 400px;
 	max-width: 100%;
-	background-color: #fff;
+	background-color: #f8fafc;
 	color: #222;
 	border-radius: 5px;
 	font-family: 'Noto Sans KR', sans-serif;
@@ -69,4 +69,11 @@ abbr[title] {
 }
 .react-calendar--selectRange .react-calendar__tile--hover {
 	background-color: #f8f8fa;
+}
+
+.tileContentWrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 }

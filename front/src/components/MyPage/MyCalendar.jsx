@@ -14,7 +14,11 @@ function MyCalendar({ dateMoodData }) {
 	const renderTileContent = ({ date, view }) => {
 		const mood = getMoodFromDate(date);
 		if (view === 'month') {
-			return <div className='text-4xl'>{mood ? <span>{mood}</span> : <span>⚪</span>}</div>;
+			return (
+				<div className="tileContentWrapper">
+					<span className="text-4xl">{mood ? mood : '⚪'}</span>
+				</div>
+			);
 		} else {
 			return null;
 		}
@@ -23,13 +27,17 @@ function MyCalendar({ dateMoodData }) {
 	return (
 		<div>
 			<Calendar
-				className="hide-dates" // Add the custom CSS class to Calendar
+				className="" // Add the custom CSS class to Calendar
 				onChange={(newValue) => setValue(newValue)}
 				value={value}
 				tileContent={renderTileContent}
 				formatDay={(locale, date) =>
 					date.toLocaleString('en', { day: 'numeric' })
 				}
+				formatShortWeekday={(
+					locale,
+					date, // Add this prop for customizing weekday names
+				) => date.toLocaleString('en', { weekday: 'short' })}
 			/>
 		</div>
 	);
