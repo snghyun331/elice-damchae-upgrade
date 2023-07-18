@@ -8,7 +8,7 @@ const StoryCard = ({ storyData }) => {
 				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 pl-5 pr-5 my-4 ms-5 relative`}
 			>
 				<div className="flex items-center justify-center">
-					<figure className="max-w-lg w-[21rem] h-[16rem] overflow-hidden">
+					<figure className="max-w-lg w-[21rem] h-[12rem] overflow-hidden">
 						<img
 							className="w-full h-full object-cover object-center rounded-2xl"
 							src={storyData.storyImg}
@@ -19,13 +19,13 @@ const StoryCard = ({ storyData }) => {
 							}}
 						/>
 					</figure>
-					<span className="absolute top-48 left-48 text-8xl">
+					<span className="absolute top-36 right-2 text-8xl">
 						{storyData.mood}
 					</span>
 				</div>
 				<div className="px-4 py-8 flex flex-col justify-between">
 					<div>
-						<h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+						<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 							{storyData.title.length > 32
 								? `${storyData.title.slice(0, 32)}...`
 								: storyData.title}

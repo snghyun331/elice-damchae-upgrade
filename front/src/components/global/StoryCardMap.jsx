@@ -100,10 +100,10 @@ const StoryCardMap = () => {
 	return (
 		<>
 			<div className="font-bold mb-8 md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-base font-medium">
+				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-base font-medium">
 					{displayedData.map((storyData) => (
 						<div key={storyData.title}>
-							<StoryCard storyData={storyData} />
+							<StoryCard storyData={storyData}/>
 						</div>
 					))}
 				</div>

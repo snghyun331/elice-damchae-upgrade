@@ -56,13 +56,13 @@ const MyComments = () => {
 
 	return (
 		<div>
-			<h3 className="text-3xl text-gray-700 font-semibold">내가 쓴 댓글</h3>
+			<h3 className="text-2xl text-gray-700 font-semibold">내가 쓴 댓글</h3>
 			<div className="text-base mt-4 mb-4 text-gray-700">
 				스토리와 대나무숲에 단 댓글 모두를 확인할 수 있어요.
 			</div>
 
 			<div className="flex justify-center mt-10">
-				<ul className="bg-gray-100 w-full max-w-6xl text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+				<ul className="bg-slate-50 w-full max-w-6xl text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
 					{displayedData.map((comment) => (
 						<li
 							key={comment._id}
