@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Search from '../Global2/Search';
-import StoryCreateModal from '../Global2/StoryCreateModal';
-import StoryCardMap from '../Global2/StoryCardMap';
+import Search from '../Global/Search';
+import StoryCreateModal from '../Global/StoryCreateModal';
+import StoryCardMap from '../Global/StoryCardMap';
 
 const MyStories = () => {
 	const [showStoryCreateModal, setShowStoryCreateModal] = useState(false);
