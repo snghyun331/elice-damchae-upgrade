@@ -1,10 +1,8 @@
-import { useState } from 'react';
-
+import usePagination from '../../hooks/usePagination';
 import StoryCard from './StoryCard';
 import Pagination from './Pagination';
 
 const StoryCardMap = () => {
-	const [currentPage, setCurrentPage] = useState(1);
 	const dummyData = [
 		{
 			username: 'Mike',
@@ -39,63 +37,17 @@ const StoryCardMap = () => {
 			storyImg: 'https://picsum.photos/200/300',
 			mood: '😊',
 		},
-		{
-			username: 'Mike',
-			title: 'Story 5',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 6',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 7',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 8',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 9',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
 	];
 
 	const itemsPerPage = 8;
-	const totalPages = Math.ceil(dummyData.length / itemsPerPage);
-	const startIndex = (currentPage - 1) * itemsPerPage;
-	const endIndex = currentPage * itemsPerPage;
-	const displayedData = dummyData.slice(startIndex, endIndex);
-
-	const handlePreviousClick = () => {
-		if (currentPage > 1) setCurrentPage(currentPage - 1);
-	};
-
-	const handleNextClick = () => {
-		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-	};
-
-	const handleClick = (pageNumber) => setCurrentPage(pageNumber);
+	const {
+		currentPage,
+		totalPages,
+		displayedData,
+		handlePreviousClick,
+		handleNextClick,
+		handleClick,
+	} = usePagination(dummyData, itemsPerPage);
 
 	return (
 		<>
@@ -109,8 +61,8 @@ const StoryCardMap = () => {
 				</div>
 				<div className="flex justify-center mt-10">
 					<Pagination
-						totalPages={totalPages}
 						currentPage={currentPage}
+						totalPages={totalPages}
 						handlePreviousClick={handlePreviousClick}
 						handleNextClick={handleNextClick}
 						handleClick={handleClick}
