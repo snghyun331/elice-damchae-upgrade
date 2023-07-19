@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Pagination from '../Global/Pagination';
+import Pagination from '../global/Pagination';
 
 const MyComments = () => {
 	const [currentPage, setCurrentPage] = useState(1);
@@ -62,11 +62,11 @@ const MyComments = () => {
 			</div>
 
 			<div className="flex justify-center mt-10">
-				<ul className="bg-slate-50 w-full max-w-6xl text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+				<ul className="w-full max-w-6xl text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
 					{displayedData.map((comment) => (
 						<li
 							key={comment._id}
-							className="text-gray-700 w-full px-6 py-3 border-b border-gray-200 dark:border-gray-600"
+							className="text-gray-700 w-full px-6 py-3 border-b border-gray-200 dark:border-gray-600 bg-slate-100"
 						>
 							<span className="font-bold text-gray-900">댓글</span>{' '}
 							{comment.comment}{' '}

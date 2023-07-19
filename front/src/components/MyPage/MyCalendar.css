@@ -1,5 +1,6 @@
 .react-calendar__tile--now .react-calendar__tile__num,
 .react-calendar__month-view__days__day abbr {
+	display: none;
 	font-size: 0.7em;
 	position: inherit;
 }
@@ -34,6 +35,10 @@ abbr[title] {
 /* .react-calendar__month-view__days__day--weekend {
     color: #d10000;
    } */
+.react-calendar__tile {
+	padding: 12px;
+}
+
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
 	background: #f8f8fa;

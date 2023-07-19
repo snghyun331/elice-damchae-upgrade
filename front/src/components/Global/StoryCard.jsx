@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
-
+import { Link } from'react-router-dom';
 const StoryCard = ({ storyData }) => {
 	return (
 		<>
 			<div
 				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 pl-5 pr-5 my-4 ms-5 relative`}
-			>
+			><Link to={`/stories/${storyData.id}`}>
 				<div className="flex items-center justify-center">
 					<figure className="max-w-lg w-[21rem] h-[12rem] overflow-hidden">
 						<img
@@ -42,6 +42,7 @@ const StoryCard = ({ storyData }) => {
 						<span className="ml-1">더보기</span>
 					</div>
 				</div>
+				</Link>
 			</div>
 		</>
 	);

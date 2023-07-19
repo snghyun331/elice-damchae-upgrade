@@ -1,4 +1,6 @@
 // import { useParams } from 'react-router-dom';
+import { moodColors } from '../Util/Util';
+import { Link } from 'react-router-dom';
 import TextViewer from '../Global/TextViewer';
 
 const StoryRead = () => {
@@ -18,21 +20,19 @@ const StoryRead = () => {
 		profileImg: 'https://picsum.photos/200/300',
 	};
 
-	const moodColors = {
-		'😨': '#F1E3FF',
-		'😮': '#FFFBB8',
-		'😊': '#FFE3F0',
-		'😢': '#ECF1FF',
-		'😡': '#F9EBDE',
-		'😐': '#E0E0E0',
-	};
-
 	const moodColor = moodColors[dummyData.mood];
 
 	return (
-		<div className="flex justify-center">
+		<div className={`w-4/5 max-w-2xl mx-auto dark:bg-gray-800`}>
+			<button
+				type="button"
+				className="text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-4 py-1 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+			>
+				<Link to="/stories">목록으로</Link>
+			</button>
+
 			<div
-				className={`w-4/5 max-w-2xl border border-gray-200 rounded-lg shadow mx-auto bg-white dark:bg-gray-800`}
+				className={`w-full max-w-2xl border border-gray-200 rounded-lg shadow mx-auto bg-white dark:bg-gray-800`}
 				style={{ backgroundColor: moodColor }}
 			>
 				<div className="relative h-52 overflow-hidden rounded-t-lg">

@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Outlet } from 'react-router-dom';
 import Home from '../components/Home/Home';
 import MyPage from '../components/MyPage/MyPage';
 import InfoChange from '../components/User/InfoChange';
@@ -20,17 +20,11 @@ const Router = () => {
 
 			<Route path="infochange" element={<InfoChange />} />
 
-			<Route path="stories" element={<MyStories />}>
+			<Route path="stories" element={<Outlet />}>
+				<Route index element={<MyStories />} />
+				<Route path="read" element={<StoryRead />} />
 				<Route path=":storyId" element={<StoryRead />} />
 			</Route>
-
-			<Route path="/read" element={<StoryRead />} />
-
-			{/* <Route path="/daenamus" element={<Stories />}>
-				<Route path=":index" element={<Stories />} />
-				<Route path=":daenamuId" element={<Stories />} />
-				<Route path="write" element={<Stories />} />
-			</Route> */}
 		</Routes>
 	);
 };
