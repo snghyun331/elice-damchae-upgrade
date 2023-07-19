@@ -22,6 +22,8 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 		setVideoId('HClfli9xd3g');
 	};
 
+	const handlePostStory = () => {};
+
 	return (
 		<div
 			className={`overflow-y-auto max-h-100 fixed inset-0 flex justify-center z-50 backdrop-filter backdrop-blur ${modalStyle}`}
@@ -117,6 +119,7 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 
 					<div className="justify-end flex p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
 						<button
+							onClick={handlePostStory}
 							type="button"
 							className="self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 						>
