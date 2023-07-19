@@ -1,5 +1,5 @@
 // import { useParams } from 'react-router-dom';
-
+import { moodColors } from "../Util/Util";
 const StoryRead = () => {
 	// console.log('스토리 리드 진입');
 	// const { storyId } = useParams();
@@ -17,14 +17,7 @@ const StoryRead = () => {
 		profileImg: 'https://picsum.photos/200/300',
 	};
 
-	const moodColors = {
-		'😨': '#F1E3FF',
-		'😮': '#FFFBB8',
-		'😊': '#FFE3F0',
-		'😢': '#ECF1FF',
-		'😡': '#F9EBDE',
-		'😐': '#E0E0E0',
-	};
+
 
 	const moodColor = moodColors[dummyData.mood];
 

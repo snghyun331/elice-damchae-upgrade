@@ -7,6 +7,7 @@ const StoryCardMap = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const dummyData = [
 		{
+			id: '1',
 			username: 'Mike',
 			title:
 				'가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요 가장',
@@ -16,6 +17,7 @@ const StoryCardMap = () => {
 			mood: '😊',
 		},
 		{
+			id: '2',
 			username: 'Mike',
 			title: 'Story 2',
 			content:
