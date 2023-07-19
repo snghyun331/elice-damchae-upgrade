@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import { moodColors } from '../Util/Util';
 
 const MyDaenamuCard = ({ data }) => {
+  const moodColor = moodColors[data.mood];
+
   return (
     <a
       href="#"
       className="block max-w-sm p-6 bg-white border border-gray-200 rounded-2xl hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+      style={{ borderColor: moodColor }}
     >
       <div className="flex flex-col h-full">
         <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
