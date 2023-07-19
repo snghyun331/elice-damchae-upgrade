@@ -15,7 +15,7 @@ const Footer = () => {
 						<span className="text-white text-sm text-gray-500 sm:text-center dark:text-gray-400">
 							© 2023{' '}
 							<a href="https://flowbite.com/" className="hover:underline">
-								Flowbite™
+								Damchae™
 							</a>
 							. All Rights Reserved.
 						</span>

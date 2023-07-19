@@ -1,3 +1,5 @@
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
+
 import { useEffect, useRef } from 'react';
 import {
 	Chart,
@@ -44,6 +46,11 @@ const MyMoodStat = () => {
 				plugins: {
 					legend: {
 						position: 'bottom',
+						labels: {
+							padding: 5,
+							usePointStyle: true,
+							pointStyle: 'circle',
+						},
 					},
 				},
 			},
@@ -55,8 +62,9 @@ const MyMoodStat = () => {
 	}, []);
 
 	return (
-		<div className="block p-7 pb-10 bg-slate-50 border border-gray-200 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col items-center justify-center">
-			<h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+		<div className="relative block p-7 pb-10 bg-slate-50 border border-gray-200 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col items-center justify-center">
+			<InformationCircleIcon className="absolute top-3 right-3 h-5 w-5 text-slate-400" />{' '}
+			<h5 className="mb-8  text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
 				나의 감정 통계
 			</h5>
 			<div>
