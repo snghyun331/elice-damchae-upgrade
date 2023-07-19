@@ -12,6 +12,12 @@ const MyPage = () => {
 		{ date: '2023-07-18', mood: '😊' },
 		{ date: '2023-07-19', mood: '😢' },
 	];
+
+	const myDaenamuData = [
+		{ title: '2023-07-18', content: '😊' },
+		{ title: '2023-07-19', content: '😢' },
+	];
+
 	return (
 		<div className="lg:px-52">
 			<h3 className="text-3xl text-gray-700 font-semibold">나의 활동</h3>
@@ -45,7 +51,7 @@ const MyPage = () => {
 			</div>
 
 			<hr className="my-8" />
-			<MyDaenamus />
+			<MyDaenamus myDaenamuData={myDaenamuData} />
 
 			<hr className="my-8" />
 			<MyLikedDaenamus />
