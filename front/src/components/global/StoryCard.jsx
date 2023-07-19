@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import PropTypes from 'prop-types';
 
 const StoryCard = ({ storyData }) => {
 	return (
@@ -47,4 +47,13 @@ const StoryCard = ({ storyData }) => {
 	);
 };
 
+StoryCard.propTypes = {
+	storyData: PropTypes.shape({
+		storyImg: PropTypes.string.isRequired,
+		title: PropTypes.string.isRequired,
+		username: PropTypes.string.isRequired,
+		content: PropTypes.string.isRequired,
+		mood: PropTypes.number.isRequired,
+	}).isRequired,
+};
 export default StoryCard;

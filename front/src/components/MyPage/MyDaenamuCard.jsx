@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
 const MyDaenamuCard = ({ data }) => {
@@ -19,5 +20,9 @@ const MyDaenamuCard = ({ data }) => {
 		</a>
 	);
 };
+
+MyDaenamuCard.propTypes = {
+	data: PropTypes.object.isRequired
+}
 
 export default MyDaenamuCard;
