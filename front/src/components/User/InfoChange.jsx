@@ -8,7 +8,7 @@ const InfoChange = () => {
 		password: '',
 		nickname: '',
 		mbti: '',
-		profileImg: '/images/.jpg',
+		profileImg: '/images/loginimg.jpg',
 	});
 
 	const [confirmPassword, setConfirmPassword] = useState('');
