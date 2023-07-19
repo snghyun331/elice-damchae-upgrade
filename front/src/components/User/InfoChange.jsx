@@ -8,6 +8,7 @@ const InfoChange = () => {
 		password: '',
 		nickname: '',
 		mbti: '',
+		profileImg: '/images/.jpg',
 	});
 
 	const [confirmPassword, setConfirmPassword] = useState('');
@@ -25,6 +26,14 @@ const InfoChange = () => {
 		},
 		[setUser],
 	);
+
+	const handleImageUpload = (event) => {
+		const file = event.target.files[0];
+		setUser((prev) => ({
+			...prev,
+			profileImg: URL.createObjectURL(file),
+		}));
+	};
 
 	const handleChangeConfirm = useCallback(
 		(e) => {
@@ -71,6 +80,29 @@ const InfoChange = () => {
 								회원정보수정
 							</h1>
 							<form className="space-y-4 md:space-y-6" action={handleSubmit}>
+								<div>
+									<label
+										className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+										htmlFor="file_input"
+									>
+										썸네일 업로드
+									</label>
+									<input
+										className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+										id="file_input"
+										type="file"
+										onChange={handleImageUpload}
+									/>
+
+									<div className="mt-4">
+										<p className="text-sm text-gray-500">선택된 이미지:</p>
+										<img
+											className="mt-2 max-w-xs"
+											src={user.profileImg}
+											alt="Selected Thumbnail"
+										/>
+									</div>
+								</div>
 								<div className="flex flex-col">
 									<label
 										htmlFor="email"
