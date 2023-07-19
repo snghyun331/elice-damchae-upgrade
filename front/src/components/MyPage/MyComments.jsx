@@ -73,7 +73,10 @@ const MyComments = () => {
 							<span className="text-xs text-gray-400">{comment.createdAt}</span>
 							<div className="mt-2" />
 							<span className="font-bold text-gray-900">본문</span>{' '}
-							<a href="/" className="underline underline-offset-2 text-blue-900">
+							<a
+								href="/"
+								className="underline underline-offset-2 text-blue-900"
+							>
 								{comment.originTitle}
 							</a>
 						</li>

@@ -1,7 +1,7 @@
 .react-calendar__tile--now .react-calendar__tile__num,
 .react-calendar__month-view__days__day abbr {
 	font-size: 0.7em;
-    position: inherit;
+	position: inherit;
 }
 
 .react-calendar {
