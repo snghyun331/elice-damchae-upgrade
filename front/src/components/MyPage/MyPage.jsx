@@ -52,8 +52,6 @@ const MyPage = () => {
 			</div>
 
 			<hr className="my-8" />
-<<<<<<< HEAD
-=======
 
 			{/* 내가 쓴 대숲 데이터, 내가 좋아한 대숲 데이터는 3개만 가져오거나 3개로 slice 해서 아래에 넣을 것. */}
 			<MyDaenamus myDaenamuData={myDaenamuData} />

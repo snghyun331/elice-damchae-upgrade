@@ -1,5 +1,7 @@
 // import { useParams } from 'react-router-dom';
 import { moodColors } from "../Util/Util";
+import { Link } from "react-router-dom";
+
 const StoryRead = () => {
 	// console.log('스토리 리드 진입');
 	// const { storyId } = useParams();
