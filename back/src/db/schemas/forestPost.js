@@ -44,25 +44,3 @@ const ForestPostSchema = new Schema(
 const ForestPost = mongoose.model('ForestPost', ForestPostSchema);
 
 export default ForestPost;
-
-// import mongoose from 'mongoose';
-
-// const { Schema } = mongoose;
-
-// const ForestPostSchema = new Schema(
-// 	{
-// 		title: {
-// 			type: String,
-// 			required: true,
-// 		},
-// 		content: {
-// 			type: String,
-// 			required: true,
-// 		},
-// 	},
-// 	{ timestamps: true },
-// );
-
-// const ForestPost = mongoose.model('ForestPost', ForestPostSchema);
-
-// export default ForestPost;import mongoose from 'mongoose';
