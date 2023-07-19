@@ -1,4 +1,5 @@
 // import { useParams } from 'react-router-dom';
+import TextViewer from '../Global/TextViewer';
 
 const StoryRead = () => {
 	// console.log('스토리 리드 진입');
@@ -61,7 +62,7 @@ const StoryRead = () => {
 						<span className="text-9xl">{dummyData.mood}</span>
 					</div>
 					<div className="-mt-12 p-14 leading-relaxed text-gray-700 dark:text-gray-400">
-						{dummyData.content}
+						<TextViewer />
 					</div>
 
 					<div>
