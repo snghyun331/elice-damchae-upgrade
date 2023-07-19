@@ -1,8 +1,0 @@
-.vscode/*
-.env
-node_modules
-.png
-.jpg
-.jpeg
-.DS_Store
-__pycache__/
