@@ -1,31 +1,23 @@
 import { create } from 'zustand';
+import useLoginStore from './useLoginStore';
 
 const useRegisterStore = create((set) => ({
-	user: {
-		email: '',
-		password: '',
-		nickname: '',
-		mbti: null,
-	},
+	...useLoginStore(),
+	nickname: '',
+	mbti: '',
+	setNickname: (nickname) => set({ nickname }),
+	setMbti: (mbti) => set({ mbti }),
+
 	confirmPassword: '',
-	code: '',
-	isEmailFocused: false,
-	isPasswordFocused: false,
 	isNicknameFocused: false,
 	isConfirmFocused: false,
+	code: '',
 	isCodeFocused: false,
-	setEmail: (email) => set((state) => ({ user: { ...state.user, email } })),
-	setPassword: (password) =>
-		set((state) => ({ user: { ...state.user, password } })),
-	setNickname: (nickname) =>
-		set((state) => ({ user: { ...state.user, nickname } })),
-	setMBTI: (mbti) => set((state) => ({ user: { ...state.user, mbti } })),
+
 	setConfirmPassword: (confirmPassword) => set({ confirmPassword }),
-	setCode: (code) => set({ code }),
-	setIsEmailFocused: (isEmailFocused) => set({ isEmailFocused }),
-	setIsPasswordFocused: (isPasswordFocused) => set({ isPasswordFocused }),
 	setIsNicknameFocused: (isNicknameFocused) => set({ isNicknameFocused }),
 	setIsConfirmFocused: (isConfirmFocused) => set({ isConfirmFocused }),
+	setCode: (Code) => set({ Code }),
 	setIsCodeFocused: (isCodeFocused) => set({ isCodeFocused }),
 }));
 

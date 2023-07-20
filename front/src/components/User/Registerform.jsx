@@ -2,29 +2,36 @@ import useRegisterStore from '../../store/useRegisterStore';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
+import { postApi } from '../../services/api';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
 	const {
-		user,
-		confirmPassword,
-		code,
+		email,
+		password,
 		isEmailFocused,
 		isPasswordFocused,
-		isNicknameFocused,
-		isConfirmFocused,
-		isCodeFocused,
-		setIsEmailFocused,
-		setIsPasswordFocused,
-		setIsNicknameFocused,
-		setIsConfirmFocused,
-		setIsCodeFocused,
 		setEmail,
 		setPassword,
+		setIsEmailFocused,
+		setIsPasswordFocused,
+		setIsLoggedIn,
+		errMsg,
+		setErrMsg,
+		nickname,
+		mbti,
 		setNickname,
-		setMBTI,
+		setMbti,
+		confirmPassword,
+		isNicknameFocused,
+		isConfirmFocused,
+		code,
+		isCodeFocused,
 		setConfirmPassword,
+		setIsNicknameFocused,
+		setIsConfirmFocused,
 		setCode,
+		setIsCodeFocused,
 	} = useRegisterStore();
 
 	const handleChangeInput = useCallback(
@@ -55,26 +62,26 @@ const RegisterForm = () => {
 
 	const validateEmail = () => {
 		const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,255}$/;
-		return emailRegex.test(user.email);
+		return emailRegex.test(email);
 	};
 
 	const validatePassword = () => {
 		const passwordRegex =
 			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
-		return passwordRegex.test(user.password);
+		return passwordRegex.test(password);
 	};
 
 	const validateNickname = () => {
 		const nicknameRegex = /^[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,16}$/;
-		return nicknameRegex.test(user.nickname);
+		return nicknameRegex.test(nickname);
 	};
 
 	const isEmailValid = useMemo(validateEmail, [validateEmail]);
 	const isPasswordValid = useMemo(validatePassword, [validatePassword]);
 	const isNicknameValid = useMemo(validateNickname, [validateNickname]);
 	const isPasswordSame = useMemo(
-		() => user.password === confirmPassword,
-		[user.password, confirmPassword],
+		() => password === confirmPassword,
+		[password, confirmPassword],
 	);
 
 	const isFormValid = useMemo(
@@ -83,9 +90,30 @@ const RegisterForm = () => {
 			isPasswordValid &&
 			isPasswordSame &&
 			isNicknameValid &&
-			user.mbti,
-		[isEmailValid, isPasswordValid, isPasswordSame, isNicknameValid, user.mbti],
+			mbti,
+		[isEmailValid, isPasswordValid, isPasswordSame, isNicknameValid, mbti],
 	);
+
+	const user = { email, password, nickname, mbti };
+
+	const handleSubmit = async (e) => {
+		try {
+			e.preventDefault();
+
+			// 회원가입 요청
+			const response = await postApi('auth/register', user);
+			console.log(response);
+
+			// 회원가입이 성공한 경우 토큰을 저장
+			const jwtToken = response.data.token;
+			localStorage.setItem('accessToken', jwtToken);
+			setIsLoggedIn(true); // Set login status to true
+
+			navigate('/');
+		} catch (error) {
+			setErrMsg(error.response.data.message);
+		}
+	};
 
 	const handleEmailCheck = () => {
 		// Logic for email verification
@@ -110,7 +138,7 @@ const RegisterForm = () => {
 							<h1 className="text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
 								회원가입
 							</h1>
-							<form className="space-y-4 md:space-y-6" action="#">
+							<form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
 								<div className="flex flex-col">
 									<label
 										htmlFor="email"
@@ -120,7 +148,7 @@ const RegisterForm = () => {
 									</label>
 									<div className="flex space-x-2 justify-end">
 										<input
-											value={user.email}
+											value={email}
 											onChange={handleChangeInput}
 											type="email"
 											name="email"
@@ -135,7 +163,7 @@ const RegisterForm = () => {
 										<button
 											type="button"
 											onClick={handleEmailCheck}
-											disabled={!user.email || !isEmailValid}
+											disabled={!email || !isEmailValid}
 											className="self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
 										>
 											이메일인증
@@ -178,7 +206,7 @@ const RegisterForm = () => {
 										비밀번호
 									</label>
 									<input
-										value={user.password}
+										value={password}
 										onChange={handleChangeInput}
 										type="password"
 										name="password"
@@ -232,7 +260,7 @@ const RegisterForm = () => {
 
 									<div className="flex flex-row space-x-2 justify-end">
 										<input
-											value={user.nickname}
+											value={nickname}
 											onChange={handleChangeInput}
 											onFocus={() => setIsNicknameFocused(true)}
 											onBlur={() => setIsNicknameFocused(false)}
@@ -267,8 +295,8 @@ const RegisterForm = () => {
 										MBTI
 									</label>
 									<Select
-										value={user.mbti}
-										onChange={(selectedOption) => setMBTI(selectedOption)}
+										value={mbti}
+										onChange={(selectedOption) => setMbti(selectedOption)}
 										options={[
 											{ value: 'ISTJ', label: 'ISTJ' },
 											{ value: 'ISFJ', label: 'ISFJ' },
@@ -299,6 +327,9 @@ const RegisterForm = () => {
 									>
 										가입하기
 									</button>
+									{errMsg && (
+										<p className="text-red-500 text-xs italic">{errMsg}</p>
+									)}
 									<p className="mt-3 self-center text-sm font-light text-gray-500 dark:text-gray-400">
 										이미 계정이 있습니까?{' '}
 										<a

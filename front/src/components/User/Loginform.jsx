@@ -7,24 +7,18 @@ import { postApi } from '../../services/api';
 const LoginForm = () => {
 	const navigate = useNavigate();
 	const {
-		user, // Access the user object
+		email,
+		password,
 		isEmailFocused,
 		isPasswordFocused,
 		setEmail,
 		setPassword,
 		setIsEmailFocused,
 		setIsPasswordFocused,
-		setLoggedIn,
+		setIsLoggedIn,
 		errMsg,
 		setErrMsg,
 	} = useLoginStore();
-
-	const { email, password } = user;
-
-	const handleChangeInput = (e) => {
-		if (e.target.name === 'email') setEmail(e.target.value);
-		if (e.target.name === 'password') setPassword(e.target.value);
-	};
 
 	const validateEmail = () => {
 		const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,255}$/;
@@ -40,21 +34,25 @@ const LoginForm = () => {
 		[isEmailValid, isPasswordValid],
 	);
 
-	const loginMutation = useMutation((formData) =>
-		postApi('auth/login', formData),
-	);
+	const user = { email, password };
+	const loginMutation = useMutation((user) => postApi('auth/login', user));
 
-	const handleLogin = async (e) => {
+	const handleChangeInput = (e) => {
+		if (e.target.name === 'email') setEmail(e.target.value);
+		if (e.target.name === 'password') setPassword(e.target.value);
+	};
+
+	const handleSubmit = async (e) => {
 		try {
 			e.preventDefault();
 
-			// Call the loginMutation with the email and password
-			const response = await loginMutation.mutateAsync({ email, password });
+			// Call the loginMutation with the user object
+			const response = await loginMutation.mutateAsync(user);
 			console.log(response);
 
 			const jwtToken = response.data.token;
 			localStorage.setItem('accessToken', jwtToken);
-			setLoggedIn(true); // 로그인 상태를 true로 설정
+			setIsLoggedIn(true); // Set login status to true
 
 			navigate('/');
 		} catch (error) {
@@ -85,7 +83,7 @@ const LoginForm = () => {
 							</div>
 
 							<div className="mt-8">
-								<form onSubmit={handleLogin}>
+								<form onSubmit={handleSubmit}>
 									<div className="relative">
 										<label
 											htmlFor="email"
