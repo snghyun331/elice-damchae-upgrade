@@ -1,44 +1,56 @@
-import { useState, useCallback, useMemo } from 'react';
+import useRegisterStore from '../../store/useRegisterStore';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
-
-	const [user, setUser] = useState({
-		email: '',
-		password: '',
-		nickname: '',
-		mbti: '',
-	});
-
-	const [confirmPassword, setConfirmPassword] = useState('');
-	const [isEmailFocused, setIsEmailFocused] = useState(false);
-	const [isPasswordFocused, setIsPasswordFocused] = useState(false);
-	const [isNicknameFocused, setIsNicknameFocused] = useState(false);
-	const [isConfirmFocused, setIsConfirmFocused] = useState(false);
-	const [Code, setCode] = useState('');
-	const [isCodeFocused, setIsCodeFocused] = useState(false);
+	const {
+		user,
+		confirmPassword,
+		code,
+		isEmailFocused,
+		isPasswordFocused,
+		isNicknameFocused,
+		isConfirmFocused,
+		isCodeFocused,
+		setIsEmailFocused,
+		setIsPasswordFocused,
+		setIsNicknameFocused,
+		setIsConfirmFocused,
+		setIsCodeFocused,
+		setEmail,
+		setPassword,
+		setNickname,
+		setMBTI,
+		setConfirmPassword,
+		setCode,
+	} = useRegisterStore();
 
 	const handleChangeInput = useCallback(
 		(e) => {
-			setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+			const { name, value } = e.target;
+			switch (name) {
+				case 'email':
+					setEmail(value);
+					break;
+				case 'password':
+					setPassword(value);
+					break;
+				case 'nickname':
+					setNickname(value);
+					break;
+				case 'confirmPassword':
+					setConfirmPassword(value);
+					break;
+				case 'code':
+					setCode(value);
+					break;
+				default:
+					break;
+			}
 		},
-		[setUser],
-	);
-
-	const handleChangeConfirm = useCallback(
-		(e) => {
-			setConfirmPassword(e.target.value);
-		},
-		[setConfirmPassword],
-	);
-
-	const handleChangeCode = useCallback(
-		(e) => {
-			setCode(e.target.value);
-		},
-		[setCode],
+		[setEmail, setPassword, setNickname, setConfirmPassword, setCode],
 	);
 
 	const validateEmail = () => {
@@ -138,8 +150,7 @@ const RegisterForm = () => {
 
 								<div className="flex flex-row space-x-2 justify-end">
 									<input
-										value={Code}
-										onChange={handleChangeCode}
+										value={code}
 										type="text"
 										name="Code"
 										id="verification-code"
@@ -152,7 +163,7 @@ const RegisterForm = () => {
 									<button
 										type="button"
 										onClick={handleCodeCheck}
-										disabled={!Code || isCodeFocused}
+										disabled={!code || isCodeFocused}
 										className="justify-self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
 									>
 										확인
@@ -180,8 +191,8 @@ const RegisterForm = () => {
 									/>
 									{!isPasswordValid && isPasswordFocused && (
 										<p className="text-red-500 text-xs italic">
-											비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로 설정해
-											주세요.
+											비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로
+											설정해주세요.
 										</p>
 									)}
 								</div>
@@ -194,7 +205,7 @@ const RegisterForm = () => {
 									</label>
 									<input
 										value={confirmPassword}
-										onChange={handleChangeConfirm}
+										onChange={handleChangeInput}
 										type="password"
 										name="confirmPassword"
 										id="confirm-password"
@@ -257,9 +268,7 @@ const RegisterForm = () => {
 									</label>
 									<Select
 										value={user.mbti}
-										onChange={(selectedOption) =>
-											setUser((prev) => ({ ...prev, mbti: selectedOption }))
-										}
+										onChange={(selectedOption) => setMBTI(selectedOption)}
 										options={[
 											{ value: 'ISTJ', label: 'ISTJ' },
 											{ value: 'ISFJ', label: 'ISFJ' },
