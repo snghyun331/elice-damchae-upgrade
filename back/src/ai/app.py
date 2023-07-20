@@ -16,6 +16,15 @@ from transformers import BertModel
 from transformers import AdamW
 from transformers.optimization import get_cosine_schedule_with_warmup
 
+tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
+bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
+vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
+device = torch.device('cpu')
+loaded_model = bertModelClass.BERTClassifier(bertmodel, dr_rate=0.5)
+loaded_model.load_state_dict(torch.load('./best_model.h5',map_location=device))
+loaded_model.eval()
+max_len = 64
+batch_size = 32
 
 def predict(predict_sentence, model):
     data = [predict_sentence, '0']
@@ -61,13 +70,4 @@ def getPredictResult():
     return jsonify({'sentence': sentence, 'emotion': emotion})
 
 if __name__ == '__main__':
-    tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
-    bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
-    vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
-    device = torch.device('cpu')
-    loaded_model = bertModelClass.BERTClassifier(bertmodel, dr_rate=0.5)
-    loaded_model.load_state_dict(torch.load('./best_model.h5',map_location=device))
-    loaded_model.eval()
-    max_len = 64
-    batch_size = 32
     app.run(host = '0.0.0.0', port = 5000)
