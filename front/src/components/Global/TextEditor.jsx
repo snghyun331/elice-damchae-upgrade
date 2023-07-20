@@ -3,7 +3,7 @@ import { Editor } from '@toast-ui/react-editor';
 import axios from 'axios';
 
 const TextEditor = () => {
-	const [title, setTitle] = useState('제목');
+	const [title, setTitle] = useState('');
 
 	const editorRef = useRef();
 
@@ -44,10 +44,10 @@ const TextEditor = () => {
 				value={title}
 			/>
 			<h3 className="font-semibold">본문</h3>
-			<div style={{ marginTop: 5 }}>
+			<div className="mt-5">
 				<Editor
 					ref={editorRef}
-					initialValue=""
+					initialValue="내용을 입력하세요"
 					previewStyle="vertical"
 					previewHighlight={false}
 					height="300px"
