@@ -1,6 +1,8 @@
 import { Schema, model } from 'mongoose';
 
+// 1. UTC를 한국 시간대로 변환하는 함수
 const getKoreanTimestamp = () => {
+	// 한국 시간대는 UTC+9
 	const koreanTimezoneOffset = 9 * 60;
 	const now = new Date();
 	now.setMinutes(now.getMinutes() + koreanTimezoneOffset);
