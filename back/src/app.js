@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import { userRouter } from './routers/userRouter.js';
+import forestRouter from './routers/forestPostRouter.js';
 const app = express();
 
 app.use(cors());
@@ -15,7 +16,8 @@ app.get('/', (req, res) => {
 });
 
 app.use(userRouter);
-
+app.use('/post', forestRouter);
+app.use(errorMiddleware);
 // app.post('/user/login', async (req, res) => {
 // 	const { id, password } = req.body;
 // 	// TODO id, password가 있는지 체크한다.
