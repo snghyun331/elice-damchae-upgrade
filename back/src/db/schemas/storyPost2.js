@@ -2,10 +2,21 @@ import { Schema, model } from 'mongoose';
 
 const StoryPostSchema = new Schema(
 	{
-		userInfo: {
+		userId: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
 			required: true,
+		},
+		userName: {
+			type: String,
+			required: true,
+		},
+		userMbti: {
+			type: String,
+			required: true,
+		},
+		userProfileImg: {
+			type: String,
 		},
 		title: {
 			type: String,
@@ -32,18 +43,12 @@ const StoryPostSchema = new Schema(
 		music: {
 			type: String,
 		},
-		commentList: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: 'StoryComment',
-			},
-		],
 	},
 	{
 		timestamps: true,
 	},
 );
 
-const StoryPost = model('StoryPost', StoryPostSchema);
+const StoryPostModel = model('StoryPost', StoryPostSchema);
 
-export { StoryPost };
+export { StoryPostModel };
