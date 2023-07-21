@@ -1,39 +1,108 @@
-import BadRequest from '../middlewares/error/badRequest.js';
-import { getById } from '../services/userService';
-import { create, getById } from '../services/userService';
-import tokenService from '../jwt';
+import userModel from '../db/schemas/user.js';
+import is from '@sindresorhus/is';
+import { userService } from '../services/userService.js';
 
-// 회원가입
-app.post('/user/register', async (req, res) => {
-	const { id, password, name } = req.body;
+class userController {
+	static async userRegister(req, res, next) {
+		try {
+			if (is.emptyObject(req.body)) {
+				throw new Error(
+					'headers의 Content-Type을 application/json으로 설정해주세요',
+				);
+			}
 
-	if (!id || !password || !name) {
-		throw new BadRequest('id, password, name은 필수입력 사항입니다.');
+			// req (request) 에서 데이터 가져오기
+			const { email, password, nickname, mbti } = await req.body;
+
+			// 위 데이터를 유저 db에 추가하기
+			const newUser = await userService.addUser({
+				email,
+				password,
+				nickname,
+				mbti,
+			});
+
+			if (newUser.errorMessage) {
+				throw new Error(newUser.errorMessage);
+			}
+
+			return res.status(201).json(newUser);
+		} catch (error) {
+			res
+				.status(400)
+				.send({ errorMessage: '요청한 데이터 형식이 올바르지 않습니다.' });
+			next(error);
+		}
 	}
 
-	const user = await getById(id);
-	if (user) {
-		throw new BadRequest('이미 존재하는 아이디입니다.');
+	static async userLogin(req, res, next) {
+		try {
+			// req (request) 에서 데이터 가져오기
+			const email = req.body.email;
+			const password = req.body.password;
+
+			// 위 데이터를 이용하여 유저 db에서 유저 찾기
+			const user = await userService.getUser({ email, password });
+
+			if (user.errorMessage) {
+				throw new Error(user.errorMessage);
+			}
+
+			return res.status(200).send(user);
+		} catch (error) {
+			next(error);
+		}
 	}
 
-	await create({ id, password, name });
+	static async userUpdate(req, res, next) {
+		try {
+			// URI로부터 사용자 id를 추출함.
+			const userId = req.params.userId;
+			// body data 로부터 업데이트할 사용자 정보를 추출함.
+			const password = req.body.password ?? null;
+			const nickname = req.body.nickname ?? null;
+			const mbti = req.body.mbti ?? null;
 
-	res.send({ message: '사용자를 등록했습니다.' });
-});
-// 로그인
-app.post('/user/login', async (req, res) => {
-	const { id, password } = req.body;
+			const toUpdate = { password, nickname, mbti };
 
-	if (!id || !password) {
-		throw new BadRequest('id, password는 필수입력 사항입니다.');
+			// 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
+			const updatedUser = await userService.setUser({ userId, toUpdate });
+
+			if (updatedUser.errorMessage) {
+				throw new Error(updatedUser.errorMessage);
+			}
+
+			return res.status(200).json(updatedUser);
+		} catch (error) {
+			next(error);
+		}
 	}
 
-	const user = await getById(id);
-	if (!user || user.password !== password) {
-		throw new BadRequest(
-			'존재하지 않는 사용자이거나 비밀번호가 일치하지 않습니다.',
-		);
+	static async checkNickname(req, res, next) {
+		try {
+			const { nickname } = req.body;
+			const existingUser = await userService.getUserNickname({ nickname });
+
+			return res.json(existingUser);
+		} catch (error) {
+			res.status(500).json();
+		}
 	}
 
-	res.status(200).send({ token: tokenService.getToken(id) });
-});
+	static async userWithdraw(req, res, next) {
+		try {
+			const userId = req.body.userId;
+			// 사용자를 비활성화 처리하기 위해 `isOut` 필드를 `true`로 설정
+			const user = await userService.withdrawUser(userId);
+
+			if (!user) {
+				return res.status(404).json({ error: '존재하지 않는 유저입니다.' });
+			}
+			return res.status(200).json({ message: '회원 탈퇴 완료' });
+		} catch (error) {
+			next(error);
+		}
+	}
+}
+
+export { userController };
