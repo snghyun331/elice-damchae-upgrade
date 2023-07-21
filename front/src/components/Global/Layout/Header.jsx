@@ -1,18 +1,21 @@
-import { useState, Fragment } from 'react';
+import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
+import useLoginStore from '../../../store/useLoginStore';
 
 const classNames = (...classes) => {
 	return classes.filter(Boolean).join(' ');
 };
 
 const Header = () => {
-	const [isLoggedIn, setisLoggedIn] = useState('true');
 	const navigate = useNavigate();
+	const { isLoggedIn, setIsLoggedIn } = useLoginStore();
 	const logout = () => {
-		setisLoggedIn(false);
+		localStorage.removeItem('accessToken');
+		setIsLoggedIn(false);
+		window.location.href = '/';
 	};
 
 	const menuItems = [

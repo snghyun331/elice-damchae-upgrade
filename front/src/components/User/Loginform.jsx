@@ -1,38 +1,65 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
+import useLoginStore from '../../store/useLoginStore';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from 'react-query';
+import { postApi } from '../../services/api';
 
 const LoginForm = () => {
 	const navigate = useNavigate();
+	const {
+		email,
+		password,
+		isEmailFocused,
+		isPasswordFocused,
+		setEmail,
+		setPassword,
+		setIsEmailFocused,
+		setIsPasswordFocused,
+		setIsLoggedIn,
+		errMsg,
+		setErrMsg,
+	} = useLoginStore();
 
-	const [user, setUser] = useState({
-		email: '',
-		password: '',
-	});
-	const [isEmailFocused, setIsEmailFocused] = useState(false);
-	const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+	const handleSubmit = async (e) => {
+		try {
+			e.preventDefault();
 
-	//이메일이 abc@example.com 형태인지 regex를 이용해 확인함.
+			// Call the loginMutation with the user object
+			const response = await loginMutation.mutateAsync(user);
+			console.log(response);
+			const jwtToken = response.data.token;
+			console.log(jwtToken);
 
-	const handleChangeInput = (e) => {
-		setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+			// localStorage.setItem('accessToken', jwtToken);
+			localStorage.setItem('accessToken', jwtToken);
+			setIsLoggedIn(true);
+			navigate('/');
+		} catch (error) {
+			setErrMsg(error.response.data.errorMessage);
+		}
 	};
 
 	const validateEmail = () => {
 		const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,255}$/;
-		return emailRegex.test(user.email);
+		return emailRegex.test(email);
 	};
 
-	const isEmailValid = useMemo(validateEmail, [validateEmail]);
+	const isEmailValid = useMemo(validateEmail, [email]);
 
-	const isPasswordValid = useMemo(
-		() => user.password.length > 0,
-		[user.password],
-	);
+	const isPasswordValid = useMemo(() => password.length > 0, [password]);
 
 	const isFormValid = useMemo(
 		() => isEmailValid && isPasswordValid,
 		[isEmailValid, isPasswordValid],
 	);
+
+	const user = { email, password };
+	const loginMutation = useMutation((user) => postApi('auth/login', user));
+
+	const handleChangeInput = (e) => {
+		if (e.target.name === 'email') setEmail(e.target.value);
+		if (e.target.name === 'password') setPassword(e.target.value);
+	};
 
 	return (
 		<div>
@@ -57,7 +84,7 @@ const LoginForm = () => {
 							</div>
 
 							<div className="mt-8">
-								<form>
+								<form onSubmit={handleSubmit}>
 									<div className="relative">
 										<label
 											htmlFor="email"
@@ -70,10 +97,10 @@ const LoginForm = () => {
 											name="email"
 											id="email"
 											placeholder="elice@gmail.com"
-											value={user.email}
+											value={email}
 											onChange={handleChangeInput}
 											onFocus={() => {
-												if (!isFormValid && user.email === '') {
+												if (!isFormValid && email === '') {
 													setIsEmailFocused(true);
 												}
 											}}
@@ -82,12 +109,12 @@ const LoginForm = () => {
 											}}
 											className={`block w-full px-4 py-2 my-2 text-gray-700 placeholder-gray-400 bg-white border rounded-md dark:placeholder-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 dark:focus:border-blue-400 focus:ring-gray-400 focus:outline-none focus:ring focus:ring-opacity-40`}
 										/>
-										{!isEmailValid && user.email !== '' && isEmailFocused && (
+										{!isEmailValid && email !== '' && isEmailFocused && (
 											<p className="text-red-500 text-xs italic">
 												이메일 형식이 올바르지 않습니다.
 											</p>
 										)}
-										{!isFormValid && user.email === '' && isEmailFocused && (
+										{!isFormValid && email === '' && isEmailFocused && (
 											<p className="text-red-500 text-xs italic">
 												이메일을 입력해주세요.
 											</p>
@@ -109,10 +136,10 @@ const LoginForm = () => {
 											name="password"
 											id="password"
 											placeholder="********"
-											value={user.password}
+											value={password}
 											onChange={handleChangeInput}
 											onFocus={() => {
-												if (!isFormValid && user.password === '') {
+												if (!isFormValid && password === '') {
 													setIsPasswordFocused(true);
 												}
 											}}
@@ -121,13 +148,11 @@ const LoginForm = () => {
 											}}
 											className="block w-full px-4 py-2 my-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:ring-gray-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
 										/>
-										{!isFormValid &&
-											user.password === '' &&
-											isPasswordFocused && (
-												<p className="text-red-500 text-xs italic">
-													비밀번호를 입력해주세요.
-												</p>
-											)}
+										{!isFormValid && password === '' && isPasswordFocused && (
+											<p className="text-red-500 text-xs italic">
+												비밀번호를 입력해주세요.
+											</p>
+										)}
 									</div>
 
 									<div className="mt-6">
@@ -138,6 +163,9 @@ const LoginForm = () => {
 										>
 											로그인
 										</button>
+										{errMsg && (
+											<p className="text-red-500 text-xs italic">{errMsg}</p>
+										)}
 									</div>
 								</form>
 
