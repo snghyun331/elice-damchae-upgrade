@@ -3,6 +3,7 @@ import moment from 'moment';
 import TextEditor from './TextEditor';
 import PropTypes from 'prop-types';
 import MusicVideo from '../Stories/MusicVideo';
+import ImageGallery from './ImageGallery';
 
 const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 	const currentDate = moment().format('YYYY년 M월 D일');
@@ -12,7 +13,7 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 	const [selectedImage, setSelectedImage] = useState(null);
 	const [videoId, setVideoId] = useState('');
 
-	const handleImageUpload = (event) => {
+	const handleThumbnailUpload = (event) => {
 		const file = event.target.files[0];
 		setSelectedImage(URL.createObjectURL(file));
 	};
@@ -66,6 +67,8 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 					</div>
 					<div className="flex flex-col p-6 space-y-6">
 						<TextEditor />
+						<ImageGallery />
+
 						<div>
 							<label
 								className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -77,7 +80,7 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 								className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
 								id="file_input"
 								type="file"
-								onChange={handleImageUpload}
+								onChange={handleThumbnailUpload}
 							/>
 							{selectedImage && (
 								<div className="mt-4">

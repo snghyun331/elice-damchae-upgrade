@@ -60,10 +60,10 @@ const RegisterForm = () => {
 		[setEmail, setPassword, setNickname, setConfirmPassword, setCode],
 	);
 
-	const validateEmail = () => {
+	const validateEmail = useCallback(() => {
 		const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,255}$/;
 		return emailRegex.test(email);
-	};
+	}, [email]);
 
 	const validatePassword = () => {
 		const passwordRegex =

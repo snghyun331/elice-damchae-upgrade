@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Editor } from '@toast-ui/react-editor';
-import axios from 'axios';
+import useImageUpload from '../../hooks/useImageUpload';
 
 const TextEditor = () => {
 	const [title, setTitle] = useState('');
@@ -11,27 +11,7 @@ const TextEditor = () => {
 		const content = editorRef.current?.getInstance().getHTML() || '';
 		console.log(content);
 	};
-	const handleImageUpload = async (blob, callback) => {
-		try {
-			const formData = new FormData();
-			formData.append('image', blob);
-
-			const response = await axios.post('/writeTest.do', formData, {
-				headers: { 'Content-Type': 'multipart/form-data' },
-			});
-
-			const imageUrl = `/images/${response.data.filename}`;
-
-			// callback : 에디터(마크다운 편집기)에 표시할 텍스트, 뷰어에는 imageUrl 주소에 저장된 사진으로 나옴
-			// 형식 : ![대체 텍스트](주소)
-			callback(imageUrl, '사진 대체 텍스트 입력');
-		} catch (error) {
-			console.error('이미지 업로드 실패');
-			console.error(error);
-
-			callback('image_load_fail', '사진 대체 텍스트 입력');
-		}
-	};
+	const { handleImageUpload, loading } = useImageUpload();
 
 	return (
 		<>
@@ -66,6 +46,7 @@ const TextEditor = () => {
 				/>
 			</div>
 			<button onClick={handleSubmit}>등록</button>
+			{loading && <div>이미지 업로드 중...</div>}
 		</>
 	);
 };
