@@ -1,13 +1,21 @@
-import express from 'express';
+import { Router } from 'express';
+import { userController } from '../controllers/userController.js';
 
-const router = express.Router();
+const userRouter = Router();
 
-// app이 아닌 router!
-router.post('/login', (req, res) => {
-	// ...
-});
-router.post('/register', (req, res) => {
-	// ...
-});
+userRouter.post('/auth/register', userController.userRegister);
 
-export default router;
+userRouter.post('/auth/login', userController.userLogin);
+
+userRouter.put('/users/:userId', userController.userUpdate);
+
+// 닉네임 중복확인
+userRouter.get('/auth/check-nickname', userController.checkNickname);
+
+userRouter.put('/auth/out', userController.userWithdraw);
+
+// userRouter.get('user/stories', async function (req, res, next) {});
+// userRouter.get('user/postLikes', async function (req, res, next) {});
+// userRouter.get('user/comments', async function (req, res, next) {});
+
+export { userRouter };
