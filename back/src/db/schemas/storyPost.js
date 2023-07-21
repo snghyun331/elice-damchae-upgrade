@@ -15,9 +15,12 @@ const StoryPostSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		contentImgList: {
-			type: Array,
-		},
+		contentImg: [
+			{
+				type: String,
+				required: false,
+			},
+		],
 		storyImg: {
 			type: String,
 		},
@@ -36,6 +39,7 @@ const StoryPostSchema = new Schema(
 			{
 				type: Schema.Types.ObjectId,
 				ref: 'StoryComment',
+				required: false,
 			},
 		],
 	},

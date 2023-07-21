@@ -3,32 +3,25 @@ import { StoryPost } from '../db/schemas/storyPost.js';
 const storyPostController = {
 	createStoryPost: async (req, res, next) => {
 		try {
-			// const {
-			// 	title,
-			// 	content,
-			// 	contentImgList,
-			// 	storyImg,
-			// 	isPublic,
-			// 	mood,
-			// 	music,
-			// } = req.body;
+			const userId = req.currentUserId;
 			const storyPostInfo = await StoryPost.create({
-				userInfo: req.currentUserID,
-				title: req.body,
-				content: req.body,
-				contentImgList: req.body,
-				storyImg: req.body,
-				isPublic: req.body,
-				mood: req.body,
-				music: req.body,
+				userInfo: userId,
+				title: req.body.title,
+				content: req.body.content,
+				contentImg: req.body.contentImg,
+				storyImg: req.body.storyImg,
+				isPublic: req.body.isPublic,
+				mood: req.body.mood,
+				music: req.body.music,
 			});
 			const result = await StoryPost.populate(storyPostInfo, {
 				path: 'userInfo',
 			});
 			return res.status(200).json(result);
 		} catch (error) {
-			// console.error(error)
 			next(error);
 		}
 	},
 };
+
+export { storyPostController };
