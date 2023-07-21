@@ -1,8 +1,6 @@
 import { create } from 'zustand';
-import useLoginStore from './useLoginStore';
 
 const useRegisterStore = create((set) => ({
-	...useLoginStore,
 	nickname: '',
 	mbti: '',
 	setNickname: (nickname) => set({ nickname }),

@@ -7,7 +7,7 @@ const useLoginStore = create((set) => ({
 	setPassword: (password) => set({ password }),
 	isLoggedIn: false,
 	errMsg: '',
-	setLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
+	setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 	setErrMsg: (message) => set({ errMsg: message }),
 	isEmailFocused: false,
 	isPasswordFocused: false,

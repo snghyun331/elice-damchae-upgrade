@@ -1,4 +1,5 @@
 import useRegisterStore from '../../store/useRegisterStore';
+import useLoginStore from '../../store/useLoginStore';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
@@ -6,6 +7,7 @@ import { postApi } from '../../services/api';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
+
 	const {
 		email,
 		password,
@@ -15,9 +17,11 @@ const RegisterForm = () => {
 		setPassword,
 		setIsEmailFocused,
 		setIsPasswordFocused,
-		setIsLoggedIn,
 		errMsg,
 		setErrMsg,
+	} = useLoginStore();
+
+	const {
 		nickname,
 		mbti,
 		setNickname,
@@ -34,31 +38,28 @@ const RegisterForm = () => {
 		setIsCodeFocused,
 	} = useRegisterStore();
 
-	const handleChangeInput = useCallback(
-		(e) => {
-			const { name, value } = e.target;
-			switch (name) {
-				case 'email':
-					setEmail(value);
-					break;
-				case 'password':
-					setPassword(value);
-					break;
-				case 'nickname':
-					setNickname(value);
-					break;
-				case 'confirmPassword':
-					setConfirmPassword(value);
-					break;
-				case 'code':
-					setCode(value);
-					break;
-				default:
-					break;
-			}
-		},
-		[setEmail, setPassword, setNickname, setConfirmPassword, setCode],
-	);
+	const handleChangeInput = useCallback((e) => {
+		const { name, value } = e.target;
+
+		switch (name) {
+			case 'email':
+				setEmail(value);
+
+				break;
+			case 'password':
+				setPassword(value);
+				break;
+			case 'nickname':
+				setNickname(value);
+				break;
+			case 'confirmPassword':
+				setConfirmPassword(value);
+				break;
+			case 'code':
+				setCode(value);
+				break;
+		}
+	});
 
 	const validateEmail = useCallback(() => {
 		const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,255}$/;
@@ -101,15 +102,9 @@ const RegisterForm = () => {
 			e.preventDefault();
 
 			// 회원가입 요청
-			const response = await postApi('auth/register', user);
-			console.log(response);
+			await postApi('auth/register', user);
 
-			// 회원가입이 성공한 경우 토큰을 저장
-			const jwtToken = response.data.token;
-			localStorage.setItem('accessToken', jwtToken);
-			setIsLoggedIn(true); // Set login status to true
-
-			navigate('/');
+			navigate('/login');
 		} catch (error) {
 			setErrMsg(error.response.data.message);
 		}
@@ -295,8 +290,7 @@ const RegisterForm = () => {
 										MBTI
 									</label>
 									<Select
-										value={mbti}
-										onChange={(selectedOption) => setMbti(selectedOption)}
+										onChange={(selectedOption) => setMbti(selectedOption.value)}
 										options={[
 											{ value: 'ISTJ', label: 'ISTJ' },
 											{ value: 'ISFJ', label: 'ISFJ' },

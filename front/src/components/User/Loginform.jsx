@@ -20,6 +20,25 @@ const LoginForm = () => {
 		setErrMsg,
 	} = useLoginStore();
 
+	const handleSubmit = async (e) => {
+		try {
+			e.preventDefault();
+
+			// Call the loginMutation with the user object
+			const response = await loginMutation.mutateAsync(user);
+			console.log(response);
+			const jwtToken = response.data.token;
+			console.log(jwtToken);
+
+			// localStorage.setItem('accessToken', jwtToken);
+			localStorage.setItem('accessToken', jwtToken);
+			setIsLoggedIn(true);
+			navigate('/');
+		} catch (error) {
+			setErrMsg(error.response.data.errorMessage);
+		}
+	};
+
 	const validateEmail = () => {
 		const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,255}$/;
 		return emailRegex.test(email);
@@ -40,24 +59,6 @@ const LoginForm = () => {
 	const handleChangeInput = (e) => {
 		if (e.target.name === 'email') setEmail(e.target.value);
 		if (e.target.name === 'password') setPassword(e.target.value);
-	};
-
-	const handleSubmit = async (e) => {
-		try {
-			e.preventDefault();
-
-			// Call the loginMutation with the user object
-			const response = await loginMutation.mutateAsync(user);
-			console.log(response);
-
-			const jwtToken = response.data.token;
-			localStorage.setItem('accessToken', jwtToken);
-			setIsLoggedIn(true); // Set login status to true
-
-			navigate('/');
-		} catch (error) {
-			setErrMsg(error.response.data.message);
-		}
 	};
 
 	return (
