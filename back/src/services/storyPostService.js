@@ -30,6 +30,8 @@ class StoryPostService {
 		});
 		return createdNewStoryPost;
 	}
+
+	static async getRandomPhrase() {}
 }
 
 export { StoryPostService };

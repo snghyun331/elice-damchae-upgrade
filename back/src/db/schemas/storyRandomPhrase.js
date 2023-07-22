@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 const storyRandomPhraseSchema = new Schema({
 	mood: {
 		type: String,
-		enum: ['pleasure', 'sad', 'insecure', 'anger'],
+		// enum: ['pleasure', 'sad', 'insecure', 'anger'],
 		required: true,
 	},
 	phrase: {
