@@ -8,17 +8,10 @@ const StoryEditor = () => {
 
 	const editorRef = useRef();
 
-	const htmlToText = (body) => {
-		const regex = /<p>(.*?)<\/p>/g;
-		const matches = body.match(regex);
-		if (!matches) return '';
-		return matches.map((match) => match.replace(/<\/?p>/g, '')).join(' ');
-	};
-
 	const handleSubmit = () => {
 		const body = editorRef.current?.getInstance().getHTML() || '';
-
-		setContent(htmlToText(body));
+		console.log(body);
+		setContent(body);
 		recommend(content);
 	};
 	const { handleImageUpload, loading } = useImageUpload();
