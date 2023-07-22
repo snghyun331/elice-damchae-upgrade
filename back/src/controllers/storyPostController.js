@@ -33,11 +33,11 @@ const storyPostController = {
 		try {
 			const userId = req.currentUserId;
 			const { content } = req.body;
-			const result = await axios.post('http://127.0.0.1:5000/predict', {
+			const obj = await axios.post('http://127.0.0.1:5000/predict', {
 				text: content,
 			});
-			// result.data = { mood: '슬픔' }
-			const Mood = result.data.mood;
+			// obj.data = { mood: '슬픔' }
+			const Mood = obj.data.mood;
 
 			// 비동기 함수
 			const handlePhraseData = async (documents) => {
@@ -63,10 +63,10 @@ const storyPostController = {
 			// phrasePromise와 musicPromise를 한번에 처리
 			Promise.all([phrasePromise, musicPromise])
 				.then(([Phrase, Music]) => {
-					res.json({ mood: Mood, phrase: Phrase, music: Music });
+					const result = { mood: Mood, phrase: Phrase, music: Music };
+					return res.status(200).json(result);
 				})
 				.catch((error) => {
-					console.error('데이터 조회에 실패했습니다', error);
 					next(error);
 				});
 		} catch (error) {
