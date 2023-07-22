@@ -12,8 +12,13 @@ const classNames = (...classes) => {
 const Header = () => {
 	const navigate = useNavigate();
 	const { isLoggedIn, logout } = useUserStore();
-	const logOut = () => {
-		logout();
+
+	const handleGuestClick = () => {
+		if (isLoggedIn) {
+			navigate('/stories');
+		} else {
+			navigate('/login');
+		}
 	};
 
 	const menuItems = [
@@ -21,18 +26,20 @@ const Header = () => {
 		{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
 	];
 
-	const mobMenuItems = [
-		{ title: '대나무숲', onClick: () => navigate('/mypage') },
-		{ title: '내 스토리', onClick: () => navigate('/stories') },
-		{ title: '마이 페이지', onClick: () => navigate('/mypage') },
-		{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
-		{ title: '로그아웃', onClick: () => logOut() },
-	];
-	const mobMenuItemsGuest = [
-		{ title: '대나무숲', onClick: () => navigate('/mypage') },
-		{ title: '내 스토리', onClick: () => navigate('/stories') },
-		{ title: '로그인', onClick: () => navigate('/login') },
-	];
+	const mobMenuItems = isLoggedIn
+		? [
+				{ title: '대나무숲', onClick: () => navigate('/mypage') },
+				{ title: '내 스토리', onClick: () => navigate('/stories') },
+				{ title: '마이 페이지', onClick: () => navigate('/mypage') },
+				{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
+				{ title: '로그아웃', onClick: () => logout() },
+		  ]
+		: [
+				{ title: '대나무숲', onClick: () => navigate('/mypage') },
+				{ title: '내 스토리', onClick: () => navigate('/login') },
+				{ title: '로그인', onClick: () => navigate('/login') },
+		  ];
+
 	return (
 		<nav className="bg-blue-400 border-gray-200 dark:bg-gray-900">
 			<div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -98,7 +105,7 @@ const Header = () => {
 									</Transition>
 								</Menu>
 								<button
-									onClick={() => logOut()}
+									onClick={() => logout()}
 									type="button"
 									className="whitespace-nowrap hidden md:block text-white shadow-inner bg-[#A06763] hover:bg-[#A36560] focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-lg px-4 py-2 pt-3 text-center mr-3 md:mr-0 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
 									style={{
@@ -154,25 +161,23 @@ const Header = () => {
 						>
 							<Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
 								<div className="py-1">
-									{(isLoggedIn ? mobMenuItems : mobMenuItemsGuest).map(
-										(item) => (
-											<Menu.Item key={item.title}>
-												{({ active }) => (
-													<a
-														onClick={item.onClick}
-														className={classNames(
-															active
-																? 'bg-gray-100 text-blue-900'
-																: 'text-gray-700',
-															'block px-4 py-2 text-lg',
-														)}
-													>
-														{item.title}
-													</a>
-												)}
-											</Menu.Item>
-										),
-									)}
+									{mobMenuItems.map((item) => (
+										<Menu.Item key={item.title}>
+											{({ active }) => (
+												<a
+													onClick={item.onClick}
+													className={classNames(
+														active
+															? 'bg-gray-100 text-blue-900'
+															: 'text-gray-700',
+														'block px-4 py-2 text-lg',
+													)}
+												>
+													{item.title}
+												</a>
+											)}
+										</Menu.Item>
+									))}
 								</div>
 							</Menu.Items>
 						</Transition>
@@ -192,12 +197,12 @@ const Header = () => {
 							</a>
 						</li>
 						<li>
-							<Link
-								to="/stories"
+							<button
+								onClick={handleGuestClick}
 								className="text-white block py-2 pl-3 pr-4 ml-5 text-gray-900 rounded md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
 							>
 								내 스토리
-							</Link>
+							</button>
 						</li>
 					</ul>
 				</div>
