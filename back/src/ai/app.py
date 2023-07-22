@@ -48,7 +48,7 @@ def predict(predict_sentence, model):
             if np.argmax(logits) == 0:
                 test_eval.append("insecure")
             elif np.argmax(logits) == 1:
-                test_eval.append("suprise")
+                test_eval.append("surprise")
             elif np.argmax(logits) == 2:
                 test_eval.append("anger")
             elif np.argmax(logits) == 3:
