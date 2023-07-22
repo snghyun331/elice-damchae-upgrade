@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const storyRandomPhraseShema = new Schema({
+const storyRandomPhraseSchema = new Schema({
 	mood: {
 		type: String,
 		enum: ['pleasure', 'sad', 'insecure', 'anger'],
@@ -14,7 +14,7 @@ const storyRandomPhraseShema = new Schema({
 
 const storyRandomPhrase = model(
 	'StoryRandomPhrase',
-	storyRandomPhraseShema,
+	storyRandomPhraseSchema,
 	'storyrandomphrase',
 );
 
