@@ -31,6 +31,7 @@ const storyPostController = {
 
 	getPredict: async (req, res, next) => {
 		try {
+			const userId = req.currentUserId;
 			const { content } = req.body;
 			const result = await axios.post('http://127.0.0.1:5000/predict', {
 				text: content,
@@ -41,12 +42,9 @@ const storyPostController = {
 			// 비동기 함수
 			const handlePhraseData = async (documents) => {
 				let data = documents.filter((x) => x.mood === Mood);
-				// console.log(data);
 				let Phrases = data.map((item) => item.phrase);
-				// console.log(phrases);
 				let randomIndex = Math.floor(Math.random() * Phrases.length);
 				let Phrase = Phrases[randomIndex];
-				// console.log(Phrase);
 				return Phrase;
 			};
 
@@ -62,6 +60,7 @@ const storyPostController = {
 				StoryPostModel.getPhraseData().then(handlePhraseData);
 			const musicPromise = StoryPostModel.getMusicData().then(handleMusicData);
 
+			// phrasePromise와 musicPromise를 한번에 처리
 			Promise.all([phrasePromise, musicPromise])
 				.then(([Phrase, Music]) => {
 					res.json({ mood: Mood, phrase: Phrase, music: Music });
