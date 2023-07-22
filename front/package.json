@@ -10,6 +10,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@gradio/client": "^0.1.4",
 		"@headlessui/react": "^1.7.15",
 		"@heroicons/react": "^2.0.18",
 		"@toast-ui/editor": "^3.2.2",

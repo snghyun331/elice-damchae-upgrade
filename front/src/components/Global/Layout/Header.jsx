@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
-import useLoginStore from '../../../store/useLoginStore';
+import useUserStore from '../../../store/useUserStore';
 
 const classNames = (...classes) => {
 	return classes.filter(Boolean).join(' ');
@@ -11,11 +11,9 @@ const classNames = (...classes) => {
 
 const Header = () => {
 	const navigate = useNavigate();
-	const { isLoggedIn, setIsLoggedIn } = useLoginStore();
-	const logout = () => {
-		localStorage.removeItem('accessToken');
-		setIsLoggedIn(false);
-		window.location.href = '/';
+	const { isLoggedIn, logout } = useUserStore();
+	const logOut = () => {
+		logout();
 	};
 
 	const menuItems = [
@@ -28,7 +26,7 @@ const Header = () => {
 		{ title: '내 스토리', onClick: () => navigate('/stories') },
 		{ title: '마이 페이지', onClick: () => navigate('/mypage') },
 		{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
-		{ title: '로그아웃', onClick: () => logout() },
+		{ title: '로그아웃', onClick: () => logOut() },
 	];
 	const mobMenuItemsGuest = [
 		{ title: '대나무숲', onClick: () => navigate('/mypage') },
@@ -44,6 +42,7 @@ const Header = () => {
 				>
 					Damchae
 				</Link>
+
 				<div className="flex justify-end md:order-2 gap-1">
 					{isLoggedIn ? (
 						<>
@@ -99,7 +98,7 @@ const Header = () => {
 									</Transition>
 								</Menu>
 								<button
-									onClick={() => logout()}
+									onClick={() => logOut()}
 									type="button"
 									className="whitespace-nowrap hidden md:block text-white shadow-inner bg-[#A06763] hover:bg-[#A36560] focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-lg px-4 py-2 pt-3 text-center mr-3 md:mr-0 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
 									style={{

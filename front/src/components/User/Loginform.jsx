@@ -1,42 +1,27 @@
-import { useMemo } from 'react';
-import useLoginStore from '../../store/useLoginStore';
+import { useState, useMemo } from 'react';
+import useUserStore from '../../store/useUserStore';
+
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
-import { postApi } from '../../services/api';
 
 const LoginForm = () => {
 	const navigate = useNavigate();
-	const {
-		email,
-		password,
-		isEmailFocused,
-		isPasswordFocused,
-		setEmail,
-		setPassword,
-		setIsEmailFocused,
-		setIsPasswordFocused,
-		setIsLoggedIn,
-		errMsg,
-		setErrMsg,
-	} = useLoginStore();
+	const { email, password, setEmail, setPassword, errMsg, login } =
+		useUserStore();
+
+	const [focusedMap, setFocusedMap] = useState({
+		email: false,
+		password: false,
+	});
+
+	const handleFocus = (name, value) => {
+		setFocusedMap({ ...focusedMap, [name]: value });
+	};
+
+	const user = { email, password };
 
 	const handleSubmit = async (e) => {
-		try {
-			e.preventDefault();
-
-			// Call the loginMutation with the user object
-			const response = await loginMutation.mutateAsync(user);
-			console.log(response);
-			const jwtToken = response.data.token;
-			console.log(jwtToken);
-
-			// localStorage.setItem('accessToken', jwtToken);
-			localStorage.setItem('accessToken', jwtToken);
-			setIsLoggedIn(true);
-			navigate('/');
-		} catch (error) {
-			setErrMsg(error.response.data.errorMessage);
-		}
+		e.preventDefault();
+		await login(user);
 	};
 
 	const validateEmail = () => {
@@ -52,9 +37,6 @@ const LoginForm = () => {
 		() => isEmailValid && isPasswordValid,
 		[isEmailValid, isPasswordValid],
 	);
-
-	const user = { email, password };
-	const loginMutation = useMutation((user) => postApi('auth/login', user));
 
 	const handleChangeInput = (e) => {
 		if (e.target.name === 'email') setEmail(e.target.value);
@@ -101,20 +83,20 @@ const LoginForm = () => {
 											onChange={handleChangeInput}
 											onFocus={() => {
 												if (!isFormValid && email === '') {
-													setIsEmailFocused(true);
+													handleFocus('email', true);
 												}
 											}}
 											onBlur={() => {
-												setIsEmailFocused(false);
+												handleFocus('email', false);
 											}}
 											className={`block w-full px-4 py-2 my-2 text-gray-700 placeholder-gray-400 bg-white border rounded-md dark:placeholder-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 dark:focus:border-blue-400 focus:ring-gray-400 focus:outline-none focus:ring focus:ring-opacity-40`}
 										/>
-										{!isEmailValid && email !== '' && isEmailFocused && (
+										{!isEmailValid && email !== '' && focusedMap.email && (
 											<p className="text-red-500 text-xs italic">
 												이메일 형식이 올바르지 않습니다.
 											</p>
 										)}
-										{!isFormValid && email === '' && isEmailFocused && (
+										{!isFormValid && email === '' && focusedMap.email && (
 											<p className="text-red-500 text-xs italic">
 												이메일을 입력해주세요.
 											</p>
@@ -140,15 +122,15 @@ const LoginForm = () => {
 											onChange={handleChangeInput}
 											onFocus={() => {
 												if (!isFormValid && password === '') {
-													setIsPasswordFocused(true);
+													handleFocus('password', true);
 												}
 											}}
 											onBlur={() => {
-												setIsPasswordFocused(false);
+												handleFocus('password', false);
 											}}
 											className="block w-full px-4 py-2 my-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:ring-gray-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
 										/>
-										{!isFormValid && password === '' && isPasswordFocused && (
+										{!isFormValid && password === '' && focusedMap.password && (
 											<p className="text-red-500 text-xs italic">
 												비밀번호를 입력해주세요.
 											</p>
