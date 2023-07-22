@@ -37,26 +37,37 @@ const storyPostController = {
 			});
 			// result.data = { mood: '슬픔' }
 			const Mood = result.data.mood;
+
+			// 비동기 함수
 			const handlePhraseData = async (documents) => {
-				let Phrase;
-				if (Mood === '슬픔') {
-					let data = documents.filter((x) => x.mood === 'sad');
-					// console.log(data);
-					let Phrases = data.map((item) => item.phrase);
-					// console.log(phrases);
-					let randomIndex = Math.floor(Math.random() * Phrases.length);
-					Phrase = Phrases[randomIndex];
-				}
-				console.log(Phrase);
+				let data = documents.filter((x) => x.mood === Mood);
+				// console.log(data);
+				let Phrases = data.map((item) => item.phrase);
+				// console.log(phrases);
+				let randomIndex = Math.floor(Math.random() * Phrases.length);
+				let Phrase = Phrases[randomIndex];
+				// console.log(Phrase);
 				return Phrase;
 			};
-			StoryPostModel.getPhraseData()
-				.then(handlePhraseData)
-				.then((Phrase) => {
-					res.json({ mood: Mood, phrase: Phrase });
+
+			const handleMusicData = async (documents) => {
+				let data = documents.filter((x) => x.mood === Mood);
+				let Musics = data.map((item) => item.music);
+				let randomIndex = Math.floor(Math.random() * Musics.length);
+				let Music = Musics[randomIndex];
+				return Music;
+			};
+
+			const phrasePromise =
+				StoryPostModel.getPhraseData().then(handlePhraseData);
+			const musicPromise = StoryPostModel.getMusicData().then(handleMusicData);
+
+			Promise.all([phrasePromise, musicPromise])
+				.then(([Phrase, Music]) => {
+					res.json({ mood: Mood, phrase: Phrase, music: Music });
 				})
 				.catch((error) => {
-					console.error('phrase 조회에 실패했습니다', error);
+					console.error('데이터 조회에 실패했습니다', error);
 					next(error);
 				});
 		} catch (error) {
