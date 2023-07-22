@@ -1,5 +1,6 @@
 import { StoryPost } from '../db/schemas/storyPost.js';
 import { StoryPostService } from '../services/storyPostService.js';
+import axios from 'axios';
 
 const storyPostController = {
 	createStoryPost: async (req, res, next) => {
@@ -18,20 +19,23 @@ const storyPostController = {
 				mood,
 				music,
 			});
-			// const storyPostInfo = await StoryPost.create({
-			// 	userInfo: userId,
-			// 	title: req.body.title,
-			// 	content: req.body.content,
-			// 	contentImg: req.body.contentImg,
-			// 	storyImg: req.body.storyImg,
-			// 	isPublic: req.body.isPublic,
-			// 	mood: req.body.mood,
-			// 	music: req.body.music,
-			// });
 			const result = await StoryPost.populate(storyPostInfo, {
 				path: 'userInfo',
 			});
 			return res.status(200).json(result);
+		} catch (error) {
+			next(error);
+		}
+	},
+
+	getPredict: async (req, res, next) => {
+		try {
+			const { content } = req.body;
+			const result = await axios.post('http://127.0.0.1:5000/predict', {
+				text: content,
+			});
+			console.log({ result: result.data });
+			res.json({ mood: result.data.mood });
 		} catch (error) {
 			next(error);
 		}

@@ -72,9 +72,9 @@ def home():
 @app.route('/predict', methods=['POST'])
 def getPredictResult():
     args = request.get_json(force=True)   # request_body예시: {"sentence": "슬픈 하루였다."}
-    sentence = args.get('sentence', [])  
-    emotion = predict(sentence, loaded_model)
-    return jsonify({'sentence': sentence, 'emotion': emotion})
+    sentence = args.get('text', [])  
+    mood = predict(sentence, loaded_model)
+    return jsonify({'mood': mood})
 
 
 # 텍스트를 이미지로(아웃풋: 이미지)

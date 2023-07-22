@@ -10,4 +10,10 @@ storyPostRouter.post(
 	storyPostController.createStoryPost,
 );
 
+storyPostRouter.post(
+	'/stories/recommend',
+	loginRequired,
+	storyPostController.getPredict,
+);
+
 export { storyPostRouter };
