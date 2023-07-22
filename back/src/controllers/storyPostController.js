@@ -63,7 +63,8 @@ const storyPostController = {
 			// phrasePromise와 musicPromise를 한번에 처리
 			Promise.all([phrasePromise, musicPromise])
 				.then(([Phrase, Music]) => {
-					const result = { mood: Mood, phrase: Phrase, music: Music };
+					const formattedMusic = Music.slice(32);
+					const result = { mood: Mood, phrase: Phrase, music: formattedMusic };
 					return res.status(200).json(result);
 				})
 				.catch((error) => {
