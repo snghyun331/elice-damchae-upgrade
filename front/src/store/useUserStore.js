@@ -6,7 +6,7 @@ const useUserStore = create((set) => ({
 	password: '',
 	nickname: '',
 	mbti: '',
-	isLoggedIn: false,
+	isLoggedIn: true,
 	errMsg: '',
 
 	setEmail: (email) => set({ email }),

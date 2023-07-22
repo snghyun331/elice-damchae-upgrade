@@ -3,14 +3,23 @@ import { Editor } from '@toast-ui/react-editor';
 import useImageUpload from '../../hooks/useImageUpload';
 import useStoryStore from '../../store/useStoryStore';
 
-const TextEditor = () => {
-	const { title, setTitle, setContent } = useStoryStore();
+const StoryEditor = () => {
+	const { title, setTitle, content, setContent, recommend } = useStoryStore();
 
 	const editorRef = useRef();
 
+	const htmlToText = (body) => {
+		const regex = /<p>(.*?)<\/p>/g;
+		const matches = body.match(regex);
+		if (!matches) return '';
+		return matches.map((match) => match.replace(/<\/?p>/g, '')).join(' ');
+	};
+
 	const handleSubmit = () => {
 		const body = editorRef.current?.getInstance().getHTML() || '';
-		setContent(body);
+
+		setContent(htmlToText(body));
+		recommend(content);
 	};
 	const { handleImageUpload, loading } = useImageUpload();
 
@@ -51,7 +60,7 @@ const TextEditor = () => {
 					onClick={handleSubmit}
 					className="w-60 self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 				>
-					등록
+					기분에 맞는 음악 추천받기
 				</button>
 			</div>
 			{loading && <div>이미지 업로드 중...</div>}
@@ -59,4 +68,4 @@ const TextEditor = () => {
 	);
 };
 
-export default TextEditor;
+export default StoryEditor;
