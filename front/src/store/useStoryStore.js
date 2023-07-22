@@ -41,6 +41,15 @@ const useStoryStore = create((set) => ({
 		set({ music: '' });
 		document.body.style.overflow = 'auto';
 	},
+	postStory: async (formData) => {
+		try {
+			await postApi('/stories', formData);
+
+			window.location.href = '/stories';
+		} catch (error) {
+			set({ errMsg: error.response.data.errorMessage });
+		}
+	},
 }));
 
 export default useStoryStore;

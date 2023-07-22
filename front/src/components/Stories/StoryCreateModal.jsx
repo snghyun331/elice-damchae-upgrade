@@ -8,24 +8,32 @@ const StoryCreateModal = () => {
 	const currentDate = moment().format('YYYY년 M월 D일');
 
 	const {
+		title,
+		content,
 		thumbnail,
+		isPublic,
+		mood,
 		music,
 		phrase,
-		isPublic,
 		setIsPublic,
 		setThumbnail,
 		storyModal,
 		handleModalClose,
+		postStory,
 	} = useStoryStore();
 
 	const modalStyle = storyModal ? '' : 'hidden';
 
-	const handleThumbnailUpload = (event) => {
-		const file = event.target.files[0];
-		setThumbnail(URL.createObjectURL(file));
+	const handleThumbnailUpload = (e) => {
+		setThumbnail(e.target.files[0]);
 	};
 
-	const handlePostStory = () => {};
+	const post = { title, content, thumbnail, isPublic, mood, music };
+
+	const formData = new FormData();
+	for (const key in post) {
+		formData.append(key, post[key]);
+	}
 
 	return (
 		<div
@@ -120,7 +128,7 @@ const StoryCreateModal = () => {
 
 					<div className="justify-end flex p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
 						<button
-							onClick={handlePostStory}
+							onClick={postStory(formData)}
 							type="button"
 							className="self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 						>
