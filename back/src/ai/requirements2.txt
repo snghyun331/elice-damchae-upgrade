@@ -1,0 +1,8 @@
+# 이미 requirements.txt를 install 하셨을 경우
+
+fastapi[all]
+diffusers==0.10.0
+transformers
+scipy
+ftfy
+accelerate

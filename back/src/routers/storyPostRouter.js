@@ -5,15 +5,15 @@ import { storyPostController } from '../controllers/storyPostController.js';
 const storyPostRouter = Router();
 
 storyPostRouter.post(
-	'/stories',
-	loginRequired,
-	storyPostController.createStoryPost,
+  '/stories',
+  loginRequired,
+  storyPostController.createStoryPost,
 );
 
 storyPostRouter.post(
-	'/stories/recommend',
-	loginRequired,
-	storyPostController.getPredict,
+  '/stories/recommend',
+  loginRequired,
+  storyPostController.getPredict,
 );
 
 export { storyPostRouter };
