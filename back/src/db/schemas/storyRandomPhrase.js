@@ -1,20 +1,20 @@
 import { Schema, model } from 'mongoose';
 
 const storyRandomPhraseSchema = new Schema({
-	mood: {
-		type: String,
-		required: true,
-	},
-	phrase: {
-		type: String,
-		required: true,
-	},
+  mood: {
+    type: String,
+    required: true,
+  },
+  phrase: {
+    type: String,
+    required: true,
+  },
 });
 
 const storyRandomPhrase = model(
-	'StoryRandomPhrase',
-	storyRandomPhraseSchema,
-	'storyrandomphrase',
+  'StoryRandomPhrase',
+  storyRandomPhraseSchema,
+  'storyrandomphrase',
 );
 
 export { storyRandomPhrase };
