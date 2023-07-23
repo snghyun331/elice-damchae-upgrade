@@ -1,21 +1,25 @@
 import { Router } from 'express';
-import { userController } from '../controllers/userController.js';
+import { userAuthController } from '../controllers/userController.js';
+import { outUserValidation } from '../middlewares/outUserValidation.js';
+const userAuthRouter = Router();
 
-const userRouter = Router();
+userAuthRouter.post('/auth/register', userAuthController.userRegister);
 
-userRouter.post('/auth/register', userController.userRegister);
+userAuthRouter.post(
+  '/auth/login',
+  outUserValidation,
+  userAuthController.userLogin,
+);
 
-userRouter.post('/auth/login', userController.userLogin);
-
-userRouter.put('/users/:userId', userController.userUpdate);
+userAuthRouter.put('/users/:userId', userAuthController.userUpdate);
 
 // 닉네임 중복확인
-userRouter.get('/auth/check-nickname', userController.checkNickname);
+userAuthRouter.get('/auth/check-nickname', userAuthController.checkNickname);
 
-userRouter.put('/auth/out', userController.userWithdraw);
+userAuthRouter.put('/auth/out', userAuthController.userWithdraw);
 
 // userRouter.get('user/stories', async function (req, res, next) {});
 // userRouter.get('user/postLikes', async function (req, res, next) {});
 // userRouter.get('user/comments', async function (req, res, next) {});
 
-export { userRouter };
+export { userAuthRouter };
