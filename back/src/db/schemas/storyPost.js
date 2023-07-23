@@ -30,6 +30,7 @@ const StoryPostSchema = new Schema(
     },
     music: {
       type: String,
+      required: false,
     },
     commentList: [
       {
