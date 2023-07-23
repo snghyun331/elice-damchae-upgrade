@@ -16,7 +16,9 @@ const StoryPostSchema = new Schema(
       required: true,
     },
     thumbnail: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'Image',
+      required: false,
     },
     mood: {
       type: String,
