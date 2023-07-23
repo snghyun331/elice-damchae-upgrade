@@ -4,14 +4,20 @@ import StoryCreateModal from '../Global/StoryCreateModal';
 import BannerCarousel from './BannerCarousel';
 import Search from '../Global/Search';
 import StoryCardMap from '../Global/StoryCardMap';
+import useUserStore from '../../store/useUserStore';
 
 const Home = () => {
 	const navigate = useNavigate();
 	const [showStoryCreateModal, setShowStoryCreateModal] = useState(false);
-
+	const { isLoggedIn } = useUserStore();
 	const handleButtonClick = () => {
-		setShowStoryCreateModal(true);
-		document.body.style.overflow = 'hidden';
+		console.log(isLoggedIn);
+		if (isLoggedIn) {
+			setShowStoryCreateModal(true);
+			document.body.style.overflow = 'hidden';
+		} else {
+			navigate('/login');
+		}
 	};
 
 	const handleModalClose = () => {
@@ -41,7 +47,9 @@ const Home = () => {
 				<br />
 				<div className="mb-10">
 					<button
-						onClick={() => navigate('/stories')}
+						onClick={
+							isLoggedIn ? () => navigate('/stories') : () => navigate('/login')
+						}
 						type="button"
 						className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
 					>
