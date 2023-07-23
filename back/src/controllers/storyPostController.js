@@ -6,16 +6,14 @@ import axios from 'axios';
 const storyPostController = {
 	createStoryPost: async (req, res, next) => {
 		try {
-			const { title, content, contentImg, storyImg, isPublic, mood, music } =
-				req.body;
+			const { title, content, thumbnail, isPublic, mood, music } = req.body;
 			const userId = req.currentUserId;
 			const userInfo = userId;
 			const storyPostInfo = await StoryPostService.addStoryPost({
 				userInfo,
 				title,
 				content,
-				contentImg,
-				storyImg,
+				thumbnail,
 				isPublic,
 				mood,
 				music,

@@ -24,13 +24,7 @@ const StoryPostSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		contentImg: [
-			{
-				type: String,
-				required: false,
-			},
-		],
-		storyImg: {
+		thumbnail: {
 			type: String,
 		},
 		mood: {
