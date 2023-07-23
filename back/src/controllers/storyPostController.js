@@ -33,8 +33,9 @@ const storyPostController = {
 		try {
 			const userId = req.currentUserId;
 			const { content } = req.body;
+			const pureContent = content.replace(/<[^>]+>/g, ' ');
 			const obj = await axios.post('http://127.0.0.1:5000/predict', {
-				text: content,
+				text: pureContent,
 			});
 			// obj.data = { mood: '슬픔' }
 			const Mood = obj.data.mood;
