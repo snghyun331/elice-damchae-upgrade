@@ -2,9 +2,7 @@ import sharp from 'sharp';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-
-import { ImageModel } from '../db/models/imageModel';
-import { nextTick } from 'process';
+import { ImageModel } from '../db/models/imageModel.js';
 
 class imageService {
   static async generateUniqueFileName(file) {

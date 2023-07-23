@@ -1,4 +1,4 @@
-import { imageService } from '../services/imageService';
+import { imageService } from '../services/imageService.js';
 
 const imageController = {
   createImageSingle: async (req, res, next) => {
