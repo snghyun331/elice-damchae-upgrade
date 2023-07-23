@@ -1,17 +1,18 @@
 {
-  "name": "yarn",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://kdt-gitlab.elice.io/ai_track/class_07/ai_project/team05/mbti-agora.git",
-  "author": "",
-  "scripts": {
-    "back": "cd back && yarn dev",
-    "front": "cd front && yarn dev",
-    "dev": "concurrently --kill-others-on-fail \"yarn back\" \"yarn front\""
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "concurrently": "^8.2.0"
-  },
-  "dependencies": {}
+	"name": "yarn",
+	"version": "1.0.0",
+	"main": "index.js",
+	"repository": "https://kdt-gitlab.elice.io/ai_track/class_07/ai_project/team05/mbti-agora.git",
+	"author": "",
+	"scripts": {
+		"back": "cd back && yarn dev",
+		"front": "cd front && yarn dev",
+		"dev": "concurrently --kill-others-on-fail \"yarn back\" \"yarn front\""
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"concurrently": "^8.2.0",
+		"prettier": "^3.0.0"
+	},
+	"dependencies": {}
 }

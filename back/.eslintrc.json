@@ -1,0 +1,26 @@
+{
+	"root": true,
+	"parser": "@babel/eslint-parser",
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"babelOptions": {
+			"presets": ["@babel/preset-env"]
+		}
+	},
+	"env": {
+		"node": true,
+		"es6": true,
+		"browser": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:node/recommended",
+		"plugin:prettier/recommended"
+	],
+	"plugins": ["babel"],
+
+	"rules": {
+		"no-console": "warn"
+	}
+}

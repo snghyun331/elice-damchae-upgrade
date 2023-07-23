@@ -1,16 +1,32 @@
-import { Route, Routes } from "react-router-dom";
-import { ROUTE_ARR } from "./routes";
+import { Route, Routes, Outlet } from 'react-router-dom';
+import Home from '../components/Home/Home';
+import MyPage from '../components/MyPage/MyPage';
+import InfoChange from '../components/User/InfoChange';
+import MyStories from '../components/Stories/MyStories';
+import LoginForm from '../components/User/Loginform';
+import RegisterForm from '../components/User/Registerform';
+import StoryRead from '../components/Stories/StoryRead';
 
 const Router = () => {
-  return (
-    <Routes>
-      {ROUTE_ARR.map((route, index) => {
-        return (
-          <Route path={route.path} element={<route.element />} key={index} />
-        );
-      })}
-    </Routes>
-  );
+	return (
+		<Routes>
+			<Route path="/" element={<Home />} />
+
+			<Route path="login" element={<LoginForm />} />
+
+			<Route path="register" element={<RegisterForm />} />
+
+			<Route path="mypage" element={<MyPage />} />
+
+			<Route path="infochange" element={<InfoChange />} />
+
+			<Route path="stories" element={<Outlet />}>
+				<Route index element={<MyStories />} />
+				<Route path="read" element={<StoryRead />} />
+				<Route path=":storyId" element={<StoryRead />} />
+			</Route>
+		</Routes>
+	);
 };
 
 export default Router;
