@@ -72,22 +72,29 @@ const InfoChange = () => {
 	);
 
 	const isFormValid = useMemo(
-		() => isPasswordValid && isPasswordSame && isNicknameValid && nicknameCheck && mbti,
+		() =>
+			isPasswordValid &&
+			isPasswordSame &&
+			isNicknameValid &&
+			nicknameCheck &&
+			Boolean(mbti),
 		[isPasswordValid, isPasswordSame, isNicknameValid, nicknameCheck, mbti],
 	);
-
+	console.log('이즈폼밸리드', isFormValid);
 	const handleNicknameCheck = async () => {
 		try {
 			const response = await getApi(`auth/check-nickname?=`, nickname);
 			console.log(response.data);
 
-			if (response.data.state == 'usableNickname') {
-				alert(response.data.alertMsg);
+			if (response.data.nicknameState == 'usableNickname') {
+				alert(response.data.usableNickname);
 				setNicknameCheck(true);
+				console.log(nicknameCheck);
 			}
-			if (response.data.state == 'unusableNickname') {
-				alert(response.data.alertMsg);
+			if (response.data.nicknameState == 'unusableNickname') {
+				alert(response.data.usableNickname);
 				setNicknameCheck(false);
+				console.log(nicknameCheck);
 			}
 		} catch (error) {
 			console.log(error.response.data.message);
@@ -96,6 +103,7 @@ const InfoChange = () => {
 
 	const handleSubmit = () => {
 		//수정하기 요청
+		console.log('수정 요청');
 	};
 
 	return (
@@ -116,7 +124,7 @@ const InfoChange = () => {
 										썸네일 업로드
 									</label>
 									<input
-										className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										id="file_input"
 										name="profileImg"
 										type="file"
@@ -161,10 +169,11 @@ const InfoChange = () => {
 									<input
 										value={password}
 										onChange={handleChangeInput}
+										autoComplete=""
 										type="password"
 										name="password"
 										id="password"
-										placeholder="••••••••"
+										placeholder=""
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 										onFocus={() => handleFocus('confirmPassword', true)}
@@ -187,10 +196,11 @@ const InfoChange = () => {
 									<input
 										value={confirmPassword}
 										onChange={handleChangeInput}
+										autoComplete=""
 										type="password"
 										name="confirmPassword"
 										id="confirm-password"
-										placeholder="••••••••"
+										placeholder=""
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 										onFocus={() => handleFocus('confirmPassword', true)}
