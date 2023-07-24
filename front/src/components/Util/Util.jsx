@@ -6,3 +6,7 @@ export const moodColors = {
     '😡': '#F9EBDE',
     '😐': '#E0E0E0',
 };
+
+export const truncateString = (string, length) => {
+    return string.length > length ? `${string.slice(0, length)}...` : string
+}

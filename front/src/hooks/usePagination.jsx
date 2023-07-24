@@ -8,23 +8,23 @@ const usePagination = (data, itemsPerPage) => {
 	const endIndex = currentPage * itemsPerPage;
 	const displayedData = data.slice(startIndex, endIndex);
 
-	const handlePreviousClick = () => {
+	const prev = () => {
 		if (currentPage > 1) setCurrentPage(currentPage - 1);
 	};
 
-	const handleNextClick = () => {
+	const next = () => {
 		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
 	};
 
-	const handleClick = (pageNumber) => setCurrentPage(pageNumber);
+	const go = (pageNumber) => setCurrentPage(pageNumber);
 
 	return {
 		currentPage,
 		totalPages,
 		displayedData,
-		handlePreviousClick,
-		handleNextClick,
-		handleClick,
+		prev,
+		next,
+		go,
 	};
 };
 
