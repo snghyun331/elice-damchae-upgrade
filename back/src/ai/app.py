@@ -3,7 +3,8 @@
 import warnings
 warnings.filterwarnings('ignore')
 import bertModelClass
-from flask import Flask, jsonify, request
+import stableDiffusionClass
+from flask import Flask, jsonify, request, Response
 import torch
 from torch import nn
 import torch.nn.functional as F
@@ -28,6 +29,25 @@ loaded_model.load_state_dict(torch.load('./best_model.h5',map_location=device))
 loaded_model.eval()
 max_len = 64
 batch_size = 32
+
+
+
+
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Flask 서버시작"
+
+
+# 글 감정분석(아웃풋 : mood)
+@app.route('/predict', methods=['POST'])
+def getPredictResult():
+    args = request.get_json(force=True)   # request_body예시: {"sentence": "슬픈 하루였다."}
+    sentence = args.get('text', [])  
+    mood = predict(sentence, loaded_model)
+    return jsonify({'mood': mood})
 
 def predict(predict_sentence, model):
     data = [predict_sentence, '0']
@@ -58,24 +78,6 @@ def predict(predict_sentence, model):
             elif np.argmax(logits) == 5:
                 test_eval.append("pleasure")
         return test_eval[0]
-
-
-
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "Flask 서버시작"
-
-
-# 글 감정분석(아웃풋 : mood)
-@app.route('/predict', methods=['POST'])
-def getPredictResult():
-    args = request.get_json(force=True)   # request_body예시: {"sentence": "슬픈 하루였다."}
-    sentence = args.get('text', [])  
-    mood = predict(sentence, loaded_model)
-    return jsonify({'mood': mood})
-
 
 # 텍스트를 이미지로(아웃풋: 이미지)
 @app.route('/text-to-image', methods=['POST'])
