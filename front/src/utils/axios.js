@@ -15,7 +15,12 @@ instance.interceptors.request.use(
 	(config) => {
 		const accessToken = getToken();
 
-		config.headers['Content-Type'] = 'application/json';
+		if (config.data instanceof FormData) {
+			console.log('폼데이터');
+			config.headers['Content-Type'] = 'multipart/form-data';
+		} else if (config.data instanceof Object) {
+			config.headers['Content-Type'] = 'application/json';
+		}
 		config.headers['Authorization'] = `Bearer ${accessToken}`;
 
 		return config;
