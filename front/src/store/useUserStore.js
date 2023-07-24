@@ -24,8 +24,6 @@ const useUserStore = create((set) => ({
 
 			localStorage.setItem('accessToken', jwtToken);
 			set({ isLoggedIn: true });
-
-			window.location.href = '/';
 		} catch (error) {
 			set({ errMsg: error.response.data.errorMessage });
 		}
@@ -35,7 +33,6 @@ const useUserStore = create((set) => ({
 		try {
 			await postApi('auth/register', user);
 			console.log(user);
-			window.location.href = '/login';
 		} catch (error) {
 			set({ errMsg: error.response.data.errorMessage });
 		}
@@ -43,7 +40,6 @@ const useUserStore = create((set) => ({
 	logout: () => {
 		localStorage.removeItem('accessToken');
 		set({ isLoggedIn: false });
-		window.location.href = '/';
 	},
 }));
 
