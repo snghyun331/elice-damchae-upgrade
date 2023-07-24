@@ -11,12 +11,12 @@ const upload = multer({
 });
 
 imageRouter.post(
-  '/images/upload',
+  '/image/upload',
   loginRequired,
   upload.single('thumbnail'),
   imageController.createImageSingle,
 );
 
-imageRouter.post('/images/multi/upload', loginRequired, upload.array('image'));
+imageRouter.post('/images/upload', loginRequired, upload.array('image'));
 
 export { imageRouter };
