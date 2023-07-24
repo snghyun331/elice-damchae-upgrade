@@ -109,6 +109,7 @@ const RegisterForm = () => {
 		e.preventDefault();
 		console.log(user);
 		await register(user);
+
 		console.log(errMsg);
 	};
 

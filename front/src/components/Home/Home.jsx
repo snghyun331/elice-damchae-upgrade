@@ -1,29 +1,15 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import StoryCreateModal from '../Global/StoryCreateModal';
+import StoryCreateModal from '../Stories/StoryCreateModal';
 import BannerCarousel from './BannerCarousel';
 import Search from '../Global/Search';
 import StoryCardMap from '../Global/StoryCardMap';
 import useUserStore from '../../store/useUserStore';
+import useStoryStore from '../../store/useStoryStore';
 
 const Home = () => {
 	const navigate = useNavigate();
-	const [showStoryCreateModal, setShowStoryCreateModal] = useState(false);
+	const { storyModal, handleModalOpen, handleModalClose } = useStoryStore();
 	const { isLoggedIn } = useUserStore();
-	const handleButtonClick = () => {
-		console.log(isLoggedIn);
-		if (isLoggedIn) {
-			setShowStoryCreateModal(true);
-			document.body.style.overflow = 'hidden';
-		} else {
-			navigate('/login');
-		}
-	};
-
-	const handleModalClose = () => {
-		setShowStoryCreateModal(false);
-		document.body.style.overflow = 'auto';
-	};
 
 	const messages = [
 		'행복한 하루 보내세요.',
@@ -56,7 +42,9 @@ const Home = () => {
 						내 스토리
 					</button>
 					<button
-						onClick={handleButtonClick}
+						onClick={
+							isLoggedIn ? () => handleModalOpen() : () => navigate('/login')
+						}
 						type="button"
 						className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
 					>
@@ -74,12 +62,9 @@ const Home = () => {
 				<StoryCardMap />
 			</div>
 			{/* 모달 렌더링 */}
-			{showStoryCreateModal && (
+			{storyModal && (
 				<>
-					<StoryCreateModal
-						showStoryCreateModal={showStoryCreateModal}
-						handleModalClose={handleModalClose}
-					/>
+					<StoryCreateModal />
 					<button
 						type="button"
 						onClick={handleModalClose}
