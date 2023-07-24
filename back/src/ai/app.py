@@ -1,4 +1,5 @@
 # !pip install "git+https://github.com/SKTBrain/KoBERT.git#egg=kobert_tokenizer&subdirectory=kobert_hf"
+# !pip install --upgrade -qq "git+https://github.com/huggingface/diffusers.git"
 import warnings
 warnings.filterwarnings('ignore')
 import bertModelClass
@@ -12,10 +13,21 @@ import gluonnlp as nlp
 from tqdm import tqdm, tqdm_notebook
 import numpy as np
 from kobert_tokenizer import KoBERTTokenizer
-from transformers import BertModel
-from transformers import AdamW
+from transformers import BertModel, AdamW
 from transformers.optimization import get_cosine_schedule_with_warmup
+from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
+from translate import Translator
 
+
+tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
+bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
+vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
+device = torch.device('cpu')
+loaded_model = bertModelClass.BERTClassifier(bertmodel, dr_rate=0.5)
+loaded_model.load_state_dict(torch.load('./best_model.h5',map_location=device))
+loaded_model.eval()
+max_len = 64
+batch_size = 32
 
 def predict(predict_sentence, model):
     data = [predict_sentence, '0']
@@ -34,18 +46,20 @@ def predict(predict_sentence, model):
             logits=i
             logits = logits.detach().cpu().numpy()
             if np.argmax(logits) == 0:
-                test_eval.append("불안")
+                test_eval.append("insecure")
             elif np.argmax(logits) == 1:
-                test_eval.append("놀람")
+                test_eval.append("surprise")
             elif np.argmax(logits) == 2:
-                test_eval.append("분노")
+                test_eval.append("anger")
             elif np.argmax(logits) == 3:
-                test_eval.append("슬픔")
+                test_eval.append("sad")
             elif np.argmax(logits) == 4:
-                test_eval.append("중립")
+                test_eval.append("neutral")
             elif np.argmax(logits) == 5:
-                test_eval.append("기쁨")
+                test_eval.append("pleasure")
         return test_eval[0]
+
+
 
 app = Flask(__name__)
 
@@ -53,21 +67,32 @@ app = Flask(__name__)
 def home():
     return "Flask 서버시작"
 
+
+# 글 감정분석(아웃풋 : mood)
 @app.route('/predict', methods=['POST'])
 def getPredictResult():
     args = request.get_json(force=True)   # request_body예시: {"sentence": "슬픈 하루였다."}
-    sentence = args.get('sentence', [])  
-    emotion = predict(sentence, loaded_model)
-    return jsonify({'sentence': sentence, 'emotion': emotion})
+    sentence = args.get('text', [])  
+    mood = predict(sentence, loaded_model)
+    return jsonify({'mood': mood})
+
+
+# 텍스트를 이미지로(아웃풋: 이미지)
+@app.route('/text-to-image', methods=['POST'])
+def getImage():
+    args = request.get_json(force=True) 
+    sentence = args.get('sentence',[])
+    translator = Translator(from_lang="ko", to_lang="en")
+    model_id = "stabilityai/stable-diffusion-2"
+    scheduler = EulerDiscreteScheduler.from_pretrained(model_id, subfolder="scheduler")
+    pipe = StableDiffusionPipeline.from_pretrained(model_id, scheduler=scheduler, revision="fp16", torch_dtype=torch.float16)
+    # pipe = pipe.to("cuda")
+    
+    translation = translator.translate(sentence)
+    image = pipe(translation, height=500, width=500).images[0]
+    return image  # 1. 이미지 고대로 return / 2. base64로 인디코딩 후 return / 3. 이미지를 url로 바꿔준 후 return
+
 
 if __name__ == '__main__':
-    tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
-    bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
-    vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
-    device = torch.device('cpu')
-    loaded_model = bertModelClass.BERTClassifier(bertmodel, dr_rate=0.5)
-    loaded_model.load_state_dict(torch.load('./best_model.h5',map_location=device))
-    loaded_model.eval()
-    max_len = 64
-    batch_size = 32
     app.run(host = '0.0.0.0', port = 5000)
+

@@ -1,18 +1,10 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 const StoryPostSchema = new Schema(
   {
-    userId: {
+    userInfo: {
       type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    userName: {
-      type: String,
-      required: true,
-    },
-    userMbti: {
-      type: String,
+      ref: 'User',
       required: true,
     },
     title: {
@@ -23,26 +15,36 @@ const StoryPostSchema = new Schema(
       type: String,
       required: true,
     },
-    stroyImg: {
-        type: String,
+    thumbnail: {
+      type: Schema.Types.ObjectId,
+      ref: 'Image',
+      required: false,
     },
     mood: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     isPublic: {
-        type: Boolean,
-        required: true
+      type: Boolean,
+      required: true,
     },
     music: {
-        type: String,
-    }
+      type: String,
+      required: false,
+    },
+    commentList: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'StoryComment',
+        required: false,
+      },
+    ],
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const StoryPostModel = model("StoryPost", StoryPostSchema);
+const StoryPost = model('StoryPost', StoryPostSchema);
 
-export { StoryPostModel };
+export { StoryPost };

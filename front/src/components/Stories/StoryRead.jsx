@@ -1,6 +1,7 @@
 // import { useParams } from 'react-router-dom';
-import { moodColors } from "../Util/Util";
-import { Link } from "react-router-dom";
+import { moodColors } from '../Util/Util';
+import { Link } from 'react-router-dom';
+import TextViewer from '../Global/TextViewer';
 
 const StoryRead = () => {
 	// console.log('스토리 리드 진입');
@@ -18,8 +19,6 @@ const StoryRead = () => {
 		createdAt: '2023년 7월 18일 (화)',
 		profileImg: 'https://picsum.photos/200/300',
 	};
-
-
 
 	const moodColor = moodColors[dummyData.mood];
 
@@ -63,7 +62,7 @@ const StoryRead = () => {
 						<span className="text-9xl">{dummyData.mood}</span>
 					</div>
 					<div className="-mt-12 p-14 leading-relaxed text-gray-700 dark:text-gray-400">
-						{dummyData.content}
+						<TextViewer />
 					</div>
 
 					<div>

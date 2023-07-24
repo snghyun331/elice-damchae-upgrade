@@ -1,13 +1,11 @@
-import { useState } from 'react';
-
+import usePagination from '../../hooks/usePagination';
 import StoryCard from './StoryCard';
 import Pagination from './Pagination';
 
 const StoryCardMap = () => {
-	const [currentPage, setCurrentPage] = useState(1);
 	const dummyData = [
 		{
-			id: '1',
+			id: 1,
 			username: 'Mike',
 			title:
 				'가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요 가장',
@@ -17,7 +15,7 @@ const StoryCardMap = () => {
 			mood: '😊',
 		},
 		{
-			id: '2',
+			id: 2,
 			username: 'Mike',
 			title: 'Story 2',
 			content:
@@ -26,6 +24,7 @@ const StoryCardMap = () => {
 			mood: '😡',
 		},
 		{
+			id: 3,
 			username: 'Mike',
 			title: 'Story 3',
 			content:
@@ -34,48 +33,9 @@ const StoryCardMap = () => {
 			mood: '😨',
 		},
 		{
+			id: 4,
 			username: 'Mike',
 			title: 'Story 4',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 5',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 6',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 7',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 8',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 9',
 			content:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
 			storyImg: 'https://picsum.photos/200/300',
@@ -84,20 +44,14 @@ const StoryCardMap = () => {
 	];
 
 	const itemsPerPage = 8;
-	const totalPages = Math.ceil(dummyData.length / itemsPerPage);
-	const startIndex = (currentPage - 1) * itemsPerPage;
-	const endIndex = currentPage * itemsPerPage;
-	const displayedData = dummyData.slice(startIndex, endIndex);
-
-	const handlePreviousClick = () => {
-		if (currentPage > 1) setCurrentPage(currentPage - 1);
-	};
-
-	const handleNextClick = () => {
-		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-	};
-
-	const handleClick = (pageNumber) => setCurrentPage(pageNumber);
+	const {
+		currentPage,
+		totalPages,
+		displayedData,
+		prev,
+		next,
+		go,
+	} = usePagination(dummyData, itemsPerPage);
 
 	return (
 		<>
@@ -105,17 +59,17 @@ const StoryCardMap = () => {
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-base font-medium">
 					{displayedData.map((storyData) => (
 						<div key={storyData.title}>
-							<StoryCard storyData={storyData} />
+							<StoryCard data={storyData} />
 						</div>
 					))}
 				</div>
 				<div className="flex justify-center mt-10">
 					<Pagination
-						totalPages={totalPages}
 						currentPage={currentPage}
-						handlePreviousClick={handlePreviousClick}
-						handleNextClick={handleNextClick}
-						handleClick={handleClick}
+						totalPages={totalPages}
+						prev={prev}
+						next={next}
+						go={go}
 					/>
 				</div>
 			</div>

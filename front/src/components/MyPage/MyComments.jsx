@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import Pagination from '../global/Pagination';
+import Pagination from '../Global/Pagination';
+import usePagination from '../../hooks/usePagination';
+
 
 const MyComments = () => {
-	const [currentPage, setCurrentPage] = useState(1);
-
 	const dummyData = [
 		{
 			comment: '응원합니다 1',
@@ -39,20 +38,14 @@ const MyComments = () => {
 	];
 
 	const itemsPerPage = 5;
-	const totalPages = Math.ceil(dummyData.length / itemsPerPage);
-	const startIndex = (currentPage - 1) * itemsPerPage;
-	const endIndex = currentPage * itemsPerPage;
-	const displayedData = dummyData.slice(startIndex, endIndex);
-
-	const handlePreviousClick = () => {
-		if (currentPage > 1) setCurrentPage(currentPage - 1);
-	};
-
-	const handleNextClick = () => {
-		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-	};
-
-	const handleClick = (pageNumber) => setCurrentPage(pageNumber);
+	const {
+		currentPage,
+		totalPages,
+		displayedData,
+		prev,
+		next,
+		go,
+	} = usePagination(dummyData, itemsPerPage);
 
 	return (
 		<div>
@@ -84,13 +77,13 @@ const MyComments = () => {
 				</ul>
 			</div>
 			<div className="flex justify-center mt-10">
-				<Pagination
-					totalPages={totalPages}
-					currentPage={currentPage}
-					handlePreviousClick={handlePreviousClick}
-					handleNextClick={handleNextClick}
-					handleClick={handleClick}
-				/>
+			<Pagination
+						currentPage={currentPage}
+						totalPages={totalPages}
+						prev={prev}
+						next={next}
+						go={go}
+					/>
 			</div>
 		</div>
 	);
