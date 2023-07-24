@@ -1,14 +1,29 @@
 import Search from '../Global/Search';
 import StoryCreateModal from './StoryCreateModal';
 import StoryCardMap from '../Global/StoryCardMap';
-import useStoryStore from '../../store/useStoryStore';
+import useStoryStore from '../../hooks/useStoryStore';
 import useUserStore from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 
 const MyStories = () => {
 	const navigate = useNavigate();
 	const { isLoggedIn } = useUserStore();
-	const { storyModal, handleModalOpen, handleModalClose } = useStoryStore();
+	const { setMusic, storyModal, setStoryModal } = useStoryStore();
+
+	const renderModal = () => {
+		if (!storyModal) return null;
+
+		return createPortal(
+			<StoryCreateModal
+				onClose={() => {
+					setStoryModal(false);
+					setMusic('');
+				}}
+			/>,
+			document.getElementById('modal-root'), // Add a div with id="modal-root" in your index.html file
+		);
+	};
 
 	return (
 		<>
@@ -17,7 +32,7 @@ const MyStories = () => {
 					<div>내 스토리</div>
 					<button
 						onClick={
-							isLoggedIn ? () => handleModalOpen() : () => navigate('/login')
+							isLoggedIn ? () => setStoryModal(true) : () => navigate('/login')
 						}
 						type="button"
 						className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
@@ -28,17 +43,7 @@ const MyStories = () => {
 				<div className="mb-20 text-sm font-medium text-zinc-600">
 					내가 쓴 스토리를 확인할 수 있어요.
 				</div>
-				{storyModal && (
-					<>
-						<StoryCreateModal />
-						<button
-							type="button"
-							onClick={handleModalClose}
-							className="z-[1] fixed inset-0 w-full h-full bg-black opacity-60 cursor-default"
-							aria-hidden="true"
-						/>
-					</>
-				)}
+				<div>{renderModal()}</div>
 				<div style={{ overflow: storyModal ? 'hidden' : 'auto' }}>
 					<Search />
 					<StoryCardMap />
