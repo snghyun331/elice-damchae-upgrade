@@ -37,7 +37,6 @@ const useUserStore = create((set, get) => ({
 		},
 
 		logout: () => {
-			
 			localStorage.removeItem('accessToken');
 			set({ isLoggedIn: false });
 			alert('로그아웃 하였습니다.');
