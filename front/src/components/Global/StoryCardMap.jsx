@@ -48,9 +48,9 @@ const StoryCardMap = () => {
 		currentPage,
 		totalPages,
 		displayedData,
-		handlePreviousClick,
-		handleNextClick,
-		handleClick,
+		prev,
+		next,
+		go,
 	} = usePagination(dummyData, itemsPerPage);
 
 	return (
@@ -67,9 +67,9 @@ const StoryCardMap = () => {
 					<Pagination
 						currentPage={currentPage}
 						totalPages={totalPages}
-						handlePreviousClick={handlePreviousClick}
-						handleNextClick={handleNextClick}
-						handleClick={handleClick}
+						prev={prev}
+						next={next}
+						go={go}
 					/>
 				</div>
 			</div>

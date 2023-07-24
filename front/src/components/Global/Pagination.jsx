@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 const Pagination = ({
 	totalPages,
 	currentPage,
-	handlePreviousClick,
-	handleNextClick,
-	handleClick,
+	prev,
+	next,
+	go,
 }) => {
 	const pageNumbers = [];
 	const maxPages = 5;
@@ -39,7 +39,7 @@ const Pagination = ({
 									? 'text-gray-400 cursor-not-allowed'
 									: 'text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white'
 							} bg-white border border-gray-300 rounded-l-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400`}
-							onClick={handlePreviousClick}
+							onClick={prev}
 						>
 							<span className="sr-only">Previous</span>
 							<svg
@@ -67,7 +67,7 @@ const Pagination = ({
 										? 'text-blue-600 border border-blue-300 bg-blue-50 z-10 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
 										: 'text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white'
 								} bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400`}
-								onClick={() => handleClick(pageNumber)}
+								onClick={() => go(pageNumber)}
 							>
 								{pageNumber}
 							</button>
@@ -81,7 +81,7 @@ const Pagination = ({
 									? 'text-gray-400 cursor-not-allowed'
 									: 'text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white'
 							} bg-white border border-gray-300 rounded-r-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400`}
-							onClick={handleNextClick}
+							onClick={next}
 						>
 							<span className="sr-only">Next</span>
 							<svg
@@ -110,9 +110,9 @@ const Pagination = ({
 Pagination.propTypes = {
 	totalPages: PropTypes.number.isRequired,
 	currentPage: PropTypes.number.isRequired,
-	handlePreviousClick: PropTypes.func.isRequired,
-	handleNextClick: PropTypes.func.isRequired,
-	handleClick: PropTypes.func.isRequired,
+	prev: PropTypes.func.isRequired,
+	next: PropTypes.func.isRequired,
+	go: PropTypes.func.isRequired,
 };
 
 export default Pagination;
