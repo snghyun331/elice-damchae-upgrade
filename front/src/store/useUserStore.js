@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
 
-
-const useUserStore = create((set) => ({
+const useUserStore = create((set, get) => ({
+	id: '',
 	email: '',
 	nickname: '',
 	mbti: '',
@@ -18,11 +18,18 @@ const useUserStore = create((set) => ({
 	actions: {
 		login: async (user) => {
 			const response = await postApi('auth/login', user);
-
+			console.log(response.data);
 			const jwtToken = response.data.token;
-
 			localStorage.setItem('accessToken', jwtToken);
-			set({ isLoggedIn: true });
+
+			set({
+				isLoggedIn: true,
+				id: response.data.id,
+				email: response.data.email,
+				nickname: response.data.nickname,
+				mbti: response.data.mbti,
+			});
+			console.log('로그인 완료 후 설정된 전역변수 :', get());
 		},
 
 		register: async (user) => {
@@ -30,9 +37,10 @@ const useUserStore = create((set) => ({
 		},
 
 		logout: () => {
+			
 			localStorage.removeItem('accessToken');
 			set({ isLoggedIn: false });
-			alert('로그아웃 하였습니다.')
+			alert('로그아웃 하였습니다.');
 		},
 	},
 }));

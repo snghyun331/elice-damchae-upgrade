@@ -7,20 +7,20 @@ import { getApi, patchApi } from '../../services/api';
 
 const InfoChange = () => {
 	const {
+		id,
 		email,
-		password,
 		nickname,
 		mbti,
 		profileImg,
 
-		setPassword,
 		setNickname,
 		setMbti,
 		setProfileImg,
 	} = useUserStore();
 
+	console.log('ID: ' + id);
+	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
-
 	const [nicknameCheck, setNicknameCheck] = useState(true);
 
 	const [focusedMap, setFocusedMap] = useState({

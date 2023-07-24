@@ -18,7 +18,7 @@ const MobileHeader = () => {
 				{ title: '내 스토리', onClick: () => navigate('/stories') },
 				{ title: '마이 페이지', onClick: () => navigate('/mypage') },
 				{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
-				{ title: '로그아웃', onClick: () => logout() },
+				{ title: '로그아웃', onClick: () => {logout(); navigate('/')} },
 		  ]
 		: [
 				{ title: '대나무숲', onClick: () => navigate('/mypage') },
