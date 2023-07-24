@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
-import useUserStore from '../../store/useUserStore';
+import useUserStore, { useUserActions } from '../../store/useUserStore';
 
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
 	const navigate = useNavigate();
-	const { email, password, setEmail, setPassword, errMsg, login } =
-		useUserStore();
+	const { email, password, setEmail, setPassword, errMsg } = useUserStore();
+
+	const { login } = useUserActions();
 
 	const [focusedMap, setFocusedMap] = useState({
 		email: false,

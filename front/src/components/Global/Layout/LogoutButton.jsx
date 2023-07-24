@@ -1,7 +1,7 @@
-import useUserStore from '../../../store/useUserStore';
+import { useUserActions } from '../../../store/useUserStore';
 
 const LogoutButton = () => {
-	const { logout } = useUserStore();
+	const { logout } = useUserActions();
 
 	return (
 		<button

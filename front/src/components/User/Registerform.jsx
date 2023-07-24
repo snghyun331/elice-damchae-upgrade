@@ -2,8 +2,9 @@ import useRegisterStore from '../../hooks/useRegisterStore';
 import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
-import useUserStore from '../../store/useUserStore';
+
 import { getApi } from '../../services/api';
+import { useUserActions } from '../../store/useUserStore';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
@@ -27,7 +28,7 @@ const RegisterForm = () => {
 		setNicknameCheck,
 	} = useRegisterStore();
 
-	const { register } = useUserStore();
+	const { register } = useUserActions();
 
 	const [focusedMap, setFocusedMap] = useState({
 		email: false,
