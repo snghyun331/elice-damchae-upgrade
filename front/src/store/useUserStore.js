@@ -3,40 +3,27 @@ import { postApi } from '../services/api';
 
 const useUserStore = create((set) => ({
 	email: '',
-	password: '',
 	nickname: '',
 	mbti: '',
 	isLoggedIn: true,
-	errMsg: '',
 
 	setEmail: (email) => set({ email }),
-	setPassword: (password) => set({ password }),
 	setNickname: (nickname) => set({ nickname }),
 	setMbti: (mbti) => set({ mbti }),
 	setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
-	setErrMsg: (errMsg) => set({ errMsg }),
 
 	actions: {
 		login: async (user) => {
-			try {
-				const response = await postApi('auth/login', user);
+			const response = await postApi('auth/login', user);
 
-				const jwtToken = response.data.token;
+			const jwtToken = response.data.token;
 
-				localStorage.setItem('accessToken', jwtToken);
-				set({ isLoggedIn: true });
-			} catch (error) {
-				set({ errMsg: error.response.data.errorMessage });
-			}
+			localStorage.setItem('accessToken', jwtToken);
+			set({ isLoggedIn: true });
 		},
 
 		register: async (user) => {
-			try {
-				await postApi('auth/register', user);
-				console.log(user);
-			} catch (error) {
-				set({ errMsg: error.response.data.errorMessage });
-			}
+			await postApi('auth/register', user);
 		},
 		logout: () => {
 			localStorage.removeItem('accessToken');

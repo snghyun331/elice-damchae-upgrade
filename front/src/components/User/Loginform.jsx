@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
 	const navigate = useNavigate();
-	const { email, password, setEmail, setPassword, errMsg } = useUserStore();
+	const { email, setEmail } = useUserStore();
 
 	const { login } = useUserActions();
+	const [errMsg, setErrMsg] = useState('');
+	const [password, setPassword] = useState('');
 
 	const [focusedMap, setFocusedMap] = useState({
 		email: false,
@@ -22,8 +24,12 @@ const LoginForm = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await login(user);
-		navigate('/');
+		try {
+			await login(user);
+			navigate('/');
+		} catch (error) {
+			setErrMsg(error.response?.data?.message); // Set the error message in the local state on login failure
+		}
 	};
 
 	const validateEmail = () => {

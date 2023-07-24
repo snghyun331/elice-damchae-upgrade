@@ -26,6 +26,7 @@ const RegisterForm = () => {
 		setConfirmPassword,
 		setCode,
 		setNicknameCheck,
+		setErrMsg,
 	} = useRegisterStore();
 
 	const { register } = useUserActions();
@@ -108,11 +109,12 @@ const RegisterForm = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log(user);
-		await register(user);
-		navigate('/login');
-
-		console.log(errMsg);
+		try {
+			await register(user);
+			navigate('/login');
+		} catch (error) {
+			setErrMsg(error.response?.data?.errorMessage);
+		}
 	};
 
 	const handleEmailCheck = () => {
@@ -124,11 +126,12 @@ const RegisterForm = () => {
 		// Logic for verification code verification
 		// You can implement your own verification code verification functionality here
 	};
+
 	const handleNicknameCheck = async () => {
 		try {
-			console.log(nickname);
 			const response = await getApi(`auth/check-nickname?=`, nickname);
 			console.log(response.data);
+
 			if (response.data.state == 'usableNickname') {
 				alert(response.data.alertMsg);
 				setNicknameCheck(true);
@@ -138,7 +141,7 @@ const RegisterForm = () => {
 				setNicknameCheck(false);
 			}
 		} catch (error) {
-			// Handle the error if needed
+			console.log(error.response.data.message);
 		}
 	};
 
