@@ -1,42 +1,46 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
 
-const useUserStore = create((set) => {
-	return {
-		email: '',
-		password: '',
-		nickname: '',
-		mbti: '',
-		isLoggedIn: true,
-		errMsg: '',
+const useUserStore = create((set) => ({
+	email: '',
+	password: '',
+	nickname: '',
+	mbti: '',
+	isLoggedIn: true,
+	errMsg: '',
 
-		login: async (user) => {
-			try {
-				const response = await postApi('auth/login', user);
+	setEmail: (email) => set({ email }),
+	setPassword: (password) => set({ password }),
+	setNickname: (nickname) => set({ nickname }),
+	setMbti: (mbti) => set({ mbti }),
+	setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
+	setErrMsg: (errMsg) => set({ errMsg }),
 
-				const jwtToken = response.data.token;
+	login: async (user) => {
+		try {
+			const response = await postApi('auth/login', user);
 
-				localStorage.setItem('accessToken', jwtToken);
-				set({ isLoggedIn: true });
-			} catch (error) {
-				set({ errMsg: error.response.data.errorMessage });
-			}
-		},
+			const jwtToken = response.data.token;
 
-		register: async (user) => {
-			try {
-				await postApi('auth/register', user);
-				console.log(user);
-			} catch (error) {
-				set({ errMsg: error.response.data.errorMessage });
-			}
-		},
+			localStorage.setItem('accessToken', jwtToken);
+			set({ isLoggedIn: true });
+		} catch (error) {
+			set({ errMsg: error.response.data.errorMessage });
+		}
+	},
 
-		logout: () => {
-			localStorage.removeItem('accessToken');
-			set({ isLoggedIn: false });
-		},
-	};
-});
+	register: async (user) => {
+		try {
+			await postApi('auth/register', user);
+			console.log(user);
+		} catch (error) {
+			set({ errMsg: error.response.data.errorMessage });
+		}
+	},
+	logout: () => {
+		localStorage.removeItem('accessToken');
+		set({ isLoggedIn: false });
+	},
+}));
 
 export default useUserStore;
