@@ -1,15 +1,12 @@
 import 'dotenv/config';
 import { app } from './src/app.js';
-import express from 'express';
+// import express from 'express';
 import mongoose from 'mongoose';
 
 const PORT = process.env.SERVER_PORT || 3001;
 const DB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017/test_db';
 
-mongoose.connect(DB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect('mongodb://localhost:27017/test_db');
 
 const db = mongoose.connection;
 

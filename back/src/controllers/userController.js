@@ -1,8 +1,7 @@
-import userModel from '../db/schemas/user.js';
 import is from '@sindresorhus/is';
 import { userService } from '../services/userService.js';
 
-class userController {
+class userAuthController {
   static async userRegister(req, res, next) {
     try {
       if (is.emptyObject(req.body)) {
@@ -93,7 +92,7 @@ class userController {
     try {
       const userId = req.body.userId;
       // 사용자를 비활성화 처리하기 위해 `isOut` 필드를 `true`로 설정
-      const user = await userService.withdrawUser(userId);
+      const user = await userService.withdrawUser({ userId });
 
       if (!user) {
         return res.status(404).json({ error: '존재하지 않는 유저입니다.' });
@@ -105,4 +104,4 @@ class userController {
   }
 }
 
-export { userController };
+export { userAuthController };
