@@ -1,29 +1,39 @@
-import { useState } from 'react';
 import moment from 'moment';
-import TextEditor from './TextEditor';
+import StoryEditor from './StoryTextEditor';
 import PropTypes from 'prop-types';
-import MusicVideo from '../Stories/MusicVideo';
-import ImageGallery from './ImageGallery';
+import MusicVideo from './MusicVideo';
+import useStoryStore from '../../store/useStoryStore';
 
-const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
+const StoryCreateModal = () => {
 	const currentDate = moment().format('YYYY년 M월 D일');
 
-	const modalStyle = showStoryCreateModal ? '' : 'hidden';
+	const {
+		title,
+		content,
+		thumbnail,
+		isPublic,
+		mood,
+		music,
+		phrase,
+		setIsPublic,
+		setThumbnail,
+		storyModal,
+		handleModalClose,
+		postStory,
+	} = useStoryStore();
 
-	const [selectedImage, setSelectedImage] = useState(null);
-	const [videoId, setVideoId] = useState('');
+	const modalStyle = storyModal ? '' : 'hidden';
 
-	const handleThumbnailUpload = (event) => {
-		const file = event.target.files[0];
-		setSelectedImage(URL.createObjectURL(file));
+	const handleThumbnailUpload = (e) => {
+		setThumbnail(e.target.files[0]);
 	};
 
-	const handleMusic = () => {
-		// 음악 추천받기 버튼 클릭 시 videoId 설정
-		setVideoId('HClfli9xd3g');
-	};
+	const post = { title, content, thumbnail, isPublic, mood, music };
 
-	const handlePostStory = () => {};
+	const formData = new FormData();
+	for (const key in post) {
+		formData.append(key, post[key]);
+	}
 
 	return (
 		<div
@@ -65,10 +75,8 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 							<span className="sr-only">Close modal</span>
 						</button>
 					</div>
-					<div className="flex flex-col p-6 space-y-6">
-						<TextEditor />
-						<ImageGallery />
 
+					<div className="flex flex-col p-6 space-y-6">
 						<div>
 							<label
 								className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -82,47 +90,45 @@ const StoryCreateModal = ({ showStoryCreateModal, handleModalClose }) => {
 								type="file"
 								onChange={handleThumbnailUpload}
 							/>
-							{selectedImage && (
+							{thumbnail && (
 								<div className="mt-4">
 									<p className="text-sm text-gray-500">선택된 이미지:</p>
 									<img
 										className="mt-2 max-w-xs"
-										src={selectedImage}
+										src={thumbnail}
 										alt="Selected Thumbnail"
 									/>
 								</div>
 							)}
 						</div>
-						<label
-							htmlFor="Toggle"
-							className="self-end inline-flex items-center p-1 cursor-pointer dark:bg-gray-300 dark:text-gray-800"
-						>
-							<input id="Toggle" type="checkbox" className="hidden peer" />
-							<span className="px-4 py-2 bg-red-300 peer-checked:bg-gray-300">
-								비공개
-							</span>
-							<span className="px-4 py-2 bg-gray-300 peer-checked:bg-blue-400">
-								공개
+						<StoryEditor />
+
+						<label className="self-end relative inline-flex items-center cursor-pointer">
+							<input
+								onChange={() => {
+									setIsPublic(!isPublic);
+									console.log(isPublic);
+								}}
+								type="checkbox"
+								value={isPublic}
+								className="sr-only peer"
+							/>
+							<div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+							<span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+								공개 스토리
 							</span>
 						</label>
 					</div>
-					<div className="flex flex-col justify-end space-y-2">
-						<button
-							onClick={handleMusic}
-							className="w-40 self-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-						>
-							음악 추천받기
-						</button>
-					</div>
-					{videoId && (
+
+					{music && (
 						<div className="p-6 border-t border-gray-200 dark:border-gray-600">
-							<MusicVideo videoId={videoId} />
+							<MusicVideo music={music} phrase={phrase} />
 						</div>
 					)}
 
 					<div className="justify-end flex p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
 						<button
-							onClick={handlePostStory}
+							onClick={postStory(formData)}
 							type="button"
 							className="self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 						>

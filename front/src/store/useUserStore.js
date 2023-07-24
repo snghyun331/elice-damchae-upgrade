@@ -1,50 +1,50 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
+import { useNavigate } from 'react-router-dom'; // Add this line
 
-const useUserStore = create((set) => ({
-	email: '',
-	password: '',
-	nickname: '',
-	mbti: '',
-	isLoggedIn: false,
-	errMsg: '',
+const useUserStore = create((set) => {
+	const navigate = useNavigate(); // Get the navigate function using useNavigate
 
-	setEmail: (email) => set({ email }),
-	setPassword: (password) => set({ password }),
-	setNickname: (nickname) => set({ nickname }),
-	setMbti: (mbti) => set({ mbti }),
-	setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
-	setErrMsg: (errMsg) => set({ errMsg }),
+	return {
+		email: '',
+		password: '',
+		nickname: '',
+		mbti: '',
+		isLoggedIn: true,
+		errMsg: '',
 
-	login: async (user) => {
-		try {
-			const response = await postApi('auth/login', user);
+		// Rest of your setters...
 
-			const jwtToken = response.data.token;
+		login: async (user) => {
+			try {
+				const response = await postApi('auth/login', user);
 
-			localStorage.setItem('accessToken', jwtToken);
-			set({ isLoggedIn: true });
+				const jwtToken = response.data.token;
 
-			window.location.href = '/';
-		} catch (error) {
-			set({ errMsg: error.response.data.errorMessage });
-		}
-	},
+				localStorage.setItem('accessToken', jwtToken);
+				set({ isLoggedIn: true });
+				navigate('/');
+			} catch (error) {
+				set({ errMsg: error.response.data.errorMessage });
+			}
+		},
 
-	register: async (user) => {
-		try {
-			await postApi('auth/register', user);
-			console.log(user);
-			window.location.href = '/login';
-		} catch (error) {
-			set({ errMsg: error.response.data.errorMessage });
-		}
-	},
-	logout: () => {
-		localStorage.removeItem('accessToken');
-		set({ isLoggedIn: false });
-		window.location.href = '/';
-	},
-}));
+		register: async (user) => {
+			try {
+				await postApi('auth/register', user);
+				console.log(user);
+				navigate('/login');
+			} catch (error) {
+				set({ errMsg: error.response.data.errorMessage });
+			}
+		},
+
+		logout: () => {
+			localStorage.removeItem('accessToken');
+			set({ isLoggedIn: false });
+			navigate('/'); // Navigate to the home page after logging out
+		},
+	};
+});
 
 export default useUserStore;
