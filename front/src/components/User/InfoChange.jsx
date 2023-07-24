@@ -3,28 +3,30 @@ import { useState, useCallback, useMemo } from 'react';
 import Select from 'react-select';
 import { mbtiList } from '../Util/Util';
 
-import { getApi } from '../../services/api';
+import { getApi, patchApi } from '../../services/api';
 
 const InfoChange = () => {
 	const {
 		email,
+		password,
 		nickname,
 		mbti,
 		profileImg,
 
+		setPassword,
 		setNickname,
 		setMbti,
 		setProfileImg,
 	} = useUserStore();
 
-	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 
-	const [nicknameCheck, setNicknameCheck] = useState(false);
+	const [nicknameCheck, setNicknameCheck] = useState(true);
 
 	const [focusedMap, setFocusedMap] = useState({
 		email: false,
 		password: false,
+		nickname: false,
 	});
 
 	const handleFocus = (name, value) => {
@@ -83,27 +85,47 @@ const InfoChange = () => {
 	console.log('이즈폼밸리드', isFormValid);
 	const handleNicknameCheck = async () => {
 		try {
-			const response = await getApi(`auth/check-nickname?=`, nickname);
+			const response = await getApi(`auth/check-nickname?nickname=${nickname}`);
 			console.log(response.data);
 
 			if (response.data.nicknameState == 'usableNickname') {
 				alert(response.data.usableNickname);
 				setNicknameCheck(true);
-				console.log(nicknameCheck);
 			}
 			if (response.data.nicknameState == 'unusableNickname') {
 				alert(response.data.usableNickname);
 				setNicknameCheck(false);
-				console.log(nicknameCheck);
 			}
 		} catch (error) {
 			console.log(error.response.data.message);
 		}
 	};
 
-	const handleSubmit = () => {
-		//수정하기 요청
-		console.log('수정 요청');
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		try {
+			const formData = new FormData();
+			formData.append('email', email);
+			formData.append('password', password);
+			formData.append('username', nickname);
+			formData.append('userMbti', mbti);
+			if (profileImg) {
+				formData.append('profileImg', profileImg);
+			}
+
+			console.log('수정요청 데이터 :', formData);
+
+			// userId 부분은 나중에 userStore로부터 받은 `${userId}`로 변경 예정.
+			const res = await patchApi(`users/:userId`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			});
+			console.log(res);
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	return (
@@ -236,12 +258,17 @@ const InfoChange = () => {
 										<button
 											type="button"
 											onClick={handleNicknameCheck}
-											disabled={!isNicknameValid}
-											className="self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
+											className={`self-end w-36 text-white ${
+												!isNicknameValid && 'opacity-50 cursor-not-allowed'
+											}		bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 
+		focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 
+		dark:bg-gray-800 dark:hover:bg-gray-700 
+		dark:focus:ring-gray-700 dark:border-gray-700`}
 										>
 											중복 확인
 										</button>
 									</div>
+									{!nicknameCheck && <p className='text-sm text-blue-600'>중복 확인버튼을 눌러 주세요.</p>}
 									{!isNicknameValid && focusedMap.nickname && (
 										<p className="text-red-500 text-xs italic">
 											닉네임은 2~16자 사이로 설정해주세요.
@@ -265,9 +292,14 @@ const InfoChange = () => {
 								</div>
 								<div className="flex flex-col">
 									<button
-										type="submit"
 										disabled={!isFormValid}
-										className="self-end bg-[#85B7CC] text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0]"
+										className={`self-end w-36 text-white ${
+											!isFormValid && 'opacity-50 cursor-not-allowed'
+										} bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 
+    focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 
+    dark:bg-gray-800 dark:hover:bg-gray-700 
+    dark:focus:ring-gray-700 dark:border-gray-700`}
+										onClick={handleSubmit}
 									>
 										수정하기
 									</button>
