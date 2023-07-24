@@ -1,12 +1,14 @@
 import 'dotenv/config';
 import { app } from './src/app.js';
-// import express from 'express';
 import mongoose from 'mongoose';
 
 const PORT = process.env.SERVER_PORT || 3001;
 const DB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017/test_db';
 
-mongoose.connect('mongodb://localhost:27017/test_db');
+mongoose.connect(DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const db = mongoose.connection;
 
@@ -22,5 +24,5 @@ db.on('error', (error) => {
 
 // 서버 실행
 app.listen(PORT, () => {
-  console.log(`정상적으로 서버를 시작하였습니다.  http://localhost:${PORT}`);
+  console.log(`정상적으로 서버를 시작하였습니다. http://localhost:${PORT}`);
 });
