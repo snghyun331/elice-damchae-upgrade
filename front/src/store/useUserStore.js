@@ -1,10 +1,7 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
-import { useNavigate } from 'react-router-dom'; // Add this line
 
 const useUserStore = create((set) => {
-	const navigate = useNavigate(); // Get the navigate function using useNavigate
-
 	return {
 		email: '',
 		password: '',
@@ -12,8 +9,6 @@ const useUserStore = create((set) => {
 		mbti: '',
 		isLoggedIn: true,
 		errMsg: '',
-
-		// Rest of your setters...
 
 		login: async (user) => {
 			try {
@@ -23,7 +18,6 @@ const useUserStore = create((set) => {
 
 				localStorage.setItem('accessToken', jwtToken);
 				set({ isLoggedIn: true });
-				navigate('/');
 			} catch (error) {
 				set({ errMsg: error.response.data.errorMessage });
 			}
@@ -33,7 +27,6 @@ const useUserStore = create((set) => {
 			try {
 				await postApi('auth/register', user);
 				console.log(user);
-				navigate('/login');
 			} catch (error) {
 				set({ errMsg: error.response.data.errorMessage });
 			}
@@ -42,7 +35,6 @@ const useUserStore = create((set) => {
 		logout: () => {
 			localStorage.removeItem('accessToken');
 			set({ isLoggedIn: false });
-			navigate('/'); // Navigate to the home page after logging out
 		},
 	};
 });
