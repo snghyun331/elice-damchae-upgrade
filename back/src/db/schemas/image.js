@@ -14,5 +14,5 @@ const imageSchema = new Schema(
   { timestamps: true },
 );
 
-const image = model('Image', imageSchema);
-export { image };
+const Image = model('Image', imageSchema);
+export { Image };

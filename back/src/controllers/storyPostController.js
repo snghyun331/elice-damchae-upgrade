@@ -1,4 +1,5 @@
 import { StoryPost } from '../db/schemas/storyPost.js';
+import { Image } from '../db/schemas/image.js';
 import { StoryPostService } from '../services/storyPostService.js';
 import { StoryPostModel } from '../db/models/storyPostModel.js';
 import axios from 'axios';
@@ -19,7 +20,7 @@ const storyPostController = {
         music,
       });
       const result = await StoryPost.populate(storyPostInfo, {
-        path: 'userInfo',
+        path: 'userInfo thumbnail',
       });
       return res.status(200).json(result);
     } catch (error) {
