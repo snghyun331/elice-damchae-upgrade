@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
 
+
 const useUserStore = create((set) => ({
-	email: 'default@email.com',
-	nickname: '기본닉네임',
-	mbti: 'INTJ',
+	email: '',
+	nickname: '',
+	mbti: '',
 	profileImg: '',
-	isLoggedIn: true,
+	isLoggedIn: Boolean(localStorage.getItem('accessToken')),
 
 	setEmail: (email) => set({ email }),
 	setNickname: (nickname) => set({ nickname }),
@@ -27,9 +28,11 @@ const useUserStore = create((set) => ({
 		register: async (user) => {
 			await postApi('auth/register', user);
 		},
+
 		logout: () => {
 			localStorage.removeItem('accessToken');
 			set({ isLoggedIn: false });
+			alert('로그아웃 하였습니다.')
 		},
 	},
 }));
