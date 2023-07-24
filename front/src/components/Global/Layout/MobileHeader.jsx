@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
+import { useUserActions } from '../../../store/useUserStore';
 import useUserStore from '../../../store/useUserStore';
 
 const classNames = (...classes) => {
@@ -9,14 +10,15 @@ const classNames = (...classes) => {
 
 const MobileHeader = () => {
 	const navigate = useNavigate();
-	const { isLoggedIn, logout } = useUserStore();
+	const { isLoggedIn } = useUserStore();
+	const { logout } = useUserActions();
 	const mobMenuItems = isLoggedIn
 		? [
 				{ title: '대나무숲', onClick: () => navigate('/mypage') },
 				{ title: '내 스토리', onClick: () => navigate('/stories') },
 				{ title: '마이 페이지', onClick: () => navigate('/mypage') },
 				{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
-				{ title: '로그아웃', onClick: () => logout() },
+				{ title: '로그아웃', onClick: () => {logout(); navigate('/')} },
 		  ]
 		: [
 				{ title: '대나무숲', onClick: () => navigate('/mypage') },

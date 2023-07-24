@@ -95,7 +95,7 @@ const RegisterForm = () => {
 			isPasswordSame &&
 			isNicknameValid &&
 			nicknameCheck &&
-			mbti,
+			Boolean(mbti),
 		[
 			isEmailValid,
 			isPasswordValid,
@@ -105,6 +105,11 @@ const RegisterForm = () => {
 			mbti,
 		],
 	);
+	console.log('isFormValid', isFormValid);
+	console.log('isEmailValid', isEmailValid);
+	console.log('isPasswordValid', isPasswordValid);
+	console.log('isNicknameValid', isNicknameValid);
+	console.log('nicknameCheck', nicknameCheck);
 
 	const user = { email, password, nickname, mbti };
 
@@ -130,15 +135,15 @@ const RegisterForm = () => {
 
 	const handleNicknameCheck = async () => {
 		try {
-			const response = await getApi(`auth/check-nickname?=`, nickname);
+			const response = await getApi(`auth/check-nickname?nickname=${nickname}`);
 			console.log(response.data);
 
-			if (response.data.state == 'usableNickname') {
-				alert(response.data.alertMsg);
+			if (response.data.nicknameState == 'usableNickname') {
+				alert(response.data.usableNickname);
 				setNicknameCheck(true);
 			}
-			if (response.data.state == 'unusableNickname') {
-				alert(response.data.alertMsg);
+			if (response.data.nicknameState == 'unusableNickname') {
+				alert(response.data.usableNickname);
 				setNicknameCheck(false);
 			}
 		} catch (error) {
