@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
-
 import Select from 'react-select';
+import useUserStore from '../../store/useUserStore';
+import { mbtiList } from '../Util/Util';
 
 const InfoChange = () => {
 	const [user, setUser] = useState({
@@ -10,6 +11,20 @@ const InfoChange = () => {
 		mbti: '',
 		profileImg: '/images/loginimg.jpg',
 	});
+
+	const {
+		email,
+		nickname,
+		mbti,
+		profileImg,
+
+		setEmail,
+		setNickname,
+		setMbti,
+		setProfileImg,
+	} = useUserStore();
+
+	const [password, setPassword] = useState('');
 
 	const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -45,24 +60,24 @@ const InfoChange = () => {
 	const validatePassword = () => {
 		const passwordRegex =
 			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
-		return passwordRegex.test(user.password);
+		return passwordRegex.test(password);
 	};
 
 	const validateNickname = () => {
 		const nicknameRegex = /^[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,16}$/;
-		return nicknameRegex.test(user.nickname);
+		return nicknameRegex.test(nickname);
 	};
 
 	const isPasswordValid = useMemo(validatePassword, [validatePassword]);
 	const isNicknameValid = useMemo(validateNickname, [validateNickname]);
 	const isPasswordSame = useMemo(
-		() => user.password === confirmPassword,
-		[user.password, confirmPassword],
+		() => password === confirmPassword,
+		[password, confirmPassword],
 	);
 
 	const isFormValid = useMemo(
-		() => isPasswordValid && isPasswordSame && isNicknameValid && user.mbti,
-		[isPasswordValid, isPasswordSame, isNicknameValid, user.mbti],
+		() => isPasswordValid && isPasswordSame && isNicknameValid && mbti,
+		[isPasswordValid, isPasswordSame, isNicknameValid, mbti],
 	);
 
 	const handleNicknameCheck = () => {
@@ -98,7 +113,7 @@ const InfoChange = () => {
 										<p className="text-sm text-gray-500">선택된 이미지:</p>
 										<img
 											className="mt-2 max-w-xs"
-											src={user.profileImg}
+											src={profileImg}
 											alt="Selected Thumbnail"
 										/>
 									</div>
@@ -111,7 +126,7 @@ const InfoChange = () => {
 										이메일
 									</label>
 									<div className="flex space-x-2">
-										<div>elice@gmail.com</div>
+										<div>{email}</div>
 										<div />
 									</div>
 								</div>
@@ -124,7 +139,7 @@ const InfoChange = () => {
 										비밀번호
 									</label>
 									<input
-										value={user.password}
+										value={password}
 										onChange={handleChangeInput}
 										type="password"
 										name="password"
@@ -178,7 +193,7 @@ const InfoChange = () => {
 
 									<div className="flex flex-row space-x-2 justify-end">
 										<input
-											value={user.nickname}
+											value={nickname}
 											onChange={handleChangeInput}
 											onFocus={() => setIsNicknameFocused(true)}
 											onBlur={() => setIsNicknameFocused(false)}
@@ -212,28 +227,11 @@ const InfoChange = () => {
 										MBTI
 									</label>
 									<Select
-										value={user.mbti}
+										value={mbti}
 										onChange={(selectedOption) =>
 											setUser((prev) => ({ ...prev, mbti: selectedOption }))
 										}
-										options={[
-											{ value: 'ISTJ', label: 'ISTJ' },
-											{ value: 'ISFJ', label: 'ISFJ' },
-											{ value: 'INFJ', label: 'INFJ' },
-											{ value: 'INTJ', label: 'INTJ' },
-											{ value: 'ISTP', label: 'ISTP' },
-											{ value: 'ISFP', label: 'ISFP' },
-											{ value: 'INFP', label: 'INFP' },
-											{ value: 'INTP', label: 'INTP' },
-											{ value: 'ESTP', label: 'ESTP' },
-											{ value: 'ESFP', label: 'ESFP' },
-											{ value: 'ENFP', label: 'ENFP' },
-											{ value: 'ENTP', label: 'ENTP' },
-											{ value: 'ESTJ', label: 'ESTJ' },
-											{ value: 'ESFJ', label: 'ESFJ' },
-											{ value: 'ENFJ', label: 'ENFJ' },
-											{ value: 'ENTJ', label: 'ENTJ' },
-										]}
+										options={mbtiList}
 										placeholder="Select MBTI"
 										classNamePrefix="react-select"
 									/>

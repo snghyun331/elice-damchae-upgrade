@@ -2,14 +2,16 @@ import { create } from 'zustand';
 import { postApi } from '../services/api';
 
 const useUserStore = create((set) => ({
-	email: '',
-	nickname: '',
-	mbti: '',
+	email: 'default@email.com',
+	nickname: '기본닉네임',
+	mbti: 'INTJ',
+	profileImg: '',
 	isLoggedIn: true,
 
 	setEmail: (email) => set({ email }),
 	setNickname: (nickname) => set({ nickname }),
 	setMbti: (mbti) => set({ mbti }),
+	setProfileImg: (profileImg) => set({ profileImg }),
 	setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 
 	actions: {
