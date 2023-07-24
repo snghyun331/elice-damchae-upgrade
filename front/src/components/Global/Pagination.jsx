@@ -107,7 +107,7 @@ const Pagination = ({
 	);
 };
 
-Pagination.PropTypes = {
+Pagination.propTypes = {
 	totalPages: PropTypes.number.isRequired,
 	currentPage: PropTypes.number.isRequired,
 	handlePreviousClick: PropTypes.func.isRequired,

@@ -5,6 +5,7 @@ import Pagination from './Pagination';
 const StoryCardMap = () => {
 	const dummyData = [
 		{
+			id: 1,
 			username: 'Mike',
 			title:
 				'가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요 가장',
@@ -14,6 +15,7 @@ const StoryCardMap = () => {
 			mood: '😊',
 		},
 		{
+			id: 2,
 			username: 'Mike',
 			title: 'Story 2',
 			content:
@@ -22,6 +24,7 @@ const StoryCardMap = () => {
 			mood: '😡',
 		},
 		{
+			id: 3,
 			username: 'Mike',
 			title: 'Story 3',
 			content:
@@ -30,6 +33,7 @@ const StoryCardMap = () => {
 			mood: '😨',
 		},
 		{
+			id: 4,
 			username: 'Mike',
 			title: 'Story 4',
 			content:
@@ -55,7 +59,7 @@ const StoryCardMap = () => {
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-base font-medium">
 					{displayedData.map((storyData) => (
 						<div key={storyData.title}>
-							<StoryCard storyData={storyData} />
+							<StoryCard data={storyData} />
 						</div>
 					))}
 				</div>
