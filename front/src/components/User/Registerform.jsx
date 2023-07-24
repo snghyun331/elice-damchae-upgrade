@@ -2,6 +2,7 @@ import useRegisterStore from '../../hooks/useRegisterStore';
 import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
+import { mbtiList } from '../Util/Util';
 
 import { getApi } from '../../services/api';
 import { useUserActions } from '../../store/useUserStore';
@@ -94,7 +95,7 @@ const RegisterForm = () => {
 			isPasswordSame &&
 			isNicknameValid &&
 			nicknameCheck &&
-			mbti,
+			Boolean(mbti),
 		[
 			isEmailValid,
 			isPasswordValid,
@@ -104,6 +105,11 @@ const RegisterForm = () => {
 			mbti,
 		],
 	);
+	console.log('isFormValid', isFormValid);
+	console.log('isEmailValid', isEmailValid);
+	console.log('isPasswordValid', isPasswordValid);
+	console.log('isNicknameValid', isNicknameValid);
+	console.log('nicknameCheck', nicknameCheck);
 
 	const user = { email, password, nickname, mbti };
 
@@ -129,15 +135,15 @@ const RegisterForm = () => {
 
 	const handleNicknameCheck = async () => {
 		try {
-			const response = await getApi(`auth/check-nickname?=`, nickname);
+			const response = await getApi(`auth/check-nickname?nickname=${nickname}`);
 			console.log(response.data);
 
-			if (response.data.state == 'usableNickname') {
-				alert(response.data.alertMsg);
+			if (response.data.nicknameState == 'usableNickname') {
+				alert(response.data.usableNickname);
 				setNicknameCheck(true);
 			}
-			if (response.data.state == 'unusableNickname') {
-				alert(response.data.alertMsg);
+			if (response.data.nicknameState == 'unusableNickname') {
+				alert(response.data.usableNickname);
 				setNicknameCheck(false);
 			}
 		} catch (error) {
@@ -313,24 +319,7 @@ const RegisterForm = () => {
 									</label>
 									<Select
 										onChange={(selectedOption) => setMbti(selectedOption.value)}
-										options={[
-											{ value: 'ISTJ', label: 'ISTJ' },
-											{ value: 'ISFJ', label: 'ISFJ' },
-											{ value: 'INFJ', label: 'INFJ' },
-											{ value: 'INTJ', label: 'INTJ' },
-											{ value: 'ISTP', label: 'ISTP' },
-											{ value: 'ISFP', label: 'ISFP' },
-											{ value: 'INFP', label: 'INFP' },
-											{ value: 'INTP', label: 'INTP' },
-											{ value: 'ESTP', label: 'ESTP' },
-											{ value: 'ESFP', label: 'ESFP' },
-											{ value: 'ENFP', label: 'ENFP' },
-											{ value: 'ENTP', label: 'ENTP' },
-											{ value: 'ESTJ', label: 'ESTJ' },
-											{ value: 'ESFJ', label: 'ESFJ' },
-											{ value: 'ENFJ', label: 'ENFJ' },
-											{ value: 'ENTJ', label: 'ENTJ' },
-										]}
+										options={mbtiList}
 										placeholder="Select MBTI"
 										classNamePrefix="react-select"
 									/>

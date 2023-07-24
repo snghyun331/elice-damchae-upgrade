@@ -5,10 +5,7 @@ import mongoose from 'mongoose';
 const PORT = process.env.SERVER_PORT || 3001;
 const DB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017/test_db';
 
-mongoose.connect(DB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(DB_URL);
 
 const db = mongoose.connection;
 
