@@ -39,7 +39,6 @@ instance.interceptors.response.use(
 			('토큰이 만료되었습니다' || '토큰이 유효하지 않습니다')
 		) {
 			localStorage.removeItem('accessToken');
-			location.href = '/';
 		}
 		return Promise.reject(error);
 	},
