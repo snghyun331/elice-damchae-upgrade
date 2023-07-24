@@ -22,7 +22,6 @@ const LoginForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		await login(user);
-		navigate('/');
 	};
 
 	const validateEmail = () => {
