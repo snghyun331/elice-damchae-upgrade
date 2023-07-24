@@ -1,4 +1,5 @@
-// eslint-disable-next-line react/prop-types
+import PropTypes from 'prop-types';
+
 const Pagination = ({
 	totalPages,
 	currentPage,
@@ -104,6 +105,14 @@ const Pagination = ({
 			</nav>
 		</>
 	);
+};
+
+Pagination.PropTypes = {
+	totalPages: PropTypes.number.isRequired,
+	currentPage: PropTypes.number.isRequired,
+	handlePreviousClick: PropTypes.func.isRequired,
+	handleNextClick: PropTypes.func.isRequired,
+	handleClick: PropTypes.func.isRequired,
 };
 
 export default Pagination;
