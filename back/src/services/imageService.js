@@ -16,7 +16,13 @@ class imageService {
     if (!file) {
       throw new Error('No image file uploaded.');
     }
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/bmp', 'image/gif'];
+    const allowedTypes = [
+      'image/jpeg',
+      'image/png',
+      'image/bmp',
+      'image/gif',
+      'image/jpg',
+    ];
     if (!allowedTypes.includes(file.mimetype)) {
       throw new Error('Invalid file type');
     }
