@@ -258,6 +258,7 @@ const InfoChange = () => {
 										<button
 											type="button"
 											onClick={handleNicknameCheck}
+											disabled={!isNicknameValid}
 											className={`self-end w-36 text-white ${
 												!isNicknameValid && 'opacity-50 cursor-not-allowed'
 											}		bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 
@@ -268,8 +269,12 @@ const InfoChange = () => {
 											중복 확인
 										</button>
 									</div>
-									{!nicknameCheck && <p className='text-sm text-blue-600'>중복 확인버튼을 눌러 주세요.</p>}
-									{!isNicknameValid && focusedMap.nickname && (
+									{isNicknameValid && !nicknameCheck && (
+										<p className="text-sm text-blue-600">
+											중복 확인버튼을 눌러 주세요.
+										</p>
+									)}
+									{!isNicknameValid && (
 										<p className="text-red-500 text-xs italic">
 											닉네임은 2~16자 사이로 설정해주세요.
 										</p>
