@@ -4,17 +4,18 @@ import useStoryGlobalStore from '../store/useStoryGlobalStore';
 
 const useStoryStore = () => {
 	const {
+		title,
 		content,
 		mood,
 		music,
 		phrase,
+		setTitle,
 		setContent,
 		setMood,
 		setMusic,
 		setPhrase,
 	} = useStoryGlobalStore();
 
-	const [title, setTitle] = useState('');
 	const [thumbnail, setThumbnail] = useState('');
 	const [isPublic, setIsPublic] = useState(false);
 	const [storyModal, setStoryModal] = useState(false);
