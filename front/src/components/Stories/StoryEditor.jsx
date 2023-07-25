@@ -2,17 +2,28 @@ import { useRef } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import useImageUpload from '../../hooks/useImageUpload';
 import useStoryStore from '../../hooks/useStoryStore';
+import { postApi } from '../../services/api';
 
 const StoryEditor = () => {
-	const { title, setTitle, music, setMood, setMusic, setPhrase, setContent } =
-		useStoryStore();
+	const {
+		title,
+		setTitle,
+		content,
+		music,
+		setMood,
+		setMusic,
+		setPhrase,
+		setContent,
+	} = useStoryStore();
 
 	const recommend = async () => {
 		try {
-			// const response = await postApi('stories/recommend', content);
-			setMood('기쁨');
-			setMusic('WVmu2vWFZ_U');
-			setPhrase('기쁘시다니 저도 기뻐요');
+			console.log(content);
+			const response = await postApi('stories/recommend', content);
+			console.log(response);
+			// setMood('기쁨');
+			// setMusic('WVmu2vWFZ_U');
+			// setPhrase('기쁘시다니 저도 기뻐요');
 		} catch (error) {
 			console.log(error.response.data.errorMessage);
 		}
@@ -22,7 +33,6 @@ const StoryEditor = () => {
 		const body = editorRef.current?.getInstance().getHTML() || '';
 		console.log(body);
 		setContent(body);
-		// recommend(content);
 		recommend();
 		console.log(music);
 	};
