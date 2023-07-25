@@ -15,6 +15,23 @@ class StoryPostModel {
   static async getMusicData() {
     return storyRandomMusic.find({}).exec();
   }
+
+  static async findOneById({ storyId }) {
+    const story = await StoryPost.findOne({ _id: storyId });
+    return story;
+  }
+
+  static async updateStory({ storyId, fieldToUpdate, newValue }) {
+    const filter = { _id: storyId };
+    const update = { [fieldToUpdate]: newValue };
+    const option = { returnOriginal: false };
+    const updatedStory = await StoryPost.findOneAndUpdate(
+      filter,
+      update,
+      option,
+    );
+    return updatedStory;
+  }
 }
 
 export { StoryPostModel };

@@ -11,8 +11,7 @@ class StoryPostService {
     music,
   }) {
     if (!title || !content) {
-      const errorMessage = '제목, 내용 모두 입력해주세요';
-      return { errorMessage };
+      throw new Error('제목, 내용 모두 입력해주세요');
     }
     const newStoryPost = {
       userInfo,
@@ -29,7 +28,74 @@ class StoryPostService {
     return createdNewStoryPost;
   }
 
-  static async getRandomPhrase() {}
+  static async setStory({ userInfo, storyId, toUpdate }) {
+    let story = await StoryPostModel.findOneById({ storyId });
+
+    if (!story) {
+      throw new Error('해당 스토리를 찾을 수 없습니다. 다시 한번 확인해주세요');
+    }
+
+    if (toUpdate.title) {
+      const fieldToUpdate = 'title';
+      const newValue = toUpdate.title;
+      story = await StoryPostModel.updateStory({
+        storyId,
+        fieldToUpdate,
+        newValue,
+      });
+    }
+
+    if (toUpdate.content) {
+      const fieldToUpdate = 'content';
+      const newValue = toUpdate.content;
+      story = await StoryPostModel.updateStory({
+        storyId,
+        fieldToUpdate,
+        newValue,
+      });
+    }
+
+    if (toUpdate.isPublic) {
+      const fieldToUpdate = 'isPublic';
+      const newValue = toUpdate.isPublic;
+      story = await StoryPostModel.updateStory({
+        storyId,
+        fieldToUpdate,
+        newValue,
+      });
+    }
+
+    if (toUpdate.thumbnail) {
+      const fieldToUpdate = 'thumbnail';
+      const newValue = toUpdate.thumbnail;
+      story = await StoryPostModel.updateStory({
+        storyId,
+        fieldToUpdate,
+        newValue,
+      });
+    }
+
+    if (toUpdate.mood) {
+      const fieldToUpdate = 'mood';
+      const newValue = toUpdate.mood;
+      story = await StoryPostModel.updateStory({
+        storyId,
+        fieldToUpdate,
+        newValue,
+      });
+    }
+
+    if (toUpdate.music) {
+      const fieldToUpdate = 'music';
+      const newValue = toUpdate.music;
+      story = await StoryPostModel.updateStory({
+        storyId,
+        fieldToUpdate,
+        newValue,
+      });
+    }
+    return story;
+  }
 }
 
 export { StoryPostService };
