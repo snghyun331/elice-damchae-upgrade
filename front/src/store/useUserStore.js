@@ -33,6 +33,7 @@ const useUserStore = create((set, get) => ({
 		},
 
 		register: async (user) => {
+			console.log(user)
 			await postApi('auth/register', user);
 		},
 

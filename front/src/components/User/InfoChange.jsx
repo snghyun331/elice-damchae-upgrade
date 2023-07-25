@@ -105,23 +105,9 @@ const InfoChange = () => {
 		e.preventDefault();
 
 		try {
-			const formData = new FormData();
-			formData.append('email', email);
-			formData.append('password', password);
-			formData.append('nickname', nickname);
-			formData.append('mbti', mbti);
-			// if (profileImg) {
-			// 	formData.append('profileImg', profileImg);
-			// }
-
-			for (var key of formData.entries()) {
-				console.log(key[0] + ', ' + key[1]);
-			}
-
-			console.log('수정요청 데이터 :', formData);
-
-			// userId 부분은 나중에 userStore로부터 받은 `${userId}`로 변경 예정.
-			const res = await putApi(`users/${id}`, formData);
+			const toUpdate = { email, password, nickname, mbti };
+			console.log('수정요청 데이터 :', toUpdate);
+			const res = await putApi(`users/${id}`, toUpdate);
 			console.log(res);
 		} catch (err) {
 			console.log(err);
