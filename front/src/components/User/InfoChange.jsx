@@ -123,7 +123,8 @@ const InfoChange = () => {
 		[email, id, mbtiToChange, nicknameToChange, passwordToChange],
 	);
 
-	const handleOut = async () => {
+	const handleOut = async (e) => {
+		e.preventDefault();
 		const confirmResign = window.confirm('정말로 회원 탈퇴를 하시겠습니까?');
 		if (confirmResign) {
 			try {
