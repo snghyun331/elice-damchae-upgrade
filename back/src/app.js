@@ -2,7 +2,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import express from 'express';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
-import { userRouter } from './routers/userRouter.js';
+import { userAuthRouter } from './routers/userRouter.js';
 import { storyPostRouter } from './routers/storyPostRouter.js';
 import forestRouter from './routers/forestPostRouter.js';
 import { imageRouter } from './routers/imageRouter.js';
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.send('안녕하세요, 레이서 프로젝트 API 입니다.');
 });
 
-app.use(userRouter);
+app.use(userAuthRouter);
 app.use(storyPostRouter);
 app.use('/post', forestRouter);
 app.use(imageRouter);

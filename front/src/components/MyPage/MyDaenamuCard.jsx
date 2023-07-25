@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { moodColors } from '../Util/Util';
 
-const MyDaenamuCard = ({ data }) => {
-  const moodColor = moodColors[data.mood];
+const MyDaenamuCard = ({ data: { mood, title, content} }) => {
+  const moodColor = moodColors[mood];
 
   return (
     <a
@@ -13,14 +13,14 @@ const MyDaenamuCard = ({ data }) => {
     >
       <div className="flex flex-col h-full">
         <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-          {data.title.length > 10
-            ? `${data.title.slice(0, 10)}...`
-            : data.title}
+          {title.length > 10
+            ? `${title.slice(0, 10)}...`
+            : title}
         </h5>
         <p className="text-sm font-normal text-gray-700 dark:text-gray-400 flex-grow">
-          {data.content.length > 70
-            ? `${data.content.slice(0, 70)}...`
-            : data.content}
+          {content.length > 70
+            ? `${content.slice(0, 70)}...`
+            : content}
         </p>
         <div className="flex w-16 items-center text-xs font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-auto self-end pt-4">
           <ChevronRightIcon className="w-4 mt-1" />

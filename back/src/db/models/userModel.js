@@ -39,13 +39,19 @@ class User {
     return updatedUser;
   }
 
-  static async withdraw({ userId, isOut }) {
+  static async withdraw({ userId }) {
     const user = await UserModel.findByIdAndUpdate(
-      userId,
-      { isOut },
+      { _id: userId },
+      { isOut: true },
       { new: true },
     );
     return user;
+  }
+
+  // 탈퇴한 회원조회
+  static async findOutUsers() {
+    const users = await User.find({ isOut: true });
+    return users;
   }
 }
 

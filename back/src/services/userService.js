@@ -1,6 +1,6 @@
 import User from '../db/models/userModel.js';
 import bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 
 class userService {
@@ -13,10 +13,11 @@ class userService {
       return { errorMessage };
     }
 
+    // 이메일 인증
+
     // 비밀번호 해쉬화
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // id 는 유니크 값 부여
     const newUser = {
       email,
       password: hashedPassword,
@@ -57,10 +58,7 @@ class userService {
     const token = jwt.sign({ userId: user.id }, secretKey);
 
     // 반환할 loginuser 객체를 위한 변수 설정
-    const id = user.id;
-    const mbti = user.mbti;
-    const nickname = user.nickname;
-    const isOut = user.isOut;
+    const { id, mbti, nickname, isOut } = user;
 
     const loginUser = {
       token,
@@ -81,7 +79,7 @@ class userService {
   }
 
   static async setUser({ userId, toUpdate }) {
-    let user = await User.findById(userId);
+    let user = await User.findById({ userId });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!user) {
@@ -127,17 +125,30 @@ class userService {
     const user = await User.findByNickname({ nickname });
 
     if (!user) {
+      const nicknameState = 'usableNickname';
       const usableNickname = '사용 가능한 닉네임 입니다.';
-      return { usableNickname };
+      return { nicknameState, usableNickname };
     }
+    const nicknameState = 'unusableNickname';
     const unusableNickname = '이미 사용 중인 닉네임 입니다.';
-    return { unusableNickname };
+    return { nicknameState, unusableNickname };
   }
 
   // 회원탈퇴 : 회원 정보는 그대로 남아있음
   static async withdrawUser({ userId }) {
-    const user = await User.withdraw({ userId, isOut: true });
+    const user = await User.withdraw({ userId });
     return user;
+  }
+
+  static async isOutUser({ email }) {
+    const user = await User.findByEmail({ email });
+    if (!user) {
+      const errorState = 'error';
+      const errorMessage = '가입 내역이 없는 이메일 입니다.';
+      return { errorState, errorMessage };
+    }
+    const isOut = user.isOut;
+    return isOut;
   }
 }
 
