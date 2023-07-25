@@ -23,10 +23,4 @@ storyPostRouter.post(
   storyPostController.getPredict,
 );
 
-storyPostRouter.post(
-  '/stories/thumbnail',
-  loginRequired,
-  storyPostController.createThumbnail,
-);
-
 export { storyPostRouter };

@@ -17,6 +17,11 @@ imageRouter.post(
   imageController.createImageSingle,
 );
 
+imageRouter.post(
+  '/image/stable',
+  loginRequired,
+  imageController.createStableImage,
+);
 // imageRouter.post('/images/upload', loginRequired, upload.array('image'));
 
 export { imageRouter };
