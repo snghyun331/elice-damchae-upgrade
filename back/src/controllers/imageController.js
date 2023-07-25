@@ -2,6 +2,7 @@ import { imageService } from '../services/imageService.js';
 import { ImageModel } from '../db/models/imageModel.js';
 import fs from 'fs';
 import sharp from 'sharp';
+import path from 'path';
 import axios from 'axios';
 
 const imageController = {
@@ -39,7 +40,11 @@ const imageController = {
 
       // 원본 이미지 삭제
       fs.unlinkSync(filePath); // 이미지 리사이징 완료되면 원본은 삭제
-      const newImage = { fileName: resizedFileName, path: resizedImagePath };
+      const fullResizedImagePath = path.resolve(resizedImagePath);
+      const newImage = {
+        fileName: resizedFileName,
+        path: fullResizedImagePath,
+      };
       const createImage = await ImageModel.create({ newImage });
       return res.status(201).send(createImage);
     } catch (error) {
