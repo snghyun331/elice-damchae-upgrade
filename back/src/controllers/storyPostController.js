@@ -33,7 +33,6 @@ const storyPostController = {
 
   getPredict: async (req, res, next) => {
     try {
-      const userId = req.currentUserId;
       const { content } = req.body;
       const pureContent = content.replace(/<[^>]+>/g, ' ');
       const obj = await axios.post('http://127.0.0.1:5000/predict', {
@@ -73,6 +72,42 @@ const storyPostController = {
         .catch((error) => {
           next(error);
         });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  updateStoryPost: async (req, res, next) => {
+    try {
+      const storyId = req.params.storyId;
+      const { title, content, isPublic, mood, music } = req.body;
+      const file = req.file ?? null;
+      const userId = req.currentUserId;
+      const userInfo = userId;
+      let thumbnail;
+      if (file) {
+        const thumbnailInfo = await imageService.uploadImage({ file });
+        thumbnail = thumbnailInfo._id;
+      }
+
+      const toUpdate = {
+        title,
+        content,
+        thumbnail,
+        isPublic,
+        mood,
+        music,
+      };
+
+      const updatedStory = await StoryPostService.setStory({
+        userInfo,
+        storyId,
+        toUpdate,
+      });
+      const result = await StoryPost.populate(updatedStory, {
+        path: 'userInfo thumbnail',
+      });
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }

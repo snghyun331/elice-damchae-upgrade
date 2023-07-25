@@ -52,8 +52,6 @@ class imageService {
     const createImage = await ImageModel.create({ newImage });
     return createImage;
   }
-
-  static async uploadStableImage({ file }) {}
 }
 
 export { imageService };

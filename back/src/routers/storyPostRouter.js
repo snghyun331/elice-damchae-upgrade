@@ -23,4 +23,11 @@ storyPostRouter.post(
   storyPostController.getPredict,
 );
 
+storyPostRouter.patch(
+  '/stories/:storyId',
+  loginRequired,
+  upload.single('image'),
+  storyPostController.updateStoryPost,
+);
+
 export { storyPostRouter };
