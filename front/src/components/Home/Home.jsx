@@ -9,6 +9,7 @@ import { createPortal } from 'react-dom';
 import useStoryStore from '../../hooks/useStoryStore';
 
 const Home = () => {
+	const { nickname } = useUserStore();
 	const navigate = useNavigate();
 	const { isLoggedIn } = useUserStore();
 	const { setMusic, storyModal, setStoryModal } = useStoryStore();
@@ -46,7 +47,7 @@ const Home = () => {
 				<BannerCarousel />
 				<br />
 				<div className="mt-16 mb-16 flex justify-center items-center flex-col">
-					<span className="text-2xl">대머리독수리 님, {randomMessage}</span>
+					<span className="text-2xl">{nickname ? nickname +' 님, ' : ''}{randomMessage}</span>
 					<br />
 					<div className="mb-10">
 						<button

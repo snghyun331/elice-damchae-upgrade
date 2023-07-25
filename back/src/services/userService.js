@@ -79,7 +79,7 @@ class userService {
   }
 
   static async setUser({ userId, toUpdate }) {
-    let user = await User.findById(userId);
+    let user = await User.findById({ userId });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!user) {

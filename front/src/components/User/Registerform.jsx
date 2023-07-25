@@ -105,11 +105,6 @@ const RegisterForm = () => {
 			mbti,
 		],
 	);
-	console.log('isFormValid', isFormValid);
-	console.log('isEmailValid', isEmailValid);
-	console.log('isPasswordValid', isPasswordValid);
-	console.log('isNicknameValid', isNicknameValid);
-	console.log('nicknameCheck', nicknameCheck);
 
 	const user = { email, password, nickname, mbti };
 
