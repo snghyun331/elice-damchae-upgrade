@@ -19,11 +19,12 @@ const StoryEditor = () => {
 	const recommend = async () => {
 		try {
 			console.log(content);
-			const response = await postApi('stories/recommend', content);
+			const response = await postApi('stories/recommend', { content });
+
 			console.log(response);
-			// setMood('기쁨');
-			// setMusic('WVmu2vWFZ_U');
-			// setPhrase('기쁘시다니 저도 기뻐요');
+			setMood(response.data.mood);
+			setMusic(response.data.music);
+			setPhrase(response.data.phrase);
 		} catch (error) {
 			console.log(error.response.data.errorMessage);
 		}
@@ -31,7 +32,7 @@ const StoryEditor = () => {
 
 	const handleRecommend = () => {
 		const body = editorRef.current?.getInstance().getHTML() || '';
-		console.log(body);
+
 		setContent(body);
 		recommend();
 		console.log(music);
