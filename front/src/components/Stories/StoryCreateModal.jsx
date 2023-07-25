@@ -1,14 +1,25 @@
 import moment from 'moment';
 import StoryEditor from './StoryEditor';
 import MusicVideo from './MusicVideo';
-import useStoryGlobalStore from '../../store/useStoryGlobalStore';
+
 import useStoryStore from '../../hooks/useStoryStore';
-import { useEffect } from 'react';
-import { postApi } from '../../services/api';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 const StoryCreateModal = ({ onClose }) => {
-	const { mood, music, phrase } = useStoryGlobalStore();
+	const {
+		title,
+		content,
+		thumbnail,
+		mood,
+		music,
+		phrase,
+		isPublic,
+		setIsPublic,
+		setThumbnail,
+	} = useStoryStore();
+
+	const [preview, setPreview] = useState('');
 
 	useEffect(() => {
 		// Prevent scrolling of the background content when the modal is open
@@ -22,16 +33,29 @@ const StoryCreateModal = ({ onClose }) => {
 
 	const handleThumbnailUpload = async (e) => {
 		e.preventDefault();
-		const formData = new FormData();
-		formData.append('image', e.target.files[0]);
-		const response = await postApi('image/upload', formData);
-		console.log(response);
-		setThumbnail('images/loginimg.jpg');
+		const file = e.target.files[0];
+		setThumbnail(file);
+		setPreview(URL.createObjectURL(file));
 	};
 
 	const currentDate = moment().format('YYYY년 M월 D일');
 
-	const { thumbnail, setThumbnail, isPublic, setIsPublic } = useStoryStore();
+	const poststory = async (e) => {
+		e.preventDefault();
+
+		try {
+			const post = { title, content, thumbnail, isPublic, mood, music };
+			const formData = new FormData();
+			for (const key in post) {
+				formData.append(key, post[key]);
+			}
+
+			const response = await ('stories', formData);
+			console.log(response);
+		} catch (e) {
+			console.error(e);
+		}
+	};
 
 	return (
 		<div className="fixed inset-0 flex justify-center items-center">
@@ -89,12 +113,12 @@ const StoryCreateModal = ({ onClose }) => {
 									type="file"
 									onChange={handleThumbnailUpload}
 								/>
-								{thumbnail && (
+								{preview && (
 									<div className="mt-4">
 										<p className="text-sm text-gray-500">선택된 이미지:</p>
 										<img
 											className="mt-2 max-w-xs"
-											src={thumbnail}
+											src={preview}
 											alt="Selected Thumbnail"
 										/>
 									</div>
@@ -127,7 +151,7 @@ const StoryCreateModal = ({ onClose }) => {
 
 						<div className="justify-end flex p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
 							<button
-								// onClick={postStory(post)}
+								onClick={poststory}
 								type="button"
 								className="self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 							>
