@@ -54,9 +54,19 @@ const useUserStore = create((set) => {
 			logout: () => {
 				localStorage.removeItem('accessToken');
 				localStorage.removeItem('userData');
-				set({ isLoggedIn: false });
+				set({ 
+					id: '',
+					email: '',
+					nickname: '',
+					mbti: '',
+					profileImg: '',
+					isLoggedIn: false,
+				});
 				alert('로그아웃 하였습니다.');
 			},
+
+			
+
 		},
 	};
 });
