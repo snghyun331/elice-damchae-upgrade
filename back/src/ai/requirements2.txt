@@ -4,3 +4,4 @@ transformers
 scipy
 ftfy
 accelerate
+translate
