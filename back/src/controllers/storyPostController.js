@@ -3,6 +3,7 @@ import { Image } from '../db/schemas/image.js';
 import { StoryPostService } from '../services/storyPostService.js';
 import { StoryPostModel } from '../db/models/storyPostModel.js';
 import axios from 'axios';
+import fs from 'fs';
 
 const storyPostController = {
   createStoryPost: async (req, res, next) => {
@@ -70,6 +71,26 @@ const storyPostController = {
         .catch((error) => {
           next(error);
         });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  createThumbnail: async (req, res, next) => {
+    try {
+      const userId = req.currentUserId;
+      const { content } = req.body;
+      const pureContent = content.replace(/<[^>]+>/g, ' ');
+      const result = await axios.post('http://127.0.0.1:5001/text-to-image', {
+        prompt: pureContent,
+      });
+      console.log(result.data.image_base64);
+      const image_data = Buffer.from(result.data.image_base64, 'base64');
+      const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+      const fileName = `image-${uniqueSuffix}.png`;
+      const filePath = `uploads/${fileName}`;
+      fs.writeFileSync(filePath, image_data);
+      return res.status(200).json({ file_name: fileName, file_path: filePath });
     } catch (error) {
       next(error);
     }

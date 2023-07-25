@@ -55,9 +55,18 @@ def generate():
     image = generate_image(imgPrompt=imgPromptCreate)
     
     # Encode the image to Base64
-    img_byte_array = io.BytesIO()
-    image.save(img_byte_array, format="PNG")
-    base64_image = base64.b64encode(img_byte_array.getvalue()).decode("utf-8")
+    temp_file_path = "temp_image.png"
+    image.save(temp_file_path, format="PNG")
+
+    # Read the image from the temporary file
+    with open(temp_file_path, "rb") as f:
+        image_data = f.read()
+
+    # Remove the temporary file
+    os.remove(temp_file_path)
+
+    # Encode the image data to Base64
+    base64_image = base64.b64encode(image_data).decode("utf-8")
     return jsonify({"image_base64": base64_image})
 
 

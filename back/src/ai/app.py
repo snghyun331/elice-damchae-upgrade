@@ -3,7 +3,6 @@
 import warnings
 warnings.filterwarnings('ignore')
 import bertModelClass
-import stableDiffusionClass
 from flask import Flask, jsonify, request, Response
 import torch
 from torch import nn
