@@ -31,11 +31,14 @@ const Home = () => {
 		if (!storyModal) return null;
 
 		return createPortal(
+			<div className="overlay">
 			<StoryCreateModal
 				onClose={() => {
 					setStoryModal(false);
 				}}
-			/>,
+			/>
+			</div>
+,
 			document.getElementById('modal-root'), // Add a div with id="modal-root" in your index.html file
 		);
 	};
