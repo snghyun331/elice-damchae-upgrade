@@ -8,13 +8,12 @@ import { useNavigate } from 'react-router-dom';
 const InfoChange = () => {
 	const navigate = useNavigate();
 	const { logout } = useUserActions();
-	const { id, email, nickname, mbti, profileImg } = useUserStore();
+	const { id, email, nickname, mbti, profileImg, setNickname, setMbti, setProfileImg } = useUserStore();
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
 		mbtiList.find((item) => item.value === mbti),
 	);
-	console.log(mbtiToChange.value);
 	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
 
 	const [confirmPassword, setConfirmPassword] = useState('');
@@ -83,7 +82,6 @@ const InfoChange = () => {
 			const response = await getApi(
 				`auth/check-nickname?nickname=${nicknameToChange}`,
 			);
-			console.log(response.data);
 
 			if (response.data.nicknameState == 'usableNickname') {
 				alert(response.data.usableNickname);
@@ -112,6 +110,9 @@ const InfoChange = () => {
 				const res = await putApi(`users/${id}`, toUpdate);
 				if (res.status === 200) {
 					alert('정보를 수정하였습니다.');
+					setNickname(toUpdate.nickname);
+					setMbti(toUpdate.mbti);
+					setProfileImg(toUpdate.profileImg);
 				} else {
 					alert('정보 수정에 실패하였습니다.');
 				}
