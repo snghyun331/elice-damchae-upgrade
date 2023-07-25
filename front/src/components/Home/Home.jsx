@@ -11,7 +11,7 @@ import useStoryStore from '../../hooks/useStoryStore';
 const Home = () => {
 	const navigate = useNavigate();
 	const { isLoggedIn } = useUserStore();
-	const { setMusic, storyModal, setStoryModal } = useStoryStore();
+	const { setTitle, setMusic, storyModal, setStoryModal } = useStoryStore();
 
 	const messages = [
 		'행복한 하루 보내세요.',
@@ -33,7 +33,6 @@ const Home = () => {
 			<StoryCreateModal
 				onClose={() => {
 					setStoryModal(false);
-					setMusic('');
 				}}
 			/>,
 			document.getElementById('modal-root'), // Add a div with id="modal-root" in your index.html file
@@ -63,7 +62,11 @@ const Home = () => {
 						<button
 							onClick={
 								isLoggedIn
-									? () => setStoryModal(true)
+									? () => {
+											setStoryModal(true);
+											setMusic('');
+											setTitle('');
+									  }
 									: () => navigate('/login')
 							}
 							type="button"

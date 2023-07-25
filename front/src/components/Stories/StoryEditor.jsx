@@ -2,12 +2,10 @@ import { useRef } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import useImageUpload from '../../hooks/useImageUpload';
 import useStoryStore from '../../hooks/useStoryStore';
-import useStoryGlobalStore from '../../store/useStoryGlobalStore';
 
 const StoryEditor = () => {
-	const { title, setTitle } = useStoryStore();
-	const { music, setMood, setMusic, setPhrase, setContent } =
-		useStoryGlobalStore();
+	const { title, setTitle, music, setMood, setMusic, setPhrase, setContent } =
+		useStoryStore();
 
 	const recommend = async () => {
 		try {
@@ -38,7 +36,9 @@ const StoryEditor = () => {
 			<h3 className="font-semibold">제목</h3>
 			<input
 				className="border"
-				onChange={(e) => setTitle(e.target.value)}
+				onChange={(e) => {
+					setTitle(e.target.value);
+				}}
 				type="text"
 				id="title"
 				value={title}

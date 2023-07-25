@@ -9,7 +9,7 @@ import { createPortal } from 'react-dom';
 const MyStories = () => {
 	const navigate = useNavigate();
 	const { isLoggedIn } = useUserStore();
-	const { setMusic, storyModal, setStoryModal } = useStoryStore();
+	const { setTitle, setMusic, storyModal, setStoryModal } = useStoryStore();
 
 	const renderModal = () => {
 		if (!storyModal) return null;
@@ -18,7 +18,6 @@ const MyStories = () => {
 			<StoryCreateModal
 				onClose={() => {
 					setStoryModal(false);
-					setMusic('');
 				}}
 			/>,
 			document.getElementById('modal-root'), // Add a div with id="modal-root" in your index.html file
@@ -32,7 +31,13 @@ const MyStories = () => {
 					<div>내 스토리</div>
 					<button
 						onClick={
-							isLoggedIn ? () => setStoryModal(true) : () => navigate('/login')
+							isLoggedIn
+								? () => {
+										setStoryModal(true);
+										setMusic('');
+										setTitle('');
+								  }
+								: () => navigate('/login')
 						}
 						type="button"
 						className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
