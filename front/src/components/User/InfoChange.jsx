@@ -14,6 +14,7 @@ const InfoChange = () => {
 	const [mbtiToChange, setMbtiToChange] = useState(
 		mbtiList.find((item) => item.value === mbti),
 	);
+	console.log(mbtiToChange.value);
 	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
 
 	const [confirmPassword, setConfirmPassword] = useState('');
@@ -89,7 +90,7 @@ const InfoChange = () => {
 				setNicknameCheck(true);
 			}
 			if (response.data.nicknameState == 'unusableNickname') {
-				alert(response.data.usableNickname);
+				alert(response.data.unusableNickname);
 				setNicknameCheck(false);
 			}
 		} catch (error) {
@@ -106,7 +107,7 @@ const InfoChange = () => {
 					email,
 					passwordToChange,
 					nickname: nicknameToChange,
-					mbti: mbtiToChange,
+					mbti: mbtiToChange.value,
 				};
 				const res = await putApi(`users/${id}`, toUpdate);
 				if (res.status === 200) {
@@ -298,9 +299,7 @@ const InfoChange = () => {
 									</label>
 									<Select
 										defaultValue={mbtiToChange}
-										onChange={(selectedOption) =>
-											mbtiToChange(selectedOption)
-										}
+										onChange={setMbtiToChange}
 										options={mbtiList}
 										placeholder="Select MBTI"
 										classNamePrefix="react-select"
