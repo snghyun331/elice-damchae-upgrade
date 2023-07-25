@@ -3,7 +3,7 @@ import StoryEditor from './StoryEditor';
 import MusicVideo from './MusicVideo';
 
 import useStoryStore from '../../hooks/useStoryStore';
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useRef } from 'react';
 import PropTypes from 'prop-types';
 
 const StoryCreateModal = ({ onClose }) => {
@@ -18,6 +18,8 @@ const StoryCreateModal = ({ onClose }) => {
 		setIsPublic,
 		setThumbnail,
 	} = useStoryStore();
+
+	const dimmedRef = useRef(null);
 
 	const [preview, setPreview] = useState('');
 
@@ -60,7 +62,13 @@ const StoryCreateModal = ({ onClose }) => {
 	return (
 		<div className="fixed inset-0 flex justify-center items-center">
 			<div
+			ref={dimmedRef}
 				className={`fixed inset-0 flex justify-center z-50 backdrop-filter backdrop-blur `}
+				onClick={(e) => {
+					if (!e.target.closest("#staticModal")) {
+						onClose()
+					}
+				}}
 			>
 				<div
 					id="staticModal"
