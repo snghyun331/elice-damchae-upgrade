@@ -1,50 +1,65 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
 
-const useUserStore = create((set, get) => ({
-	id: '',
-	email: '',
-	nickname: '',
-	mbti: '',
-	profileImg: '',
-	isLoggedIn: Boolean(localStorage.getItem('accessToken')),
+const useUserStore = create((set) => {
+	const initialUserData = {
+		id: '',
+		email: '',
+		nickname: '',
+		mbti: '',
+		profileImg: '',
+		isLoggedIn: Boolean(localStorage.getItem('accessToken')),
+	};
 
-	setEmail: (email) => set({ email }),
-	setNickname: (nickname) => set({ nickname }),
-	setMbti: (mbti) => set({ mbti }),
-	setProfileImg: (profileImg) => set({ profileImg }),
-	setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
+	const savedUserData = JSON.parse(localStorage.getItem('userData'));
+	const userData = savedUserData
+		? { ...initialUserData, ...savedUserData }
+		: initialUserData;
 
-	actions: {
-		login: async (user) => {
-			const response = await postApi('auth/login', user);
-			console.log(response.data);
-			const jwtToken = response.data.token;
-			localStorage.setItem('accessToken', jwtToken);
+	return {
+		...userData,
 
-			set({
-				isLoggedIn: true,
-				id: response.data.id,
-				email: response.data.email,
-				nickname: response.data.nickname,
-				mbti: response.data.mbti,
-			});
-			console.log('로그인 완료 후 설정된 전역변수 :', get());
+		setEmail: (email) => set({ email }),
+		setNickname: (nickname) => set({ nickname }),
+		setMbti: (mbti) => set({ mbti }),
+		setProfileImg: (profileImg) => set({ profileImg }),
+		setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
+
+		actions: {
+			login: async (user) => {
+				const response = await postApi('auth/login', user);
+				console.log(response.data);
+				const jwtToken = response.data.token;
+				localStorage.setItem('accessToken', jwtToken);
+
+				const userData = {
+					isLoggedIn: true,
+					id: response.data.id,
+					email: response.data.email,
+					nickname: response.data.nickname,
+					mbti: response.data.mbti,
+				};
+
+				// Save the user data in local storage
+				localStorage.setItem('userData', JSON.stringify(userData));
+
+				set(userData);
+			},
+
+			register: async (user) => {
+				console.log(user);
+				await postApi('auth/register', user);
+			},
+
+			logout: () => {
+				localStorage.removeItem('accessToken');
+				localStorage.removeItem('userData');
+				set({ isLoggedIn: false });
+				alert('로그아웃 하였습니다.');
+			},
 		},
-
-		register: async (user) => {
-			console.log(user)
-			await postApi('auth/register', user);
-		},
-
-		logout: () => {
-			localStorage.removeItem('accessToken');
-			set({ isLoggedIn: false });
-			alert('로그아웃 하였습니다.');
-		},
-	},
-}));
+	};
+});
 
 export const useUserActions = () => useUserStore((state) => state.actions);
-
 export default useUserStore;

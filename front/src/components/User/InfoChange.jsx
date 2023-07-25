@@ -6,20 +6,12 @@ import { mbtiList } from '../Util/Util';
 import { getApi, putApi } from '../../services/api';
 
 const InfoChange = () => {
-	const {
-		id,
-		email,
-		nickname,
-		mbti,
-		profileImg,
+	const { id, email, nickname, mbti, profileImg } = useUserStore();
+	const [passwordToChange, setPasswordToChange] = useState('');
+	const [nicknameToChange, setNicknameToChange] = useState(nickname);
+	const [mbtiToChange, setMbtiToChange] = useState(mbti);
+	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
 
-		setNickname,
-		setMbti,
-		setProfileImg,
-	} = useUserStore();
-
-	console.log('ID: ' + id);
-	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [nicknameCheck, setNicknameCheck] = useState(true);
 
@@ -38,10 +30,10 @@ const InfoChange = () => {
 
 		switch (name) {
 			case 'password':
-				setPassword(value);
+				setPasswordToChange(value);
 				break;
 			case 'nickname':
-				setNickname(value);
+				setNicknameToChange(value);
 				setNicknameCheck(false);
 				break;
 			case 'confirmPassword':
@@ -49,7 +41,7 @@ const InfoChange = () => {
 				break;
 			case 'profileImg': {
 				const file = e.target.files[0];
-				setProfileImg(URL.createObjectURL(file));
+				setProfileImgToChange(URL.createObjectURL(file));
 				break;
 			}
 		}
@@ -58,7 +50,7 @@ const InfoChange = () => {
 	const validatePassword = () => {
 		const passwordRegex =
 			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
-		return passwordRegex.test(password);
+		return passwordRegex.test(passwordToChange);
 	};
 
 	const validateNickname = () => {
@@ -66,11 +58,11 @@ const InfoChange = () => {
 		return nicknameRegex.test(nickname);
 	};
 
-	const isPasswordValid = useMemo(validatePassword, [password]);
+	const isPasswordValid = useMemo(validatePassword, [passwordToChange]);
 	const isNicknameValid = useMemo(validateNickname, [nickname]);
 	const isPasswordSame = useMemo(
-		() => password === confirmPassword,
-		[password, confirmPassword],
+		() => passwordToChange === confirmPassword,
+		[passwordToChange, confirmPassword],
 	);
 
 	const isFormValid = useMemo(
@@ -105,7 +97,12 @@ const InfoChange = () => {
 		e.preventDefault();
 
 		try {
-			const toUpdate = { email, password, nickname, mbti };
+			const toUpdate = {
+				email,
+				passwordToChange,
+				nicknameToChange,
+				mbtiToChange,
+			};
 			console.log('수정요청 데이터 :', toUpdate);
 			const res = await putApi(`users/${id}`, toUpdate);
 			console.log(res);
@@ -126,10 +123,10 @@ const InfoChange = () => {
 							<form className="space-y-4 md:space-y-6" action={handleSubmit}>
 								<div>
 									<label
-										className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+										className="block mb-2 font-semibold text-gray-900 dark:text-white"
 										htmlFor="file_input"
 									>
-										썸네일 업로드
+										프로필 이미지
 									</label>
 									<input
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -140,12 +137,12 @@ const InfoChange = () => {
 									/>
 
 									<div className="mt-4">
-										{profileImg ? (
+										{profileImgToChange ? (
 											<>
 												<p className="text-sm text-gray-500">선택된 이미지:</p>
 												<img
 													className="mt-2 max-w-xs"
-													src={profileImg}
+													src={profileImgToChange}
 													alt="Selected Thumbnail"
 												/>
 											</>
@@ -157,7 +154,7 @@ const InfoChange = () => {
 								<div className="flex flex-col">
 									<label
 										htmlFor="email"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										이메일
 									</label>
@@ -170,12 +167,12 @@ const InfoChange = () => {
 								<div>
 									<label
 										htmlFor="password"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="mt-3 block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										비밀번호
 									</label>
 									<input
-										value={password}
+										value={passwordToChange}
 										onChange={handleChangeInput}
 										autoComplete=""
 										type="password"
@@ -197,7 +194,7 @@ const InfoChange = () => {
 								<div>
 									<label
 										htmlFor="confirm-password"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										비밀번호 재확인
 									</label>
@@ -224,14 +221,13 @@ const InfoChange = () => {
 								<div className="flex flex-col">
 									<label
 										htmlFor="nickname"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										닉네임
 									</label>
 
 									<div className="flex flex-row space-x-2 justify-end">
 										<input
-											value={nickname}
 											onChange={handleChangeInput}
 											onFocus={() => handleFocus(true)}
 											onBlur={() => handleFocus(false)}
@@ -270,12 +266,14 @@ const InfoChange = () => {
 								<div>
 									<label
 										htmlFor="mbti"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										MBTI
 									</label>
 									<Select
-										onChange={(selectedOption) => setMbti(selectedOption.value)}
+										onChange={(selectedOption) =>
+											setMbtiToChange(selectedOption.value)
+										}
 										options={mbtiList}
 										placeholder="Select MBTI"
 										classNamePrefix="react-select"
