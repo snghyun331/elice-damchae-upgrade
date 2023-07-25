@@ -1,15 +1,18 @@
 import { StoryPost } from '../db/schemas/storyPost.js';
-import { Image } from '../db/schemas/image.js';
-import { StoryPostService } from '../services/storyPostService.js';
 import { StoryPostModel } from '../db/models/storyPostModel.js';
+import { StoryPostService } from '../services/storyPostService.js';
+import { imageService } from '../services/imageService.js';
 import axios from 'axios';
 
 const storyPostController = {
   createStoryPost: async (req, res, next) => {
     try {
-      const { title, content, thumbnail, isPublic, mood, music } = req.body;
+      const { title, content, isPublic, mood, music } = req.body;
+      const file = req.file;
+      const thumbnailInfo = await imageService.uploadImage({ file });
       const userId = req.currentUserId;
       const userInfo = userId;
+      const thumbnail = thumbnailInfo._id;
       const storyPostInfo = await StoryPostService.addStoryPost({
         userInfo,
         title,
