@@ -11,7 +11,9 @@ const InfoChange = () => {
 	const { id, email, nickname, mbti, profileImg } = useUserStore();
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
-	const [mbtiToChange, setMbtiToChange] = useState(mbti);
+	const [mbtiToChange, setMbtiToChange] = useState(
+		mbtiList.find((item) => item.value === mbti),
+	);
 	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
 
 	const [confirmPassword, setConfirmPassword] = useState('');
@@ -30,7 +32,7 @@ const InfoChange = () => {
 	const isPasswordValid = useMemo(() => {
 		const passwordRegex =
 			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
-		return passwordRegex.test(passwordToChange);
+		return passwordToChange ? passwordRegex.test(passwordToChange) : true;
 	}, [passwordToChange]);
 
 	const isNicknameValid = useMemo(() => {
@@ -126,8 +128,8 @@ const InfoChange = () => {
 				const response = await putApi(`auth/out`, { userId: id });
 				if (response.status === 200) {
 					alert('정상적으로 회원탈퇴가 완료되었습니다.');
-					logout()
-					navigate('/')
+					logout();
+					navigate('/');
 				}
 			} catch (error) {
 				console.error('회원탈퇴 오류:', error);
@@ -208,7 +210,7 @@ const InfoChange = () => {
 										onFocus={() => handleFocus('confirmPassword', true)}
 										onBlur={() => handleFocus('confirmPassword', false)}
 									/>
-									{!isPasswordValid && focusedMap.password && (
+									{!isPasswordValid && (
 										<p className="text-red-500 text-xs italic">
 											비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로
 											설정해주세요.
@@ -287,7 +289,6 @@ const InfoChange = () => {
 										</p>
 									)}
 								</div>
-
 								<div>
 									<label
 										htmlFor="mbti"
@@ -296,8 +297,9 @@ const InfoChange = () => {
 										MBTI
 									</label>
 									<Select
+										defaultValue={mbtiToChange}
 										onChange={(selectedOption) =>
-											setMbtiToChange(selectedOption.value)
+											mbtiToChange(selectedOption)
 										}
 										options={mbtiList}
 										placeholder="Select MBTI"
@@ -310,22 +312,22 @@ const InfoChange = () => {
 										className={`self-end w-36 text-white ${
 											!isFormValid && 'opacity-50 cursor-not-allowed'
 										} bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 
-    focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 
-    dark:bg-gray-800 dark:hover:bg-gray-700 
-    dark:focus:ring-gray-700 dark:border-gray-700`}
+		focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 
+		dark:bg-gray-800 dark:hover:bg-gray-700 
+		dark:focus:ring-gray-700 dark:border-gray-700`}
 										onClick={handleSubmit}
 									>
 										수정하기
 									</button>
+									<hr className="my-8" />
+									<button
+										onClick={handleOut}
+										className="text-sm text-red-600 underline ml-auto"
+									>
+										회원 탈퇴
+									</button>
 								</div>
 							</form>
-							<hr />
-							<button
-								onClick={handleOut}
-								className="text-sm text-red-600 underline underli"
-							>
-								회원 탈퇴
-							</button>
 						</div>
 					</div>
 				</div>
