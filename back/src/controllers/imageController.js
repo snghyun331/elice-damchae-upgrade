@@ -10,6 +10,12 @@ const imageController = {
       next(error);
     }
   },
+
+  createStableImage: async (req, res, next) => {
+    try{
+      
+    }
+  }
 };
 
 export { imageController };
