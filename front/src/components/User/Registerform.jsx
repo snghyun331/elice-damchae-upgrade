@@ -138,7 +138,7 @@ const RegisterForm = () => {
 				setNicknameCheck(true);
 			}
 			if (response.data.nicknameState == 'unusableNickname') {
-				alert(response.data.usableNickname);
+				alert(response.data.unusableNickname);
 				setNicknameCheck(false);
 			}
 		} catch (error) {
