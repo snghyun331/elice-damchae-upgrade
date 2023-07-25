@@ -21,10 +21,6 @@ class userAuthController {
         mbti,
       });
 
-      if (newUser.errorMessage) {
-        throw new Error(newUser.errorMessage);
-      }
-
       return res.status(201).json(newUser);
     } catch (error) {
       res
@@ -79,7 +75,7 @@ class userAuthController {
 
   static async checkNickname(req, res, next) {
     try {
-      const { nickname } = req.body;
+      const nickname = req.query.nickname.replace(/\/$/, '');
       const existingUser = await userService.getUserNickname({ nickname });
 
       return res.json(existingUser);
