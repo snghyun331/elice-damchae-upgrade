@@ -76,8 +76,7 @@ class userAuthController {
   static async checkNickname(req, res, next) {
     try {
       const nickname = req.query.nickname.replace(/\/$/, '');
-      const existingUser = await userService.readUserNickname({ nickname });
-
+      const existingUser = await userService.getUserNickname({ nickname });
       return res.json(existingUser);
     } catch (error) {
       res.status(500).json();

@@ -4,24 +4,22 @@ import useUserStore from '../store/useUserStore';
 const useRegisterStore = () => {
 	const {
 		email,
-		password,
 		nickname,
 		mbti,
 		isLoggedIn,
-		errMsg,
 
 		setEmail,
-		setPassword,
 		setNickname,
 		setMbti,
 		setIsLoggedIn,
-		setErrMsg,
 	} = useUserStore();
 
+	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [code, setCode] = useState('');
 	const [checkMsg, setCheckMsg] = useState('');
 	const [nicknameCheck, setNicknameCheck] = useState(false);
+	const [errMsg, setErrMsg] = useState('');
 
 	return {
 		email,
@@ -31,9 +29,9 @@ const useRegisterStore = () => {
 		isLoggedIn,
 		confirmPassword,
 		code,
-		errMsg,
 		checkMsg,
 		nicknameCheck,
+		errMsg,
 
 		setEmail,
 		setPassword,
@@ -42,9 +40,9 @@ const useRegisterStore = () => {
 		setIsLoggedIn,
 		setConfirmPassword,
 		setCode,
-		setErrMsg,
 		setCheckMsg,
 		setNicknameCheck,
+		setErrMsg,
 	};
 };
 
