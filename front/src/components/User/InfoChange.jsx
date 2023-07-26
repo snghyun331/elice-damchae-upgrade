@@ -79,7 +79,7 @@ const InfoChange = () => {
 	const handleNicknameCheck = useCallback(async () => {
 		try {
 			const response = await getApi(
-				`auth/check-nickname?nickname=${nicknameToChange}`,
+				`auth/checkNickname?nickname=${nicknameToChange}`,
 			);
 
 			if (response.data.nicknameState == 'usableNickname') {

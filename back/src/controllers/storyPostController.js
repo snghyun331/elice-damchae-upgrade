@@ -7,7 +7,8 @@ import axios from 'axios';
 const storyPostController = {
   createStoryPost: async (req, res, next) => {
     try {
-      const { title, content, isPublic, mood, music } = req.body;
+      const { title, content, thumbnailStable, isPublic, mood, music } =
+        req.body;
       const file = req.file;
       const thumbnailInfo = await imageService.uploadImage({ file });
       const userId = req.currentUserId;
@@ -18,12 +19,13 @@ const storyPostController = {
         title,
         content,
         thumbnail,
+        thumbnailStable,
         isPublic,
         mood,
         music,
       });
       const result = await StoryPost.populate(storyPostInfo, {
-        path: 'userInfo thumbnail',
+        path: 'userInfo thumbnail thumbnailStable',
       });
       return res.status(200).json(result);
     } catch (error) {
@@ -80,32 +82,39 @@ const storyPostController = {
   updateStoryPost: async (req, res, next) => {
     try {
       const storyId = req.params.storyId;
-      const { title, content, isPublic, mood, music } = req.body;
+      const { title, content, thumbnailStable, isPublic, mood, music } =
+        req.body;
       const file = req.file ?? null;
       const userId = req.currentUserId;
       const userInfo = userId;
       let thumbnail;
+
       if (file) {
         const thumbnailInfo = await imageService.uploadImage({ file });
         thumbnail = thumbnailInfo._id;
+        thumbnailStable === null;
+      }
+
+      if (thumbnailStable) {
+        thumbnail === null;
       }
 
       const toUpdate = {
         title,
         content,
         thumbnail,
+        thumbnailStable,
         isPublic,
         mood,
         music,
       };
-
       const updatedStory = await StoryPostService.setStory({
         userInfo,
         storyId,
         toUpdate,
       });
       const result = await StoryPost.populate(updatedStory, {
-        path: 'userInfo thumbnail',
+        path: 'userInfo thumbnail thumbnailStable',
       });
       return res.status(200).json(result);
     } catch (error) {
