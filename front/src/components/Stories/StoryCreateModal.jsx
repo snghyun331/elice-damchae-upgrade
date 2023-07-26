@@ -14,11 +14,10 @@ const StoryCreateModal = ({ onClose }) => {
 		mood,
 		music,
 		phrase,
-		prompt,
+
 		isPublic,
 		setIsPublic,
 		setThumbnail,
-		setPrompt,
 	} = useStoryStore();
 
 	const dimmedRef = useRef(null);
@@ -133,16 +132,6 @@ const StoryCreateModal = ({ onClose }) => {
 										/>
 									</div>
 								)}
-								<h2 className="font-semibold">AI 이미지 생성</h2>
-								<input
-									className="w-full border"
-									onChange={(e) => {
-										setPrompt(e.target.value);
-									}}
-									type="text"
-									id="prompt"
-									value={prompt}
-								/>
 							</div>
 							<StoryEditor />
 

@@ -17,8 +17,8 @@ const StoryEditor = () => {
 	} = useStoryStore();
 
 	const recommend = async () => {
+		console.log(content);
 		try {
-			console.log(content);
 			const response = await postApi('stories/recommend', { content });
 
 			console.log(response);
@@ -28,6 +28,23 @@ const StoryEditor = () => {
 		} catch (error) {
 			console.log(error.response.data.errorMessage);
 		}
+	};
+
+	const generateImage = async () => {
+		try {
+			const response = await postApi('image/stable', { content });
+
+			console.log(response);
+		} catch (error) {
+			console.log(error.response.data.errorMessage);
+		}
+	};
+
+	const handleGenerate = async () => {
+		const body = editorRef.current?.getInstance().getHTML() || '';
+
+		setContent(body);
+		generateImage();
 	};
 
 	const handleRecommend = () => {
@@ -77,6 +94,12 @@ const StoryEditor = () => {
 				/>
 			</div>
 			<div className="flex flex-col justify-end space-y-2">
+				<button
+					onClick={handleGenerate}
+					className="w-60 self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+				>
+					썸네일 이미지 생성하기
+				</button>
 				<button
 					onClick={handleRecommend}
 					className="w-60 self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
