@@ -3,29 +3,19 @@ import ForestPost from '../schemas/forestPost.js';
 import UserModel from '../schemas/user.js';
 
 class forestModel {
-	static async findAll() {
-		const Forest = await ForestPost.find();
-		return Forest;
+	static async create({ newForestPost }) {
+		const createdForest = await ForestPost.create(newForestPost);
+		return createdForest;
 	}
+
+	static async findAll(getAlls) {
+		const findAllForest = await ForestPost.find({ getAlls });
+		return findAllForest;
+	}
+
 	static async findByPost({ _id }) {
 		const getForest = await ForestPost.findOne({ _id });
 		return getForest;
-	}
-
-	// async findByMbti({ mbti }) {
-	// 	const getForestMbti = await ForestPost.findOne(mbti);
-	// 	return getForestMbti;
-	// }
-
-	static async createPost({ title, content, imageUrl, userId }) {
-		const newForest = {
-			title,
-			content,
-			imageUrl,
-			userId,
-		};
-		const createdNewForestPost = await ForestPost.create(newForest);
-		return createdNewForestPost;
 	}
 
 	static async updatePost({ updatePost }) {
@@ -50,15 +40,28 @@ class forestModel {
 			return updateForestPost;
 		}
 	}
-	static async deletePost({ title, content, imageUrl, userId }) {
-		const deleteForest = {
-			title,
-			content,
-			imageUrl,
-			userId,
-		};
-		const deleteForestPost = await ForestPost.deleteOne(deleteForest);
-		return deleteForestPost;
+
+	static async deletePost({ deletePost }) {
+		console.log('model까지', deletePost);
+		if (!(deletePost.imageUrl = 'None')) {
+			console.log(1);
+			const deleteForestPost = await ForestPost.deleteOne(
+				{ userId: deletePost.userId, _id: deletePost._id },
+				{
+					title: deletePost.title,
+					content: deletePost.content,
+					imageUrl: deletePost.imageUrl,
+				},
+			);
+			return deleteForestPost;
+		} else {
+			console.log(2);
+			const deleteForestPost = await ForestPost.deleteOne(
+				{ userId: deletePost.userId, _id: deletePost._id },
+				{ title: deletePost.title, content: deletePost.content },
+			);
+			return deleteForestPost;
+		}
 	}
 }
 

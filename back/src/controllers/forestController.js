@@ -6,32 +6,6 @@ import BadRequest from '../middlewares/error/badRequest.js';
 import { handleError } from '../middlewares/error/forestErrorHandler.js';
 
 class ForestController {
-	static async getAllPosts(req, res, next) {
-		try {
-			const forestServiceInstance = new ForestService();
-			const posts = await forestServiceInstance.findAll();
-			statusCode.setResponseCode200(res);
-			res.send(posts);
-		} catch (error) {
-			next(error);
-		}
-	}
-
-	static async findByPost(req, res, next) {
-		try {
-			const userId = req.params.id;
-			const forestServiceInstance = new ForestService();
-			const post = await forestServiceInstance.findByPost(userId);
-			if (!post) {
-				throw new NotFoundError('존재하지 않는 글입니다');
-			}
-			statusCode.setResponseCode200(res);
-			res.send(post);
-		} catch (error) {
-			next(error);
-		}
-	}
-
 	static async createPost(req, res, next) {
 		try {
 			// 로그인 상태 확인
@@ -53,19 +27,19 @@ class ForestController {
 			const userId = req.currentUserId;
 
 			// 글 등록을 위해 필요한 데이터 객체 생성
-			const newForestPost = {
+			const newForestPost = await ForestService.createPost({
 				title,
 				content,
 				imageUrl,
 				userId,
-			};
+			});
 
 			// ForestService.addStoryPost() 메서드 호출 시 newForestPost를 전달
-			const createdForestPost = await ForestService.createPost(newForestPost);
+			// const createdForestPost = await ForestService.create(newForestPost);
 
 			return res
 				.status(200)
-				.json({ message: '글을 등록했습니다.', userId: createdForestPost });
+				.json({ message: '글을 등록했습니다.', userId: newForestPost });
 		} catch (error) {
 			handleError(error); // handleError 함수를 호출하여 에러를 적절히 처리
 			// console.log(error);
@@ -77,6 +51,49 @@ class ForestController {
 		}
 	}
 
+	static async getAllPosts(req, res, next) {
+		try {
+			const forestServiceInstance = new ForestService();
+
+			let getAlls = [];
+			if (req.query.option == 'title') {
+				getAlls = [{ title: new RegExp(req.query.content) }];
+			} else if (req.query.option == 'content') {
+				getAlls = [{ content: new RegExp(req.query.content) }];
+			} else if (req.query.option == 'title+content') {
+				getAlls = [
+					{ title: new RegExp(req.query.content) },
+					{ content: new RegExp(req.query.content) },
+				];
+			} else {
+				throw new NotFoundError('검색 옵션이 없습니다.');
+			}
+
+			const posts = await forestServiceInstance.findAll({ getAlls });
+
+			statusCode.setResponseCode200(res);
+			res.send(posts);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	static async findByPost(req, res, next) {
+		try {
+			const _id = req.currentUserId;
+			const forestServiceInstance = new ForestService();
+			const post = await forestServiceInstance.findByPost({ _id });
+			if (!post) {
+				console.log(post);
+				throw new NotFoundError('존재하지 않는 글입니다');
+			}
+			statusCode.setResponseCode200(res);
+			res.send(post);
+		} catch (error) {
+			next(error);
+		}
+	}
+
 	static async updatePost(req, res, next) {
 		try {
 			// 로그인 상태 확인
@@ -85,7 +102,7 @@ class ForestController {
 					.status(400)
 					.json({ message: '글을 수정하려면 로그인이 필요합니다.' });
 			}
-			console.log(req.body);
+			// console.log(req.body);
 			const { title, content, imageUrl } = req.body;
 			const postId = req.params.id;
 
@@ -125,11 +142,21 @@ class ForestController {
 					.status(400)
 					.json({ message: '글을 삭제하려면 로그인이 필요합니다.' });
 			}
-			const userId = req.currentUserId;
+
+			const { title, content, imageUrl } = req.body;
 			const postId = req.params.id;
 
+			const userId = req.currentUserId;
+
 			const forestServiceInstance = new ForestService();
-			const deletedPost = await forestServiceInstance.deletePost(userId);
+			let deletePost = {};
+			if (!imageUrl) {
+				const imageUrl = 'None';
+				deletePost = { _id: postId, title, content, userId, imageUrl };
+			} else {
+				deletePost = { _id: postId, title, content, userId, imageUrl };
+			}
+			const deletedPost = await forestServiceInstance.deletePost(deletePost);
 
 			if (!deletedPost) {
 				throw new NotFoundError('존재하지 않는 글입니다.');
