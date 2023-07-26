@@ -8,6 +8,7 @@ import forestRouter from './routers/forestPostRouter.js';
 import { imageRouter } from './routers/imageRouter.js';
 
 const app = express();
+app.use('/uploads', express.static('uploads'));
 
 app.use(cors());
 app.use(morgan('dev')); // 콘솔창에서 log 확인

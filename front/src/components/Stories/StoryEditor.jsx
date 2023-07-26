@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import useImageUpload from '../../hooks/useImageUpload';
 import useStoryStore from '../../hooks/useStoryStore';
@@ -9,13 +9,23 @@ const StoryEditor = () => {
 		title,
 		setTitle,
 		content,
+		thumbnail,
 
 		music,
 		setMood,
 		setMusic,
 		setPhrase,
 		setContent,
+		setThumbnail,
 	} = useStoryStore();
+
+	const [preview, setPreview] = useState('');
+
+	const handleThumbnailUpload = async (e) => {
+		e.preventDefault();
+		const file = e.target.files[0];
+		setPreview(URL.createObjectURL(file));
+	};
 
 	const recommend = async () => {
 		try {
@@ -31,14 +41,14 @@ const StoryEditor = () => {
 	};
 
 	const generateImage = async () => {
-		console.log(content);
 		try {
 			const response = await postApi('image/stable', { content });
-			console.log(response);
+			setThumbnail(response.data.fileName);
 		} catch (error) {
-			console.log('에러');
+			console.log(error);
 		}
 	};
+	//TODO: 로딩중 걸기
 
 	const handleGenerate = async () => {
 		const body = editorRef.current?.getInstance().getHTML() || '';
@@ -97,19 +107,57 @@ const StoryEditor = () => {
 					onChange={onChange}
 				/>
 			</div>
-			<div className="flex flex-col justify-end space-y-2">
-				<button
-					onClick={handleGenerate}
-					className="w-60 self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-				>
-					썸네일 이미지 생성하기
-				</button>
-				<button
-					onClick={handleRecommend}
-					className="w-60 self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-				>
-					기분에 맞는 음악 추천받기
-				</button>
+			<div className="flex flex-col space-y-2">
+				<div className="flex flex-row space-x-2 mb-5">
+					<div className="w-1/2">
+						<div className="h-1/4 items-end">
+							<input
+								className="rounded-lg block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+								id="file_input"
+								type="file"
+								onChange={handleThumbnailUpload}
+							/>
+						</div>
+						{preview && (
+							<div className="h-3/4">
+								<p className="text-sm text-gray-500">선택된 이미지:</p>
+								<img
+									className="h-full"
+									src={preview}
+									alt="Selected Thumbnail"
+								/>
+							</div>
+						)}
+					</div>
+					<div className="w-1/2 ">
+						<div className="h-1/4 flex">
+							<button
+								onClick={handleGenerate}
+								className="w-full h-8 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+							>
+								썸네일 이미지 생성하기
+							</button>
+						</div>
+						{thumbnail && (
+							<div className="h-3/4">
+								<p className="text-sm text-gray-500">선택된 이미지:</p>
+								<img
+									className="h-full"
+									src={`http://localhost:3000/uploads/${thumbnail}`}
+								/>
+							</div>
+						)}
+					</div>
+				</div>
+
+				<div className="w-full">
+					<button
+						onClick={handleRecommend}
+						className="mt-8 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+					>
+						기분에 맞는 음악 추천받기
+					</button>
+				</div>
 			</div>
 
 			{loading && <div>이미지 업로드 중...</div>}

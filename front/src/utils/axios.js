@@ -8,7 +8,6 @@ const getToken = () => {
 
 const instance = axios.create({
 	baseURL: serverUrl,
-	timeout: 4000,
 });
 
 instance.interceptors.request.use(
@@ -40,6 +39,7 @@ instance.interceptors.response.use(
 		return response;
 	},
 	(error) => {
+		console.error(error);
 		if (
 			error.response.data.message ===
 			('토큰이 만료되었습니다' || '토큰이 유효하지 않습니다')
