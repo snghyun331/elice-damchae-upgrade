@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import { Editor } from '@toast-ui/react-editor';
-import useImageUpload from '../../hooks/useImageUpload';
 import useStoryStore from '../../hooks/useStoryStore';
 import { postApi } from '../../services/api';
 
@@ -9,14 +8,16 @@ const StoryEditor = () => {
 		title,
 		setTitle,
 		content,
-		thumbnail,
+
+		stableThumbnail,
 
 		music,
 		setMood,
 		setMusic,
 		setPhrase,
 		setContent,
-		setThumbnail,
+		setLocalThumbnail,
+		setStableThumbnail,
 	} = useStoryStore();
 
 	const [preview, setPreview] = useState('');
@@ -24,6 +25,7 @@ const StoryEditor = () => {
 	const handleThumbnailUpload = async (e) => {
 		e.preventDefault();
 		const file = e.target.files[0];
+		setLocalThumbnail(file);
 		setPreview(URL.createObjectURL(file));
 	};
 
@@ -43,7 +45,7 @@ const StoryEditor = () => {
 	const generateImage = async () => {
 		try {
 			const response = await postApi('image/stable', { content });
-			setThumbnail(response.data.fileName);
+			setStableThumbnail(response.data.fileName);
 		} catch (error) {
 			console.log(error);
 		}
@@ -63,8 +65,6 @@ const StoryEditor = () => {
 	};
 
 	const editorRef = useRef();
-
-	const { handleImageUpload, loading } = useImageUpload();
 
 	const onChange = () => {
 		const body = editorRef.current.getInstance().getHTML();
@@ -101,9 +101,6 @@ const StoryEditor = () => {
 						['ul', 'ol', 'task', 'indent', 'outdent'],
 						['table', 'image', 'link'],
 					]}
-					hooks={{
-						addImageBlobHook: handleImageUpload,
-					}}
 					ref={editorRef}
 					onChange={onChange}
 				/>
@@ -143,17 +140,59 @@ const StoryEditor = () => {
 								썸네일 이미지 생성하기
 							</button>
 						</div>
-						{thumbnail && (
+						{stableThumbnail && (
 							<div className="h-3/4">
 								<p className="text-sm text-gray-500">선택된 이미지:</p>
 								<img
 									className="h-full"
-									src={`http://localhost:3000/uploads/${thumbnail}`}
+									src={`http://localhost:3000/uploads/${stableThumbnail}`}
 								/>
 							</div>
 						)}
 					</div>
 				</div>
+
+				<ul className="grid w-full gap-6 md:grid-cols-2">
+					<li>
+						<input
+							type="radio"
+							id="local-thumbnail"
+							name="hosting"
+							value="local-thumbnail"
+							className="hidden peer"
+							required
+						/>
+						<label
+							htmlFor="local-thumbnail"
+							className="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+						>
+							<div className="block">
+								<div className="w-full text-lg font-semibold">
+									로컬 이미지 선택
+								</div>
+							</div>
+						</label>
+					</li>
+					<li>
+						<input
+							type="radio"
+							id="stable-thumnail"
+							name="hosting"
+							value="stable-thumnail"
+							className="hidden peer"
+						/>
+						<label
+							htmlFor="stable-thumnail"
+							className="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+						>
+							<div className="block">
+								<div className="w-full text-lg font-semibold">
+									AI로 생성한 이미지 선택
+								</div>
+							</div>
+						</label>
+					</li>
+				</ul>
 
 				<div className="w-full">
 					<button
@@ -165,8 +204,6 @@ const StoryEditor = () => {
 					</button>
 				</div>
 			</div>
-
-			{loading && <div>이미지 업로드 중...</div>}
 		</>
 	);
 };
