@@ -112,6 +112,20 @@ const storyPostController = {
       next(error);
     }
   },
+
+  deleteStoryPost: async (req, res, next) => {
+    try {
+      const storyId = req.params.storyId;
+      const result = await StoryPostService.deleteStory({ storyId });
+      if (result.errorMessage) {
+        throw new Error(result.errorMessage);
+      }
+
+      return res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export { storyPostController };

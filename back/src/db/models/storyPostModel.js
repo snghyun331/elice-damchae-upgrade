@@ -32,6 +32,12 @@ class StoryPostModel {
     );
     return updatedStory;
   }
+
+  static async deleteOneByStoryId({ storyId }) {
+    const deletedStory = await StoryPost.deleteOne({ _id: storyId });
+    const isCompleteDeleted = deletedStory.deletedCount === 1;
+    return isCompleteDeleted;
+  }
 }
 
 export { StoryPostModel };
