@@ -3,7 +3,7 @@ import StoryEditor from './StoryEditor';
 import MusicVideo from './MusicVideo';
 
 import useStoryStore from '../../hooks/useStoryStore';
-import { useEffect, useState,useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 const StoryCreateModal = ({ onClose }) => {
@@ -14,9 +14,11 @@ const StoryCreateModal = ({ onClose }) => {
 		mood,
 		music,
 		phrase,
+		prompt,
 		isPublic,
 		setIsPublic,
 		setThumbnail,
+		setPrompt,
 	} = useStoryStore();
 
 	const dimmedRef = useRef(null);
@@ -62,11 +64,11 @@ const StoryCreateModal = ({ onClose }) => {
 	return (
 		<div className="fixed inset-0 flex justify-center items-center">
 			<div
-			ref={dimmedRef}
+				ref={dimmedRef}
 				className={`fixed inset-0 flex justify-center z-50 backdrop-filter backdrop-blur `}
 				onClick={(e) => {
-					if (!e.target.closest("#staticModal")) {
-						onClose()
+					if (!e.target.closest('#staticModal')) {
+						onClose();
 					}
 				}}
 			>
@@ -131,6 +133,16 @@ const StoryCreateModal = ({ onClose }) => {
 										/>
 									</div>
 								)}
+								<h2 className="font-semibold">AI 이미지 생성</h2>
+								<input
+									className="w-full border"
+									onChange={(e) => {
+										setPrompt(e.target.value);
+									}}
+									type="text"
+									id="prompt"
+									value={prompt}
+								/>
 							</div>
 							<StoryEditor />
 

@@ -9,6 +9,7 @@ const useStoryStore = () => {
 		mood,
 		music,
 		phrase,
+
 		setTitle,
 		setContent,
 		setMood,
@@ -19,6 +20,7 @@ const useStoryStore = () => {
 	const [thumbnail, setThumbnail] = useState('');
 	const [isPublic, setIsPublic] = useState(false);
 	const [storyModal, setStoryModal] = useState(false);
+	const [prompt, setPrompt] = useState('');
 	const [errMsg, setErrMsg] = useState('');
 
 	const postStory = async (post) => {
@@ -38,6 +40,7 @@ const useStoryStore = () => {
 		mood,
 		music,
 		phrase,
+		prompt,
 		storyModal,
 		errMsg,
 		setErrMsg,
@@ -50,6 +53,7 @@ const useStoryStore = () => {
 		setMusic,
 		setPhrase,
 		setStoryModal,
+		setPrompt,
 
 		postStory,
 	};
