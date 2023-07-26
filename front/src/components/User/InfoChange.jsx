@@ -28,20 +28,9 @@ const InfoChange = () => {
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [nicknameCheck, setNicknameCheck] = useState(true);
 
-	const [focusedMap, setFocusedMap] = useState({
-		email: false,
-		password: false,
-		nickname: false,
-	});
-
-	const handleFocus = (name, value) => {
-		setFocusedMap({ ...focusedMap, [name]: value });
-	};
-
 	const isPasswordValid = useMemo(() => {
 		const passwordRegex =
 			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
-		console.log('레젝스 테스트', passwordRegex.test(passwordToChange));
 		return passwordToChange ? passwordRegex.test(passwordToChange) : true;
 	}, [passwordToChange]);
 
@@ -49,7 +38,6 @@ const InfoChange = () => {
 		const nicknameRegex = /^[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,16}$/;
 		return nicknameRegex.test(nicknameToChange);
 	}, [nicknameToChange]);
-
 	const isPasswordSame = useMemo(
 		() => passwordToChange == confirmPassword,
 
@@ -65,12 +53,6 @@ const InfoChange = () => {
 			Boolean(mbti),
 		[isPasswordValid, isPasswordSame, isNicknameValid, nicknameCheck, mbti],
 	);
-	console.log('isPasswordValid', isPasswordValid);
-	console.log('isPasswordSame', isPasswordSame);
-	console.log('isNicknameValid', isNicknameValid);
-	console.log('nicknameCheck', nicknameCheck);
-	console.log(Boolean(mbti));
-	console.log('isFormValid', isFormValid);
 
 	const handleChangeInput = useCallback(({ target }) => {
 		const { name, value, files } = target;
@@ -229,8 +211,6 @@ const InfoChange = () => {
 										placeholder=""
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
-										onFocus={() => handleFocus('confirmPassword', true)}
-										onBlur={() => handleFocus('confirmPassword', false)}
 									/>
 									{!isPasswordValid && (
 										<p className="text-red-500 text-xs italic">
@@ -256,10 +236,8 @@ const InfoChange = () => {
 										placeholder=""
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
-										onFocus={() => handleFocus('confirmPassword', true)}
-										onBlur={() => handleFocus('confirmPassword', false)}
 									/>
-									{!isPasswordSame && focusedMap.confirmPassword && (
+									{!isPasswordSame && (
 										<p className="text-red-500 text-xs italic">
 											비밀번호가 일치하지 않습니다.
 										</p>
@@ -278,8 +256,6 @@ const InfoChange = () => {
 										<input
 											onChange={handleChangeInput}
 											value={nicknameToChange}
-											onFocus={() => handleFocus(true)}
-											onBlur={() => handleFocus(false)}
 											type="text"
 											name="nickname"
 											id="nickname"
