@@ -1,5 +1,5 @@
 import useRegisterStore from '../../hooks/useRegisterStore';
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { mbtiList } from '../Util/Util';
@@ -31,15 +31,6 @@ const RegisterForm = () => {
 	} = useRegisterStore();
 
 	const { register } = useUserActions();
-
-	const [focusedMap, setFocusedMap] = useState({
-		email: false,
-		password: false,
-	});
-
-	const handleFocus = (name, value) => {
-		setFocusedMap({ ...focusedMap, [name]: value });
-	};
 
 	const handleChangeInput = useCallback((e) => {
 		const { name, value } = e.target;
@@ -173,8 +164,6 @@ const RegisterForm = () => {
 											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 											placeholder="name@company.com"
 											required=""
-											onFocus={() => handleFocus('email', true)}
-											onBlur={() => handleFocus('email', false)}
 										/>
 
 										<button
@@ -186,7 +175,7 @@ const RegisterForm = () => {
 											이메일인증
 										</button>
 									</div>
-									{!isEmailValid && focusedMap.email && (
+									{!isEmailValid && email && (
 										<p className="text-red-500 text-xs italic">
 											이메일 형식이 올바르지 않습니다.
 										</p>
@@ -202,8 +191,6 @@ const RegisterForm = () => {
 										placeholder="인증번호 입력"
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
-										onFocus={() => handleFocus('code', true)}
-										onBlur={() => handleFocus('code', false)}
 									/>
 
 									<button
@@ -232,10 +219,8 @@ const RegisterForm = () => {
 										placeholder="••••••••"
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
-										onFocus={() => handleFocus('password', true)}
-										onBlur={() => handleFocus('password', false)}
 									/>
-									{!isPasswordValid && focusedMap.password && (
+									{!isPasswordValid && password && (
 										<p className="text-red-500 text-xs italic">
 											비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로
 											설정해주세요.
@@ -258,10 +243,8 @@ const RegisterForm = () => {
 										placeholder="••••••••"
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
-										onFocus={() => handleFocus('confirmPassword', true)}
-										onBlur={() => handleFocus('confirmPassword', false)}
 									/>
-									{!isPasswordSame && focusedMap.confirmPassword && (
+									{!isPasswordSame && confirmPassword && (
 										<p className="text-red-500 text-xs italic">
 											비밀번호가 일치하지 않습니다.
 										</p>
@@ -280,8 +263,6 @@ const RegisterForm = () => {
 										<input
 											value={nickname}
 											onChange={handleChangeInput}
-											onFocus={() => handleFocus('nickname', true)}
-											onBlur={() => handleFocus('nickname', false)}
 											type="text"
 											name="nickname"
 											id="nickname"
@@ -298,7 +279,7 @@ const RegisterForm = () => {
 											중복 확인
 										</button>
 									</div>
-									{!isNicknameValid && focusedMap.nickname && (
+									{!isNicknameValid && nickname && (
 										<p className="text-red-500 text-xs italic">
 											닉네임은 2~16자 사이로 설정해주세요.
 										</p>
