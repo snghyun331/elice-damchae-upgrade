@@ -8,8 +8,16 @@ class forestModel {
 		return createdForest;
 	}
 
-	static async findAll(getAlls) {
-		const findAllForest = await ForestPost.find({ getAlls });
+	static async findAll({ getAlls }) {
+		// console.log(getAlls);
+		// console.log(getAlls.$or);
+		// const getAll = getAlls.$or[0];
+		// console.log(getAll);
+		const findAllForest = await ForestPost.find(
+			getAlls[0],
+			// title: getAlls.$or[0].title,
+			// content: getAlls.$or[0].content,
+		);
 		return findAllForest;
 	}
 

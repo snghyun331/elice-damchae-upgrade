@@ -21,7 +21,8 @@ class ForestService {
 
 	async findAll({ getAlls }) {
 		try {
-			const posts = await forestModel.findAll({ $or: getAlls });
+			console.log(getAlls, getAlls.title);
+			const posts = await forestModel.findAll({ getAlls });
 			console.log(posts);
 			return posts;
 		} catch (error) {
