@@ -1,9 +1,7 @@
 // forestController.js
 import ForestService from '../services/forestService.js';
 import { statusCode } from '../utills/statusCode.js';
-import NotFoundError from '../middlewares/error/notFoundError.js';
 import BadRequest from '../middlewares/error/badRequest.js';
-import { handleError } from '../middlewares/error/forestErrorHandler.js';
 
 class ForestController {
 	static async createPost(req, res, next) {
@@ -41,7 +39,7 @@ class ForestController {
 				.status(200)
 				.json({ message: '글을 등록했습니다.', userId: newForestPost });
 		} catch (error) {
-			handleError(error); // handleError 함수를 호출하여 에러를 적절히 처리
+			next(error); // handleError 함수를 호출하여 에러를 적절히 처리
 			// console.log(error);
 			console.log(error);
 			return res.status(500).json({
@@ -66,7 +64,7 @@ class ForestController {
 					{ content: new RegExp(req.query.content) },
 				];
 			} else {
-				throw new NotFoundError('검색 옵션이 없습니다.');
+				throw new Error('검색 옵션이 없습니다.');
 			}
 
 			const posts = await forestServiceInstance.findAll({ getAlls });
@@ -85,7 +83,7 @@ class ForestController {
 			const post = await forestServiceInstance.findByPost({ _id });
 			if (!post) {
 				console.log(post);
-				throw new NotFoundError('존재하지 않는 글입니다');
+				throw new Error('존재하지 않는 글입니다');
 			}
 			statusCode.setResponseCode200(res);
 			res.send(post);
@@ -123,7 +121,7 @@ class ForestController {
 			const updatedPost = await forestServiceInstance.updatePost(updatePost);
 
 			if (!updatedPost) {
-				throw new NotFoundError('존재하지 않는 글입니다.');
+				throw new Error('존재하지 않는 글입니다.');
 			}
 
 			statusCode.setResponseCode200(res);
@@ -159,7 +157,7 @@ class ForestController {
 			const deletedPost = await forestServiceInstance.deletePost(deletePost);
 
 			if (!deletedPost) {
-				throw new NotFoundError('존재하지 않는 글입니다.');
+				throw new Error('존재하지 않는 글입니다.');
 			}
 
 			statusCode.setResponseCode200(res);
