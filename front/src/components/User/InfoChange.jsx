@@ -24,7 +24,6 @@ const InfoChange = () => {
 		mbtiList.find((item) => item.value === mbti),
 	);
 	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
-
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [nicknameCheck, setNicknameCheck] = useState(true);
 
@@ -265,9 +264,9 @@ const InfoChange = () => {
 										<button
 											type="button"
 											onClick={handleNicknameCheck}
-											disabled={!isNicknameValid}
+											disabled={!isNicknameValid || nickname == nicknameToChange }
 											className={`self-end w-36 text-white ${
-												!isNicknameValid && 'opacity-50 cursor-not-allowed'
+												(!isNicknameValid || nickname == nicknameToChange) && 'opacity-50 cursor-not-allowed'
 											} bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 
 		focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 
 		dark:bg-gray-800 dark:hover:bg-gray-700 
