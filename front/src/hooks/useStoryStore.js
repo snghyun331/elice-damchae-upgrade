@@ -18,7 +18,7 @@ const useStoryStore = () => {
 	} = useStoryGlobalStore();
 
 	const [thumbnail, setThumbnail] = useState('');
-	const [isPublic, setIsPublic] = useState(false);
+	const [isPublic, setIsPublic] = useState(true);
 	const [storyModal, setStoryModal] = useState(false);
 	const [prompt, setPrompt] = useState('');
 	const [errMsg, setErrMsg] = useState('');

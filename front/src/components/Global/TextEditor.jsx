@@ -28,7 +28,7 @@ const TextEditor = () => {
 			<div className="mt-5">
 				<Editor
 					ref={editorRef}
-					initialValue="내용을 입력하세요"
+					initialValue=""
 					previewStyle="vertical"
 					previewHighlight={false}
 					height="300px"

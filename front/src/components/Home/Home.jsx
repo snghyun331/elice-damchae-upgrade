@@ -12,7 +12,8 @@ const Home = () => {
 	const { nickname } = useUserStore();
 	const navigate = useNavigate();
 	const { isLoggedIn } = useUserStore();
-	const { setTitle, setMusic, storyModal, setStoryModal } = useStoryStore();
+	const { setTitle, setContent, setMusic, storyModal, setStoryModal } =
+		useStoryStore();
 
 	const messages = [
 		'행복한 하루 보내세요.',
@@ -30,15 +31,20 @@ const Home = () => {
 	const renderModal = () => {
 		if (!storyModal) return null;
 
+		const reset = () => {
+			setTitle('');
+			setContent('');
+		};
+
 		return createPortal(
 			<div className="overlay">
-			<StoryCreateModal
-				onClose={() => {
-					setStoryModal(false);
-				}}
-			/>
-			</div>
-,
+				<StoryCreateModal
+					onClose={() => {
+						setStoryModal(false);
+						reset();
+					}}
+				/>
+			</div>,
 			document.getElementById('modal-root'), // Add a div with id="modal-root" in your index.html file
 		);
 	};
@@ -49,7 +55,10 @@ const Home = () => {
 				<BannerCarousel />
 				<br />
 				<div className="mt-16 mb-16 flex justify-center items-center flex-col">
-					<span className="text-2xl">{nickname ? nickname +' 님, ' : ''}{randomMessage}</span>
+					<span className="text-2xl">
+						{nickname ? nickname + ' 님, ' : ''}
+						{randomMessage}
+					</span>
 					<br />
 					<div className="mb-10">
 						<button

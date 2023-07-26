@@ -69,6 +69,7 @@ const StoryEditor = () => {
 	const onChange = () => {
 		const body = editorRef.current.getInstance().getHTML();
 		setContent(body);
+		console.log(body);
 	};
 
 	return (
@@ -90,7 +91,7 @@ const StoryEditor = () => {
 					placeholder="내용을 입력하세요."
 					previewStyle="vertical"
 					previewHighlight={false}
-					height="300px"
+					height="400px"
 					initialEditType="wysiwyg"
 					language="ko-KR"
 					toolbarItems={[
@@ -106,6 +107,9 @@ const StoryEditor = () => {
 					ref={editorRef}
 					onChange={onChange}
 				/>
+				{content?.length <= 16 && (
+					<p className="text-right text-red-400">10자 이상 입력해주세요.</p>
+				)}
 			</div>
 			<div className="flex flex-col space-y-2">
 				<div className="flex flex-row space-x-2 mb-5">
@@ -133,7 +137,8 @@ const StoryEditor = () => {
 						<div className="h-1/4 flex">
 							<button
 								onClick={handleGenerate}
-								className="w-full h-8 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								disabled={content?.length <= 16}
+								className="w-full h-8 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 							>
 								썸네일 이미지 생성하기
 							</button>
@@ -153,7 +158,8 @@ const StoryEditor = () => {
 				<div className="w-full">
 					<button
 						onClick={handleRecommend}
-						className="mt-8 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+						disabled={content?.length <= 16}
+						className="w-full h-8 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 					>
 						기분에 맞는 음악 추천받기
 					</button>
