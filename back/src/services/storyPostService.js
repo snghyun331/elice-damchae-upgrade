@@ -70,7 +70,6 @@ class StoryPostService {
     if (toUpdate.thumbnail) {
       const fieldToUpdate = 'thumbnail';
       const newValue = toUpdate.thumbnail;
-      console.log(newValue);
       story = await StoryPostModel.updateStory({
         storyId,
         fieldToUpdate,

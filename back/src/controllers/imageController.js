@@ -29,7 +29,6 @@ const imageController = {
       const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
       const fileName = `image-${uniqueSuffix}.png`;
       const filePath = `uploads/${fileName}`;
-      console.log(filePath);
       fs.writeFileSync(filePath, image_data);
       const resizedImagePath = `uploads/resized-${fileName}`;
       const resizedFileName = `resized-${fileName}`;
