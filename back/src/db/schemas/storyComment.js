@@ -1,0 +1,28 @@
+import { Schema, model } from 'mongoose';
+
+const StoryCommentSchema = new Schema(
+  {
+    storyId: {
+      type: Schema.Types.ObjectId,
+      ref: 'StoryPost',
+      required: true,
+    },
+    writerId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    comment: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+    collection: 'storyComments',
+  },
+);
+
+const StoryComment = model('StoryComment', StoryCommentSchema);
+
+export { StoryComment };
