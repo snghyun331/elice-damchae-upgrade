@@ -11,6 +11,11 @@ class User {
     return user;
   }
 
+  static async findByMbti({ mbti }) {
+    const user = await UserModel.find({ mbti });
+    return user;
+  }
+
   static async findById({ userId }) {
     const user = await UserModel.findById(userId);
     return user;
@@ -39,7 +44,7 @@ class User {
     return updatedUser;
   }
 
-  static async withdraw({ userId }) {
+  static async delete({ userId }) {
     const user = await UserModel.findByIdAndUpdate(
       { _id: userId },
       { isOut: true },
@@ -49,7 +54,7 @@ class User {
   }
 
   // 탈퇴한 회원조회
-  static async findOutUsers() {
+  static async findDeletedUsers() {
     const users = await User.find({ isOut: true });
     return users;
   }
