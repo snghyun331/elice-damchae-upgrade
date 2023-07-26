@@ -11,7 +11,10 @@ const imageSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true, collection: 'images' },
+  {
+    timestamps: true,
+    // collection: 'images'
+  },
 );
 
 const Image = model('Image', imageSchema);
