@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import base64
 import requests
+import os
 from googletrans import Translator
 
 app = Flask(__name__)
@@ -47,15 +48,10 @@ def generate_image():
         return jsonify({"error": "Non-200 response from API"}), 500
 
     data = response.json()
-    image_paths = []
+    base64_value = data['artifacts'][0]['base64']
+    
 
-    for i, image in enumerate(data["artifacts"]):
-        image_path = f"./out/txt2img_{image['seed']}.png"
-        with open(image_path, "wb") as f:
-            f.write(base64.b64decode(image["base64"]))
-        image_paths.append(image_path)
-
-    return jsonify({"image_paths": image_paths}), 200
+    return jsonify({"image_base64": base64_value})
 
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0', port = 5002)
+    app.run(host='0.0.0.0', port=5002)
