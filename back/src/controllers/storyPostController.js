@@ -135,6 +135,19 @@ const storyPostController = {
       next(error);
     }
   },
+
+  readStoryDetail: async function (req, res, next) {
+    try {
+      const storyId = req.params.storyId;
+      const storyInfo = await StoryPostService.readStoryDetail({ storyId });
+      if (storyInfo.errorMessage) {
+        throw new Error(storyInfo.errorMessage);
+      }
+      return res.status(200).send(storyInfo);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export { storyPostController };

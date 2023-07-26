@@ -36,4 +36,5 @@ storyPostRouter.delete(
   storyPostController.deleteStoryPost,
 );
 
+storyPostRouter.get('/stories/:storyId', storyPostController.readStoryDetail);
 export { storyPostRouter };

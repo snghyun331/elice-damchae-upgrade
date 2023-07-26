@@ -31,7 +31,7 @@ class StoryPostService {
   }
 
   static async setStory({ userInfo, storyId, toUpdate }) {
-    let story = await StoryPostModel.findOneById({ storyId });
+    let story = await StoryPostModel.findOneByStoryId({ storyId });
 
     if (!story) {
       throw new Error('해당 스토리를 찾을 수 없습니다. 다시 한번 확인해주세요');
@@ -70,7 +70,6 @@ class StoryPostService {
     if (toUpdate.thumbnail) {
       const fieldToUpdate = 'thumbnail';
       const newValue = toUpdate.thumbnail;
-      console.log(newValue);
       story = await StoryPostModel.updateStory({
         storyId,
         fieldToUpdate,
@@ -137,6 +136,15 @@ class StoryPostService {
       return { errorMessage };
     }
     return { result: 'Success' };
+  }
+
+  static async readStoryDetail({ storyId }) {
+    const story = await StoryPostModel.findOneByStoryId({ storyId });
+    if (!story) {
+      const errorMessage = '존재하지 않는 스토리입니다';
+      return { errorMessage };
+    }
+    return story;
   }
 }
 

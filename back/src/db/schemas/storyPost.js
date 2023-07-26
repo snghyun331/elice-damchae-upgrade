@@ -47,6 +47,7 @@ const StoryPostSchema = new Schema(
   },
   {
     timestamps: true,
+    // collection: 'storyPosts',
   },
 );
 
