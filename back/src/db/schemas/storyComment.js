@@ -16,6 +16,10 @@ const StoryCommentSchema = new Schema(
       type: String,
       required: true,
     },
+    mood: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
