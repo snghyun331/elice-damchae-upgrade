@@ -9,6 +9,7 @@ const StoryEditor = () => {
 		title,
 		setTitle,
 		content,
+
 		music,
 		setMood,
 		setMusic,
@@ -17,7 +18,6 @@ const StoryEditor = () => {
 	} = useStoryStore();
 
 	const recommend = async () => {
-		console.log(content);
 		try {
 			const response = await postApi('stories/recommend', { content });
 
@@ -31,12 +31,12 @@ const StoryEditor = () => {
 	};
 
 	const generateImage = async () => {
+		console.log(content);
 		try {
 			const response = await postApi('image/stable', { content });
-
 			console.log(response);
 		} catch (error) {
-			console.log(error.response.data.errorMessage);
+			console.log('에러');
 		}
 	};
 
@@ -48,9 +48,6 @@ const StoryEditor = () => {
 	};
 
 	const handleRecommend = () => {
-		const body = editorRef.current?.getInstance().getHTML() || '';
-
-		setContent(body);
 		recommend();
 		console.log(music);
 	};
@@ -58,6 +55,11 @@ const StoryEditor = () => {
 	const editorRef = useRef();
 
 	const { handleImageUpload, loading } = useImageUpload();
+
+	const onChange = () => {
+		const body = editorRef.current.getInstance().getHTML();
+		setContent(body);
+	};
 
 	return (
 		<>
@@ -74,8 +76,8 @@ const StoryEditor = () => {
 			<h3 className="font-semibold">본문</h3>
 			<div className="mt-5">
 				<Editor
-					ref={editorRef}
-					initialValue="내용을 입력하세요"
+					initialValue=" "
+					placeholder="내용을 입력하세요."
 					previewStyle="vertical"
 					previewHighlight={false}
 					height="300px"
@@ -91,6 +93,8 @@ const StoryEditor = () => {
 					hooks={{
 						addImageBlobHook: handleImageUpload,
 					}}
+					ref={editorRef}
+					onChange={onChange}
 				/>
 			</div>
 			<div className="flex flex-col justify-end space-y-2">
