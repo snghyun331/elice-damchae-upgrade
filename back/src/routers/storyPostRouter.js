@@ -30,4 +30,10 @@ storyPostRouter.patch(
   storyPostController.updateStoryPost,
 );
 
+storyPostRouter.delete(
+  '/stories/:storyId',
+  loginRequired,
+  storyPostController.deleteStoryPost,
+);
+
 export { storyPostRouter };
