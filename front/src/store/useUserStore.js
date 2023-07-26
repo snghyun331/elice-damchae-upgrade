@@ -2,41 +2,74 @@ import { create } from 'zustand';
 import { postApi } from '../services/api';
 
 const useUserStore = create((set) => {
-	return {
+	const initialUserData = {
+		id: '',
 		email: '',
-		password: '',
 		nickname: '',
 		mbti: '',
-		isLoggedIn: true,
-		errMsg: '',
+		profileImg: '',
+		isLoggedIn: Boolean(localStorage.getItem('accessToken')),
+	};
 
-		login: async (user) => {
-			try {
+	const savedUserData = JSON.parse(localStorage.getItem('userData'));
+	const userData = savedUserData
+		? { ...initialUserData, ...savedUserData }
+		: initialUserData;
+
+	return {
+		...userData,
+
+		setEmail: (email) => set({ email }),
+		setNickname: (nickname) => set({ nickname }),
+		setMbti: (mbti) => set({ mbti }),
+		setProfileImg: (profileImg) => set({ profileImg }),
+		setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
+
+		actions: {
+			login: async (user) => {
 				const response = await postApi('auth/login', user);
-
+				console.log(response.data);
 				const jwtToken = response.data.token;
-
 				localStorage.setItem('accessToken', jwtToken);
-				set({ isLoggedIn: true });
-			} catch (error) {
-				set({ errMsg: error.response.data.errorMessage });
-			}
-		},
 
-		register: async (user) => {
-			try {
-				await postApi('auth/register', user);
+				const userData = {
+					isLoggedIn: true,
+					id: response.data.id,
+					email: response.data.email,
+					nickname: response.data.nickname,
+					mbti: response.data.mbti,
+				};
+
+				// Save the user data in local storage
+				localStorage.setItem('userData', JSON.stringify(userData));
+
+				set(userData);
+			},
+
+			register: async (user) => {
 				console.log(user);
-			} catch (error) {
-				set({ errMsg: error.response.data.errorMessage });
-			}
-		},
+				await postApi('auth/register', user);
+			},
 
-		logout: () => {
-			localStorage.removeItem('accessToken');
-			set({ isLoggedIn: false });
+			logout: () => {
+				localStorage.removeItem('accessToken');
+				localStorage.removeItem('userData');
+				set({ 
+					id: '',
+					email: '',
+					nickname: '',
+					mbti: '',
+					profileImg: '',
+					isLoggedIn: false,
+				});
+				alert('로그아웃 하였습니다.');
+			},
+
+			
+
 		},
 	};
 });
 
+export const useUserActions = () => useUserStore((state) => state.actions);
 export default useUserStore;

@@ -1,9 +1,11 @@
 import useRegisterStore from '../../hooks/useRegisterStore';
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
-import useUserStore from '../../store/useUserStore';
+import { mbtiList } from '../Util/Util';
+
 import { getApi } from '../../services/api';
+import { useUserActions } from '../../store/useUserStore';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
@@ -25,18 +27,10 @@ const RegisterForm = () => {
 		setConfirmPassword,
 		setCode,
 		setNicknameCheck,
+		setErrMsg,
 	} = useRegisterStore();
 
-	const { register } = useUserStore();
-
-	const [focusedMap, setFocusedMap] = useState({
-		email: false,
-		password: false,
-	});
-
-	const handleFocus = (name, value) => {
-		setFocusedMap({ ...focusedMap, [name]: value });
-	};
+	const { register } = useUserActions();
 
 	const handleChangeInput = useCallback((e) => {
 		const { name, value } = e.target;
@@ -92,7 +86,7 @@ const RegisterForm = () => {
 			isPasswordSame &&
 			isNicknameValid &&
 			nicknameCheck &&
-			mbti,
+			Boolean(mbti),
 		[
 			isEmailValid,
 			isPasswordValid,
@@ -107,11 +101,12 @@ const RegisterForm = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log(user);
-		await register(user);
-		navigate('/login');
-
-		console.log(errMsg);
+		try {
+			await register(user);
+			navigate('/login');
+		} catch (error) {
+			setErrMsg(error.response?.data?.errorMessage);
+		}
 	};
 
 	const handleEmailCheck = () => {
@@ -123,21 +118,22 @@ const RegisterForm = () => {
 		// Logic for verification code verification
 		// You can implement your own verification code verification functionality here
 	};
+
 	const handleNicknameCheck = async () => {
 		try {
-			console.log(nickname);
-			const response = await getApi(`auth/check-nickname?=`, nickname);
+			const response = await getApi(`auth/check-nickname?nickname=${nickname}`);
 			console.log(response.data);
-			if (response.data.state == 'usableNickname') {
-				alert(response.data.alertMsg);
+
+			if (response.data.nicknameState == 'usableNickname') {
+				alert(response.data.usableNickname);
 				setNicknameCheck(true);
 			}
-			if (response.data.state == 'unusableNickname') {
-				alert(response.data.alertMsg);
+			if (response.data.nicknameState == 'unusableNickname') {
+				alert(response.data.unusableNickname);
 				setNicknameCheck(false);
 			}
 		} catch (error) {
-			// Handle the error if needed
+			console.log(error.response.data.message);
 		}
 	};
 
@@ -168,8 +164,6 @@ const RegisterForm = () => {
 											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 											placeholder="name@company.com"
 											required=""
-											onFocus={() => handleFocus('email', true)}
-											onBlur={() => handleFocus('email', false)}
 										/>
 
 										<button
@@ -181,7 +175,7 @@ const RegisterForm = () => {
 											이메일인증
 										</button>
 									</div>
-									{!isEmailValid && focusedMap.email && (
+									{!isEmailValid && email && (
 										<p className="text-red-500 text-xs italic">
 											이메일 형식이 올바르지 않습니다.
 										</p>
@@ -197,8 +191,6 @@ const RegisterForm = () => {
 										placeholder="인증번호 입력"
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
-										onFocus={() => handleFocus('code', true)}
-										onBlur={() => handleFocus('code', false)}
 									/>
 
 									<button
@@ -227,10 +219,8 @@ const RegisterForm = () => {
 										placeholder="••••••••"
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
-										onFocus={() => handleFocus('password', true)}
-										onBlur={() => handleFocus('password', false)}
 									/>
-									{!isPasswordValid && focusedMap.password && (
+									{!isPasswordValid && password && (
 										<p className="text-red-500 text-xs italic">
 											비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로
 											설정해주세요.
@@ -253,10 +243,8 @@ const RegisterForm = () => {
 										placeholder="••••••••"
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
-										onFocus={() => handleFocus('confirmPassword', true)}
-										onBlur={() => handleFocus('confirmPassword', false)}
 									/>
-									{!isPasswordSame && focusedMap.confirmPassword && (
+									{!isPasswordSame && confirmPassword && (
 										<p className="text-red-500 text-xs italic">
 											비밀번호가 일치하지 않습니다.
 										</p>
@@ -275,8 +263,6 @@ const RegisterForm = () => {
 										<input
 											value={nickname}
 											onChange={handleChangeInput}
-											onFocus={() => handleFocus('nickname', true)}
-											onBlur={() => handleFocus('nickname', false)}
 											type="text"
 											name="nickname"
 											id="nickname"
@@ -293,7 +279,7 @@ const RegisterForm = () => {
 											중복 확인
 										</button>
 									</div>
-									{!isNicknameValid && focusedMap.nickname && (
+									{!isNicknameValid && nickname && (
 										<p className="text-red-500 text-xs italic">
 											닉네임은 2~16자 사이로 설정해주세요.
 										</p>
@@ -309,24 +295,7 @@ const RegisterForm = () => {
 									</label>
 									<Select
 										onChange={(selectedOption) => setMbti(selectedOption.value)}
-										options={[
-											{ value: 'ISTJ', label: 'ISTJ' },
-											{ value: 'ISFJ', label: 'ISFJ' },
-											{ value: 'INFJ', label: 'INFJ' },
-											{ value: 'INTJ', label: 'INTJ' },
-											{ value: 'ISTP', label: 'ISTP' },
-											{ value: 'ISFP', label: 'ISFP' },
-											{ value: 'INFP', label: 'INFP' },
-											{ value: 'INTP', label: 'INTP' },
-											{ value: 'ESTP', label: 'ESTP' },
-											{ value: 'ESFP', label: 'ESFP' },
-											{ value: 'ENFP', label: 'ENFP' },
-											{ value: 'ENTP', label: 'ENTP' },
-											{ value: 'ESTJ', label: 'ESTJ' },
-											{ value: 'ESFJ', label: 'ESFJ' },
-											{ value: 'ENFJ', label: 'ENFJ' },
-											{ value: 'ENTJ', label: 'ENTJ' },
-										]}
+										options={mbtiList}
 										placeholder="Select MBTI"
 										classNamePrefix="react-select"
 									/>

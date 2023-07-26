@@ -1,19 +1,45 @@
 import { useRef } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import useImageUpload from '../../hooks/useImageUpload';
-import useStoryStore from '../../store/useStoryStore';
+import useStoryStore from '../../hooks/useStoryStore';
+import { postApi } from '../../services/api';
 
 const StoryEditor = () => {
-	const { title, setTitle, content, setContent, recommend } = useStoryStore();
+	const {
+		title,
+		setTitle,
+		content,
+		music,
+		setMood,
+		setMusic,
+		setPhrase,
+		setContent,
+	} = useStoryStore();
+
+	const recommend = async () => {
+		try {
+			console.log(content);
+			const response = await postApi('stories/recommend', { content });
+
+			console.log(response);
+			setMood(response.data.mood);
+			setMusic(response.data.music);
+			setPhrase(response.data.phrase);
+		} catch (error) {
+			console.log(error.response.data.errorMessage);
+		}
+	};
+
+	const handleRecommend = () => {
+		const body = editorRef.current?.getInstance().getHTML() || '';
+
+		setContent(body);
+		recommend();
+		console.log(music);
+	};
 
 	const editorRef = useRef();
 
-	const handleSubmit = () => {
-		const body = editorRef.current?.getInstance().getHTML() || '';
-		console.log(body);
-		setContent(body);
-		recommend(content);
-	};
 	const { handleImageUpload, loading } = useImageUpload();
 
 	return (
@@ -21,7 +47,9 @@ const StoryEditor = () => {
 			<h3 className="font-semibold">제목</h3>
 			<input
 				className="border"
-				onChange={(e) => setTitle(e.target.value)}
+				onChange={(e) => {
+					setTitle(e.target.value);
+				}}
 				type="text"
 				id="title"
 				value={title}
@@ -50,12 +78,13 @@ const StoryEditor = () => {
 			</div>
 			<div className="flex flex-col justify-end space-y-2">
 				<button
-					onClick={handleSubmit}
+					onClick={handleRecommend}
 					className="w-60 self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 				>
 					기분에 맞는 음악 추천받기
 				</button>
 			</div>
+
 			{loading && <div>이미지 업로드 중...</div>}
 		</>
 	);
