@@ -9,7 +9,8 @@ import { createPortal } from 'react-dom';
 const MyStories = () => {
 	const navigate = useNavigate();
 	const { isLoggedIn } = useUserStore();
-	const { setTitle, setMusic, storyModal, setStoryModal } = useStoryStore();
+	const { setTitle, setMusic, storyModal, setStoryModal, reset } =
+		useStoryStore();
 
 	const renderModal = () => {
 		if (!storyModal) return null;
@@ -18,6 +19,7 @@ const MyStories = () => {
 			<StoryCreateModal
 				onClose={() => {
 					setStoryModal(false);
+					reset();
 				}}
 			/>,
 			document.getElementById('modal-root'), // Add a div with id="modal-root" in your index.html file

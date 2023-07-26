@@ -12,8 +12,7 @@ const Home = () => {
 	const { nickname } = useUserStore();
 	const navigate = useNavigate();
 	const { isLoggedIn } = useUserStore();
-	const { setTitle, setContent, setMusic, storyModal, setStoryModal } =
-		useStoryStore();
+	const { storyModal, setStoryModal, reset } = useStoryStore();
 
 	const messages = [
 		'행복한 하루 보내세요.',
@@ -30,11 +29,6 @@ const Home = () => {
 
 	const renderModal = () => {
 		if (!storyModal) return null;
-
-		const reset = () => {
-			setTitle('');
-			setContent('');
-		};
 
 		return createPortal(
 			<div className="overlay">
@@ -77,8 +71,6 @@ const Home = () => {
 								isLoggedIn
 									? () => {
 											setStoryModal(true);
-											setMusic('');
-											setTitle('');
 									  }
 									: () => navigate('/login')
 							}
