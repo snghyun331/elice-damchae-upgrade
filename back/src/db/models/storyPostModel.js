@@ -16,7 +16,7 @@ class StoryPostModel {
     return storyRandomMusic.find({}).exec();
   }
 
-  static async findOneById({ storyId }) {
+  static async findOneByStoryId({ storyId }) {
     const story = await StoryPost.findOne({ _id: storyId });
     return story;
   }
