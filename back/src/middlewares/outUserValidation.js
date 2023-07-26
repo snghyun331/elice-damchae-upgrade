@@ -4,7 +4,7 @@ import { userService } from '../services/userService.js';
 async function outUserValidation(req, res, next) {
   try {
     const email = req.body.email;
-    const isOut = await userService.isOutUser({ email });
+    const isOut = await userService.isDeletedUser({ email });
 
     if (isOut === null) {
       // 404 : 요청받은 리소스 찾을 수 없음
