@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import useUserStore, { useUserActions } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import GoogleLoginButton from '../Global/Layout/GoogleLoginButton';
+import GoogleButton from '../Global/Layout/GoogleButton';
 const LoginForm = () => {
 	const navigate = useNavigate();
 	const { email, setEmail } = useUserStore();
@@ -155,7 +156,9 @@ const LoginForm = () => {
 										{errMsg && (
 											<p className="text-red-500 text-xs italic">{errMsg}</p>
 										)}
-										<GoogleLoginButton />
+										{/* <GoogleLoginButton /> */}
+
+										<GoogleButton />
 									</div>
 								</form>
 
