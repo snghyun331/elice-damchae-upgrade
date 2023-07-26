@@ -21,8 +21,8 @@ const imageController = {
       const userId = req.currentUserId;
       const { content } = req.body;
       const pureContent = content.replace(/<[^>]+>/g, ' ');
-      const result = await axios.post('http://127.0.0.1:5001/text-to-image', {
-        prompt: pureContent,
+      const result = await axios.post('http://127.0.0.1:5002/generate-image', {
+        korean_text: pureContent,
       });
       // console.log(result.data.image_base64);
       const image_data = Buffer.from(result.data.image_base64, 'base64');
