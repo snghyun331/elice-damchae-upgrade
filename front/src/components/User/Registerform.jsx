@@ -98,7 +98,7 @@ const RegisterForm = () => {
 	);
 
 	const user = { email, password, nickname, mbti };
-
+console.log(user);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
@@ -121,7 +121,7 @@ const RegisterForm = () => {
 
 	const handleNicknameCheck = async () => {
 		try {
-			const response = await getApi(`auth/check-nickname?nickname=${nickname}`);
+			const response = await getApi(`auth/checkNickname?nickname=${nickname}`);
 			console.log(response.data);
 
 			if (response.data.nicknameState == 'usableNickname') {
