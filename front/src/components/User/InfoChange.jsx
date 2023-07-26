@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { mbtiList } from '../Util/Util';
 import { getApi, putApi } from '../../services/api';
 import Select from 'react-select';
@@ -18,11 +18,13 @@ const InfoChange = () => {
 		setMbti,
 		setProfileImg,
 	} = useUserStore();
-
 	const [passwordToChange, setPasswordToChange] = useState('');
-	const [nicknameToChange, setNicknameToChange] = useState('');
-	const [mbtiToChange, setMbtiToChange] = useState(null);
-	const [profileImgToChange, setProfileImgToChange] = useState(null);
+	const [nicknameToChange, setNicknameToChange] = useState(nickname);
+	const [mbtiToChange, setMbtiToChange] = useState(
+		mbtiList.find((item) => item.value === mbti),
+	);
+	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
+
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [nicknameCheck, setNicknameCheck] = useState(true);
 
@@ -32,47 +34,43 @@ const InfoChange = () => {
 		nickname: false,
 	});
 
-	useEffect(() => {
-		setNicknameToChange(nickname);
-		setMbtiToChange(mbtiList.find((item) => item.value === mbti));
-		setProfileImgToChange(profileImg);
-	}, [nickname, mbti, profileImg]);
+	const handleFocus = (name, value) => {
+		setFocusedMap({ ...focusedMap, [name]: value });
+	};
 
-	const handleFocus = useCallback((name, value) => {
-		setFocusedMap((prev) => ({ ...prev, [name]: value }));
-	}, []);
-
-	const isPasswordValid = useCallback(() => {
+	const isPasswordValid = useMemo(() => {
 		const passwordRegex =
 			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
+		console.log('레젝스 테스트', passwordRegex.test(passwordToChange));
 		return passwordToChange ? passwordRegex.test(passwordToChange) : true;
 	}, [passwordToChange]);
 
-	const isNicknameValid = useCallback(() => {
+	const isNicknameValid = useMemo(() => {
 		const nicknameRegex = /^[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,16}$/;
 		return nicknameRegex.test(nicknameToChange);
 	}, [nicknameToChange]);
 
-	const isPasswordSame = useCallback(
-		() => passwordToChange === confirmPassword,
+	const isPasswordSame = useMemo(
+		() => passwordToChange == confirmPassword,
+
 		[passwordToChange, confirmPassword],
 	);
 
-	const isFormValid = useCallback(
+	const isFormValid = useMemo(
 		() =>
-			isPasswordValid() &&
-			isPasswordSame() &&
-			isNicknameValid() &&
+			isPasswordValid &&
+			isPasswordSame &&
+			isNicknameValid &&
 			nicknameCheck &&
-			Boolean(mbtiToChange),
-		[
-			isPasswordValid,
-			isPasswordSame,
-			isNicknameValid,
-			nicknameCheck,
-			mbtiToChange,
-		],
+			Boolean(mbti),
+		[isPasswordValid, isPasswordSame, isNicknameValid, nicknameCheck, mbti],
 	);
+	console.log('isPasswordValid', isPasswordValid);
+	console.log('isPasswordSame', isPasswordSame);
+	console.log('isNicknameValid', isNicknameValid);
+	console.log('nicknameCheck', nicknameCheck);
+	console.log(Boolean(mbti));
+	console.log('isFormValid', isFormValid);
 
 	const handleChangeInput = useCallback(({ target }) => {
 		const { name, value, files } = target;
@@ -93,8 +91,6 @@ const InfoChange = () => {
 				setProfileImgToChange(URL.createObjectURL(file));
 				break;
 			}
-			default:
-				break;
 		}
 	}, []);
 
@@ -104,11 +100,11 @@ const InfoChange = () => {
 				`auth/check-nickname?nickname=${nicknameToChange}`,
 			);
 
-			if (response.data.nicknameState === 'usableNickname') {
+			if (response.data.nicknameState == 'usableNickname') {
 				alert(response.data.usableNickname);
 				setNicknameCheck(true);
 			}
-			if (response.data.nicknameState === 'unusableNickname') {
+			if (response.data.nicknameState == 'unusableNickname') {
 				alert(response.data.unusableNickname);
 				setNicknameCheck(false);
 			}
@@ -121,13 +117,16 @@ const InfoChange = () => {
 		async (e) => {
 			e.preventDefault();
 
+			// passwordToChange가 빈 문자열이라면 password는 toUpdate에 추가하지 않습니다.
+			const toUpdate = {
+				email,
+				...(passwordToChange !== '' && { password: passwordToChange }),
+				nickname: nicknameToChange,
+				mbti: mbtiToChange.value,
+			};
+
 			try {
-				const toUpdate = {
-					email,
-					password: passwordToChange,
-					nickname: nicknameToChange,
-					mbti: mbtiToChange.value,
-				};
+				console.log(toUpdate);
 				const res = await putApi(`users/${id}`, toUpdate);
 				if (res.status === 200) {
 					alert('정보를 수정하였습니다.');
@@ -144,25 +143,21 @@ const InfoChange = () => {
 		[email, id, mbtiToChange, nicknameToChange, passwordToChange],
 	);
 
-	const handleOut = useCallback(
-		async (e) => {
-			e.preventDefault();
-			const confirmResign = window.confirm('정말로 회원 탈퇴를 하시겠습니까?');
-			if (confirmResign) {
-				try {
-					const response = await putApi(`auth/out`, { userId: id });
-					if (response.status === 200) {
-						alert('정상적으로 회원탈퇴가 완료되었습니다.');
-						logout();
-						navigate('/');
-					}
-				} catch (error) {
-					console.error('회원탈퇴 오류:', error);
+	const handleOut = async () => {
+		const confirmResign = window.confirm('정말로 회원 탈퇴를 하시겠습니까?');
+		if (confirmResign) {
+			try {
+				const response = await putApi(`auth/out`, { userId: id });
+				if (response.status === 200) {
+					alert('정상적으로 회원탈퇴가 완료되었습니다.');
+					logout();
+					navigate('/');
 				}
+			} catch (error) {
+				console.error('회원탈퇴 오류:', error);
 			}
-		},
-		[id, logout, navigate],
-	);
+		}
+	};
 
 	return (
 		<>
