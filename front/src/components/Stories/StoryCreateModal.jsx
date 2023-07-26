@@ -3,8 +3,9 @@ import StoryEditor from './StoryEditor';
 import MusicVideo from './MusicVideo';
 
 import useStoryStore from '../../hooks/useStoryStore';
-import { useEffect, useState,useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { postApi } from '../../services/api';
 
 const StoryCreateModal = ({ onClose }) => {
 	const {
@@ -14,14 +15,12 @@ const StoryCreateModal = ({ onClose }) => {
 		mood,
 		music,
 		phrase,
+
 		isPublic,
 		setIsPublic,
-		setThumbnail,
 	} = useStoryStore();
 
 	const dimmedRef = useRef(null);
-
-	const [preview, setPreview] = useState('');
 
 	useEffect(() => {
 		// Prevent scrolling of the background content when the modal is open
@@ -32,13 +31,6 @@ const StoryCreateModal = ({ onClose }) => {
 			document.body.style.overflow = 'auto';
 		};
 	}, []);
-
-	const handleThumbnailUpload = async (e) => {
-		e.preventDefault();
-		const file = e.target.files[0];
-		setThumbnail(file);
-		setPreview(URL.createObjectURL(file));
-	};
 
 	const currentDate = moment().format('YYYY년 M월 D일');
 
@@ -52,8 +44,8 @@ const StoryCreateModal = ({ onClose }) => {
 				formData.append(key, post[key]);
 			}
 
-			const response = await ('stories', formData);
-			console.log(response);
+			const response = await postApi('stories', formData);
+			console.log(response.data);
 		} catch (e) {
 			console.error(e);
 		}
@@ -62,11 +54,11 @@ const StoryCreateModal = ({ onClose }) => {
 	return (
 		<div className="fixed inset-0 flex justify-center items-center">
 			<div
-			ref={dimmedRef}
+				ref={dimmedRef}
 				className={`fixed inset-0 flex justify-center z-50 backdrop-filter backdrop-blur `}
 				onClick={(e) => {
-					if (!e.target.closest("#staticModal")) {
-						onClose()
+					if (!e.target.closest('#staticModal')) {
+						onClose();
 					}
 				}}
 			>
@@ -108,30 +100,6 @@ const StoryCreateModal = ({ onClose }) => {
 						</div>
 
 						<div className="flex flex-col p-6 space-y-6">
-							<div>
-								<label
-									className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-									htmlFor="file_input"
-								>
-									썸네일 업로드
-								</label>
-								<input
-									className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-									id="file_input"
-									type="file"
-									onChange={handleThumbnailUpload}
-								/>
-								{preview && (
-									<div className="mt-4">
-										<p className="text-sm text-gray-500">선택된 이미지:</p>
-										<img
-											className="mt-2 max-w-xs"
-											src={preview}
-											alt="Selected Thumbnail"
-										/>
-									</div>
-								)}
-							</div>
 							<StoryEditor />
 
 							<label className="self-end relative inline-flex items-center cursor-pointer">

@@ -9,6 +9,7 @@ import { imageRouter } from './routers/imageRouter.js';
 import { storyCommentRouter } from './routers/storyCommentRouter.js';
 
 const app = express();
+app.use('/uploads', express.static('uploads'));
 
 app.use(cors());
 app.use(morgan('dev')); // 콘솔창에서 log 확인

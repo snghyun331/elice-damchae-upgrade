@@ -45,7 +45,8 @@ const imageController = {
         path: fullResizedImagePath,
       };
       const createImage = await ImageModel.create({ newImage });
-      return res.status(201).send(createImage);
+      console.log(createImage);
+      res.status(201).send(createImage);
     } catch (error) {
       next(error);
     }
