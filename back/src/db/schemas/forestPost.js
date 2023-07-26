@@ -1,15 +1,16 @@
+// forestPost.js
 import mongoose from 'mongoose';
 
-const { Schema } = mongoose;
+const { Schema, model } = mongoose;
 
 const ForestPostSchema = new Schema(
   {
-    postId: {
+    userId: {
       type: Schema.Types.ObjectId,
-      ref: 'Post',
-      required: false,
+      ref: 'User',
+      required: true,
     },
-    imageUrl: {
+    image: {
       type: String,
       required: false, // 선택적 필드로 변경
     },
@@ -21,26 +22,18 @@ const ForestPostSchema = new Schema(
       type: String,
       required: true,
     },
-    postCount: {
+    // mbti: {
+    // 	type: String,
+    // 	required: true,
+    // },
+    views: {
       type: Number,
-      required: false, // 선택적 필드로 변경
-    },
-    userCount: {
-      type: Number,
-      required: false, // 선택적 필드로 변경
-    },
-    createAt: {
-      type: Date,
-      default: Date.now,
-    },
-    deleteAt: {
-      type: Date,
-      default: null,
+      default: 0,
     },
   },
   { timestamps: true },
 );
 
-const ForestPost = mongoose.model('ForestPost', ForestPostSchema);
+const ForestPost = model('ForestPost', ForestPostSchema);
 
 export default ForestPost;

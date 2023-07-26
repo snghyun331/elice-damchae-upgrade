@@ -37,16 +37,10 @@ const StoryPostSchema = new Schema(
       type: String,
       required: false,
     },
-    commentList: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'StoryComment',
-        required: false,
-      },
-    ],
   },
   {
     timestamps: true,
+    // collection: 'storyPosts',
   },
 );
 

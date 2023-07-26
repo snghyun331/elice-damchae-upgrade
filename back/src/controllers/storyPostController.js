@@ -135,6 +135,19 @@ const storyPostController = {
       next(error);
     }
   },
+
+  readStoryDetail: async function (req, res, next) {
+    try {
+      const storyId = req.params.storyId;
+      const storyInfo = await StoryPostService.readStoryDetail({ storyId });
+      const result = await StoryPost.populate(storyInfo, {
+        path: 'userInfo thumbnail ',
+      });
+      return res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export { storyPostController };
