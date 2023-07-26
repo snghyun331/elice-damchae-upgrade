@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 class userService {
-  static async addUser({ email, password, mbti, nickname }) {
+  static async createUser({ email, password, mbti, nickname }) {
     // 이메일 중복 확인
     const user = await User.findByEmail({ email });
     if (user) {
@@ -32,7 +32,7 @@ class userService {
     return createdNewUser;
   }
 
-  static async getUser({ email, password }) {
+  static async readUser({ email, password }) {
     // 이메일 db에 존재 여부 확인
     const user = await User.findByEmail({ email });
     if (!user) {
@@ -73,13 +73,13 @@ class userService {
     return loginUser;
   }
 
-  static async getUsers() {
+  static async readUsers() {
     const users = await User.findAll();
     return users;
   }
 
-  static async setUser({ userId, toUpdate }) {
-    let user = await User.findById(userId);
+  static async updateUser({ userId, toUpdate }) {
+    let user = await User.findById({ userId });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!user) {
@@ -108,7 +108,7 @@ class userService {
     return user;
   }
 
-  static async getUserInfo({ userId }) {
+  static async readUserInfo({ userId }) {
     const user = await User.findById({ userId });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
@@ -121,7 +121,7 @@ class userService {
     return user;
   }
 
-  static async getUserNickname({ nickname }) {
+  static async readUserNickname({ nickname }) {
     const user = await User.findByNickname({ nickname });
 
     if (!user) {
@@ -135,12 +135,12 @@ class userService {
   }
 
   // 회원탈퇴 : 회원 정보는 그대로 남아있음
-  static async withdrawUser({ userId }) {
-    const user = await User.withdraw({ userId });
+  static async deleteUser({ userId }) {
+    const user = await User.delete({ userId });
     return user;
   }
 
-  static async isOutUser({ email }) {
+  static async isDeletedUser({ email }) {
     const user = await User.findByEmail({ email });
     if (!user) {
       const errorState = 'error';

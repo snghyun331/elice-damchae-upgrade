@@ -14,16 +14,12 @@ class userAuthController {
       const { email, password, nickname, mbti } = await req.body;
 
       // 위 데이터를 유저 db에 추가하기
-      const newUser = await userService.addUser({
+      const newUser = await userService.createUser({
         email,
         password,
         nickname,
         mbti,
       });
-
-      if (newUser.errorMessage) {
-        throw new Error(newUser.errorMessage);
-      }
 
       return res.status(201).json(newUser);
     } catch (error) {
@@ -41,7 +37,7 @@ class userAuthController {
       const password = req.body.password;
 
       // 위 데이터를 이용하여 유저 db에서 유저 찾기
-      const user = await userService.getUser({ email, password });
+      const user = await userService.readUser({ email, password });
 
       if (user.errorMessage) {
         throw new Error(user.errorMessage);
@@ -65,7 +61,7 @@ class userAuthController {
       const toUpdate = { password, nickname, mbti };
 
       // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
-      const updatedUser = await userService.setUser({ userId, toUpdate });
+      const updatedUser = await userService.updateUser({ userId, toUpdate });
 
       if (updatedUser.errorMessage) {
         throw new Error(updatedUser.errorMessage);
@@ -79,8 +75,8 @@ class userAuthController {
 
   static async checkNickname(req, res, next) {
     try {
-      const { nickname } = req.body;
-      const existingUser = await userService.getUserNickname({ nickname });
+      const nickname = req.query.nickname.replace(/\/$/, '');
+      const existingUser = await userService.readUserNickname({ nickname });
 
       return res.json(existingUser);
     } catch (error) {
@@ -88,11 +84,11 @@ class userAuthController {
     }
   }
 
-  static async userWithdraw(req, res, next) {
+  static async userDelete(req, res, next) {
     try {
       const userId = req.body.userId;
       // 사용자를 비활성화 처리하기 위해 `isOut` 필드를 `true`로 설정
-      const user = await userService.withdrawUser({ userId });
+      const user = await userService.deleteUser({ userId });
 
       if (!user) {
         return res.status(404).json({ error: '존재하지 않는 유저입니다.' });

@@ -14,9 +14,9 @@ userAuthRouter.post(
 userAuthRouter.put('/users/:userId', userAuthController.userUpdate);
 
 // 닉네임 중복확인
-userAuthRouter.get('/auth/check-nickname', userAuthController.checkNickname);
+userAuthRouter.get('/auth/checkNickname', userAuthController.checkNickname);
 
-userAuthRouter.put('/auth/out', userAuthController.userWithdraw);
+userAuthRouter.put('/auth/out', userAuthController.userDelete);
 
 // userRouter.get('user/stories', async function (req, res, next) {});
 // userRouter.get('user/postLikes', async function (req, res, next) {});
