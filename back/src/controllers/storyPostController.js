@@ -140,10 +140,10 @@ const storyPostController = {
     try {
       const storyId = req.params.storyId;
       const storyInfo = await StoryPostService.readStoryDetail({ storyId });
-      if (storyInfo.errorMessage) {
-        throw new Error(storyInfo.errorMessage);
-      }
-      return res.status(200).send(storyInfo);
+      const result = await StoryPost.populate(storyInfo, {
+        path: 'userInfo thumbnail ',
+      });
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
