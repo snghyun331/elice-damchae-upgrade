@@ -94,7 +94,7 @@ const storyPostController = {
         .then(([Phrase, Music]) => {
           const formattedMusic = Music.slice(32);
           const result = { mood: Mood, phrase: Phrase, music: formattedMusic };
-          return res.status(200).json(result);
+          return res.status(201).json(result);
         })
         .catch((error) => {
           next(error);
@@ -164,10 +164,6 @@ const storyPostController = {
     try {
       const storyId = req.params.storyId;
       const result = await StoryPostService.deleteStory({ storyId });
-      if (result.errorMessage) {
-        throw new Error(result.errorMessage);
-      }
-
       return res.status(200).send(result);
     } catch (error) {
       next(error);
@@ -181,7 +177,7 @@ const storyPostController = {
       const result = await StoryPost.populate(storyInfo, {
         path: 'userInfo thumbnail ',
       });
-      return res.status(200).send(result);
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }

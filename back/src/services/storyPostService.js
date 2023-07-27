@@ -101,8 +101,7 @@ class StoryPostService {
   static async deleteStory({ storyId }) {
     let isDeleted = await StoryPostModel.deleteOneByStoryId({ storyId });
     if (!isDeleted) {
-      const errorMessage = '삭제할 게시글 정보가 없습니다';
-      return { errorMessage };
+      throw new Error('삭제할 게시글 정보가 없습니다.');
     }
     return { result: 'Success' };
   }

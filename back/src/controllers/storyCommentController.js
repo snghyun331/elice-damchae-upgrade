@@ -27,6 +27,41 @@ const StoryCommentController = {
       next(error);
     }
   },
+
+  updateStoryComment: async (req, res, next) => {
+    try {
+      const commentId = req.params.commentId;
+      const { comment } = req.body;
+      const obj = await axios.post('http://127.0.0.1:5000/predict', {
+        text: comment,
+      });
+      const mood = obj.data.mood;
+      const toUpdate = { comment, mood };
+
+      const updatedComment = await StoryCommentService.setStoryComment({
+        commentId,
+        toUpdate,
+      });
+      const result = await StoryComment.populate(updatedComment, {
+        path: 'storyId writerId',
+      });
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  deleteStoryComment: async (req, res, next) => {
+    try {
+      const commentId = req.params.commentId;
+      const result = await StoryCommentService.deleteStoryComment({
+        commentId,
+      });
+      return res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export { StoryCommentController };

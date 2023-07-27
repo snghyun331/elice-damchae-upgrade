@@ -10,7 +10,7 @@ const imageController = {
     try {
       const file = req.file;
       const createImage = await imageService.uploadImage({ file });
-      res.status(201).send(createImage);
+      res.status(201).json(createImage);
     } catch (error) {
       next(error);
     }
@@ -45,8 +45,7 @@ const imageController = {
         path: fullResizedImagePath,
       };
       const createImage = await ImageModel.create({ newImage });
-      console.log(createImage);
-      res.status(201).send(createImage);
+      res.status(201).json(createImage);
     } catch (error) {
       next(error);
     }
