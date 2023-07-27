@@ -220,7 +220,7 @@ const InfoChange = () => {
 									>
 										{!isPasswordValid && passwordToChange
 											? '비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로 설정해주세요.'
-											: 'hidden'}
+											: '　'}
 									</p>
 								</div>
 								<div>
@@ -250,7 +250,7 @@ const InfoChange = () => {
 									>
 										{!isPasswordSame && confirmPassword
 											? '비밀번호가 일치하지 않습니다.'
-											: 'hidden'}
+											: '　'}
 									</p>
 								</div>
 
@@ -304,7 +304,7 @@ const InfoChange = () => {
 										>
 											{isNicknameValid && !nicknameCheck
 												? '중복 확인버튼을 눌러 주세요.'
-												: 'hidden'}
+												: '　'}
 										</span>
 									</p>
 								</div>

@@ -184,7 +184,7 @@ const RegisterForm = () => {
 									>
 										{!isEmailValid && email
 											? '이메일 형식이 올바르지 않습니다.'
-											: 'hidden'}
+											: '　'}
 									</p>
 								</div>
 
@@ -236,7 +236,7 @@ const RegisterForm = () => {
 									>
 										{!isPasswordValid && password
 											? '비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로 설정해주세요.'
-											: 'hidden'}
+											: '　'}
 									</p>
 								</div>
 								<div>
@@ -266,7 +266,7 @@ const RegisterForm = () => {
 									>
 										{!isPasswordSame && confirmPassword
 											? '비밀번호가 일치하지 않습니다.'
-											: 'hidden'}
+											: '　'}
 									</p>
 								</div>
 
@@ -309,7 +309,7 @@ const RegisterForm = () => {
 									>
 										{!isNicknameValid && nickname
 											? '닉네임은 2~16자 사이로 설정해주세요.'
-											: 'hidden'}
+											: '　'}
 									</p>
 								</div>
 
