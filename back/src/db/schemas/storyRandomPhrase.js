@@ -11,6 +11,10 @@ const storyRandomPhraseSchema = new Schema({
   },
 });
 
-const storyRandomPhrase = model('StoryRandomPhrase', storyRandomPhraseSchema);
+const storyRandomPhrase = model(
+  'StoryRandomPhrase',
+  storyRandomPhraseSchema,
+  'storyrandomphrase',
+);
 
 export { storyRandomPhrase };
