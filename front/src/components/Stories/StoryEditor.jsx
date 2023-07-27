@@ -3,6 +3,7 @@ import { Editor } from '@toast-ui/react-editor';
 import useStoryStore from '../../hooks/useStoryStore';
 import { postApi } from '../../services/api';
 import RadioOption from '../Global/RadioOption';
+import useImageUpload from '../../hooks/useImageUpload';
 
 const StoryEditor = () => {
 	const {
@@ -73,6 +74,8 @@ const StoryEditor = () => {
 		setContent(body);
 	};
 
+	const { handleImageUpload, loading } = useImageUpload();
+
 	return (
 		<>
 			<h3 className="font-semibold">제목</h3>
@@ -104,6 +107,9 @@ const StoryEditor = () => {
 					]}
 					ref={editorRef}
 					onChange={onChange}
+					hooks={{
+						addImageBlobHook: handleImageUpload,
+					}}
 				/>
 				{content?.length <= 16 && (
 					<p className="text-right text-red-400">10자 이상 입력해주세요.</p>
@@ -173,6 +179,7 @@ const StoryEditor = () => {
 						)}
 					</div>
 				</div>
+				{loading && <div>이미지 업로드 중...</div>}
 
 				<div className="w-full">
 					<button
