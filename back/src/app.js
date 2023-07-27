@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
 app.use(userAuthRouter);
 app.use(storyPostRouter);
-app.use('/post', forestRouter);
+app.use('/forest', forestRouter);
 app.use(imageRouter);
 app.use(storyCommentRouter);
 app.use(forestCommentRouter);
