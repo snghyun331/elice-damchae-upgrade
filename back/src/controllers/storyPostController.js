@@ -186,6 +186,24 @@ const storyPostController = {
       next(error);
     }
   },
+
+  readAllStories: async function (req, res, next) {
+    try {
+      const page = parseInt(req.query.page || 1); // default 페이지: 1
+      const { stories, totalPage, count } = await StoryPostService.readPosts(
+        page,
+      );
+
+      return res.status(200).json({
+        currentPage: page,
+        totalPage: totalPage,
+        totalStoriesCount: count,
+        stories,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export { storyPostController };
