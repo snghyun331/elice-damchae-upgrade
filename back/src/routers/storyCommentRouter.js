@@ -10,4 +10,10 @@ storyCommentRouter.post(
   StoryCommentController.createStoryComment,
 );
 
+storyCommentRouter.patch(
+  '/stories/comments/:commentId',
+  loginRequired,
+  StoryCommentController.updateStoryComment,
+);
+
 export { storyCommentRouter };

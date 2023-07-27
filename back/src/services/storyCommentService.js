@@ -12,6 +12,36 @@ class StoryCommentService {
     });
     return createdNewComment;
   }
+
+  static async setStoryComment({ commentId, toUpdate }) {
+    let comment = await StoryCommentModel.findOneByCommentId({ commentId });
+
+    if (!comment) {
+      throw new Error('해당 댓글을 찾을 수 없습니다. 다시 한번 확인해부세요');
+    }
+
+    if (toUpdate.comment) {
+      const fieldToUpdate = 'comment';
+      const newValue = toUpdate.comment;
+      comment = await StoryCommentModel.updateComment({
+        commentId,
+        fieldToUpdate,
+        newValue,
+      });
+    }
+
+    if (toUpdate.mood) {
+      const fieldToUpdate = 'mood';
+      const newValue = toUpdate.mood;
+      comment = await StoryCommentModel.updateComment({
+        commentId,
+        fieldToUpdate,
+        newValue,
+      });
+    }
+
+    return comment;
+  }
 }
 
 export { StoryCommentService };

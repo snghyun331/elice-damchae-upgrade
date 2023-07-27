@@ -14,6 +14,23 @@ class StoryCommentModel {
 
     return populatedComments;
   }
+
+  static async findOneByCommentId({ commentId }) {
+    const comment = await StoryComment.findOne({ _id: commentId });
+    return comment;
+  }
+
+  static async updateComment({ commentId, fieldToUpdate, newValue }) {
+    const filter = { _id: commentId };
+    const update = { [fieldToUpdate]: newValue };
+    const option = { returnOriginal: false };
+    const updatedComment = await StoryComment.findOneAndUpdate(
+      filter,
+      update,
+      option,
+    );
+    return updatedComment;
+  }
 }
 
 export { StoryCommentModel };
