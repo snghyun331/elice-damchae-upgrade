@@ -27,15 +27,6 @@ const useStoryStore = () => {
 	const [storyModal, setStoryModal] = useState(false);
 	const [errMsg, setErrMsg] = useState('');
 
-	const postStory = async (post) => {
-		try {
-			await postApi('/stories', post);
-			window.location.href = '/stories';
-		} catch (error) {
-			setErrMsg(error.response.data.errorMessage);
-		}
-	};
-
 	const reset = () => {
 		setTitle('');
 		setContent('');
@@ -73,7 +64,6 @@ const useStoryStore = () => {
 		setPhrase,
 		setStoryModal,
 
-		postStory,
 		reset,
 	};
 };
