@@ -2,16 +2,14 @@ import { StoryPost } from '../db/schemas/storyPost.js';
 import { StoryPostModel } from '../db/models/storyPostModel.js';
 import { StoryPostService } from '../services/storyPostService.js';
 import { imageService } from '../services/imageService.js';
-import { ImageModel } from '../db/models/imageModel.js';
 import axios from 'axios';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 const storyPostController = {
   createStoryPost: async (req, res, next) => {
     try {
       const userId = req.currentUserId;
       const userInfo = userId;
+
       const { title, content, thumbnail, isPublic, mood, music } = req.body;
       const file = req.file ?? null;
       let thumbnailLocal;
@@ -40,31 +38,11 @@ const storyPostController = {
           music,
         });
       } else if (!file && !thumbnail) {
-        const __filename = fileURLToPath(import.meta.url); // 현재 모듈의 URL을 가져오기
-        const __dirname = path.dirname(__filename); // 디렉토리 경로를 추출
-        const uploadsPath = path.resolve(
-          __dirname,
-          '..',
-          '..',
-          '..',
-          'front',
-          'public',
-          'images',
-        );
-        const fileName = 'thumbnail.jpg';
-        const ImagePath = path.join(uploadsPath, fileName);
-        const fullImagePath = path.resolve(ImagePath);
-        const newImage = {
-          fileName: fileName,
-          path: fullImagePath,
-        };
-        const createDefaultImage = await ImageModel.create({ newImage });
-        const defaultImageId = createDefaultImage._id;
         storyPostInfo = await StoryPostService.addStoryPost({
           userInfo,
           title,
           content,
-          thumbnail: defaultImageId,
+          thumbnail: null,
           isPublic,
           mood,
           music,
@@ -129,28 +107,15 @@ const storyPostController = {
   updateStoryPost: async (req, res, next) => {
     try {
       const storyId = req.params.storyId;
-      const { title, content, thumbnailStable, isPublic, mood, music } =
-        req.body;
+      const { title, content, thumbnail, isPublic, mood, music } = req.body;
       const file = req.file ?? null;
       const userId = req.currentUserId;
       const userInfo = userId;
-      let thumbnail;
-
-      if (file) {
-        const thumbnailInfo = await imageService.uploadImage({ file });
-        thumbnail = thumbnailInfo._id;
-        thumbnailStable === null;
-      }
-
-      if (thumbnailStable) {
-        thumbnail === null;
-      }
 
       const toUpdate = {
         title,
         content,
         thumbnail,
-        thumbnailStable,
         isPublic,
         mood,
         music,

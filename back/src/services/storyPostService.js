@@ -76,36 +76,6 @@ class StoryPostService {
       });
     }
 
-    if (!toUpdate.thumbnail) {
-      const fieldToUpdate = 'thumbnail';
-      const newValue = null;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
-
-    if (toUpdate.thumbnailStable) {
-      const fieldToUpdate = 'thumbnailStable';
-      const newValue = toUpdate.thumbnailStable;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
-
-    if (!toUpdate.thumbnailStable) {
-      const fieldToUpdate = 'thumbnailStable';
-      const newValue = null;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
-
     if (toUpdate.mood) {
       const fieldToUpdate = 'mood';
       const newValue = toUpdate.mood;
