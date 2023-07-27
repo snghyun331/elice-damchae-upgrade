@@ -10,7 +10,7 @@ const GoogleButton = () => {
 	const { register, login } = useUserActions();
 	const navigate = useNavigate();
 
-		useEffect(() => {
+	useEffect(() => {
 		function start() {
 			gapi.client.init({
 				clientId: clientIdData,
@@ -22,17 +22,17 @@ const GoogleButton = () => {
 
 	const onSuccess = async (res) => {
 		console.log(res);
-		const email = res.wt.cu
-		const password = res.tokenId //사용하지 않을 가상 비밀번호 생성
-		const nickname = res.wt.Ad
-		const mbti = '미설정'
+		const email = res.wt.cu;
+		const password = res.tokenId; //사용하지 않을 가상 비밀번호 생성
+		const nickname = res.wt.Ad;
+		const mbti = '미설정';
 
 		const user = { email, password, nickname, mbti, isGoogleLogin: true };
 
 		try {
 			await register(user);
 			await login(user);
-			navigate('/')
+			navigate('/');
 		} catch (error) {
 			console.log(error.response?.data?.errorMessage);
 		}
@@ -48,7 +48,9 @@ const GoogleButton = () => {
 				clientId={clientIdData}
 				onSuccess={onSuccess}
 				onFailure={onFailure}
-			/>{' '}
+				buttonText="Google 계정으로 로그인 · 회원가입"
+				className="w-full flex justify-center items-center"
+			/>
 		</div>
 	);
 };
