@@ -7,10 +7,10 @@ import { useNavigate } from 'react-router-dom';
 const clientIdData = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const GoogleButton = () => {
-	const { register, login } = useUserActions();
+	const { googleRegister, googleLogin } = useUserActions();
 	const navigate = useNavigate();
 
-		useEffect(() => {
+	useEffect(() => {
 		function start() {
 			gapi.client.init({
 				clientId: clientIdData,
@@ -22,17 +22,17 @@ const GoogleButton = () => {
 
 	const onSuccess = async (res) => {
 		console.log(res);
-		const email = res.wt.cu
-		const password = res.tokenId //사용하지 않을 가상 비밀번호 생성
-		const nickname = res.wt.Ad
-		const mbti = '비공개'
+		const email = res.wt.cu;
+		const idToken = res.tokenId; //사용하지 않을 가상 비밀번호 생성
+		const nickname = res.wt.Ad;
+		const mbti = '미설정';
 
-		const user = { email, password, nickname, mbti, isGoogleLogin: true };
+		const user = { email, idToken, nickname, mbti, isGoogleLogin: true };
 
 		try {
-			await register(user);
-			await login(user);
-			navigate('/')
+			await googleRegister(user);
+			await googleLogin(user);
+			navigate('/');
 		} catch (error) {
 			console.log(error.response?.data?.errorMessage);
 		}
@@ -48,7 +48,9 @@ const GoogleButton = () => {
 				clientId={clientIdData}
 				onSuccess={onSuccess}
 				onFailure={onFailure}
-			/>{' '}
+				buttonText="Google 계정으로 로그인 · 회원가입"
+				className="w-full flex justify-center items-center"
+			/>
 		</div>
 	);
 };

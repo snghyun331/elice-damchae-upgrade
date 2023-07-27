@@ -98,7 +98,7 @@ const RegisterForm = () => {
 	);
 
 	const user = { email, password, nickname, mbti };
-console.log(user);
+	console.log(user);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
@@ -141,7 +141,7 @@ console.log(user);
 		<>
 			<section className="bg-gray-50 dark:bg-gray-900">
 				<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-					<div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+					<div className="w-full bg-white rounded-sm shadow dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 						<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
 							<h1 className="text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
 								회원가입
@@ -150,7 +150,7 @@ console.log(user);
 								<div className="flex flex-col">
 									<label
 										htmlFor="email"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										이메일
 									</label>
@@ -161,25 +161,31 @@ console.log(user);
 											type="email"
 											name="email"
 											id="email"
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 											placeholder="name@company.com"
 											required=""
 										/>
-
 										<button
 											type="button"
 											onClick={handleEmailCheck}
 											disabled={!email || !isEmailValid}
-											className="self-end bg-blue-700 text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
+											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+											style={{ height: '45px' }}
 										>
-											이메일인증
+											이메일 인증
 										</button>
 									</div>
-									{!isEmailValid && email && (
-										<p className="text-red-500 text-xs italic">
-											이메일 형식이 올바르지 않습니다.
-										</p>
-									)}
+									<p
+										className={`text-xs ${
+											!isEmailValid && email
+												? 'text-red-500'
+												: 'text-transparent'
+										}`}
+									>
+										{!isEmailValid && email
+											? '이메일 형식이 올바르지 않습니다.'
+											: '　'}
+									</p>
 								</div>
 
 								<div className="flex flex-row space-x-2 justify-end">
@@ -189,7 +195,7 @@ console.log(user);
 										name="Code"
 										id="verification-code"
 										placeholder="인증번호 입력"
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										className="-mt-5 h-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 									/>
 
@@ -197,7 +203,8 @@ console.log(user);
 										type="button"
 										onClick={handleCodeCheck}
 										disabled={!code}
-										className="justify-self-end bg-blue-700 text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
+										className="-mt-5 flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+										style={{ height: '45px' }}
 									>
 										확인
 									</button>
@@ -206,7 +213,7 @@ console.log(user);
 								<div>
 									<label
 										htmlFor="password"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="mt-8 block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										비밀번호
 									</label>
@@ -217,20 +224,25 @@ console.log(user);
 										name="password"
 										id="password"
 										placeholder="••••••••"
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 									/>
-									{!isPasswordValid && password && (
-										<p className="text-red-500 text-xs italic">
-											비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로
-											설정해주세요.
-										</p>
-									)}
+									<p
+										className={`text-xs ${
+											!isPasswordValid && password
+												? 'text-red-500'
+												: 'text-transparent'
+										}`}
+									>
+										{!isPasswordValid && password
+											? '비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로 설정해주세요.'
+											: '　'}
+									</p>
 								</div>
 								<div>
 									<label
 										htmlFor="confirm-password"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										비밀번호 재확인
 									</label>
@@ -241,20 +253,27 @@ console.log(user);
 										name="confirmPassword"
 										id="confirm-password"
 										placeholder="••••••••"
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 									/>
-									{!isPasswordSame && confirmPassword && (
-										<p className="text-red-500 text-xs italic">
-											비밀번호가 일치하지 않습니다.
-										</p>
-									)}
+
+									<p
+										className={`text-xs ${
+											!isPasswordSame && confirmPassword
+												? 'text-red-500'
+												: 'text-transparent'
+										}`}
+									>
+										{!isPasswordSame && confirmPassword
+											? '비밀번호가 일치하지 않습니다.'
+											: '　'}
+									</p>
 								</div>
 
 								<div className="flex flex-col">
 									<label
 										htmlFor="nickname"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="-mt-3 block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										닉네임
 									</label>
@@ -267,36 +286,44 @@ console.log(user);
 											name="nickname"
 											id="nickname"
 											placeholder="강아지"
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										/>
 
 										<button
 											type="button"
 											onClick={handleNicknameCheck}
 											disabled={!isNicknameValid}
-											className="self-end bg-blue-700 text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] w-1/3 text-sm"
+											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+											style={{ height: '45px' }}
 										>
 											중복 확인
 										</button>
 									</div>
-									{!isNicknameValid && nickname && (
-										<p className="text-red-500 text-xs italic">
-											닉네임은 2~16자 사이로 설정해주세요.
-										</p>
-									)}
+
+									<p
+										className={`text-xs ${
+											!isNicknameValid && nickname
+												? 'text-red-500'
+												: 'text-transparent'
+										}`}
+									>
+										{!isNicknameValid && nickname
+											? '닉네임은 2~16자 사이로 설정해주세요.'
+											: '　'}
+									</p>
 								</div>
 
 								<div>
 									<label
 										htmlFor="mbti"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="-mt-3 block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										MBTI
 									</label>
 									<Select
 										onChange={(selectedOption) => setMbti(selectedOption.value)}
 										options={mbtiList}
-										placeholder="Select MBTI"
+										placeholder="MBTI 선택"
 										classNamePrefix="react-select"
 									/>
 								</div>
@@ -304,19 +331,18 @@ console.log(user);
 									<button
 										type="submit"
 										disabled={!isFormValid}
-										className="self-end bg-blue-700 text-white font-bold py-2 pt-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-[#BBDCE8] hover:bg-[#3B82A0]"
+										className="my-4 w-full flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+										style={{ height: '45px' }}
 									>
 										가입하기
 									</button>
-									{errMsg && (
-										<p className="text--500 text-xs italic">{errMsg}</p>
-									)}
+									{errMsg && <p className="text--500 text-xs">{errMsg}</p>}
 
 									<p className="mt-3 self-center text-sm font-light text-gray-500 dark:text-gray-400">
 										이미 계정이 있습니까?{' '}
 										<a
 											onClick={() => navigate('/login')}
-											className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+											className="font-medium text-primary-600 hover:underline dark:text-primary-500 cursor-"
 										>
 											로그인하기
 										</a>

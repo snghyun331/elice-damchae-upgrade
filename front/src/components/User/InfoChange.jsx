@@ -13,11 +13,14 @@ const InfoChange = () => {
 		email,
 		nickname,
 		mbti,
+		isGoogleLogin,
 		profileImg,
 		setNickname,
 		setMbti,
 		setProfileImg,
 	} = useUserStore();
+
+	console.log(isGoogleLogin);
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
@@ -142,9 +145,9 @@ const InfoChange = () => {
 
 	return (
 		<>
-			<section className="bg-gray-50 dark:bg-gray-900">
-				<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-					<div className="max-h-90 w-full bg-white rounded-sm shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+			<section className="" style={{}}>
+				<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 my-20">
+					<div className="w-full bg-white rounded-sm shadow-xl dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700 ">
 						<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
 							<h1 className="text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
 								회원정보 수정
@@ -201,22 +204,32 @@ const InfoChange = () => {
 										비밀번호
 									</label>
 									<input
+										disabled={isGoogleLogin}
 										value={passwordToChange}
 										onChange={handleChangeInput}
 										autoComplete=""
 										type="password"
 										name="password"
 										id="password"
-										placeholder=""
+										placeholder={
+											isGoogleLogin
+												? '구글로 가입한 경우 비밀번호 수정이 불가합니다.'
+												: ''
+										}
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 									/>
-									{!isPasswordValid && (
-										<p className="text-red-500 text-xs italic">
-											비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로
-											설정해주세요.
-										</p>
-									)}
+									<p
+										className={`text-xs ${
+											!isPasswordValid && passwordToChange
+												? 'text-red-500'
+												: 'text-transparent'
+										}`}
+									>
+										{!isPasswordValid && passwordToChange
+											? '비밀번호는 8~20자 영문, 숫자, 특수문자 조합으로 설정해주세요.'
+											: '　'}
+									</p>
 								</div>
 								<div>
 									<label
@@ -226,21 +239,32 @@ const InfoChange = () => {
 										비밀번호 재확인
 									</label>
 									<input
+										disabled={isGoogleLogin}
 										value={confirmPassword}
 										onChange={handleChangeInput}
 										autoComplete=""
 										type="password"
 										name="confirmPassword"
 										id="confirm-password"
-										placeholder=""
+										placeholder={
+											isGoogleLogin
+												? '구글로 가입한 경우 비밀번호 수정이 불가합니다.'
+												: ''
+										}
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 									/>
-									{!isPasswordSame && (
-										<p className="text-red-500 text-xs italic">
-											비밀번호가 일치하지 않습니다.
-										</p>
-									)}
+									<p
+										className={`text-xs ${
+											!isPasswordSame && confirmPassword
+												? 'text-red-500'
+												: 'text-transparent'
+										}`}
+									>
+										{!isPasswordSame && confirmPassword
+											? '비밀번호가 일치하지 않습니다.'
+											: '　'}
+									</p>
 								</div>
 
 								<div className="flex flex-col">
@@ -264,27 +288,38 @@ const InfoChange = () => {
 										<button
 											type="button"
 											onClick={handleNicknameCheck}
-											disabled={!isNicknameValid || nickname == nicknameToChange }
-											className={`self-end w-36 text-white ${
-												(!isNicknameValid || nickname == nicknameToChange) && 'opacity-50 cursor-not-allowed'
-											} bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 
-		focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 
-		dark:bg-gray-800 dark:hover:bg-gray-700 
-		dark:focus:ring-gray-700 dark:border-gray-700`}
+											disabled={
+												!isNicknameValid || nickname == nicknameToChange
+											}
+											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+											style={{ height: '45px' }}
 										>
 											중복 확인
 										</button>
 									</div>
-									{!isNicknameValid && (
-										<p className="text-red-500 text-xs italic">
-											닉네임은 2~16자 사이로 설정해주세요.
-										</p>
-									)}
-									{isNicknameValid && !nicknameCheck && (
-										<p className="text-sm text-blue-600">
-											중복 확인버튼을 눌러 주세요.
-										</p>
-									)}
+
+									<p
+										className={`text-xs ${
+											!isNicknameValid && nicknameToChange
+												? 'text-red-500'
+												: 'text-transparent'
+										}`}
+									>
+										{!isNicknameValid && nicknameToChange
+											? '닉네임은 2~16자 사이로 설정해주세요.'
+											: ''}{' '}
+										<span
+											className={`text-xs ${
+												isNicknameValid && !nicknameCheck
+													? 'text-red-500'
+													: 'text-transparent'
+											}`}
+										>
+											{isNicknameValid && !nicknameCheck
+												? '중복 확인버튼을 눌러 주세요.'
+												: '　'}
+										</span>
+									</p>
 								</div>
 								<div>
 									<label
@@ -297,19 +332,14 @@ const InfoChange = () => {
 										defaultValue={mbtiToChange}
 										onChange={setMbtiToChange}
 										options={mbtiList}
-										placeholder="Select MBTI"
+										placeholder="MBTI "
 										classNamePrefix="react-select"
 									/>
 								</div>
 								<div className="flex flex-col">
 									<button
 										disabled={!isFormValid}
-										className={`self-end w-36 text-white ${
-											!isFormValid && 'opacity-50 cursor-not-allowed'
-										} bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 
-		focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 
-		dark:bg-gray-800 dark:hover:bg-gray-700 
-		dark:focus:ring-gray-700 dark:border-gray-700`}
+										className="my-4 w-full flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
 										onClick={handleSubmit}
 									>
 										수정하기

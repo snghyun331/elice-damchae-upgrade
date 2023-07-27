@@ -1,5 +1,9 @@
 import is from '@sindresorhus/is';
 import { userService } from '../services/userService.js';
+import { OAuth2Client } from 'google-auth-library';
+
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const client = new OAuth2Client(CLIENT_ID); // CLIENT_ID를 애플리케이션의 Google CLIENT_ID로 대체하세요.
 
 class userAuthController {
   static async userRegister(req, res, next) {
@@ -30,6 +34,50 @@ class userAuthController {
     }
   }
 
+  //구글 가입용
+  static async googleRegister(req, res, next) {
+    try {
+      if (is.emptyObject(req.body)) {
+        throw new Error(
+          'headers의 Content-Type을 application/json으로 설정해주세요',
+        );
+      }
+
+      const { email, idToken, nickname, mbti, isGoogleLogin } = await req.body;
+
+      // Google ID 토큰을 검증합니다.
+      const verifyIdToken = async (token) => {
+        const ticket = await client.verifyIdToken({
+          idToken: token,
+          audience: CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        return payload;
+      };
+
+      const payload = await verifyIdToken(idToken);
+      if (!payload || payload.email !== email) {
+        res.status(400).send({ errorMessage: 'Google 인증에 실패했습니다.' });
+        return;
+      }
+
+      const newUser = await userService.createUser({
+        email,
+        password: null,
+        nickname,
+        mbti,
+        isGoogleLogin,
+      });
+
+      return res.status(201).json(newUser);
+    } catch (error) {
+      res
+        .status(400)
+        .send({ errorMessage: '요청한 데이터 형식이 올바르지 않습니다.' });
+      next(error);
+    }
+  }
+
   static async userLogin(req, res, next) {
     try {
       // req (request) 에서 데이터 가져오기
@@ -38,6 +86,27 @@ class userAuthController {
 
       // 위 데이터를 이용하여 유저 db에서 유저 찾기
       const user = await userService.readUser({ email, password });
+
+      if (user.errorMessage) {
+        throw new Error(user.errorMessage);
+      }
+      if (user.isGoogleLogin) {
+        throw new Error('Google 로그인으로 진행하세요.');
+      }
+
+      return res.status(200).send(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  //구글 로그인용
+  static async googleLogin(req, res, next) {
+    try {
+      const email = req.body.email;
+      const idToken = req.body.idToken;
+
+      const user = await userService.readGoogleUser({ email, idToken });
 
       if (user.errorMessage) {
         throw new Error(user.errorMessage);
