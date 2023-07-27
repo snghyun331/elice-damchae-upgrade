@@ -112,21 +112,47 @@ const storyPostController = {
       const userId = req.currentUserId;
       const userInfo = userId;
 
-      const toUpdate = {
-        title,
-        content,
-        thumbnail,
-        isPublic,
-        mood,
-        music,
-      };
+      let thumbnailLocal;
+      let thumbnailLocalId;
+      let toUpdate;
+      if (file && !thumbnail) {
+        thumbnailLocal = await imageService.uploadImage({ file });
+        thumbnailLocalId = thumbnailLocal._id;
+        toUpdate = {
+          title,
+          content,
+          thumbnail: thumbnailLocalId,
+          isPublic,
+          mood,
+          music,
+        };
+      } else if (!file && thumbnail) {
+        toUpdate = {
+          title,
+          content,
+          thumbnail,
+          isPublic,
+          mood,
+          music,
+        };
+      } else if (!file && !thumbnail) {
+        toUpdate = {
+          title,
+          content,
+          thumbnail: null,
+          isPublic,
+          mood,
+          music,
+        };
+      }
+
       const updatedStory = await StoryPostService.setStory({
         userInfo,
         storyId,
         toUpdate,
       });
       const result = await StoryPost.populate(updatedStory, {
-        path: 'userInfo thumbnail thumbnailStable',
+        path: 'userInfo thumbnail',
       });
       return res.status(200).json(result);
     } catch (error) {
