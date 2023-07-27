@@ -150,7 +150,7 @@ const RegisterForm = () => {
 								<div className="flex flex-col">
 									<label
 										htmlFor="email"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										이메일
 									</label>
@@ -170,7 +170,7 @@ const RegisterForm = () => {
 											onClick={handleEmailCheck}
 											disabled={!email || !isEmailValid}
 											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
-											style={{ height: '42px' }}
+											style={{ height: '45px' }}
 										>
 											이메일 인증
 										</button>
@@ -204,7 +204,7 @@ const RegisterForm = () => {
 										onClick={handleCodeCheck}
 										disabled={!code}
 										className="-mt-5 flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
-										style={{ height: '42px' }}
+										style={{ height: '45px' }}
 									>
 										확인
 									</button>
@@ -213,7 +213,7 @@ const RegisterForm = () => {
 								<div>
 									<label
 										htmlFor="password"
-										className="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="mt-8 block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										비밀번호
 									</label>
@@ -242,7 +242,7 @@ const RegisterForm = () => {
 								<div>
 									<label
 										htmlFor="confirm-password"
-										className="-mt-3 block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										비밀번호 재확인
 									</label>
@@ -273,7 +273,7 @@ const RegisterForm = () => {
 								<div className="flex flex-col">
 									<label
 										htmlFor="nickname"
-										className="-mt-3 block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="-mt-3 block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										닉네임
 									</label>
@@ -294,7 +294,7 @@ const RegisterForm = () => {
 											onClick={handleNicknameCheck}
 											disabled={!isNicknameValid}
 											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
-											style={{ height: '42px' }}
+											style={{ height: '45px' }}
 										>
 											중복 확인
 										</button>
@@ -316,7 +316,7 @@ const RegisterForm = () => {
 								<div>
 									<label
 										htmlFor="mbti"
-										className="block -mt-3 mb-2 text-lg font-medium text-gray-900 dark:text-white"
+										className="-mt-3 block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
 										MBTI
 									</label>
@@ -331,14 +331,12 @@ const RegisterForm = () => {
 									<button
 										type="submit"
 										disabled={!isFormValid}
-										className="w-full flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
-										style={{ height: '42px' }}
+										className="my-4 w-full flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+										style={{ height: '45px' }}
 									>
 										가입하기
 									</button>
-									{errMsg && (
-										<p className="text--500 text-xs">{errMsg}</p>
-									)}
+									{errMsg && <p className="text--500 text-xs">{errMsg}</p>}
 
 									<p className="mt-3 self-center text-sm font-light text-gray-500 dark:text-gray-400">
 										이미 계정이 있습니까?{' '}
