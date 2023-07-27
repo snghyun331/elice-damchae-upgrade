@@ -30,6 +30,34 @@ class userAuthController {
     }
   }
 
+
+
+  //구글로그인용
+  static async googleLogin(req, res, next) {
+    try {
+      // req (request)에서 데이터 가져오기
+      const googleAuthToken = req.body.token;
+
+      // Google 인증 토큰을 사용하여 사용자 정보 받아오기
+      const googleUser = await userService.authenticateGoogleUser(googleAuthToken);
+
+      if (googleUser.errorMessage) {
+        throw new Error(googleUser.errorMessage);
+      }
+
+      // 유저 찾기 또는 추가하기
+      const user = await userService.findOrCreateUser(googleUser.email, googleUser);
+
+      if (user.errorMessage) {
+        throw new Error(user.errorMessage);
+      }
+
+      return res.status(200).send(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async userLogin(req, res, next) {
     try {
       // req (request) 에서 데이터 가져오기
