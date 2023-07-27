@@ -8,6 +8,7 @@ const useUserStore = create((set) => {
 		nickname: '',
 		mbti: '',
 		profileImg: '',
+		isGoogleLogin: false,
 		isLoggedIn: Boolean(localStorage.getItem('accessToken')),
 	};
 
@@ -56,11 +57,32 @@ const useUserStore = create((set) => {
 				await postApi('auth/googleRegister', user);
 			},
 
+			googleLogin: async (user) => {
+				const response = await postApi('auth/googleLogin', user);
+				console.log(response);
+				const jwtToken = response.data.token;
+
+				localStorage.setItem('accessToken', jwtToken);
+
+				const userData = {
+					isLoggedIn: true,
+					id: response.data.id,
+					email: response.data.email,
+					nickname: response.data.nickname,
+					mbti: response.data.mbti,
+					isGoogleLogin: true,
+				};
+
+				// Save the user data in local storage
+				localStorage.setItem('userData', JSON.stringify(userData));
+
+				set(userData);
+			},
 
 			logout: () => {
 				localStorage.removeItem('accessToken');
 				localStorage.removeItem('userData');
-				set({ 
+				set({
 					id: '',
 					email: '',
 					nickname: '',
@@ -70,9 +92,6 @@ const useUserStore = create((set) => {
 				});
 				alert('로그아웃 하였습니다.');
 			},
-
-			
-
 		},
 	};
 });

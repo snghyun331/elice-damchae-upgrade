@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 // import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 
+import { OAuth2Client } from 'google-auth-library';
+
 class userService {
   static async createUser({ email, password, mbti, nickname, isGoogleLogin }) {
     // 이메일 중복 확인
@@ -46,16 +48,16 @@ class userService {
     }
 
     let isPasswordCorrect = false;
-
-    // 구글 로그인인 경우 비밀번호 확인을 생략합니다.
     if (user.isGoogleLogin) {
-      isPasswordCorrect = true;
+      const errorMessage =
+        'Google 계정으로 로그인해 주세요. 비밀번호로 로그인할 수 없습니다.';
+      return { errorMessage };
     } else {
       // 비밀번호 일치 여부 확인
       const correctPasswordHash = user.password;
       isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
     }
-    
+
     if (!isPasswordCorrect) {
       const errorMessage =
         '비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.';
@@ -66,7 +68,7 @@ class userService {
     const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
     const token = jwt.sign({ userId: user.id }, secretKey);
 
-    // 반환할 loginuser 객체를 위한 변수 설정
+    // 반환할 loginUser 객체를 위한 변수 설정
     const { id, mbti, nickname, isOut } = user;
 
     const loginUser = {
@@ -158,6 +160,61 @@ class userService {
     }
     const isOut = user.isOut;
     return isOut;
+  }
+
+  //구글 로그인용
+  static async readGoogleUser({ email, idToken }) {
+    const user = await User.findByEmail({ email });
+    if (!user) {
+      const errorMessage =
+        '해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
+      return { errorMessage };
+    }
+
+    if (!user.isGoogleLogin) {
+      const errorMessage =
+        '이메일 로그인으로 진행하세요. Google 로그인 계정이 아닙니다.';
+      return { errorMessage };
+    }
+
+    const verifyIdToken = async (token) => {
+      const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+
+      const getClient = () => {
+        return new OAuth2Client(CLIENT_ID);
+      };
+
+      const client = getClient();
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      return payload;
+    };
+
+    const payload = await verifyIdToken(idToken);
+    if (!payload || payload.email !== email) {
+      const errorMessage = 'Google 인증에 실패했습니다.';
+      return { errorMessage };
+    }
+
+    const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
+    const token = jwt.sign({ userId: user.id }, secretKey);
+
+    const { id, mbti, nickname, isOut } = user;
+
+    const loginUser = {
+      token,
+      id,
+      email,
+      mbti,
+      nickname,
+      isOut,
+      errorMessage: null,
+    };
+
+    return loginUser;
   }
 }
 

@@ -13,6 +13,12 @@ userAuthRouter.post(
   userAuthController.userLogin,
 );
 
+userAuthRouter.post(
+  '/auth/googleLogin',
+  outUserValidation,
+  userAuthController.googleLogin,
+);
+
 userAuthRouter.put('/users/:userId', userAuthController.userUpdate);
 
 // 닉네임 중복확인

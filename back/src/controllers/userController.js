@@ -34,7 +34,7 @@ class userAuthController {
     }
   }
 
-  //구글 로그인용
+  //구글 가입용
   static async googleRegister(req, res, next) {
     try {
       if (is.emptyObject(req.body)) {
@@ -86,6 +86,28 @@ class userAuthController {
 
       // 위 데이터를 이용하여 유저 db에서 유저 찾기
       const user = await userService.readUser({ email, password });
+
+      if (user.errorMessage) {
+        throw new Error(user.errorMessage);
+      }
+      console.log(user);
+      if (user.isGoogleLogin) {
+        throw new Error('Google 로그인으로 진행하세요.');
+      }
+
+      return res.status(200).send(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  //구글 로그인용
+  static async googleLogin(req, res, next) {
+    try {
+      const email = req.body.email;
+      const idToken = req.body.idToken;
+
+      const user = await userService.readGoogleUser({ email, idToken });
 
       if (user.errorMessage) {
         throw new Error(user.errorMessage);

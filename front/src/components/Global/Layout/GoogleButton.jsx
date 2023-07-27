@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const clientIdData = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const GoogleButton = () => {
-	const { googleRegister, login } = useUserActions();
+	const { googleRegister, googleLogin } = useUserActions();
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -31,7 +31,7 @@ const GoogleButton = () => {
 
 		try {
 			await googleRegister(user);
-			await login(user);
+			await googleLogin(user);
 			navigate('/');
 		} catch (error) {
 			console.log(error.response?.data?.errorMessage);
