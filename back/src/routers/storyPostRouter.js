@@ -26,7 +26,7 @@ storyPostRouter.post(
 storyPostRouter.patch(
   '/stories/:storyId',
   loginRequired,
-  upload.single('image'),
+  upload.single('thumbnail'),
   storyPostController.updateStoryPost,
 );
 
