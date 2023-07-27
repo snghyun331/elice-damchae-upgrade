@@ -6,6 +6,16 @@ export const moodColors = {
 	'😡': '#F9EBDE',
 	'😐': '#E0E0E0',
 };
+ 
+// TODO : pleasure-기쁨, sad-슬픔, insecure(불안), anger(분노), neutral(중립), surprise(놀람) 으로 변경 예정.
+export const textToMood = {
+	insecure: '😨',
+	surprise: '😮',
+	happy: '😊',
+	sad: '😢',
+	angry: '😡',
+	neutral: '😐',
+};
 
 export const mbtiList = [
 	{ value: 'ISTJ', label: 'ISTJ' },
