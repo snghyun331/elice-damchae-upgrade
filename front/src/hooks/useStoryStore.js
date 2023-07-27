@@ -7,6 +7,8 @@ const useStoryStore = () => {
 		title,
 		content,
 		thumbnail,
+		localThumbnail,
+		stableThumbnail,
 		mood,
 		music,
 		phrase,
@@ -14,14 +16,14 @@ const useStoryStore = () => {
 		setTitle,
 		setContent,
 		setThumbnail,
+		setLocalThumbnail,
+		setStableThumbnail,
 		setMood,
 		setMusic,
 		setPhrase,
 	} = useStoryGlobalStore();
 
-	const [localThumbnail, setLocalThumbnail] = useState('');
-	const [stableThumbnail, setStableThumbnail] = useState('');
-	const [isPublic, setIsPublic] = useState(true);
+	const [isPublic, setIsPublic] = useState(false);
 	const [storyModal, setStoryModal] = useState(false);
 	const [errMsg, setErrMsg] = useState('');
 
@@ -40,8 +42,10 @@ const useStoryStore = () => {
 		setMood('');
 		setMusic('');
 		setPhrase('');
+		setThumbnail('');
+		setLocalThumbnail('');
 		setStableThumbnail('');
-		setIsPublic(true);
+		setIsPublic(false);
 	};
 
 	return {

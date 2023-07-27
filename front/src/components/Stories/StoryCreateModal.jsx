@@ -39,6 +39,7 @@ const StoryCreateModal = ({ onClose }) => {
 
 		try {
 			const post = { title, content, thumbnail, isPublic, mood, music };
+			console.log(post);
 			const formData = new FormData();
 			for (const key in post) {
 				formData.append(key, post[key]);
