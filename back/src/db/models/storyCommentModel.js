@@ -37,6 +37,8 @@ class StoryCommentModel {
     const isCompletedDeleted = deletedComment.deletedCount === 1;
     return isCompletedDeleted;
   }
+
+  // static async findAllCommentsByWriterId({ writerId }) {}
 }
 
 export { StoryCommentModel };
