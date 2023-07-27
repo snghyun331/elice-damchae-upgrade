@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 class userService {
-  static async createUser({ email, password, mbti, nickname }) {
+  static async createUser({ email, password, mbti, nickname, isGoogleLogin }) {
     // 이메일 중복 확인
     const user = await User.findByEmail({ email });
     if (user) {
@@ -23,6 +23,7 @@ class userService {
       password: hashedPassword,
       mbti,
       nickname,
+      isGoogleLogin: isGoogleLogin || false, // isGoogleLogin 값을 포함하거나 기본값으로 false 설정
     };
 
     // db에 저장
