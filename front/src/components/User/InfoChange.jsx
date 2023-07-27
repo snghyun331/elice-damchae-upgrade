@@ -13,11 +13,14 @@ const InfoChange = () => {
 		email,
 		nickname,
 		mbti,
+		isGoogleLogin,
 		profileImg,
 		setNickname,
 		setMbti,
 		setProfileImg,
 	} = useUserStore();
+
+	console.log(isGoogleLogin);
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
@@ -142,7 +145,7 @@ const InfoChange = () => {
 
 	return (
 		<>
-			<section className="" style={{ }}>
+			<section className="" style={{}}>
 				<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 my-20">
 					<div className="w-full bg-white rounded-sm shadow-xl dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700 ">
 						<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -201,13 +204,18 @@ const InfoChange = () => {
 										비밀번호
 									</label>
 									<input
+										disabled={isGoogleLogin}
 										value={passwordToChange}
 										onChange={handleChangeInput}
 										autoComplete=""
 										type="password"
 										name="password"
 										id="password"
-										placeholder=""
+										placeholder={
+											isGoogleLogin
+												? '구글로 가입한 경우 비밀번호 수정이 불가합니다.'
+												: ''
+										}
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 									/>
@@ -231,13 +239,18 @@ const InfoChange = () => {
 										비밀번호 재확인
 									</label>
 									<input
+										disabled={isGoogleLogin}
 										value={confirmPassword}
 										onChange={handleChangeInput}
 										autoComplete=""
 										type="password"
 										name="confirmPassword"
 										id="confirm-password"
-										placeholder=""
+										placeholder={
+											isGoogleLogin
+												? '구글로 가입한 경우 비밀번호 수정이 불가합니다.'
+												: ''
+										}
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 									/>

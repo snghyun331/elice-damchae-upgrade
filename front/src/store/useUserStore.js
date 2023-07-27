@@ -88,6 +88,7 @@ const useUserStore = create((set) => {
 					nickname: '',
 					mbti: '',
 					profileImg: '',
+					isGoogleLogin: false,
 					isLoggedIn: false,
 				});
 				alert('로그아웃 하였습니다.');
