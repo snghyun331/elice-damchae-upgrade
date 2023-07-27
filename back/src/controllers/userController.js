@@ -11,14 +11,14 @@ class userAuthController {
       }
 
       // req (request) 에서 데이터 가져오기
-      const { email, password, nickname, mbti } = await req.body;
-
+      const { email, password, nickname, mbti, isGoogleLogin } = await req.body;
       // 위 데이터를 유저 db에 추가하기
       const newUser = await userService.createUser({
         email,
         password,
         nickname,
         mbti,
+        isGoogleLogin,
       });
 
       return res.status(201).json(newUser);

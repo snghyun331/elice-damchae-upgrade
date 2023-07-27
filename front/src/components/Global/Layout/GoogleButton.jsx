@@ -23,11 +23,11 @@ const GoogleButton = () => {
 	const onSuccess = async (res) => {
 		console.log(res);
 		const email = res.wt.cu
-		const password = 'googleLogin'
+		const password = res.tokenId //사용하지 않을 가상 비밀번호 생성
 		const nickname = res.wt.Ad
 		const mbti = '비공개'
 
-		const user = { email, password, nickname, mbti };
+		const user = { email, password, nickname, mbti, isGoogleLogin: true };
 
 		try {
 			await register(user);
