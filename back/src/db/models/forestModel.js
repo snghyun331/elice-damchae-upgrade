@@ -1,6 +1,5 @@
 // // forestModel.js
 import ForestPost from '../schemas/forestPost.js';
-import UserModel from '../schemas/user.js';
 
 class forestModel {
   static async create({ newForestPost }) {
@@ -21,6 +20,15 @@ class forestModel {
     return findAllForest;
   }
 
+  static async findByMbti({ getMbtis }) {
+    const findAllMbti = await ForestPost.find(getMbtis[0]);
+    return findAllMbti;
+  }
+
+  static async findByForestId({ forestId }) {
+    const getForest = await ForestPost.findOne({ _id: forestId });
+    return getForest;
+  }
   static async findByPost({ _id }) {
     const getForest = await ForestPost.findOne({ _id });
     return getForest;
@@ -28,7 +36,7 @@ class forestModel {
 
   static async updatePost({ updatePost }) {
     console.log('model까지', updatePost);
-    if (!(updatePost.imageUrl = 'None')) {
+    if (!(updatePost.imageUrl == 'None')) {
       console.log(1);
       const updateForestPost = await ForestPost.updateOne(
         { userId: updatePost.userId, _id: updatePost._id },
@@ -51,7 +59,7 @@ class forestModel {
 
   static async deletePost({ deletePost }) {
     console.log('model까지', deletePost);
-    if (!(deletePost.imageUrl = 'None')) {
+    if (!(deletePost.imageUrl == 'None')) {
       console.log(1);
       const deleteForestPost = await ForestPost.deleteOne(
         { userId: deletePost.userId, _id: deletePost._id },
@@ -70,6 +78,15 @@ class forestModel {
       );
       return deleteForestPost;
     }
+  }
+
+  static async paging(page, totalPost) {
+    const { board, startPage, endPage, maxPost, totalPage, currentPage } = await ForestPost.(
+      page,
+      totalPost
+    );
+
+    return { board, currentPage, startPage, endPage, maxPost, totalPage };
   }
 }
 

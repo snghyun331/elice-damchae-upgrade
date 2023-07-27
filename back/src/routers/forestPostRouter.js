@@ -18,4 +18,7 @@ router.put('/:id', loginRequired, ForestController.updatePost);
 // 글 삭제
 router.delete('/:id', loginRequired, ForestController.deletePost);
 
+// MBTI 별로 게시물 조회
+router.get('/mbti/:mbti', ForestController.getByMbti);
+
 export default router;
