@@ -13,7 +13,7 @@ const upload = multer({
 storyPostRouter.post(
   '/stories',
   loginRequired,
-  upload.single('image'),
+  upload.single('thumbnail'),
   storyPostController.createStoryPost,
 );
 
