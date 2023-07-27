@@ -7,11 +7,13 @@ import { getApi } from '../../services/api';
 const StoryCardMap = () => {
 	const [storiesData, setStoriesData] = useState([]);
 	const [isDataLoaded, setIsDataLoaded] = useState(false);
+	const [totalPage, setTotalPage] = useState(0);
 
 	const fetchData = async (page = 1) => {
 		try {
 			const response = await getApi(`stories?page=${page}`);
 			setStoriesData(response.data.stories);
+			setTotalPage(response.data.totalPage);
 			setIsDataLoaded(true);
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
@@ -22,9 +24,10 @@ const StoryCardMap = () => {
 		fetchData(currentPage);
 	}, []);
 
-	const itemsPerPage = 8;
-	const { currentPage, totalPages, displayedData, prev, next, go } =
-		usePagination(isDataLoaded ? storiesData : [], itemsPerPage);
+
+	const { currentPage, displayedData, prev, next, go } = usePagination(
+		isDataLoaded ? storiesData : [], totalPage
+	);
 
 	useEffect(() => {
 		if (isDataLoaded) {
@@ -46,7 +49,7 @@ const StoryCardMap = () => {
 				<div className="flex justify-center mt-10">
 					<Pagination
 						currentPage={currentPage}
-						totalPages={totalPages}
+						totalPages={totalPage}
 						prev={prev}
 						next={next}
 						go={go}
