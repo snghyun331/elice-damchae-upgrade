@@ -23,7 +23,7 @@ const StoryCommentSchema = new Schema(
   },
   {
     timestamps: true,
-    // collection: 'storyComments',
+    collection: 'storyComments',
   },
 );
 
