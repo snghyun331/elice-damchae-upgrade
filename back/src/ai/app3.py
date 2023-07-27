@@ -50,7 +50,9 @@ def generate_image():
     response = requests.post(url, headers=headers, json=body)
 
     if response.status_code != 200:
-        return jsonify({"error": "Non-200 response from API"}), 500    data = response.json()
+        return jsonify({"error": "Non-200 response from API"}), 500
+
+    data = response.json()
     base64_value = data['artifacts'][0]['base64']
 
     return jsonify({"image_base64": base64_value})

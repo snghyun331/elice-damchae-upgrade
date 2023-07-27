@@ -2,13 +2,14 @@ import { useRef, useState } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import useStoryStore from '../../hooks/useStoryStore';
 import { postApi } from '../../services/api';
+import RadioOption from '../Global/RadioOption';
 
 const StoryEditor = () => {
 	const {
 		title,
 		setTitle,
 		content,
-
+		localThumbnail,
 		stableThumbnail,
 
 		music,
@@ -21,6 +22,7 @@ const StoryEditor = () => {
 	} = useStoryStore();
 
 	const [preview, setPreview] = useState('');
+	const [selectedOption, setSelectedOption] = useState('');
 
 	const handleThumbnailUpload = async (e) => {
 		e.preventDefault();
@@ -69,7 +71,6 @@ const StoryEditor = () => {
 	const onChange = () => {
 		const body = editorRef.current.getInstance().getHTML();
 		setContent(body);
-		console.log(body);
 	};
 
 	return (
@@ -111,7 +112,7 @@ const StoryEditor = () => {
 			<div className="flex flex-col space-y-2">
 				<div className="flex flex-row space-x-2 mb-5">
 					<div className="w-1/2">
-						<div className="h-1/4 items-end">
+						<div className="h-1/5 items-end">
 							<input
 								className="rounded-lg block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
 								id="file_input"
@@ -120,18 +121,28 @@ const StoryEditor = () => {
 							/>
 						</div>
 						{preview && (
-							<div className="h-3/4">
-								<p className="text-sm text-gray-500">선택된 이미지:</p>
-								<img
-									className="h-full"
-									src={preview}
-									alt="Selected Thumbnail"
+							<div>
+								<div>
+									<p className="text-sm text-gray-500">선택된 이미지:</p>
+									<img
+										className="h-full"
+										src={preview}
+										alt="Selected Thumbnail"
+									/>
+								</div>
+								<RadioOption
+									id="local-thumbnail"
+									value="local-thumbnail"
+									name="hosting"
+									label="로컬 이미지 선택"
+									selectedOption={selectedOption}
+									setSelectedOption={setSelectedOption}
 								/>
 							</div>
 						)}
 					</div>
 					<div className="w-1/2 ">
-						<div className="h-1/4 flex">
+						<div className="h-1/5 flex">
 							<button
 								onClick={handleGenerate}
 								disabled={content?.length <= 16}
@@ -141,58 +152,26 @@ const StoryEditor = () => {
 							</button>
 						</div>
 						{stableThumbnail && (
-							<div className="h-3/4">
-								<p className="text-sm text-gray-500">선택된 이미지:</p>
-								<img
-									className="h-full"
-									src={`http://localhost:3000/uploads/${stableThumbnail}`}
+							<div>
+								<div>
+									<p className="text-sm text-gray-500">선택된 이미지:</p>
+									<img
+										className="h-full"
+										src={`http://localhost:3000/uploads/${stableThumbnail}`}
+									/>
+								</div>
+								<RadioOption
+									id="stable-thumbnail"
+									value="stable-thumbnail"
+									name="hosting"
+									label="AI로 생성된 이미지 선택"
+									selectedOption={selectedOption}
+									setSelectedOption={setSelectedOption}
 								/>
 							</div>
 						)}
 					</div>
 				</div>
-
-				<ul className="grid w-full gap-6 md:grid-cols-2">
-					<li>
-						<input
-							type="radio"
-							id="local-thumbnail"
-							name="hosting"
-							value="local-thumbnail"
-							className="hidden peer"
-							required
-						/>
-						<label
-							htmlFor="local-thumbnail"
-							className="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-						>
-							<div className="block">
-								<div className="w-full text-lg font-semibold">
-									로컬 이미지 선택
-								</div>
-							</div>
-						</label>
-					</li>
-					<li>
-						<input
-							type="radio"
-							id="stable-thumnail"
-							name="hosting"
-							value="stable-thumnail"
-							className="hidden peer"
-						/>
-						<label
-							htmlFor="stable-thumnail"
-							className="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-						>
-							<div className="block">
-								<div className="w-full text-lg font-semibold">
-									AI로 생성한 이미지 선택
-								</div>
-							</div>
-						</label>
-					</li>
-				</ul>
 
 				<div className="w-full">
 					<button

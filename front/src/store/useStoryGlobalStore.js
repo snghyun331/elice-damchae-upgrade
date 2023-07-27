@@ -6,11 +6,16 @@ const useStoryGlobalStore = create((set) => ({
 	mood: '',
 	music: '',
 	phrase: '',
-	thumnail: '',
+	thumbnail: '',
+	localThumbnail: '',
+	stableThumbnail: '',
+	//TODO:나중에 경로 변경하기
 
 	setTitle: (title) => set({ title }),
 	setContent: (content) => set({ content }),
-	setThumnail: (thumnail) => set({ thumnail }),
+	setThumbnail: (thumbnail) => set({ thumbnail }),
+	setLocalThumbnail: (localThumbnail) => set({ localThumbnail }),
+	setStableThumbnail: (stableThumbnail) => set({ stableThumbnail }),
 	setMood: (mood) => set({ mood }),
 	setMusic: (music) => set({ music }),
 	setPhrase: (phrase) => set({ phrase }),

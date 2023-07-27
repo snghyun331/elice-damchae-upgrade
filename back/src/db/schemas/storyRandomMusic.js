@@ -11,6 +11,10 @@ const storyRandomMusicSchema = new Schema({
   },
 });
 
-const storyRandomMusic = model('StoryRandomMusic', storyRandomMusicSchema);
+const storyRandomMusic = model(
+  'StoryRandomMusic',
+  storyRandomMusicSchema,
+  'storyrandommusic',
+);
 
 export { storyRandomMusic };
