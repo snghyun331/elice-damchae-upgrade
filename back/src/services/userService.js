@@ -50,7 +50,7 @@ class userService {
     let isPasswordCorrect = false;
     if (user.isGoogleLogin) {
       const errorMessage =
-        'Google 계정으로 로그인해 주세요. 비밀번호로 로그인할 수 없습니다.';
+        'Google 계정으로 로그인해 주세요.';
       return { errorMessage };
     } else {
       // 비밀번호 일치 여부 확인

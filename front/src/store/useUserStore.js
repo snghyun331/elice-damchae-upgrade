@@ -29,7 +29,6 @@ const useUserStore = create((set) => {
 		actions: {
 			login: async (user) => {
 				const response = await postApi('auth/login', user);
-				console.log(response.data);
 				const jwtToken = response.data.token;
 				localStorage.setItem('accessToken', jwtToken);
 
@@ -48,18 +47,15 @@ const useUserStore = create((set) => {
 			},
 
 			register: async (user) => {
-				console.log(user);
 				await postApi('auth/register', user);
 			},
 
 			googleRegister: async (user) => {
-				console.log(user);
 				await postApi('auth/googleRegister', user);
 			},
 
 			googleLogin: async (user) => {
 				const response = await postApi('auth/googleLogin', user);
-				console.log(response);
 				const jwtToken = response.data.token;
 
 				localStorage.setItem('accessToken', jwtToken);

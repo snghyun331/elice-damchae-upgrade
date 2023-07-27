@@ -90,7 +90,6 @@ class userAuthController {
       if (user.errorMessage) {
         throw new Error(user.errorMessage);
       }
-      console.log(user);
       if (user.isGoogleLogin) {
         throw new Error('Google 로그인으로 진행하세요.');
       }

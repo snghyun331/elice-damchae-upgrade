@@ -100,12 +100,12 @@ const LoginForm = () => {
 											className={`block w-full px-4 py-2 my-2 text-gray-700 placeholder-gray-400 bg-white border rounded-md dark:placeholder-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 dark:focus:border-blue-400 focus:ring-gray-400 focus:outline-none focus:ring focus:ring-opacity-40`}
 										/>
 										{!isEmailValid && email !== '' && focusedMap.email && (
-											<p className="text-red-500 text-xs italic">
+											<p className="text-red-500 text-xs">
 												이메일 형식이 올바르지 않습니다.
 											</p>
 										)}
 										{!isFormValid && email === '' && focusedMap.email && (
-											<p className="text-red-500 text-xs italic">
+											<p className="text-red-500 text-xs">
 												이메일을 입력해주세요.
 											</p>
 										)}
@@ -139,7 +139,7 @@ const LoginForm = () => {
 											className="block w-full px-4 py-2 my-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:ring-gray-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
 										/>
 										{!isFormValid && password === '' && focusedMap.password && (
-											<p className="text-red-500 text-xs italic">
+											<p className="text-red-500 text-xs">
 												비밀번호를 입력해주세요.
 											</p>
 										)}
@@ -154,7 +154,7 @@ const LoginForm = () => {
 											로그인
 										</button>
 										{errMsg && (
-											<p className="text-red-500 text-xs italic">{errMsg}</p>
+											<p className="text-red-500 text-xs">{errMsg}</p>
 										)}
 										{/* <GoogleLoginButton /> */}
 
