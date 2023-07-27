@@ -7,27 +7,50 @@ import axios from 'axios';
 const storyPostController = {
   createStoryPost: async (req, res, next) => {
     try {
-      const { title, content, thumbnailStable, isPublic, mood, music } =
-        req.body;
-      const file = req.file;
-      const thumbnailInfo = await imageService.uploadImage({ file });
       const userId = req.currentUserId;
       const userInfo = userId;
-      const thumbnail = thumbnailInfo._id;
-      const storyPostInfo = await StoryPostService.addStoryPost({
-        userInfo,
-        title,
-        content,
-        thumbnail,
-        thumbnailStable,
-        isPublic,
-        mood,
-        music,
-      });
+      const { title, content, thumbnail, isPublic, mood, music } = req.body;
+      const file = req.file ?? null;
+      let thumbnailLocal;
+      let thumbnailLocalId;
+      let storyPostInfo;
+      if (file && !thumbnail) {
+        thumbnailLocal = await imageService.uploadImage({ file });
+        thumbnailLocalId = thumbnailLocal._id;
+        storyPostInfo = await StoryPostService.addStoryPost({
+          userInfo,
+          title,
+          content,
+          thumbnail: thumbnailLocalId,
+          isPublic,
+          mood,
+          music,
+        });
+      } else if (!file && thumbnail) {
+        storyPostInfo = await StoryPostService.addStoryPost({
+          userInfo,
+          title,
+          content,
+          thumbnail: thumbnail,
+          isPublic,
+          mood,
+          music,
+        });
+      } else if (!file && !thumbnail) {
+        storyPostInfo = await StoryPostService.addStoryPost({
+          userInfo,
+          title,
+          content,
+          thumbnail: null,
+          isPublic,
+          mood,
+          music,
+        });
+      }
       const result = await StoryPost.populate(storyPostInfo, {
-        path: 'userInfo thumbnail thumbnailStable',
+        path: 'userInfo thumbnail',
       });
-      return res.status(200).json(result);
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
