@@ -8,9 +8,8 @@ const StoryCommentController = {
       const storyId = req.params.storyId;
       const writerId = req.currentUserId;
       const { comment } = req.body;
-      const pureComment = comment.replace(/<[^>]+>/g, ' ');
       const obj = await axios.post('http://127.0.0.1:5000/predict', {
-        text: pureComment,
+        text: comment,
       });
       const mood = obj.data.mood;
       const newComment = await StoryCommentService.createStoryComment({

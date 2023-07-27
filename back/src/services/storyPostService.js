@@ -7,7 +7,6 @@ class StoryPostService {
     title,
     content,
     thumbnail,
-    thumbnailStable,
     isPublic,
     mood,
     music,
@@ -20,7 +19,6 @@ class StoryPostService {
       title,
       content,
       thumbnail,
-      thumbnailStable,
       isPublic,
       mood,
       music,
@@ -71,36 +69,6 @@ class StoryPostService {
     if (toUpdate.thumbnail) {
       const fieldToUpdate = 'thumbnail';
       const newValue = toUpdate.thumbnail;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
-
-    if (!toUpdate.thumbnail) {
-      const fieldToUpdate = 'thumbnail';
-      const newValue = null;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
-
-    if (toUpdate.thumbnailStable) {
-      const fieldToUpdate = 'thumbnailStable';
-      const newValue = toUpdate.thumbnailStable;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
-
-    if (!toUpdate.thumbnailStable) {
-      const fieldToUpdate = 'thumbnailStable';
-      const newValue = null;
       story = await StoryPostModel.updateStory({
         storyId,
         fieldToUpdate,
