@@ -297,7 +297,7 @@ const InfoChange = () => {
 										defaultValue={mbtiToChange}
 										onChange={setMbtiToChange}
 										options={mbtiList}
-										placeholder="Select MBTI"
+										placeholder="MBTI 선택"
 										classNamePrefix="react-select"
 									/>
 								</div>
