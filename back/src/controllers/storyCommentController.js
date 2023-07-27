@@ -50,6 +50,18 @@ const StoryCommentController = {
       next(error);
     }
   },
+
+  deleteStoryComment: async (req, res, next) => {
+    try {
+      const commentId = req.params.commentId;
+      const result = await StoryCommentService.deleteStoryComment({
+        commentId,
+      });
+      return res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export { StoryCommentController };

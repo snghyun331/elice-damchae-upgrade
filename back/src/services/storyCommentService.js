@@ -42,6 +42,14 @@ class StoryCommentService {
 
     return comment;
   }
+
+  static async deleteStoryComment({ commentId }) {
+    let isDeleted = await StoryCommentModel.deleteOneByCommentId({ commentId });
+    if (!isDeleted) {
+      throw new Error('삭제할 댓글 정보가 없습니다.');
+    }
+    return { result: 'Success' };
+  }
 }
 
 export { StoryCommentService };

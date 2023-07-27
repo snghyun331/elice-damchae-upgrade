@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { StoryCommentController } from '../controllers/storyCommentController.js';
+import { storyPostController } from '../controllers/storyPostController.js';
 
 const storyCommentRouter = Router();
 
@@ -16,4 +17,9 @@ storyCommentRouter.patch(
   StoryCommentController.updateStoryComment,
 );
 
+storyCommentRouter.delete(
+  '/stories/comments/:commentId',
+  loginRequired,
+  StoryCommentController.deleteStoryComment,
+);
 export { storyCommentRouter };

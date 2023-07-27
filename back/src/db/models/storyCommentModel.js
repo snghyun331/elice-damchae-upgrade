@@ -31,6 +31,12 @@ class StoryCommentModel {
     );
     return updatedComment;
   }
+
+  static async deleteOneByCommentId({ commentId }) {
+    const deletedComment = await StoryComment.deleteOne({ _id: commentId });
+    const isCompletedDeleted = deletedComment.deletedCount === 1;
+    return isCompletedDeleted;
+  }
 }
 
 export { StoryCommentModel };
