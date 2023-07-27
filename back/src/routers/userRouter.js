@@ -5,6 +5,8 @@ const userAuthRouter = Router();
 
 userAuthRouter.post('/auth/register', userAuthController.userRegister);
 
+userAuthRouter.post('/auth/googleRegister', userAuthController.googleRegister);
+
 userAuthRouter.post(
   '/auth/login',
   outUserValidation,

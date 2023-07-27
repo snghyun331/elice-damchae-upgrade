@@ -51,6 +51,12 @@ const useUserStore = create((set) => {
 				await postApi('auth/register', user);
 			},
 
+			googleRegister: async (user) => {
+				console.log(user);
+				await postApi('auth/googleRegister', user);
+			},
+
+
 			logout: () => {
 				localStorage.removeItem('accessToken');
 				localStorage.removeItem('userData');

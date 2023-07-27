@@ -15,12 +15,15 @@ class userService {
 
     // 이메일 인증
 
-    // 비밀번호 해쉬화
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let hashedPassword;
+    // 비밀번호 해쉬화 (비밀번호가 제공된 경우에만 수행)
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
 
     const newUser = {
       email,
-      password: hashedPassword,
+      password: isGoogleLogin ? password : hashedPassword,
       mbti,
       nickname,
       isGoogleLogin: isGoogleLogin || false, // isGoogleLogin 값을 포함하거나 기본값으로 false 설정
@@ -42,12 +45,17 @@ class userService {
       return { errorMessage };
     }
 
-    // 비밀번호 일치 여부 확인
-    const correctPasswordHash = user.password;
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      correctPasswordHash,
-    );
+    let isPasswordCorrect = false;
+
+    // 구글 로그인인 경우 비밀번호 확인을 생략합니다.
+    if (user.isGoogleLogin) {
+      isPasswordCorrect = true;
+    } else {
+      // 비밀번호 일치 여부 확인
+      const correctPasswordHash = user.password;
+      isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
+    }
+    
     if (!isPasswordCorrect) {
       const errorMessage =
         '비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.';
