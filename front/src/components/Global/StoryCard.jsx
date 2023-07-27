@@ -2,10 +2,13 @@
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import { truncateString } from '../Util/Util';
+import { textToMood } from '../Util/Util';
 
 const StoryCard = ({
 	data: { id, username, title, content, storyImg, mood },
 }) => {
+	const moodIcon = textToMood[mood.toLowerCase()] || '❓'; // fallback to question mark for unknown text
+
 	return (
 		<>
 			<div
@@ -24,7 +27,7 @@ const StoryCard = ({
 								}}
 							/>
 						</figure>
-						<span className="absolute top-36 right-2 text-8xl">{mood}</span>
+						<span className="absolute top-36 right-2 text-8xl">{moodIcon}</span>
 					</div>
 					<div className="px-4 py-8 flex flex-col justify-between">
 						<div>
