@@ -5,3 +5,4 @@ scipy
 ftfy
 accelerate
 translate
+googletrans
