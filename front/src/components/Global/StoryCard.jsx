@@ -2,10 +2,10 @@
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import { truncateString, removeTag } from '../Util/Util';
-import { textToIcon } from '../Util/Util';
+import { textToIcon, formatRelativeTime } from '../Util/Util';
 
 const StoryCard = ({
-	data: { _id, username, title, content, storyImg, mood },
+	data: { content, createdAt, mood, thumbnail, title, _id },
 }) => {
 	const moodIcon = textToIcon[mood.toLowerCase()] || '❓'; // fallback to question mark for unknown text
 
@@ -19,7 +19,7 @@ const StoryCard = ({
 						<figure className="max-w-lg w-[21rem] h-[12rem] overflow-hidden">
 							<img
 								className="w-full h-full object-cover object-center rounded-2xl"
-								src={storyImg}
+								src={thumbnail}
 								alt="스토리 이미지"
 								onError={(e) => {
 									e.target.src =
@@ -34,7 +34,12 @@ const StoryCard = ({
 							<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 								{truncateString(title, 32)}
 							</h5>
-							<div className="text-sm text-gray-500">{username}</div>
+							<div className="text-sm text-gray-500">
+								유저명
+								<span className="text-xs ml-2">
+									{formatRelativeTime(createdAt)}
+								</span>
+							</div>
 							<p className="text-sm mb-3 font-normal text-gray-700 dark:text-gray-400">
 								{truncateString(removeTag(content), 100)}
 							</p>

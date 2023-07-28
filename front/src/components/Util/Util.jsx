@@ -52,3 +52,23 @@ export const formatDate = (string) => {
 	const formattedDate = date.format('YYYY년 MM월 DD일');
 	return formattedDate;
 };
+
+export const formatRelativeTime = (string) => {
+	const now = moment();
+	const date = moment(string);
+
+	const duration = moment.duration(now.diff(date));
+	const daysElapsed = duration.asDays();
+
+	if (duration.asSeconds() < 60) {
+		return '방금';
+	} else if (duration.asMinutes() < 60) {
+		return `${Math.floor(duration.asMinutes())}분 전`;
+	} else if (duration.asHours() < 24) {
+		return `${Math.floor(duration.asHours())}시간 전`;
+	} else if (daysElapsed <= 3) {
+		return `${Math.floor(daysElapsed)}일 전`;
+	} else {
+		return date.format('YYYY-MM-DD');
+	}
+};
