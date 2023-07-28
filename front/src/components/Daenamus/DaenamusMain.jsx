@@ -2,11 +2,12 @@ import { useState } from 'react';
 import Search from '../Global/Search';
 import DaenamusCard from '../Global/DaenamusCard';
 import { mbtiList } from '../Util/Util';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const DaenamusMain = () => {
 	const [selectedMBTI, setSelectedMBTI] = useState([]);
 	const [selectedTab, setSelectedTab] = useState('전체글');
+	const navigate = useNavigate();
 
 	const toggleMBTI = (value) => {
 		if (selectedMBTI.includes(value)) {
@@ -34,10 +35,13 @@ const DaenamusMain = () => {
 					<div className="flex justify-between items-center mb-4 text-3xl font-semibold text-zinc-700">
 						<div>대나무숲</div>
 						<button
+							onClick={() => {
+								navigate('/daenamus/write');
+							}}
 							type="button"
 							className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
 						>
-							<Link to="/daenamus/write">글쓰기</Link>
+							글쓰기
 						</button>
 					</div>
 					<div className="text-sm font-medium text-zinc-600">

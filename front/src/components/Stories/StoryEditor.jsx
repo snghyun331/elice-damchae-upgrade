@@ -76,6 +76,8 @@ const StoryEditor = () => {
 
 	const { handleImageUpload, loading } = useImageUpload();
 
+	const fileRef = useRef();
+
 	return (
 		<>
 			<h3 className="font-semibold">제목</h3>
@@ -123,6 +125,7 @@ const StoryEditor = () => {
 								className="rounded-lg block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
 								id="file_input"
 								type="file"
+								ref={fileRef}
 								onChange={handleThumbnailUpload}
 							/>
 						</div>
@@ -136,6 +139,7 @@ const StoryEditor = () => {
 												setPreview('');
 												setLocalThumbnail('');
 												setThumbnail(null);
+												fileRef.current.value = '';
 											}}
 										>
 											X

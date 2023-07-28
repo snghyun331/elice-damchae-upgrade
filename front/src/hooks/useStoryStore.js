@@ -33,7 +33,7 @@ const useStoryStore = () => {
 		setMood('');
 		setMusic('');
 		setPhrase('');
-		setThumbnail(null);
+		setThumbnail('');
 		setLocalThumbnail('');
 		setStableThumbnail('');
 		setIsPublic(false);

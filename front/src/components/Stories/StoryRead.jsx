@@ -3,8 +3,8 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
 
 import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { getApi } from '../../services/api';
+import { useNavigate, useParams } from 'react-router-dom';
+import { delApi, getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
 import useUserStore from '../../store/useUserStore';
 
@@ -12,6 +12,7 @@ const StoryRead = () => {
 	const { storyId } = useParams();
 	const [story, setStory] = useState([]);
 	const [isDataLoaded, setIsDataLoaded] = useState(false);
+	const navigate = useNavigate();
 
 	const { id } = useUserStore();
 
@@ -21,6 +22,15 @@ const StoryRead = () => {
 			console.log(res);
 			setStory(res.data);
 			setIsDataLoaded(true);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleDelete = async () => {
+		try {
+			await delApi(`stories/${storyId}`);
+			navigate('/stories');
 		} catch (error) {
 			console.log(error);
 		}
@@ -48,7 +58,11 @@ const StoryRead = () => {
 				<div className="relative h-52 overflow-hidden rounded-t-lg">
 					<img
 						className="w-full h-full object-cover"
-						src="https://picsum.photos/200/300"
+						src={
+							story.thumbnail
+								? `http://localhost:3000/uploads/${story.thumbnail.fileName}`
+								: 'https://climate.onep.go.th/wp-content/uploads/2020/01/default-image.jpg'
+						}
 						alt=""
 					/>
 					<div className="absolute inset-0 bg-black opacity-60"></div>
@@ -67,7 +81,10 @@ const StoryRead = () => {
 								<button className="text-white underline underline-offset-2 text-red-400">
 									수정
 								</button>
-								<button className="ml-2 text-white underline underline-offset-2 text-red-400">
+								<button
+									onClick={handleDelete}
+									className="ml-2 text-white underline underline-offset-2 text-red-400"
+								>
 									삭제
 								</button>
 							</>
@@ -75,14 +92,14 @@ const StoryRead = () => {
 					</div>
 				</div>
 
-				<div>
+				<div className="flex flex-col">
 					<div className="relative -top-20 left-6 max-w-md">
-						<span className="text-9xl">
+						<div className="text-9xl">
 							{isDataLoaded && textToIcon[story.mood]}
-						</span>
+						</div>
 					</div>
 
-					<div className="relative p-10">
+					<div className="relative top-0 p-10">
 						{isDataLoaded && <Viewer initialValue={story.content} />}
 					</div>
 
