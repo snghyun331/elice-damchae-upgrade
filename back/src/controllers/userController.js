@@ -63,10 +63,6 @@ class userAuthController {
       // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
       const updatedUser = await userService.updateUser({ userId, toUpdate });
 
-      if (updatedUser.errorMessage) {
-        throw new Error(updatedUser.errorMessage);
-      }
-
       return res.status(200).json(updatedUser);
     } catch (error) {
       next(error);
@@ -100,4 +96,24 @@ class userAuthController {
   }
 }
 
-export { userAuthController };
+class userServiceController {
+  static async userStories(req, res, next) {
+    const userId = req.params.userId;
+    const stories = await userService.readStories({ userId });
+
+    return res.json(stories);
+  }
+
+  static async userForests(req, res, next) {
+    try {
+      const userId = req.params.userId;
+      const forests = await userService.readForests({ userId });
+
+      return res.json(forests);
+    } catch (error) {
+      res.status(500);
+    }
+  }
+}
+
+export { userAuthController, userServiceController };
