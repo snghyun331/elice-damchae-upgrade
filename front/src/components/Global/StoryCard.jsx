@@ -8,6 +8,11 @@ const StoryCard = ({
 	data: { content, createdAt, mood, thumbnail, title, _id, userInfo },
 }) => {
 	const moodIcon = textToIcon[mood.toLowerCase()] || '❓'; // fallback to question mark for unknown text
+
+	const imageSrc = thumbnail
+    ? `http://localhost:3000/uploads/${thumbnail.fileName}`
+    : "";
+
 	return (
 		<>
 			<div
@@ -18,7 +23,7 @@ const StoryCard = ({
 						<figure className="max-w-lg w-[21rem] h-[12rem] overflow-hidden">
 							<img
 								className="w-full h-full object-cover object-center rounded-2xl"
-								src={thumbnail}
+								src={imageSrc}
 								alt="스토리 이미지"
 								onError={(e) => {
 									e.target.src =
