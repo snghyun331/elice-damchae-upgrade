@@ -33,13 +33,10 @@ class imageService {
     // 파일명 생성  ex: image-1686418086297-173678905.png
     const fileName = await imageService.generateUniqueFileName(file);
 
-    // 리사이징 된 이미지 저장
     const uploadsPath = path.resolve(__dirname, '..', '..', 'uploads');
     const ImagePath = path.join(uploadsPath, fileName);
-    // 파일 리사이징
-    const resizedImageBuffer = await sharp(file.path)
-      .resize(800, 800)
-      .toBuffer();
+
+    const resizedImageBuffer = await sharp(file.path).toBuffer();
     await sharp(resizedImageBuffer).toFile(ImagePath);
 
     // 원본 이미지 삭제
