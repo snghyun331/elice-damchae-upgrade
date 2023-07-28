@@ -49,8 +49,7 @@ class userService {
 
     let isPasswordCorrect = false;
     if (user.isGoogleLogin) {
-      const errorMessage =
-        'Google 계정으로 로그인해 주세요.';
+      const errorMessage = 'Google 계정으로 로그인해 주세요.';
       return { errorMessage };
     } else {
       // 비밀번호 일치 여부 확인
@@ -199,7 +198,7 @@ class userService {
       return { errorMessage };
     }
 
-    const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
+    const secretKey = process.env.JWT_SECRET_KEY;
     const token = jwt.sign({ userId: user.id }, secretKey);
 
     const { id, mbti, nickname, isOut } = user;
