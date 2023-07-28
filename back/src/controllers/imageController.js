@@ -32,9 +32,7 @@ class imageController {
       fs.writeFileSync(filePath, image_data);
       const resizedImagePath = `uploads/resized-${fileName}`;
       const resizedFileName = `resized-${fileName}`;
-      const resizedImageBuffer = await sharp(filePath)
-        .resize(800, 800)
-        .toBuffer();
+      const resizedImageBuffer = await sharp(filePath).toBuffer();
       await sharp(resizedImageBuffer).toFile(resizedImagePath);
 
       // 원본 이미지 삭제
