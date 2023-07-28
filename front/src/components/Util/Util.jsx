@@ -3,19 +3,18 @@ import moment from 'moment';
 export const textToColor = {
 	insecure: '#F1E3FF',
 	surprise: '#FFFBB8',
-	happy: '#FFE3F0',
+	pleasure: '#FFE3F0',
 	sad: '#ECF1FF',
-	angry: '#F9EBDE',
+	anger: '#F9EBDE',
 	neutral: '#E0E0E0',
 };
 
-// TODO : pleasure-기쁨, sad-슬픔, insecure(불안), anger(분노), neutral(중립), surprise(놀람) 으로 변경 예정.
 export const textToIcon = {
 	insecure: '😨',
 	surprise: '😮',
-	happy: '😊',
+	pleasure: '😊',
 	sad: '😢',
-	angry: '😡',
+	anger: '😡',
 	neutral: '😐',
 };
 
