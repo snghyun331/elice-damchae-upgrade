@@ -1,4 +1,3 @@
-import { StoryPost } from '../db/schemas/storyPost.js';
 import { StoryPostModel } from '../db/models/storyPostModel.js';
 import { StoryPostService } from '../services/storyPostService.js';
 import { imageService } from '../services/imageService.js';
@@ -49,9 +48,10 @@ class storyPostController {
         });
       }
 
-      const result = await StoryPost.populate(storyPostInfo, {
-        path: 'userInfo thumbnail',
-      });
+      const result = await StoryPostService.populateStoryPost(
+        storyPostInfo,
+        'userInfo thumbnail',
+      );
       return res.status(201).json(result);
     } catch (error) {
       next(error);
@@ -151,9 +151,12 @@ class storyPostController {
         storyId,
         toUpdate,
       });
-      const result = await StoryPost.populate(updatedStory, {
-        path: 'userInfo thumbnail',
-      });
+
+      const result = await StoryPostService.populateStoryPost(
+        updatedStory,
+        'userInfo thumbnail',
+      );
+
       return res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -174,9 +177,10 @@ class storyPostController {
     try {
       const storyId = req.params.storyId;
       const storyInfo = await StoryPostService.readStoryDetail({ storyId });
-      const result = await StoryPost.populate(storyInfo, {
-        path: 'userInfo thumbnail ',
-      });
+      const result = await StoryPostService.populateStoryPost(
+        storyInfo,
+        'userInfo thumbnail',
+      );
       return res.status(200).json(result);
     } catch (error) {
       next(error);

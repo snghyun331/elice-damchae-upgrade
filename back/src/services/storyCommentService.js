@@ -50,6 +50,12 @@ class StoryCommentService {
     }
     return { result: 'Success' };
   }
+
+  static async populateStoryComment(info, path) {
+    const field = { path: path };
+    const result = StoryCommentModel.populateStoryComment(info, field);
+    return result;
+  }
 }
 
 export { StoryCommentService };

@@ -1,5 +1,4 @@
 import { StoryCommentService } from '../services/storyCommentService.js';
-import { StoryComment } from '../db/schemas/storyComment.js';
 import axios from 'axios';
 
 class StoryCommentController {
@@ -19,9 +18,10 @@ class StoryCommentController {
         mood,
       });
 
-      const result = await StoryComment.populate(newComment, {
-        path: 'storyId writerId',
-      });
+      const result = await StoryCommentService.populateStoryComment(
+        newComment,
+        'storyId writerId',
+      );
       return res.status(201).json(result);
     } catch (error) {
       next(error);
@@ -42,9 +42,11 @@ class StoryCommentController {
         commentId,
         toUpdate,
       });
-      const result = await StoryComment.populate(updatedComment, {
-        path: 'storyId writerId',
-      });
+
+      const result = await StoryCommentService.populateStoryComment(
+        updatedComment,
+        'storyId writerId',
+      );
       return res.status(200).json(result);
     } catch (error) {
       next(error);

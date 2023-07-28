@@ -132,6 +132,12 @@ class StoryPostService {
     const totalPage = Math.ceil(count / limit);
     return { stories, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
   }
+
+  static async populateStoryPost(info, path) {
+    const field = { path: path };
+    const result = StoryPostModel.populateStoryPost(info, field);
+    return result;
+  }
 }
 
 export { StoryPostService };
