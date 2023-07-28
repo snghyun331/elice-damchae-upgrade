@@ -1,18 +1,24 @@
 import { useState } from 'react';
 import Search from '../Global/Search';
 import DaenamusCard from '../Global/DaenamusCard';
-
+import { mbtiList } from '../Util/Util';
 import { Link } from 'react-router-dom';
 
 const DaenamusMain = () => {
-	const [showStoryCreateModal, setShowStoryCreateModal] = useState(false);
+	const [selectedMBTI, setSelectedMBTI] = useState([]);
+	const [selectedTab, setSelectedTab] = useState('전체글');
 
-	const handleButtonClick = () => {
-		setShowStoryCreateModal(true);
+	const toggleMBTI = (value) => {
+		if (selectedMBTI.includes(value)) {
+			setSelectedMBTI(selectedMBTI.filter((item) => item !== value));
+		} else {
+			setSelectedMBTI([...selectedMBTI, value]);
+		}
 	};
 
-	const handleModalClose = () => {
-		setShowStoryCreateModal(false);
+	const handleTabClick = (tab) => {
+		setSelectedTab(tab);
+		//tab이 인기글이라면 인기글 요청, 전체글(최신순)이라면 전체글 요청하는 API 연결
 	};
 
 	return (
@@ -24,84 +30,63 @@ const DaenamusMain = () => {
 					<Search />
 				</div>
 
-				<h2 className="text-3xl font-bold mb-4">대나무숲</h2>
-
-				<h4 className="text-lg font-medium mb-4">
-					다양한 주제의 토론에 참가하고 나와 같은 유형이나 나와 다른 유형이
-					어떻게 반응하는지 알아보아요
-				</h4>
-
-				<div className="flex justify-between mb-4">
-					<div>
-						{/* 버튼 대신 Link 컴포넌트를 사용하여 새로운 글쓰기 페이지로 이동하는 링크 생성 */}
-						<Link
-							to="/daenamus/write"
-							className="bg-blue-500 text-white px-4 py-2 rounded-md"
+				<div className="font-bold md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+					<div className="flex justify-between items-center mb-4 text-3xl font-semibold text-zinc-700">
+						<div>대나무숲</div>
+						<button
+							type="button"
+							className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
 						>
-							글쓰기
-						</Link>
+							<Link to="/daenamus/write">글쓰기</Link>
+						</button>
 					</div>
+					<div className="text-sm font-medium text-zinc-600">
+						다양한 주제의 토론에 참가하고 나와 같은 유형이나 나와 다른 유형이
+						어떻게 반응하는지 알아보아요.
+					</div>
+				</div>
 
-					<ul className="flex space-x-4">
-						<li>
-							<button className="text-blue-500">전체글</button>
-						</li>
-						<li>
-							<button className="text-blue-500">인기글</button>
-						</li>
-						<li>
-							<button className="text-blue-500">enfp</button>
-						</li>
-						<li>
-							<button className="text-blue-500">enfj</button>
-						</li>
-						<li>
-							<button className="text-blue-500">entp</button>
-						</li>
-						<li>
-							<button className="text-blue-500">entj</button>
-						</li>
-						<li>
-							<button className="text-blue-500">estp</button>
-						</li>
-						<li>
-							<button className="text-blue-500">estj</button>
-						</li>
-						<li>
-							<button className="text-blue-500">esfp</button>
-						</li>
-						<li>
-							<button className="text-blue-500">esfj</button>
-						</li>
-						<li>
-							<button className="text-blue-500">infp</button>
-						</li>
-						<li>
-							<button className="text-blue-500">infj</button>
-						</li>
-						<li>
-							<button className="text-blue-500">intp</button>
-						</li>
-						<li>
-							<button className="text-blue-500">intj</button>
-						</li>
-						<li>
-							<button className="text-blue-500">istp</button>
-						</li>
-						<li>
-							<button className="text-blue-500">istj</button>
-						</li>
-						<li>
-							<button className="text-blue-500">isfp</button>
-						</li>
-						<li>
-							<button className="text-blue-500">isfj</button>
-						</li>
+				<div className="mb-8 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+					<ul className="flex flex-wrap -mb-px">
+						{['전체글', '인기글'].map((tab) => (
+							<li key={tab} className="mr-2">
+								<button
+									onClick={() => handleTabClick(tab)}
+									className={`inline-block p-4 rounded-t-lg focus:outline-none ${
+										selectedTab === tab
+											? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500'
+											: 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
+									}`}
+								>
+									{tab}
+								</button>
+							</li>
+						))}
 					</ul>
 				</div>
 
-				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-					{/* 게시글 카드를 데이터에 맞게 반복해서 생성 */}
+				<div className="text-sm text-gray-500 my-2">작성자 유형별로 조회</div>
+				{mbtiList.map((item, index) => {
+					const isSelected = selectedMBTI.includes(item.value);
+
+					return (
+						<span
+							key={index}
+							onClick={() => toggleMBTI(item.value)}
+							className={`leading-9 cursor-pointer border pt-1 bg-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full ${
+								isSelected
+									? 'border-blue-600 text-blue-600'
+									: 'border-gray-400 text-gray-400'
+							} dark:bg-white ${
+								isSelected ? 'dark:text-blue-300' : 'dark:text-gray-400'
+							}`}
+						>
+							{item.label} {isSelected && <span>×</span>}
+						</span>
+					);
+				})}
+
+				<div className="mt-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 					{Array.from({ length: 12 }).map((_, index) => (
 						<div key={index}>
 							<DaenamusCard />
