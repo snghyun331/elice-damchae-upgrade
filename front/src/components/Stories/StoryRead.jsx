@@ -1,4 +1,4 @@
-import { textToIcon, textToColor } from '../Util/Util';
+import { textToIcon, textToColor, formatDate } from '../Util/Util';
 import { Link } from 'react-router-dom';
 import TextViewer from '../Global/TextViewer';
 import { useParams } from 'react-router-dom';
@@ -22,8 +22,6 @@ const StoryRead = () => {
 	useEffect(() => {
 		fetchData();
 	}, []);
-
-	const moodColor = textToColor[story.mood];
 
 	return (
 		<div className={`w-4/5 max-w-2xl mx-auto dark:bg-gray-800`}>
@@ -49,7 +47,7 @@ const StoryRead = () => {
 					<div className="absolute inset-0 bg-black opacity-60"></div>
 
 					<div className="ms-4 mt-4 absolute top-1 left-1 p-4 z-10 max-w-md">
-						<p className="text-white mb-1">{story.createdAt}</p>
+						<p className="text-white mb-1">{formatDate(story.createdAt)}</p>
 						<h5 className="leading-loose text-white text-2xl font-bold">
 							{story.title}
 						</h5>
