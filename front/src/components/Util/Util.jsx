@@ -1,4 +1,4 @@
-export const moodColors = {
+export const textToColor = {
 	'😨': '#F1E3FF',
 	'😮': '#FFFBB8',
 	'😊': '#FFE3F0',
@@ -8,7 +8,7 @@ export const moodColors = {
 };
 
 // TODO : pleasure-기쁨, sad-슬픔, insecure(불안), anger(분노), neutral(중립), surprise(놀람) 으로 변경 예정.
-export const textToMood = {
+export const textToIcon = {
 	insecure: '😨',
 	surprise: '😮',
 	happy: '😊',

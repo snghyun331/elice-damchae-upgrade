@@ -2,12 +2,12 @@
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import { truncateString, removeTag } from '../Util/Util';
-import { textToMood } from '../Util/Util';
+import { textToIcon } from '../Util/Util';
 
 const StoryCard = ({
 	data: { _id, username, title, content, storyImg, mood },
 }) => {
-	const moodIcon = textToMood[mood.toLowerCase()] || '❓'; // fallback to question mark for unknown text
+	const moodIcon = textToIcon[mood.toLowerCase()] || '❓'; // fallback to question mark for unknown text
 
 	return (
 		<>

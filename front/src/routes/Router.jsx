@@ -27,7 +27,6 @@ const Router = () => {
 
 				<Route path="stories" element={<Outlet />}>
 					<Route index element={<MyStories />} />
-					<Route path="read" element={<StoryRead />} />
 					<Route path=":storyId" element={<StoryRead />} />
 				</Route>
 			</Route>

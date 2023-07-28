@@ -1,5 +1,4 @@
-// import { useParams } from 'react-router-dom';
-import { moodColors, textToMood } from '../Util/Util';
+import { textToIcon, textToColor } from '../Util/Util';
 import { Link } from 'react-router-dom';
 import TextViewer from '../Global/TextViewer';
 import { useParams } from 'react-router-dom';
@@ -26,7 +25,7 @@ const StoryRead = () => {
 		fetchData();
 	}, []);
 
-	const moodColor = moodColors[story.mood];
+	const moodColor = textToColor[story.mood];
 
 	return (
 		<div className={`w-4/5 max-w-2xl mx-auto dark:bg-gray-800`}>
@@ -65,7 +64,7 @@ const StoryRead = () => {
 
 				<div>
 					<div className="relative -top-20 left-6 max-w-md">
-						<span className="text-9xl">{textToMood[story.mood]}</span>
+						<span className="text-9xl">{textToIcon[story.mood]}</span>
 					</div>
 					<div className="-mt-12 p-14 leading-relaxed text-gray-700 dark:text-gray-400">
 						<TextViewer />
