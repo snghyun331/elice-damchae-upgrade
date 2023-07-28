@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
-import { moodColors } from '../Util/Util';
+import { textToColor } from '../Util/Util';
 
 const MyDaenamuCard = ({ data: { mood, title, content} }) => {
-  const moodColor = moodColors[mood];
+  const moodColor = textToColor[mood];
 
   return (
     <a

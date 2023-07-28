@@ -4,8 +4,6 @@ import { useState } from 'react';
 const usePagination = (data, totalPages) => {
 	const [currentPage, setCurrentPage] = useState(1);
 
-	const displayedData = data;
-
 	const prev = () => {
 		if (currentPage > 1) setCurrentPage(currentPage - 1);
 	};
@@ -19,7 +17,6 @@ const usePagination = (data, totalPages) => {
 	return {
 		currentPage,
 		totalPages,
-		displayedData,
 		prev,
 		next,
 		go,
