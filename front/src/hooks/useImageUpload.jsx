@@ -14,9 +14,11 @@ const useImageUpload = () => {
 			formData.append('image', blob);
 			console.log(blob);
 
-			const response = await postApi('images/upload', formData);
+			const response = await postApi('image/upload', formData);
 
-			const imageUrl = `/images/${response.data.filename}`;
+			const imageUrl = `http://localhost:3000/uploads/${response.data.fileName}`;
+			console.log(imageUrl);
+			//TODO:나중에 경로 제대로 설정
 
 			callback(imageUrl, '사진 대체 텍스트 입력');
 		} catch (error) {

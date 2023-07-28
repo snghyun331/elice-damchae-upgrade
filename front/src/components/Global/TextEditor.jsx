@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import useImageUpload from '../../hooks/useImageUpload';
-import useStoryStore from '../../store/useStoryStore';
+import useStoryStore from '../../hooks/useStoryStore';
 
 const TextEditor = () => {
 	const { title, setTitle, setContent } = useStoryStore();
