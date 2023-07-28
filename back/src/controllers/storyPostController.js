@@ -1,37 +1,64 @@
-import { StoryPost } from '../db/schemas/storyPost.js';
 import { StoryPostModel } from '../db/models/storyPostModel.js';
 import { StoryPostService } from '../services/storyPostService.js';
 import { imageService } from '../services/imageService.js';
 import axios from 'axios';
 
-const storyPostController = {
-  createStoryPost: async (req, res, next) => {
+class storyPostController {
+  static async createStoryPost(req, res, next) {
     try {
-      const { title, content, isPublic, mood, music } = req.body;
-      const file = req.file;
-      const thumbnailInfo = await imageService.uploadImage({ file });
       const userId = req.currentUserId;
       const userInfo = userId;
-      const thumbnail = thumbnailInfo._id;
-      const storyPostInfo = await StoryPostService.addStoryPost({
-        userInfo,
-        title,
-        content,
-        thumbnail,
-        isPublic,
-        mood,
-        music,
-      });
-      const result = await StoryPost.populate(storyPostInfo, {
-        path: 'userInfo thumbnail',
-      });
-      return res.status(200).json(result);
+
+      const { title, content, thumbnail, isPublic, mood, music } = req.body;
+      const file = req.file ?? null;
+      let thumbnailLocal;
+      let thumbnailLocalId;
+      let storyPostInfo;
+      if (file && !thumbnail) {
+        thumbnailLocal = await imageService.uploadImage({ file });
+        thumbnailLocalId = thumbnailLocal._id;
+        storyPostInfo = await StoryPostService.addStoryPost({
+          userInfo,
+          title,
+          content,
+          thumbnail: thumbnailLocalId,
+          isPublic,
+          mood,
+          music,
+        });
+      } else if (!file && thumbnail) {
+        storyPostInfo = await StoryPostService.addStoryPost({
+          userInfo,
+          title,
+          content,
+          thumbnail: thumbnail,
+          isPublic,
+          mood,
+          music,
+        });
+      } else if (!file && !thumbnail) {
+        storyPostInfo = await StoryPostService.addStoryPost({
+          userInfo,
+          title,
+          content,
+          thumbnail: null,
+          isPublic,
+          mood,
+          music,
+        });
+      }
+
+      const result = await StoryPostService.populateStoryPost(
+        storyPostInfo,
+        'userInfo thumbnail',
+      );
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  getPredict: async (req, res, next) => {
+  static async getPredict(req, res, next) {
     try {
       const { content } = req.body;
       const pureContent = content.replace(/<[^>]+>/g, ' ');
@@ -67,7 +94,7 @@ const storyPostController = {
         .then(([Phrase, Music]) => {
           const formattedMusic = Music.slice(32);
           const result = { mood: Mood, phrase: Phrase, music: formattedMusic };
-          return res.status(200).json(result);
+          return res.status(201).json(result);
         })
         .catch((error) => {
           next(error);
@@ -75,57 +102,108 @@ const storyPostController = {
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  updateStoryPost: async (req, res, next) => {
+  static async updateStoryPost(req, res, next) {
     try {
       const storyId = req.params.storyId;
-      const { title, content, isPublic, mood, music } = req.body;
+      const { title, content, thumbnail, isPublic, mood, music } = req.body;
       const file = req.file ?? null;
       const userId = req.currentUserId;
       const userInfo = userId;
-      let thumbnail;
-      if (file) {
-        const thumbnailInfo = await imageService.uploadImage({ file });
-        thumbnail = thumbnailInfo._id;
-      }
 
-      const toUpdate = {
-        title,
-        content,
-        thumbnail,
-        isPublic,
-        mood,
-        music,
-      };
+      let thumbnailLocal;
+      let thumbnailLocalId;
+      let toUpdate;
+      if (file && !thumbnail) {
+        thumbnailLocal = await imageService.uploadImage({ file });
+        thumbnailLocalId = thumbnailLocal._id;
+        toUpdate = {
+          title,
+          content,
+          thumbnail: thumbnailLocalId,
+          isPublic,
+          mood,
+          music,
+        };
+      } else if (!file && thumbnail) {
+        toUpdate = {
+          title,
+          content,
+          thumbnail,
+          isPublic,
+          mood,
+          music,
+        };
+      } else if (!file && !thumbnail) {
+        toUpdate = {
+          title,
+          content,
+          thumbnail: null,
+          isPublic,
+          mood,
+          music,
+        };
+      }
 
       const updatedStory = await StoryPostService.setStory({
         userInfo,
         storyId,
         toUpdate,
       });
-      const result = await StoryPost.populate(updatedStory, {
-        path: 'userInfo thumbnail',
-      });
+
+      const result = await StoryPostService.populateStoryPost(
+        updatedStory,
+        'userInfo thumbnail',
+      );
+
       return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  deleteStoryPost: async (req, res, next) => {
+  static async deleteStoryPost(req, res, next) {
     try {
       const storyId = req.params.storyId;
       const result = await StoryPostService.deleteStory({ storyId });
-      if (result.errorMessage) {
-        throw new Error(result.errorMessage);
-      }
-
       return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
-  },
-};
+  }
+
+  static async readStoryDetail(req, res, next) {
+    try {
+      const storyId = req.params.storyId;
+      const storyInfo = await StoryPostService.readStoryDetail({ storyId });
+      const result = await StoryPostService.populateStoryPost(
+        storyInfo,
+        'userInfo thumbnail',
+      );
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async readAllStories(req, res, next) {
+    try {
+      const page = parseInt(req.query.page || 1); // default 페이지: 1
+      const { stories, totalPage, count } = await StoryPostService.readPosts(
+        page,
+      );
+
+      return res.status(200).json({
+        currentPage: page,
+        totalPage: totalPage,
+        totalStoriesCount: count,
+        stories,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+}
 
 export { storyPostController };
