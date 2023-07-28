@@ -6,9 +6,9 @@ import { ImageModel } from '../db/models/imageModel.js';
 
 class imageService {
   static async generateUniqueFileName(file) {
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const uniqueSuffix = `${Date.now()}`;
     const extension = file.originalname.split('.').pop(); // 확장자 추출
-    const fileName = `${file.fieldname}-${uniqueSuffix}.${extension}`;
+    const fileName = `formData-${uniqueSuffix}.${extension}`;
     return fileName;
   }
 
@@ -30,22 +30,32 @@ class imageService {
     const __filename = fileURLToPath(import.meta.url); // 현재 모듈의 URL을 가져오기
     const __dirname = path.dirname(__filename); // 디렉토리 경로를 추출
 
-    // 파일명 생성  ex: image-1686418086297-173678905.png
     const fileName = await imageService.generateUniqueFileName(file);
 
     const uploadsPath = path.resolve(__dirname, '..', '..', 'uploads');
     const ImagePath = path.join(uploadsPath, fileName);
 
-    const resizedImageBuffer = await sharp(file.path).toBuffer();
-    await sharp(resizedImageBuffer).toFile(ImagePath);
+    const ImageBuffer = await sharp(file.path).toBuffer();
+    await sharp(ImageBuffer).toFile(ImagePath);
 
-    // 원본 이미지 삭제
-    fs.unlinkSync(file.path); // 이미지 리사이징 완료되면 원본은 삭제
+    // 이상한 숫자파일 삭제
+    fs.unlinkSync(file.path);
 
-    const newImage = { fileName: fileName, path: file.path };
+    const newImage = { fileName: fileName, path: ImagePath };
+    const createImage = await ImageModel.create({ newImage });
+    return createImage;
+  }
 
-    // 리사이징된 이미지 경로 저장
-    newImage.path = ImagePath;
+  static async uploadStableImage(imageData) {
+    const uniqueSuffix = `${Date.now()}`;
+    const fileName = `stable-${uniqueSuffix}.png`;
+    const filePath = `uploads/${fileName}`;
+    fs.writeFileSync(filePath, imageData);
+    const fullFilePath = path.resolve(filePath);
+    const newImage = {
+      fileName: fileName,
+      path: fullFilePath,
+    };
     const createImage = await ImageModel.create({ newImage });
     return createImage;
   }
