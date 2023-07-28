@@ -4,11 +4,15 @@ import TextViewer from '../Global/TextViewer';
 import { useParams } from 'react-router-dom';
 import { getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
+import useUserStore from '../../store/useUserStore';
+
 const StoryRead = () => {
 	const { storyId } = useParams();
 	const [story, setStory] = useState([]);
 	const [isDataLoaded, setIsDataLoaded] = useState(false);
 
+	const { id } = useUserStore();
+	
 	const fetchData = async () => {
 		try {
 			const res = await getApi(`stories/${storyId}`);
@@ -47,22 +51,28 @@ const StoryRead = () => {
 					<div className="absolute inset-0 bg-black opacity-60"></div>
 
 					<div className="ms-4 mt-4 absolute top-1 left-1 p-4 z-10 max-w-md">
-						<p className="text-white mb-1">{formatDate(story.createdAt)}</p>
+						<p className="text-white mb-1">{isDataLoaded &&  formatDate(story.createdAt)}</p>
 						<h5 className="leading-loose text-white text-2xl font-bold">
 							{story.title}
 						</h5>
 					</div>
 					<div className="text-sm text-end absolute top-1 right-1 mt-4 me-4">
-						<p className="text-white mb-1">조회 123</p>
-						<button className="text-white underline underline-offset-2 text-red-400">
-							삭제
-						</button>
+						{isDataLoaded && story.userInfo._id == id && (
+							<>
+								<button className="text-white underline underline-offset-2 text-red-400">
+									수정
+								</button>
+								<button className="ml-2 text-white underline underline-offset-2 text-red-400">
+									삭제
+								</button>
+							</>
+						)}
 					</div>
 				</div>
 
 				<div>
 					<div className="relative -top-20 left-6 max-w-md">
-						<span className="text-9xl">{textToIcon[story.mood]}</span>
+						<span className="text-9xl">{isDataLoaded && textToIcon[story.mood]}</span>
 					</div>
 					<div className="-mt-12 p-14 leading-relaxed text-gray-700 dark:text-gray-400">
 						<TextViewer />
@@ -72,7 +82,7 @@ const StoryRead = () => {
 						<div className="w-12 h-12 mx-auto mt-6 rounded-full overflow-hidden">
 							<img
 								className="w-full h-full object-cover"
-								src={story.profileImg}
+								src={isDataLoaded && story.profileImg}
 								alt="작성자 프로필 이미지"
 							/>
 						</div>
