@@ -80,10 +80,10 @@ const StoryRead = () => {
 							/>
 						</div>
 						<h5 className="text-center text-gray-700 mx-auto mt-2">
-							{story.username}
+							{story.userInfo.nickname}
 						</h5>
 						<p className="text-gray-400 text-xs text-center mt-1 mb-5">
-							{story.userMbti}
+							{story.userInfo.mbti}
 						</p>
 					</div>
 					<hr className="h-px my-8 ms-8 me-8 bg-gray-300 border-0 dark:bg-gray-700" />
