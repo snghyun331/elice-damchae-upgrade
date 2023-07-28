@@ -6,7 +6,7 @@ export const moodColors = {
 	'😡': '#F9EBDE',
 	'😐': '#E0E0E0',
 };
- 
+
 // TODO : pleasure-기쁨, sad-슬픔, insecure(불안), anger(분노), neutral(중립), surprise(놀람) 으로 변경 예정.
 export const textToMood = {
 	insecure: '😨',
@@ -39,4 +39,8 @@ export const mbtiList = [
 
 export const truncateString = (string, length) => {
 	return string.length > length ? `${string.slice(0, length)}...` : string;
+};
+
+export const removeTag = (string) => {
+	return string.replace(/<[^>]*>?/g, '');
 };

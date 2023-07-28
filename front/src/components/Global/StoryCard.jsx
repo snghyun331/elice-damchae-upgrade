@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
-import { truncateString } from '../Util/Util';
+import { truncateString, removeTag } from '../Util/Util';
 import { textToMood } from '../Util/Util';
 
 const StoryCard = ({
@@ -20,7 +20,7 @@ const StoryCard = ({
 							<img
 								className="w-full h-full object-cover object-center rounded-2xl"
 								src={storyImg}
-								alt="image description"
+								alt="스토리 이미지"
 								onError={(e) => {
 									e.target.src =
 										'https://climate.onep.go.th/wp-content/uploads/2020/01/default-image.jpg';
@@ -36,7 +36,7 @@ const StoryCard = ({
 							</h5>
 							<div className="text-sm text-gray-500">{username}</div>
 							<p className="text-sm mb-3 font-normal text-gray-700 dark:text-gray-400">
-								{truncateString(content, 100)}
+								{truncateString(removeTag(content), 100)}
 							</p>
 						</div>
 						<div className="flex w-16 items-center text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end">
