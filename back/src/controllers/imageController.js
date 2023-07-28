@@ -5,18 +5,18 @@ import sharp from 'sharp';
 import path from 'path';
 import axios from 'axios';
 
-const imageController = {
-  createImageSingle: async (req, res, next) => {
+class imageController {
+  static async createImageSingle(req, res, next) {
     try {
       const file = req.file;
       const createImage = await imageService.uploadImage({ file });
-      res.status(201).send(createImage);
+      res.status(201).json(createImage);
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  createStableImage: async (req, res, next) => {
+  static async createStableImage(req, res, next) {
     try {
       const userId = req.currentUserId;
       const { content } = req.body;
@@ -45,12 +45,11 @@ const imageController = {
         path: fullResizedImagePath,
       };
       const createImage = await ImageModel.create({ newImage });
-      console.log(createImage);
-      res.status(201).send(createImage);
+      res.status(201).json(createImage);
     } catch (error) {
       next(error);
     }
-  },
-};
+  }
+}
 
 export { imageController };

@@ -20,11 +20,7 @@ const StoryPostSchema = new Schema(
       ref: 'Image',
       required: false,
     },
-    // thumbnailStable: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'Image',
-    //   required: false,
-    // },
+
     mood: {
       type: String,
       required: true,
@@ -40,7 +36,7 @@ const StoryPostSchema = new Schema(
   },
   {
     timestamps: true,
-    // collection: 'storyPosts',
+    collection: 'storyPosts',
   },
 );
 

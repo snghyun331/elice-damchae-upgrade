@@ -49,6 +49,11 @@ class StoryPostModel {
     const count = await StoryPost.countDocuments(); // 전체 스토리 수
     return { stories, count };
   }
+
+  static async populateStoryPost(info, field) {
+    const result = StoryPost.populate(info, field);
+    return result;
+  }
 }
 
 export { StoryPostModel };

@@ -13,7 +13,7 @@ const imageSchema = new Schema(
   },
   {
     timestamps: true,
-    // collection: 'images'
+    collection: 'images',
   },
 );
 

@@ -1,11 +1,10 @@
-import { StoryPost } from '../db/schemas/storyPost.js';
 import { StoryPostModel } from '../db/models/storyPostModel.js';
 import { StoryPostService } from '../services/storyPostService.js';
 import { imageService } from '../services/imageService.js';
 import axios from 'axios';
 
-const storyPostController = {
-  createStoryPost: async (req, res, next) => {
+class storyPostController {
+  static async createStoryPost(req, res, next) {
     try {
       const userId = req.currentUserId;
       const userInfo = userId;
@@ -49,16 +48,17 @@ const storyPostController = {
         });
       }
 
-      const result = await StoryPost.populate(storyPostInfo, {
-        path: 'userInfo thumbnail',
-      });
+      const result = await StoryPostService.populateStoryPost(
+        storyPostInfo,
+        'userInfo thumbnail',
+      );
       return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  getPredict: async (req, res, next) => {
+  static async getPredict(req, res, next) {
     try {
       const { content } = req.body;
       const pureContent = content.replace(/<[^>]+>/g, ' ');
@@ -94,7 +94,7 @@ const storyPostController = {
         .then(([Phrase, Music]) => {
           const formattedMusic = Music.slice(32);
           const result = { mood: Mood, phrase: Phrase, music: formattedMusic };
-          return res.status(200).json(result);
+          return res.status(201).json(result);
         })
         .catch((error) => {
           next(error);
@@ -102,9 +102,9 @@ const storyPostController = {
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  updateStoryPost: async (req, res, next) => {
+  static async updateStoryPost(req, res, next) {
     try {
       const storyId = req.params.storyId;
       const { title, content, thumbnail, isPublic, mood, music } = req.body;
@@ -151,43 +151,43 @@ const storyPostController = {
         storyId,
         toUpdate,
       });
-      const result = await StoryPost.populate(updatedStory, {
-        path: 'userInfo thumbnail',
-      });
+
+      const result = await StoryPostService.populateStoryPost(
+        updatedStory,
+        'userInfo thumbnail',
+      );
+
       return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  deleteStoryPost: async (req, res, next) => {
+  static async deleteStoryPost(req, res, next) {
     try {
       const storyId = req.params.storyId;
       const result = await StoryPostService.deleteStory({ storyId });
-      if (result.errorMessage) {
-        throw new Error(result.errorMessage);
-      }
-
       return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  readStoryDetail: async function (req, res, next) {
+  static async readStoryDetail(req, res, next) {
     try {
       const storyId = req.params.storyId;
       const storyInfo = await StoryPostService.readStoryDetail({ storyId });
-      const result = await StoryPost.populate(storyInfo, {
-        path: 'userInfo thumbnail ',
-      });
-      return res.status(200).send(result);
+      const result = await StoryPostService.populateStoryPost(
+        storyInfo,
+        'userInfo thumbnail',
+      );
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  readAllStories: async function (req, res, next) {
+  static async readAllStories(req, res, next) {
     try {
       const page = parseInt(req.query.page || 1); // default 페이지: 1
       const { stories, totalPage, count } = await StoryPostService.readPosts(
@@ -203,7 +203,7 @@ const storyPostController = {
     } catch (error) {
       next(error);
     }
-  },
-};
+  }
+}
 
 export { storyPostController };
