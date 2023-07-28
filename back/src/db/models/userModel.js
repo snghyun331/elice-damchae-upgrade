@@ -1,4 +1,6 @@
 import UserModel from '../schemas/user.js';
+import { StoryPost } from '../schemas/storyPost.js';
+import ForestPost from '../schemas/forestPost.js';
 
 class User {
   static async create({ newUser }) {
@@ -57,6 +59,16 @@ class User {
   static async findDeletedUsers() {
     const users = await User.find({ isOut: true });
     return users;
+  }
+
+  static async findStoriesById({ userId }) {
+    const stories = await StoryPost.find({ userInfo: userId });
+    return stories;
+  }
+
+  static async findForestsById({ userId }) {
+    const forests = await ForestPost.find({ userInfo: userId });
+    return forests;
   }
 }
 

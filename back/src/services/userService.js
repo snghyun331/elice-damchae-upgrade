@@ -33,8 +33,6 @@ class userService {
 
     // db에 저장
     const createdNewUser = await User.create({ newUser });
-    createdNewUser.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
-
     return createdNewUser;
   }
 
@@ -161,6 +159,25 @@ class userService {
     return isOut;
   }
 
+  static async readStories(userId) {
+    const stories = await User.findStoriesById(userId);
+    if (!stories) {
+      const errorState = 'error';
+      const errorMessage = '스토리 작성내역이 존재하지 않습니다.';
+      return { errorState, errorMessage };
+    }
+    return stories;
+  }
+
+  static async readForests({ userId }) {
+    const forests = await User.findForestsById({ userId });
+    if (!forests) {
+      const errorState = 'error';
+      const errorMessage = '게시글 작성내역이 존재하지 않습니다.';
+      return { errorState, errorMessage };
+    }
+    return forests;
+  }
   //구글 로그인용
   static async readGoogleUser({ email, idToken }) {
     const user = await User.findByEmail({ email });
