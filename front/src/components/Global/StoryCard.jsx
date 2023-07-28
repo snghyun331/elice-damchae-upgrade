@@ -5,10 +5,9 @@ import { truncateString, removeTag } from '../Util/Util';
 import { textToIcon, formatRelativeTime } from '../Util/Util';
 
 const StoryCard = ({
-	data: { content, createdAt, mood, thumbnail, title, _id },
+	data: { content, createdAt, mood, thumbnail, title, _id, userInfo },
 }) => {
 	const moodIcon = textToIcon[mood.toLowerCase()] || '❓'; // fallback to question mark for unknown text
-
 	return (
 		<>
 			<div
@@ -35,7 +34,7 @@ const StoryCard = ({
 								{truncateString(title, 32)}
 							</h5>
 							<div className="text-sm text-gray-500">
-								유저명
+								{userInfo.nickname}
 								<span className="text-xs ml-2">
 									{formatRelativeTime(createdAt)}
 								</span>
