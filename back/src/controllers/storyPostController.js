@@ -193,12 +193,15 @@ class storyPostController {
       const { stories, totalPage, count } = await StoryPostService.readPosts(
         page,
       );
-
+      const result = await StoryPostService.populateStoryPost(
+        stories,
+        'userInfo thumbnail',
+      );
       return res.status(200).json({
         currentPage: page,
         totalPage: totalPage,
         totalStoriesCount: count,
-        stories,
+        result,
       });
     } catch (error) {
       next(error);
