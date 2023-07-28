@@ -14,7 +14,7 @@ const storyRandomPhraseSchema = new Schema({
 const storyRandomPhrase = model(
   'StoryRandomPhrase',
   storyRandomPhraseSchema,
-  'storyrandomphrase',
+  'storyRandomPhrases',
 );
 
 export { storyRandomPhrase };

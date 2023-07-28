@@ -8,7 +8,7 @@ const UserSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false,
     },
     mbti: {
       type: String,
@@ -22,6 +22,11 @@ const UserSchema = new Schema(
     isOut: {
       type: Boolean,
       required: true,
+      default: false,
+    },
+    isGoogleLogin: {
+      type: Boolean,
+      required: false,
       default: false,
     },
   },

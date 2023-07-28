@@ -1,159 +1,93 @@
-import ForestPost from '../db/schemas/forestPost.js';
+// forestService.js
+import { forestModel } from '../db/models/forestModel.js';
 
-// 글 관련 서비스
-const forestService = {
-  getAllPosts: async () => {
+class ForestService {
+  static async createPost({ title, content, imageUrl, userId }) {
+    if (!title || !content) {
+      const errorMessage = '제목과 내용은 필수 입력 사항입니다.';
+      throw new Error(errorMessage);
+    }
+
+    const newForestPost = {
+      title,
+      content,
+      imageUrl,
+      userId,
+    };
+
+    const createdForestPost = await forestModel.create({ newForestPost });
+    return createdForestPost;
+  }
+
+  async findAll({ getAlls }) {
     try {
-      const posts = await ForestPost.find().populate('postId', 'imageUrl');
+      console.log(getAlls, getAlls.title);
+      const posts = await forestModel.findAll({ getAlls });
+      console.log(posts);
       return posts;
     } catch (error) {
-      console.error(error);
-      throw new Error('글 조회에 실패했습니다.');
+      console.log(error);
+      throw new Error('포스트 조회에 실패했습니다.');
     }
-  },
+  }
 
-  getPostById: async (postId) => {
+  async findByPost({ _id }) {
     try {
-      const post = await ForestPost.findById(postId).populate(
-        'postId',
-        'imageUrl',
-      );
-      if (!post) {
-        throw new Error('존재하지 않는 글입니다.');
-      }
+      const post = await forestModel.findByPost({ _id });
       return post;
     } catch (error) {
-      console.error(error);
-      throw new Error('글 조회에 실패했습니다.');
+      // console.log(_id);
+      throw new Error('포스트 조회에 실패했습니다.');
     }
-  },
+  }
 
-  createPost: async (title, content) => {
+  async updatePost(updatePost) {
     try {
-      if (!title || !content) {
-        throw new Error('Title, content는 필수 입력 사항입니다.');
+      if (!updatePost.title || !updatePost.content) {
+        const errorMessage = '제목과 내용은 필수 입력 사항입니다.';
+        throw new Error(errorMessage);
       }
-      const post = new ForestPost({ title, content });
-      await post.save();
-      return { message: '글을 등록했습니다.' };
-    } catch (error) {
-      console.error(error);
-      throw new Error('글 등록에 실패했습니다.');
-    }
-  },
 
-  updatePost: async (postId, title, content) => {
-    try {
-      if (!title || !content) {
-        throw new Error('Title, content는 필수 입력 사항입니다.');
-      }
-      const post = await ForestPost.findById(postId);
+      const postId = updatePost._id;
+      console.log(typeof postId);
+      const post = await forestModel.findByPost({ _id: new Object(postId) });
       if (!post) {
         throw new Error('존재하지 않는 글입니다.');
       }
-      post.title = title;
-      post.content = content;
-      await post.save();
-      return { message: '글을 수정했습니다.' };
-    } catch (error) {
-      console.error(error);
-      throw new Error('글 수정에 실패했습니다.');
-    }
-  },
 
-  deletePost: async (postId) => {
-    try {
-      const post = await ForestPost.findById(postId);
-      if (!post) {
-        throw new Error('존재하지 않는 글입니다.');
+      if (post.userId.toString() !== updatePost.userId) {
+        throw new Error('해당 글을 수정할 권한이 없습니다.');
       }
-      await post.deleteOne();
-      return { message: '글을 삭제했습니다.' };
+      const updateForestPost = await forestModel.updatePost({ updatePost });
+
+      return updateForestPost;
     } catch (error) {
-      console.error(error);
-      throw new Error('글 삭제에 실패했습니다.');
+      console.log(error);
+      throw new Error('포스트 업데이트에 실패했습니다.');
     }
-  },
-};
+  }
 
-export { forestService };
+  async deletePost(deletePost) {
+    try {
+      const postId = deletePost._id;
+      console.log(typeof postId);
+      const post = await forestModel.findByPost({ _id: new Object(postId) });
+      if (!post) {
+        throw new Error('존재하지 않은 글입니다.');
+      }
 
-// import ForestPost from '../db/schemas/forestPost.js';
+      if (post.userId.toString() !== deletePost.userId) {
+        throw new Error('해당 글을 수정할 권한이 없습니다.');
+      }
 
-// // 글 관련 서비스
-// const forestService = {
-// 	getAllPosts: async () => {
-// 		try {
-// 			const posts = await ForestPost.find().populate('postId', 'imageUrl');
-// 			return posts;
-// 		} catch (error) {
-// 			console.error(error);
-// 			throw new Error('글 조회에 실패했습니다.');
-// 		}
-// 	},
+      const deleteForestPost = await forestModel.deletePost({ deletePost });
 
-// 	getPostById: async (postId) => {
-// 		try {
-// 			const post = await ForestPost.findById(postId).populate(
-// 				'postId',
-// 				'imageUrl',
-// 			);
-// 			if (!post) {
-// 				throw new Error('존재하지 않는 글입니다.');
-// 			}
-// 			return post;
-// 		} catch (error) {
-// 			console.error(error);
-// 			throw new Error('글 조회에 실패했습니다.');
-// 		}
-// 	},
+      return deleteForestPost;
+    } catch (error) {
+      console.log(error);
+      throw new Error('포스트 삭제에 실패했습니다.');
+    }
+  }
+}
 
-// 	createPost: async (title, content) => {
-// 		try {
-// 			if (!title || !content) {
-// 				throw new Error('Title, content는 필수 입력 사항입니다.');
-// 			}
-// 			const post = new ForestPost({ title, content });
-// 			await post.save();
-// 			return { message: '글을 등록했습니다.' };
-// 		} catch (error) {
-// 			console.error(error);
-// 			throw new Error('글 등록에 실패했습니다.');
-// 		}
-// 	},
-
-// 	updatePost: async (postId, title, content) => {
-// 		try {
-// 			if (!title || !content) {
-// 				throw new Error('Title, content는 필수 입력 사항입니다.');
-// 			}
-// 			const post = await ForestPost.findById(postId);
-// 			if (!post) {
-// 				throw new Error('존재하지 않는 글입니다.');
-// 			}
-// 			post.title = title;
-// 			post.content = content;
-// 			await post.save();
-// 			return { message: '글을 수정했습니다.' };
-// 		} catch (error) {
-// 			console.error(error);
-// 			throw new Error('글 수정에 실패했습니다.');
-// 		}
-// 	},
-
-// 	deletePost: async (postId) => {
-// 		try {
-// 			const post = await ForestPost.findById(postId);
-// 			if (!post) {
-// 				throw new Error('존재하지 않는 글입니다.');
-// 			}
-// 			await post.deleteOne();
-// 			return { message: '글을 삭제했습니다.' };
-// 		} catch (error) {
-// 			console.error(error);
-// 			throw new Error('글 삭제에 실패했습니다.');
-// 		}
-// 	},
-// };
-
-// export { forestService };
+export default ForestService;

@@ -14,7 +14,7 @@ const storyRandomMusicSchema = new Schema({
 const storyRandomMusic = model(
   'StoryRandomMusic',
   storyRandomMusicSchema,
-  'storyrandommusic',
+  'storyRandomMusics',
 );
 
 export { storyRandomMusic };

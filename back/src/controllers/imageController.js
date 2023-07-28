@@ -5,18 +5,18 @@ import sharp from 'sharp';
 import path from 'path';
 import axios from 'axios';
 
-const imageController = {
-  createImageSingle: async (req, res, next) => {
+class imageController {
+  static async createImageSingle(req, res, next) {
     try {
       const file = req.file;
       const createImage = await imageService.uploadImage({ file });
-      res.status(201).send(createImage);
+      res.status(201).json(createImage);
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  createStableImage: async (req, res, next) => {
+  static async createStableImage(req, res, next) {
     try {
       const userId = req.currentUserId;
       const { content } = req.body;
@@ -29,7 +29,6 @@ const imageController = {
       const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
       const fileName = `image-${uniqueSuffix}.png`;
       const filePath = `uploads/${fileName}`;
-      console.log(filePath);
       fs.writeFileSync(filePath, image_data);
       const resizedImagePath = `uploads/resized-${fileName}`;
       const resizedFileName = `resized-${fileName}`;
@@ -46,11 +45,11 @@ const imageController = {
         path: fullResizedImagePath,
       };
       const createImage = await ImageModel.create({ newImage });
-      return res.status(201).send(createImage);
+      res.status(201).json(createImage);
     } catch (error) {
       next(error);
     }
-  },
-};
+  }
+}
 
 export { imageController };

@@ -13,7 +13,7 @@ const upload = multer({
 storyPostRouter.post(
   '/stories',
   loginRequired,
-  upload.single('image'),
+  upload.single('thumbnail'),
   storyPostController.createStoryPost,
 );
 
@@ -26,7 +26,7 @@ storyPostRouter.post(
 storyPostRouter.patch(
   '/stories/:storyId',
   loginRequired,
-  upload.single('image'),
+  upload.single('thumbnail'),
   storyPostController.updateStoryPost,
 );
 
@@ -35,5 +35,9 @@ storyPostRouter.delete(
   loginRequired,
   storyPostController.deleteStoryPost,
 );
+
+storyPostRouter.get('/stories/:storyId', storyPostController.readStoryDetail);
+
+storyPostRouter.get('/stories', storyPostController.readAllStories);
 
 export { storyPostRouter };

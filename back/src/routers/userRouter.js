@@ -5,10 +5,18 @@ const userAuthRouter = Router();
 
 userAuthRouter.post('/auth/register', userAuthController.userRegister);
 
+userAuthRouter.post('/auth/googleRegister', userAuthController.googleRegister);
+
 userAuthRouter.post(
   '/auth/login',
   outUserValidation,
   userAuthController.userLogin,
+);
+
+userAuthRouter.post(
+  '/auth/googleLogin',
+  outUserValidation,
+  userAuthController.googleLogin,
 );
 
 userAuthRouter.put('/users/:userId', userAuthController.userUpdate);
