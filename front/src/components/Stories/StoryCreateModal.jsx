@@ -47,6 +47,10 @@ const StoryCreateModal = ({ onClose }) => {
 
 			const response = await postApi('stories', formData);
 			console.log(response.data);
+			onClose();
+			setTimeout(() => {
+				alert('스토리가 정상적으로 업로드되었습니다.');
+			}, 1000);
 		} catch (e) {
 			console.error(e);
 		}
@@ -131,30 +135,33 @@ const StoryCreateModal = ({ onClose }) => {
 							</div>
 						)}
 
-						<div className="justify-end flex-row p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-							<div>
-								<button
-									disabled={!isFormValid}
-									onClick={poststory}
-									type="button"
-									className="self-end bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-								>
-									작성 완료
-								</button>
-								<button
-									onClick={onClose}
-									data-modal-hide="staticModal"
-									type="button"
-									className="self-end text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-md border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-								>
-									닫기
-								</button>
-							</div>
-							<div>
+						<div className="flex-row p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+							<div className="flex flex-col">
+								<div className="justify-end flex flex-row">
+									<button
+										disabled={!isFormValid}
+										onClick={poststory}
+										type="button"
+										className="bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+									>
+										작성 완료
+									</button>
+									<button
+										onClick={onClose}
+										data-modal-hide="staticModal"
+										type="button"
+										className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-md border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+									>
+										닫기
+									</button>
+								</div>
 								{!isFormValid && (
-									<p className="text-red-500 text-xs">빈 칸을 채워주세요.</p>
+									<p className="self-end text-red-500 text-xs">
+										빈 칸을 채워주세요.
+									</p>
 								)}
 							</div>
+							<div></div>
 						</div>
 					</div>
 				</div>
