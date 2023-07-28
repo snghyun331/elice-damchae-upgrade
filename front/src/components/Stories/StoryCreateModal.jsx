@@ -34,7 +34,7 @@ const StoryCreateModal = ({ onClose }) => {
 
 	const currentDate = moment().format('YYYY년 M월 D일');
 
-	const poststory = async (e) => {
+	const postStory = async (e) => {
 		e.preventDefault();
 
 		try {
@@ -48,9 +48,10 @@ const StoryCreateModal = ({ onClose }) => {
 			const response = await postApi('stories', formData);
 			console.log(response.data);
 			onClose();
+
 			setTimeout(() => {
-				alert('스토리가 정상적으로 업로드되었습니다.');
-			}, 1000);
+				window.location.href = '/stories';
+			}, 100);
 		} catch (e) {
 			console.error(e);
 		}
@@ -140,7 +141,7 @@ const StoryCreateModal = ({ onClose }) => {
 								<div className="justify-end flex flex-row">
 									<button
 										disabled={!isFormValid}
-										onClick={poststory}
+										onClick={postStory}
 										type="button"
 										className="bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 									>

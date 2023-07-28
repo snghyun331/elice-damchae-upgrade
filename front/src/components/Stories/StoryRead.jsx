@@ -61,7 +61,7 @@ const StoryRead = () => {
 						src={
 							story.thumbnail
 								? `http://localhost:3000/uploads/${story.thumbnail.fileName}`
-								: '/images/thumbnail.jpg'
+								: 'https://climate.onep.go.th/wp-content/uploads/2020/01/default-image.jpg'
 						}
 						alt=""
 					/>
