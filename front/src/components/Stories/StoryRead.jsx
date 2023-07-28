@@ -5,17 +5,15 @@ import { useParams } from 'react-router-dom';
 import { getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
 const StoryRead = () => {
-	console.log('스토리 리드 진입');
 	const { storyId } = useParams();
-	console.log(storyId);
-
 	const [story, setStory] = useState([]);
+	const [isDataLoaded, setIsDataLoaded] = useState(false);
 
 	const fetchData = async () => {
 		try {
 			const res = await getApi(`stories/${storyId}`);
-			console.log(res.data);
 			setStory(res.data);
+			setIsDataLoaded(true);
 		} catch (error) {
 			console.log(error);
 		}
@@ -38,7 +36,9 @@ const StoryRead = () => {
 
 			<div
 				className={`w-full max-w-2xl border border-gray-200 rounded-lg shadow mx-auto bg-white dark:bg-gray-800`}
-				style={{ backgroundColor: moodColor }}
+				style={{
+					backgroundColor: isDataLoaded ? textToColor[story.mood] : '#FFFFFF',
+				}}
 			>
 				<div className="relative h-52 overflow-hidden rounded-t-lg">
 					<img
@@ -79,10 +79,10 @@ const StoryRead = () => {
 							/>
 						</div>
 						<h5 className="text-center text-gray-700 mx-auto mt-2">
-							{story.userInfo.nickname}
+							{isDataLoaded && story.userInfo.nickname}
 						</h5>
 						<p className="text-gray-400 text-xs text-center mt-1 mb-5">
-							{story.userInfo.mbti}
+							{isDataLoaded && story.userInfo.mbti}
 						</p>
 					</div>
 					<hr className="h-px my-8 ms-8 me-8 bg-gray-300 border-0 dark:bg-gray-700" />
