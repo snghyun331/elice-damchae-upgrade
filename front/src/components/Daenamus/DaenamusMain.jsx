@@ -73,7 +73,7 @@ const DaenamusMain = () => {
 						<span
 							key={index}
 							onClick={() => toggleMBTI(item.value)}
-							className={`leading-9 cursor-pointer border pt-1 bg-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full ${
+							className={`leading-9 cursor-pointer border bg-white text-xs font-medium mr-2 pl-2 pr-1.5 py-0.5 rounded-full ${
 								isSelected
 									? 'border-blue-600 text-blue-600'
 									: 'border-gray-400 text-gray-400'
@@ -86,7 +86,7 @@ const DaenamusMain = () => {
 					);
 				})}
 
-				<div className="mt-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+				<div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 					{Array.from({ length: 12 }).map((_, index) => (
 						<div key={index}>
 							<DaenamusCard />

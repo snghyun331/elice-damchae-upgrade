@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const InfoChange = () => {
 	const navigate = useNavigate();
-	const { logout } = useUserActions();
+	const { logout, infoChange } = useUserActions();
 	const {
 		id,
 		email,
@@ -20,7 +20,8 @@ const InfoChange = () => {
 		setProfileImg,
 	} = useUserStore();
 
-	console.log(isGoogleLogin);
+	console.log(nickname)
+	
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
@@ -117,6 +118,7 @@ const InfoChange = () => {
 					setNickname(toUpdate.nickname);
 					setMbti(toUpdate.mbti);
 					setProfileImg(toUpdate.profileImg);
+					infoChange(toUpdate);
 				} else {
 					alert('정보 수정에 실패하였습니다.');
 				}
