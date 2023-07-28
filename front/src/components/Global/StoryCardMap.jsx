@@ -9,11 +9,9 @@ const StoryCardMap = () => {
 	const [stories, setStories] = useState([]);
 	const [isDataLoaded, setIsDataLoaded] = useState(false);
 	const [totalPage, setTotalPage] = useState(0);
-
 	const fetchData = async (page = 1) => {
 		try {
 			const response = await getApi(`stories?page=${page}`);
-			console.log(response.data);
 			setStories(response.data.result);
 			setTotalPage(response.data.totalPage);
 			setIsDataLoaded(true);
@@ -21,7 +19,6 @@ const StoryCardMap = () => {
 			console.error('Failed to fetch data:', error);
 		}
 	};
-	console.log(stories)
 	useEffect(() => {
 		fetchData(currentPage);
 	}, []);
