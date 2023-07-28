@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const textToColor = {
 	insecure: '#F1E3FF',
 	surprise: '#FFFBB8',
@@ -43,4 +45,10 @@ export const truncateString = (string, length) => {
 
 export const removeTag = (string) => {
 	return string.replace(/<[^>]*>?/g, '');
+};
+
+export const formatDate = (string) => {
+	const date = moment(string);
+	const formattedDate = date.format('YYYY년 MM월 DD일');
+	return formattedDate;
 };
