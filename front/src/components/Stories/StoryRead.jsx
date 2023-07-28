@@ -1,5 +1,5 @@
 // import { useParams } from 'react-router-dom';
-import { moodColors } from '../Util/Util';
+import { moodColors, textToMood } from '../Util/Util';
 import { Link } from 'react-router-dom';
 import TextViewer from '../Global/TextViewer';
 import { useParams } from 'react-router-dom';
@@ -65,7 +65,7 @@ const StoryRead = () => {
 
 				<div>
 					<div className="relative -top-20 left-6 max-w-md">
-						<span className="text-9xl">{story.mood}</span>
+						<span className="text-9xl">{textToMood[story.mood]}</span>
 					</div>
 					<div className="-mt-12 p-14 leading-relaxed text-gray-700 dark:text-gray-400">
 						<TextViewer />
