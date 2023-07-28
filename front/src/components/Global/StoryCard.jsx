@@ -5,7 +5,7 @@ import { truncateString, removeTag } from '../Util/Util';
 import { textToMood } from '../Util/Util';
 
 const StoryCard = ({
-	data: { id, username, title, content, storyImg, mood },
+	data: { _id, username, title, content, storyImg, mood },
 }) => {
 	const moodIcon = textToMood[mood.toLowerCase()] || '❓'; // fallback to question mark for unknown text
 
@@ -14,7 +14,7 @@ const StoryCard = ({
 			<div
 				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 pl-5 pr-5 my-4 ms-5 relative`}
 			>
-				<Link to={`/stories/${id}`}>
+				<Link to={`/stories/${_id}`}>
 					<div className="flex items-center justify-center">
 						<figure className="max-w-lg w-[21rem] h-[12rem] overflow-hidden">
 							<img
