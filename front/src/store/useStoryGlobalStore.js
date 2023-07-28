@@ -6,9 +6,9 @@ const useStoryGlobalStore = create((set) => ({
 	mood: '',
 	music: '',
 	phrase: '',
-	thumbnail: '',
+	thumbnail: null,
 	localThumbnail: '',
-	stableThumbnail: '',
+	stableThumbnail: 'thumbnail-1690526042990-912987342.jpg',
 	//TODO:나중에 경로 변경하기
 
 	setTitle: (title) => set({ title }),

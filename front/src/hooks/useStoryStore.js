@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { postApi } from '../services/api';
+
 import useStoryGlobalStore from '../store/useStoryGlobalStore';
 
 const useStoryStore = () => {
@@ -33,7 +33,7 @@ const useStoryStore = () => {
 		setMood('');
 		setMusic('');
 		setPhrase('');
-		setThumbnail('');
+		setThumbnail(null);
 		setLocalThumbnail('');
 		setStableThumbnail('');
 		setIsPublic(false);

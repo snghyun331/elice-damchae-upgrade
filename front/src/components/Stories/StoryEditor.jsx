@@ -8,16 +8,16 @@ import useImageUpload from '../../hooks/useImageUpload';
 const StoryEditor = () => {
 	const {
 		title,
-		setTitle,
 		content,
-		localThumbnail,
+		music,
 		stableThumbnail,
 
-		music,
+		setTitle,
 		setMood,
 		setMusic,
 		setPhrase,
 		setContent,
+		setThumbnail,
 		setLocalThumbnail,
 		setStableThumbnail,
 	} = useStoryStore();
@@ -123,16 +123,26 @@ const StoryEditor = () => {
 								className="rounded-lg block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
 								id="file_input"
 								type="file"
-								name="image"
 								onChange={handleThumbnailUpload}
 							/>
 						</div>
 						{preview && (
 							<div>
 								<div>
-									<p className="text-sm text-gray-500">선택된 이미지:</p>
+									<div className="flex flex-row justify-between">
+										<p className="text-sm text-gray-500">선택된 이미지:</p>
+										<button
+											onClick={() => {
+												setPreview('');
+												setLocalThumbnail('');
+												setThumbnail(null);
+											}}
+										>
+											X
+										</button>
+									</div>
 									<img
-										className="h-full"
+										className="h-40"
 										src={preview}
 										alt="Selected Thumbnail"
 									/>
@@ -161,10 +171,22 @@ const StoryEditor = () => {
 						{stableThumbnail && (
 							<div>
 								<div>
-									<p className="text-sm text-gray-500">선택된 이미지:</p>
+									<div className="flex flex-row justify-between">
+										<p className="text-sm text-gray-500">선택된 이미지:</p>
+										<button
+											onClick={() => {
+												setStableThumbnail(null);
+												setThumbnail(null);
+											}}
+										>
+											X
+										</button>
+									</div>
+
 									<img
 										className="h-full"
 										src={`http://localhost:3000/uploads/${stableThumbnail}`}
+										alt="Thumbnail"
 									/>
 								</div>
 								<RadioOption
