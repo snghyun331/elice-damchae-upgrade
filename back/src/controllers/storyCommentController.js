@@ -1,9 +1,8 @@
 import { StoryCommentService } from '../services/storyCommentService.js';
-import { StoryComment } from '../db/schemas/storyComment.js';
 import axios from 'axios';
 
-const StoryCommentController = {
-  createStoryComment: async (req, res, next) => {
+class StoryCommentController {
+  static async createStoryComment(req, res, next) {
     try {
       const storyId = req.params.storyId;
       const writerId = req.currentUserId;
@@ -19,16 +18,17 @@ const StoryCommentController = {
         mood,
       });
 
-      const result = await StoryComment.populate(newComment, {
-        path: 'storyId writerId',
-      });
+      const result = await StoryCommentService.populateStoryComment(
+        newComment,
+        'storyId writerId',
+      );
       return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  updateStoryComment: async (req, res, next) => {
+  static async updateStoryComment(req, res, next) {
     try {
       const commentId = req.params.commentId;
       const { comment } = req.body;
@@ -42,16 +42,18 @@ const StoryCommentController = {
         commentId,
         toUpdate,
       });
-      const result = await StoryComment.populate(updatedComment, {
-        path: 'storyId writerId',
-      });
+
+      const result = await StoryCommentService.populateStoryComment(
+        updatedComment,
+        'storyId writerId',
+      );
       return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
-  },
+  }
 
-  deleteStoryComment: async (req, res, next) => {
+  static async deleteStoryComment(req, res, next) {
     try {
       const commentId = req.params.commentId;
       const result = await StoryCommentService.deleteStoryComment({
@@ -61,7 +63,7 @@ const StoryCommentController = {
     } catch (error) {
       next(error);
     }
-  },
-};
+  }
+}
 
 export { StoryCommentController };
