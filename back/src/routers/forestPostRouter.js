@@ -4,7 +4,7 @@ import { loginRequired } from '../middlewares/loginRequired.js';
 const router = express.Router();
 
 // 게시글 단일 조회
-router.get('/', ForestController.findByForest);
+router.get('/search', ForestController.findByForest);
 
 // 글 등록
 router.post('/', loginRequired, ForestController.createPost);
@@ -15,7 +15,8 @@ router.put('/:id', loginRequired, ForestController.updatePost);
 // 글 삭제
 router.delete('/:id', loginRequired, ForestController.deletePost);
 
-// MBTI 별로 게시물 조회
-router.get('/mbti/:mbti', ForestController.getByMbti);
+router.get('/:forestId', ForestController.readStoryDetail);
+
+router.get('/', ForestController.readAllStories);
 
 export default router;

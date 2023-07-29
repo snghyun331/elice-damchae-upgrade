@@ -2,7 +2,7 @@
 import ForestService from '../services/forestService.js';
 import { statusCode } from '../utills/statusCode.js';
 import BadRequest from '../middlewares/error/badRequest.js';
-
+import { imageService } from '../services/imageService.js';
 class ForestController {
   static async createPost(req, res, next) {
     try {
@@ -11,35 +11,54 @@ class ForestController {
           .status(400)
           .json({ message: '글을 등록하려면 로그인이 필요합니다.' });
       }
+      const forestId = req.currentUserId;
+      const forestInfo = forestId;
 
-      const { title, content, imageUrl, mbti } = req.body;
-
-      // 필수 데이터인 title과 content가 존재하는지 확인
-      if (!title || !content) {
-        throw new BadRequest('Title과 content는 필수 입력 사항입니다.');
+      const { title, content, imageUrl, mbti, thumbnail, mood } = req.body;
+      const file = req.file ?? null;
+      let thumbnailLocal;
+      let thumbnailLocalId;
+      let forestPostInfo;
+      if (file && !thumbnail) {
+        thumbnailLocal = await imageService.uploadImage({ file });
+        thumbnailLocalId = thumbnailLocal._id;
+        forestPostInfo = await ForestService.createPost({
+          userId: forestInfo,
+          title,
+          content,
+          thumbnail: thumbnailLocalId,
+          mbti,
+          imageUrl,
+          mood,
+        });
+      } else if (!file && thumbnail) {
+        forestPostInfo = await ForestService.createPost({
+          userId: forestInfo,
+          title,
+          content,
+          thumbnail: thumbnail,
+          mbti,
+          imageUrl,
+          mood,
+        });
+      } else if (!file && !thumbnail) {
+        forestPostInfo = await ForestService.createPost({
+          userId: forestInfo,
+          title,
+          content,
+          thumbnail: null,
+          mbti,
+          imageUrl,
+          mood,
+        });
       }
-
-      // 로그인한 사용자의 정보인 userId를 가져옴
-      const userId = req.currentUserId;
-
-      // 글 등록을 위해 필요한 데이터 객체 생성
-      const newForestPost = await ForestService.createPost({
-        title,
-        content,
-        imageUrl,
-        userId,
-        mbti,
-      });
-
-      return res
-        .status(200)
-        .json({ message: '글을 등록했습니다.', userId: newForestPost });
+      const result = await ForestService.populateStoryPost(
+        forestPostInfo,
+        'userInfo thumbnail',
+      );
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
-      return res.status(500).json({
-        message: '포스트 생성에 실패했습니다.',
-        errorCode: 'INTERNAL_SERVER_ERROR',
-      });
     }
   }
 
@@ -52,13 +71,8 @@ class ForestController {
         getAlls = [{ title: new RegExp(req.query.content) }];
       } else if (req.query.option == 'content') {
         getAlls = [{ content: new RegExp(req.query.content) }];
-      } else if (req.query.option == 'titl+content') {
-        getAlls = [
-          { title: new RegExp(req.query.content) },
-          { content: new RegExp(req.query.content) },
-        ];
-      } else {
-        throw new Error('검색 옵션이 없습니다.');
+      } else if (req.query.option == 'mbti') {
+        getAlls = [{ mbti: new RegExp(req.query.mbti) }];
       }
 
       const posts = await forestServiceInstance.findByForest({ getAlls });
@@ -179,41 +193,40 @@ class ForestController {
       next(error);
     }
   }
-
-  static async pagingController(req, res) {
-    const { page, q } = req.query;
+  static async readStoryDetail(req, res, next) {
     try {
       const forestServiceInstance = new ForestService();
+      const forestId = req.params.forestId;
+      const forestInfo = await forestServiceInstance.readStoryDetail({
+        forestId,
+      });
+      const result = await ForestService.populateStoryPost(
+        forestInfo,
+        'forestInfo thumbnail',
+      );
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-      const totalPost =
-        await forestServiceInstance.forestRepository.countPosts();
-      if (!totalPost) {
-        throw Error();
-      }
-
-      const {
-        board,
-        startPage,
-        endPage,
-        maxPost,
-        totalPage,
-        currentPage,
-        hidePost,
-      } = await forestServiceInstance.paging(page, totalPost, q);
-
-      res.render('home', {
-        board,
-        currentPage,
-        startPage,
-        endPage,
-        maxPost,
-        totalPage,
-        hidePost,
+  static async readAllStories(req, res, next) {
+    try {
+      const page = parseInt(req.query.page || 1); // default 페이지: 1
+      const { stories, totalPage, count } = await ForestService.readPosts(page);
+      const result = await ForestService.populateStoryPost(
+        stories,
+        'userInfo thumbnail',
+      );
+      return res.status(200).json({
+        currentPage: page,
+        totalPage: totalPage,
+        totalStoriesCount: count,
+        result,
       });
     } catch (error) {
-      res.render('/', { board: [] });
+      next(error);
     }
   }
 }
-
 export default ForestController;

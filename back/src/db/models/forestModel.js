@@ -20,14 +20,9 @@ class forestModel {
     return findAllForest;
   }
 
-  static async findByMbti({ getMbtis }) {
-    const findAllMbti = await ForestPost.find(getMbtis[0]);
-    return findAllMbti;
-  }
-
   static async findById({ _id }) {
-    const getForest = await ForestPost.findOne({ _id });
-    return getForest;
+    const Forest = await ForestPost.findOne({ _id });
+    return Forest;
   }
 
   static async updatePost({ updatePost }) {
@@ -76,17 +71,20 @@ class forestModel {
     }
   }
 
-  async countPosts() {
-    return ForestPost.countDocuments({});
+  static async findAndCountAll(skip, limit) {
+    const stories = await ForestPost.find({})
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+
+    const count = await ForestPost.countDocuments();
+    return { stories, count };
   }
 
-  async getPagedPosts(page, maxPost, q) {
-    const skipPosts = (page - 1) * maxPost;
-
-    // 검색어가 있는 경우, 검색어를 포함하는 게시물만 가져옴
-    const query = q ? { $text: { $search: q } } : {};
-
-    return ForestPost.find(query).skip(skipPosts).limit(maxPost);
+  static async populateStoryPost(info, field) {
+    const result = ForestPost.populate(info, field);
+    return result;
   }
 }
 

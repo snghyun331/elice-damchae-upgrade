@@ -1,19 +1,31 @@
-// forestService.js
+// // forestService.js
+// import { forestCommentModel } from '../db/models/forestCommentModel.js';
+import { forestCommentModel } from '../db/models/forestCommentModel.js';
 import { forestModel } from '../db/models/forestModel.js';
-
+// import { StoryCommentModel } from '../db/models/storyCommentModel.js';
 class ForestService {
-  static async createPost({ title, content, imageUrl, userId, mbti }) {
+  static async createPost({
+    userId,
+    title,
+    content,
+    imageUrl,
+    mbti,
+    mood,
+    thumbnail,
+  }) {
     if (!title || !content) {
       const errorMessage = '제목과 내용은 필수 입력 사항입니다.';
       throw new Error(errorMessage);
     }
 
     const newForestPost = {
+      userId,
       title,
       content,
+      thumbnail,
       imageUrl,
-      userId,
       mbti,
+      mood,
     };
 
     const createdForestPost = await forestModel.create({ newForestPost });
@@ -32,26 +44,6 @@ class ForestService {
     }
   }
 
-  async findById({ _id }) {
-    try {
-      const post = await forestModel.findById({ _id });
-      return post;
-    } catch (error) {
-      // console.log(_id);
-      throw new Error('포스트 조회에 실패했습니다.');
-    }
-  }
-
-  async findByMbti({ getMbtis }) {
-    try {
-      const mbtis = await forestModel.findByMbti({ getMbtis });
-      console.log(mbtis);
-      return mbtis;
-    } catch (error) {
-      throw new Error('MBTI 조회에 실패했습니다');
-    }
-  }
-
   async updatePost(updatePost) {
     try {
       if (!updatePost.title || !updatePost.content) {
@@ -59,9 +51,9 @@ class ForestService {
         throw new Error(errorMessage);
       }
 
-      const postId = updatePost._id;
-      console.log(typeof postId);
-      const post = await forestModel.findById({ _id: new Object(postId) });
+      const forestId = updatePost._id;
+      console.log(typeof forestId);
+      const post = await forestModel.findById({ _id: new Object(forestId) });
       if (!post) {
         throw new Error('존재하지 않는 글입니다.');
       }
@@ -80,9 +72,9 @@ class ForestService {
 
   async deletePost(deletePost) {
     try {
-      const postId = deletePost._id;
-      console.log(typeof postId);
-      const post = await forestModel.findById({ _id: new Object(postId) });
+      const forestId = deletePost._id;
+      console.log(typeof forestId);
+      const post = await forestModel.findById({ _id: new Object(forestId) });
       if (!post) {
         throw new Error('존재하지 않은 글입니다.');
       }
@@ -99,46 +91,32 @@ class ForestService {
       throw new Error('포스트 삭제에 실패했습니다.');
     }
   }
-
-  constructor() {
-    this.forestRepository = new forestModel();
+  async readStoryDetail({ forestId }) {
+    const forest = await forestModel.findById({ forestId });
+    const comment = await forestCommentModel.findAllByForestId({ forestId });
+    if (!forest) {
+      throw new Error('해당 게시물이 존재하지 않습니다.');
+    }
+    const forestInfo = {
+      ...forest._doc,
+      commentList: comment,
+    };
+    return forest;
   }
 
-  async paging(page, totalPost, q) {
-    const maxPost = 10;
-    const maxPage = 10;
-    let currentPage = page ? parseInt(page) : 1;
-    const hidePost = page === 1 ? 0 : (page - 1) * maxPost;
-    const totalPage = Math.ceil(totalPost / maxPost);
+  static async readPosts(page) {
+    const limit = 8; // 한 페이지당 보여줄 스토리 수
+    const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
 
-    if (currentPage > totalPage) {
-      currentPage = totalPage;
-    }
+    const { stories, count } = await forestModel.findAndCountAll(skip, limit);
+    const totalPage = Math.ceil(count / limit);
+    return { stories, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
+  }
 
-    const startPage = Math.floor((currentPage - 1) / maxPage) * maxPage + 1;
-    let endPage = startPage + maxPage - 1;
-
-    if (endPage > totalPage) {
-      endPage = totalPage;
-    }
-
-    // 검색어를 포함한 게시물만 가져오도록 수정
-    const forestPosts = await this.forestRepository.getPagedPosts(
-      currentPage,
-      maxPost,
-      q,
-    );
-
-    return {
-      board: forestPosts,
-      currentPage,
-      startPage,
-      endPage,
-      maxPost,
-      totalPage,
-      hidePost,
-    };
+  static async populateStoryPost(info, path) {
+    const field = { path: path };
+    const result = forestModel.populateStoryPost(info, field);
+    return result;
   }
 }
-
 export default ForestService;
