@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { delApi, getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
 import useUserStore from '../../store/useUserStore';
+import StoryComment from './StoryComment';
 
 const StoryRead = () => {
 	const { storyId } = useParams();
@@ -78,9 +79,6 @@ const StoryRead = () => {
 					<div className="text-sm text-end absolute top-1 right-1 mt-4 me-4">
 						{isDataLoaded && story.userInfo._id == id && (
 							<>
-								<button className="text-white underline underline-offset-2 text-red-400">
-									수정
-								</button>
 								<button
 									onClick={handleDelete}
 									className="ml-2 text-white underline underline-offset-2 text-red-400"
@@ -118,8 +116,10 @@ const StoryRead = () => {
 							{isDataLoaded && story.userInfo.mbti}
 						</p>
 					</div>
-					<hr className="h-px my-8 ms-8 me-8 bg-gray-300 border-0 dark:bg-gray-700" />
-					<div>댓글 컴포넌트 넣을 영역</div>
+					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
+					<div>
+						<StoryComment storyId={storyId} commentList={story.commentList} />
+					</div>
 				</div>
 			</div>
 		</div>

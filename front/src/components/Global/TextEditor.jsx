@@ -2,7 +2,7 @@ import { useRef, useMemo } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import { postApi } from '../../services/api';
 import useImageUpload from '../../hooks/useImageUpload';
-import useStoryStore from '../../hooks/useStoryStore';
+import useStoryStore from '../../store/useStoryStore';
 import { textToIcon } from '../Util/Util';
 
 const TextEditor = () => {

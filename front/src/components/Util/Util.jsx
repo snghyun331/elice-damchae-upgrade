@@ -52,6 +52,11 @@ export const formatDate = (string) => {
 	return formattedDate;
 };
 
+export const formatCreatedAt = (string) => {
+	const formattedTime = moment(string).format('YYYY-MM-DD HH:mm');
+	return formattedTime;
+};
+
 export const formatRelativeTime = (string) => {
 	const now = moment();
 	const date = moment(string);

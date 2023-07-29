@@ -1,4 +1,4 @@
-import useStoryStore from '../../hooks/useStoryStore';
+import useStoryStore from '../../store/useStoryStore';
 
 const RadioOption = ({
 	id,
