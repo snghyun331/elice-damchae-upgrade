@@ -8,14 +8,19 @@ const getToken = () => {
 
 const instance = axios.create({
 	baseURL: serverUrl,
-	timeout: 4000,
 });
 
 instance.interceptors.request.use(
 	(config) => {
 		const accessToken = getToken();
 
-		config.headers['Content-Type'] = 'application/json';
+		if (config.data instanceof FormData) {
+			console.log('폼데이터');
+			config.headers['Content-Type'] = 'multipart/form-data';
+		} else if (config.data instanceof Object) {
+			console.log('json데이터');
+			config.headers['Content-Type'] = 'application/json';
+		}
 		config.headers['Authorization'] = `Bearer ${accessToken}`;
 
 		return config;
@@ -34,12 +39,12 @@ instance.interceptors.response.use(
 		return response;
 	},
 	(error) => {
+		console.error(error);
 		if (
 			error.response.data.message ===
 			('토큰이 만료되었습니다' || '토큰이 유효하지 않습니다')
 		) {
 			localStorage.removeItem('accessToken');
-			location.href = '/';
 		}
 		return Promise.reject(error);
 	},

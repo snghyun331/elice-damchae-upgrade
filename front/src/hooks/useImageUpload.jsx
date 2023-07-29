@@ -12,13 +12,14 @@ const useImageUpload = () => {
 		try {
 			const formData = new FormData();
 			formData.append('image', blob);
+			console.log(blob);
 
-			const response = await postApi('/writeTest.do', formData);
+			const response = await postApi('image/upload', formData);
 
-			const imageUrl = `/images/${response.data.filename}`;
+			const imageUrl = `http://localhost:3000/uploads/${response.data.fileName}`;
+			console.log(imageUrl);
+			//TODO:나중에 경로 제대로 설정
 
-			// callback : 에디터(마크다운 편집기)에 표시할 텍스트, 뷰어에는 imageUrl 주소에 저장된 사진으로 나옴
-			// 형식 : ![대체 텍스트](주소)
 			callback(imageUrl, '사진 대체 텍스트 입력');
 		} catch (error) {
 			console.error('이미지 업로드 실패');

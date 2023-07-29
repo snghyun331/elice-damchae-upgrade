@@ -6,3 +6,4 @@ node_modules
 .jpeg
 .DS_Store
 __pycache__/
+uploads/*

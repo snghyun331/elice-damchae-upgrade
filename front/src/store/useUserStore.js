@@ -1,50 +1,111 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
 
-const useUserStore = create((set) => ({
-	email: '',
-	password: '',
-	nickname: '',
-	mbti: '',
-	isLoggedIn: false,
-	errMsg: '',
+const useUserStore = create((set) => {
+	const initialUserData = {
+		id: '',
+		email: '',
+		nickname: '',
+		mbti: '',
+		profileImg: '',
+		isGoogleLogin: false,
+		isLoggedIn: Boolean(localStorage.getItem('accessToken')),
+	};
 
-	setEmail: (email) => set({ email }),
-	setPassword: (password) => set({ password }),
-	setNickname: (nickname) => set({ nickname }),
-	setMbti: (mbti) => set({ mbti }),
-	setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
-	setErrMsg: (errMsg) => set({ errMsg }),
+	const savedUserData = JSON.parse(localStorage.getItem('userData'));
+	
+	const userData = savedUserData
+		? { ...initialUserData, ...savedUserData }
+		: initialUserData;
 
-	login: async (user) => {
-		try {
-			const response = await postApi('auth/login', user);
+	const saveUserDataToLocalStorage = (newUserData) => {
+		localStorage.setItem('userData', JSON.stringify(newUserData));
+	};
 
-			const jwtToken = response.data.token;
+	const updateUserData = (updatedUserData) => {
+		const newUserData = { ...userData, ...updatedUserData };
+		saveUserDataToLocalStorage(newUserData);
+		set(newUserData);
+	};
 
-			localStorage.setItem('accessToken', jwtToken);
-			set({ isLoggedIn: true });
+	return {
+		...userData,
 
-			window.location.href = '/';
-		} catch (error) {
-			set({ errMsg: error.response.data.errorMessage });
-		}
-	},
+		setEmail: (email) => set({ email }),
+		setNickname: (nickname) => set({ nickname }),
+		setMbti: (mbti) => set({ mbti }),
+		setProfileImg: (profileImg) => set({ profileImg }),
+		setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 
-	register: async (user) => {
-		try {
-			await postApi('auth/register', user);
-			console.log(user);
-			window.location.href = '/login';
-		} catch (error) {
-			set({ errMsg: error.response.data.errorMessage });
-		}
-	},
-	logout: () => {
-		localStorage.removeItem('accessToken');
-		set({ isLoggedIn: false });
-		window.location.href = '/';
-	},
-}));
+		actions: {
+			login: async (user) => {
+				const response = await postApi('auth/login', user);
+				const jwtToken = response.data.token;
+				localStorage.setItem('accessToken', jwtToken);
 
+				const userData = {
+					isLoggedIn: true,
+					id: response.data.id,
+					email: response.data.email,
+					nickname: response.data.nickname,
+					mbti: response.data.mbti,
+				};
+
+				localStorage.setItem('userData', JSON.stringify(userData));
+
+				set(userData);
+			},
+
+			register: async (user) => {
+				await postApi('auth/register', user);
+			},
+
+			googleRegister: async (user) => {
+				await postApi('auth/googleRegister', user);
+			},
+
+			googleLogin: async (user) => {
+				const response = await postApi('auth/googleLogin', user);
+				const jwtToken = response.data.token;
+
+				localStorage.setItem('accessToken', jwtToken);
+
+				const userData = {
+					isLoggedIn: true,
+					id: response.data.id,
+					email: response.data.email,
+					nickname: response.data.nickname,
+					mbti: response.data.mbti,
+					isGoogleLogin: true,
+				};
+
+				// Save the user data in local storage
+				localStorage.setItem('userData', JSON.stringify(userData));
+
+				set(userData);
+			},
+
+			logout: () => {
+				localStorage.removeItem('accessToken');
+				localStorage.removeItem('userData');
+				set({
+					id: '',
+					email: '',
+					nickname: '',
+					mbti: '',
+					profileImg: '',
+					isGoogleLogin: false,
+					isLoggedIn: false,
+				});
+				alert('로그아웃 하였습니다.');
+			},
+
+			infoChange: (updatedUserData) => {
+				updateUserData(updatedUserData);
+			},
+		},
+	};
+});
+
+export const useUserActions = () => useUserStore((state) => state.actions);
 export default useUserStore;

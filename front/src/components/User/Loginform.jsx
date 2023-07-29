@@ -1,12 +1,15 @@
 import { useState, useMemo } from 'react';
-import useUserStore from '../../store/useUserStore';
-
+import useUserStore, { useUserActions } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
-
+// import GoogleLoginButton from '../Global/Layout/GoogleLoginButton';
+import GoogleButton from '../Global/Layout/GoogleButton';
 const LoginForm = () => {
 	const navigate = useNavigate();
-	const { email, password, setEmail, setPassword, errMsg, login } =
-		useUserStore();
+	const { email, setEmail } = useUserStore();
+
+	const { login } = useUserActions();
+	const [errMsg, setErrMsg] = useState('');
+	const [password, setPassword] = useState('');
 
 	const [focusedMap, setFocusedMap] = useState({
 		email: false,
@@ -21,7 +24,12 @@ const LoginForm = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await login(user);
+		try {
+			await login(user);
+			navigate('/');
+		} catch (error) {
+			setErrMsg(error.response?.data?.message); // Set the error message in the local state on login failure
+		}
 	};
 
 	const validateEmail = () => {
@@ -92,12 +100,12 @@ const LoginForm = () => {
 											className={`block w-full px-4 py-2 my-2 text-gray-700 placeholder-gray-400 bg-white border rounded-md dark:placeholder-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 dark:focus:border-blue-400 focus:ring-gray-400 focus:outline-none focus:ring focus:ring-opacity-40`}
 										/>
 										{!isEmailValid && email !== '' && focusedMap.email && (
-											<p className="text-red-500 text-xs italic">
+											<p className="text-red-500 text-xs">
 												이메일 형식이 올바르지 않습니다.
 											</p>
 										)}
 										{!isFormValid && email === '' && focusedMap.email && (
-											<p className="text-red-500 text-xs italic">
+											<p className="text-red-500 text-xs">
 												이메일을 입력해주세요.
 											</p>
 										)}
@@ -131,7 +139,7 @@ const LoginForm = () => {
 											className="block w-full px-4 py-2 my-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:ring-gray-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
 										/>
 										{!isFormValid && password === '' && focusedMap.password && (
-											<p className="text-red-500 text-xs italic">
+											<p className="text-red-500 text-xs">
 												비밀번호를 입력해주세요.
 											</p>
 										)}
@@ -141,13 +149,16 @@ const LoginForm = () => {
 										<button
 											type="submit"
 											disabled={!isFormValid}
-											className="w-full text-lg px-4 py-2 pt-3 tracking-wide text-white transition-colors duration-200 transform bg-[#85B7CC] rounded-md disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] focus:outline-none focus:bg-[#85B7CC] focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+											className="w-full text-lg px-4 py-2 pt-3 mb-4 tracking-wide text-white transition-colors duration-200 transform bg-[#85B7CC] rounded-sm disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] focus:outline-none focus:bg-[#85B7CC] focus:ring focus:ring-blue-300 focus:ring-opacity-50"
 										>
 											로그인
 										</button>
 										{errMsg && (
-											<p className="text-red-500 text-xs italic">{errMsg}</p>
+											<p className="text-red-500 text-xs">{errMsg}</p>
 										)}
+										{/* <GoogleLoginButton /> */}
+
+										<GoogleButton />
 									</div>
 								</form>
 

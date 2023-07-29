@@ -6,24 +6,44 @@ import MyStories from '../components/Stories/MyStories';
 import LoginForm from '../components/User/Loginform';
 import RegisterForm from '../components/User/Registerform';
 import StoryRead from '../components/Stories/StoryRead';
+import DaenamusMain from '../components/Daenamus/DaenamusMain';
+import DaenamusWrite from '../components/Daenamus/DaenamusWrite';
+import DaenamusCardDetail from '../components/Daenamus/DaenamusCardDetail';
+
+const MainLayout = () => {
+	return (
+		<div className="main-container">
+			<Outlet />
+		</div>
+	);
+};
 
 const Router = () => {
 	return (
 		<Routes>
-			<Route path="/" element={<Home />} />
+			<Route path="/" element={<MainLayout />}>
+				<Route index element={<Home />} />
 
-			<Route path="login" element={<LoginForm />} />
+				<Route path="login" element={<LoginForm />} />
 
-			<Route path="register" element={<RegisterForm />} />
+				<Route path="register" element={<RegisterForm />} />
 
-			<Route path="mypage" element={<MyPage />} />
+				<Route path="mypage" element={<MyPage />} />
 
-			<Route path="infochange" element={<InfoChange />} />
+				<Route path="infochange" element={<InfoChange />} />
 
-			<Route path="stories" element={<Outlet />}>
-				<Route index element={<MyStories />} />
-				<Route path="read" element={<StoryRead />} />
-				<Route path=":storyId" element={<StoryRead />} />
+				<Route path="stories" element={<Outlet />}>
+					<Route index element={<MyStories />} />
+					<Route path=":storyId" element={<StoryRead />} />
+				</Route>
+
+				<Route path="daenamus" element={<Outlet />}>
+					<Route index element={<DaenamusMain />} />
+
+					<Route path="write" element={<DaenamusWrite />} />
+
+					<Route path="read" element={<DaenamusCardDetail />} />
+				</Route>
 			</Route>
 		</Routes>
 	);

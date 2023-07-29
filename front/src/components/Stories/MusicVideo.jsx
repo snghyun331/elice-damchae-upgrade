@@ -1,26 +1,31 @@
 import { useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
 import PropTypes from 'prop-types';
-import { useMediaQuery } from 'react-responsive';
+import debounce from 'lodash.debounce';
 
-const MusicVideo = ({ videoId }) => {
+const MusicVideo = ({ music, phrase }) => {
 	const [videoWidth, setVideoWidth] = useState('560');
 
-	const isDesktop = useMediaQuery({ query: '(min-width: 1724px)' });
-	const isTablet = useMediaQuery({
-		query: '(min-width: 700px) and (max-width: 1723px)',
-	});
-	const isMobile = useMediaQuery({ query: '(max-width: 700px)' });
+	const updateVideoWidth = () => {
+		if (window.innerWidth >= 680) {
+			setVideoWidth('560');
+		} else {
+			setVideoWidth(window.innerWidth * 0.7);
+		}
+	};
+
+	// Create a debounced version of the updateVideoWidth function
+	const handleResize = debounce(updateVideoWidth, 200); // Adjust the debounce wait time as needed (e.g., 200ms)
 
 	useEffect(() => {
-		if (isDesktop) {
-			setVideoWidth('560');
-		} else if (isTablet) {
-			setVideoWidth('560');
-		} else if (isMobile) {
-			setVideoWidth('280');
-		}
-	}, [isMobile, isTablet, isDesktop]);
+		// Add the event listener on component mount
+		window.addEventListener('resize', handleResize);
+
+		// Clean up the event listener on component unmount
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, [handleResize]);
 
 	const opts = {
 		width: videoWidth,
@@ -35,18 +40,21 @@ const MusicVideo = ({ videoId }) => {
 	};
 
 	return (
-		<div className="space-y-3 p-6  border-gray-200 dark:border-gray-600">
+		<div className="space-y-3 p-6 border-gray-200 dark:border-gray-600">
 			{/* YouTube 영상을 여기에 표시하는 코드 추가 */}
 			<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-				행복하시다니 다행이네요.이 노래는 어때요?
+				{phrase}
 			</h3>
-			<YouTube videoId={videoId} opts={opts} />
+			<div className="justify-center">
+				<YouTube videoId={music} opts={opts} />
+			</div>
 		</div>
 	);
 };
 
 MusicVideo.propTypes = {
-	videoId: PropTypes.string.isRequired,
+	music: PropTypes.string.isRequired,
+	phrase: PropTypes.string.isRequired,
 };
 
 export default MusicVideo;

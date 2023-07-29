@@ -1,121 +1,56 @@
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import usePagination from '../../hooks/usePagination';
 import StoryCard from './StoryCard';
 import Pagination from './Pagination';
+import { getApi } from '../../services/api';
+
 
 const StoryCardMap = () => {
-	const [currentPage, setCurrentPage] = useState(1);
-	const dummyData = [
-		{
-			id: '1',
-			username: 'Mike',
-			title:
-				'가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요 가장',
-			content:
-				'가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요 가장많이 글씨를 쓰면 몇자까지 쓸 수 있을까요 그리고 몇자까지 미리보여줄 수 있을까요',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			id: '2',
-			username: 'Mike',
-			title: 'Story 2',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😡',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 3',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😨',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 4',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 5',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 6',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 7',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 8',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-		{
-			username: 'Mike',
-			title: 'Story 9',
-			content:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incid',
-			storyImg: 'https://picsum.photos/200/300',
-			mood: '😊',
-		},
-	];
-
-	const itemsPerPage = 8;
-	const totalPages = Math.ceil(dummyData.length / itemsPerPage);
-	const startIndex = (currentPage - 1) * itemsPerPage;
-	const endIndex = currentPage * itemsPerPage;
-	const displayedData = dummyData.slice(startIndex, endIndex);
-
-	const handlePreviousClick = () => {
-		if (currentPage > 1) setCurrentPage(currentPage - 1);
+	const [stories, setStories] = useState([]);
+	const [isDataLoaded, setIsDataLoaded] = useState(false);
+	const [totalPage, setTotalPage] = useState(0);
+	const fetchData = async (page = 1) => {
+		try {
+			const response = await getApi(`stories?page=${page}`);
+			setStories(response.data.result);
+			setTotalPage(response.data.totalPage);
+			setIsDataLoaded(true);
+		} catch (error) {
+			console.error('Failed to fetch data:', error);
+		}
 	};
+	useEffect(() => {
+		fetchData(currentPage);
+	}, []);
 
-	const handleNextClick = () => {
-		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-	};
+	const { currentPage, prev, next, go } = usePagination(
+		isDataLoaded ? stories : [], totalPage
+	);
 
-	const handleClick = (pageNumber) => setCurrentPage(pageNumber);
+	useEffect(() => {
+		if (isDataLoaded) {
+			fetchData(currentPage);
+		}
+	}, [currentPage]);
 
 	return (
 		<>
 			<div className="font-bold mb-8 md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-base font-medium">
-					{displayedData.map((storyData) => (
-						<div key={storyData.title}>
-							<StoryCard storyData={storyData} />
-						</div>
-					))}
+					{isDataLoaded &&
+						stories.map((story) => (
+							<div key={story._id}>
+								<StoryCard data={story} />
+							</div>
+						))}
 				</div>
 				<div className="flex justify-center mt-10">
 					<Pagination
-						totalPages={totalPages}
 						currentPage={currentPage}
-						handlePreviousClick={handlePreviousClick}
-						handleNextClick={handleNextClick}
-						handleClick={handleClick}
+						totalPages={totalPage}
+						prev={prev}
+						next={next}
+						go={go}
 					/>
 				</div>
 			</div>

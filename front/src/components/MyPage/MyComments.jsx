@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import Pagination from '../global/Pagination';
+import Pagination from '../Global/Pagination';
+import usePagination from '../../hooks/usePagination';
+
 
 const MyComments = () => {
-	const [currentPage, setCurrentPage] = useState(1);
-
 	const dummyData = [
 		{
 			comment: '응원합니다 1',
@@ -39,20 +38,13 @@ const MyComments = () => {
 	];
 
 	const itemsPerPage = 5;
-	const totalPages = Math.ceil(dummyData.length / itemsPerPage);
-	const startIndex = (currentPage - 1) * itemsPerPage;
-	const endIndex = currentPage * itemsPerPage;
-	const displayedData = dummyData.slice(startIndex, endIndex);
-
-	const handlePreviousClick = () => {
-		if (currentPage > 1) setCurrentPage(currentPage - 1);
-	};
-
-	const handleNextClick = () => {
-		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-	};
-
-	const handleClick = (pageNumber) => setCurrentPage(pageNumber);
+	const {
+		currentPage,
+		totalPages,
+		prev,
+		next,
+		go,
+	} = usePagination(dummyData, itemsPerPage);
 
 	return (
 		<div>
@@ -63,7 +55,7 @@ const MyComments = () => {
 
 			<div className="flex justify-center mt-10">
 				<ul className="w-full max-w-6xl text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-					{displayedData.map((comment) => (
+					{dummyData.map((comment) => (
 						<li
 							key={comment._id}
 							className="text-gray-700 w-full px-6 py-3 border-b border-gray-200 dark:border-gray-600 bg-slate-100"
@@ -84,13 +76,13 @@ const MyComments = () => {
 				</ul>
 			</div>
 			<div className="flex justify-center mt-10">
-				<Pagination
-					totalPages={totalPages}
-					currentPage={currentPage}
-					handlePreviousClick={handlePreviousClick}
-					handleNextClick={handleNextClick}
-					handleClick={handleClick}
-				/>
+			<Pagination
+						currentPage={currentPage}
+						totalPages={totalPages}
+						prev={prev}
+						next={next}
+						go={go}
+					/>
 			</div>
 		</div>
 	);
