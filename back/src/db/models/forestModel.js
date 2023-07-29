@@ -1,6 +1,5 @@
 // // forestModel.js
 import ForestPost from '../schemas/forestPost.js';
-import UserModel from '../schemas/user.js';
 
 class forestModel {
   static async create({ newForestPost }) {
@@ -8,7 +7,7 @@ class forestModel {
     return createdForest;
   }
 
-  static async findAll({ getAlls }) {
+  static async findByForest({ getAlls }) {
     // console.log(getAlls);
     // console.log(getAlls.$or);
     // const getAll = getAlls.$or[0];
@@ -21,14 +20,14 @@ class forestModel {
     return findAllForest;
   }
 
-  static async findByPost({ _id }) {
-    const getForest = await ForestPost.findOne({ _id });
-    return getForest;
+  static async findById({ _id }) {
+    const Forest = await ForestPost.findOne({ _id });
+    return Forest;
   }
 
   static async updatePost({ updatePost }) {
     console.log('model까지', updatePost);
-    if (!(updatePost.imageUrl = 'None')) {
+    if (!(updatePost.imageUrl == 'None')) {
       console.log(1);
       const updateForestPost = await ForestPost.updateOne(
         { userId: updatePost.userId, _id: updatePost._id },
@@ -51,7 +50,7 @@ class forestModel {
 
   static async deletePost({ deletePost }) {
     console.log('model까지', deletePost);
-    if (!(deletePost.imageUrl = 'None')) {
+    if (!(deletePost.imageUrl == 'None')) {
       console.log(1);
       const deleteForestPost = await ForestPost.deleteOne(
         { userId: deletePost.userId, _id: deletePost._id },
@@ -70,6 +69,22 @@ class forestModel {
       );
       return deleteForestPost;
     }
+  }
+
+  static async findAndCountAll(skip, limit) {
+    const stories = await ForestPost.find({})
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+
+    const count = await ForestPost.countDocuments();
+    return { stories, count };
+  }
+
+  static async populateStoryPost(info, field) {
+    const result = ForestPost.populate(info, field);
+    return result;
   }
 }
 

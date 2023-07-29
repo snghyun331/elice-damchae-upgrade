@@ -8,12 +8,14 @@ import { storyPostRouter } from './routers/storyPostRouter.js';
 import forestRouter from './routers/forestPostRouter.js';
 import { imageRouter } from './routers/imageRouter.js';
 import { storyCommentRouter } from './routers/storyCommentRouter.js';
+import { forestCommentRouter } from './routers/forestCommentRouter.js';
 
 const app = express();
 app.use('/uploads', express.static('uploads'));
 
 app.use(cors());
-app.use(morgan('dev')); // 콘솔창에서 log 확인
+app.use(morgan('dev'));
+// 콘솔창에서 log 확인
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -26,9 +28,10 @@ app.get('/', (req, res) => {
 app.use(userAuthRouter);
 app.use(userServiceRouter);
 app.use(storyPostRouter);
-app.use('/post', forestRouter);
+app.use('/forest', forestRouter);
 app.use(imageRouter);
 app.use(storyCommentRouter);
+app.use(forestCommentRouter);
 app.use(errorMiddleware);
 
 export { app };
