@@ -7,7 +7,7 @@ class forestModel {
     return createdForest;
   }
 
-  static async findAll({ getAlls }) {
+  static async findByForest({ getAlls }) {
     // console.log(getAlls);
     // console.log(getAlls.$or);
     // const getAll = getAlls.$or[0];
@@ -25,11 +25,7 @@ class forestModel {
     return findAllMbti;
   }
 
-  static async findByForestId({ forestId }) {
-    const getForest = await ForestPost.findOne({ _id: forestId });
-    return getForest;
-  }
-  static async findByPost({ _id }) {
+  static async findById({ _id }) {
     const getForest = await ForestPost.findOne({ _id });
     return getForest;
   }
@@ -80,13 +76,17 @@ class forestModel {
     }
   }
 
-  static async paging(page, totalPost) {
-    const { board, startPage, endPage, maxPost, totalPage, currentPage } = await ForestPost.(
-      page,
-      totalPost
-    );
+  async countPosts() {
+    return ForestPost.countDocuments({});
+  }
 
-    return { board, currentPage, startPage, endPage, maxPost, totalPage };
+  async getPagedPosts(page, maxPost, q) {
+    const skipPosts = (page - 1) * maxPost;
+
+    // 검색어가 있는 경우, 검색어를 포함하는 게시물만 가져옴
+    const query = q ? { $text: { $search: q } } : {};
+
+    return ForestPost.find(query).skip(skipPosts).limit(maxPost);
   }
 }
 

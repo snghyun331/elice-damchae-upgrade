@@ -35,7 +35,7 @@ const ForestPostSchema = new Schema(
       default: 0,
     },
   },
-  { timestamps: true },
+  { timestamps: true, collection: 'forestPosts' },
 );
 
 const ForestPost = model('ForestPost', ForestPostSchema);

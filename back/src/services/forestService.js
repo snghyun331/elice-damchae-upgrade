@@ -20,10 +20,10 @@ class ForestService {
     return createdForestPost;
   }
 
-  async findAll({ getAlls }) {
+  async findByForest({ getAlls }) {
     try {
       // console.log(getAlls, getAlls.content);
-      const posts = await forestModel.findAll({ getAlls });
+      const posts = await forestModel.findByForest({ getAlls });
       console.log(posts);
       return posts;
     } catch (error) {
@@ -31,21 +31,10 @@ class ForestService {
       throw new Error('포스트 조회에 실패했습니다.');
     }
   }
-  // async findAll({ getAlls }) {
-  //   try {
-  //     console.log(getAlls, getAlls.title);
-  //     const posts = await forestModel.findAll({ getAlls });
-  //     console.log(posts);
-  //     return posts;
-  //   } catch (error) {
-  //     console.log(error);
-  //     throw new Error('포스트 조회에 실패했습니다.');
-  //   }
-  // }
 
-  async findByPost({ _id }) {
+  async findById({ _id }) {
     try {
-      const post = await forestModel.findByPost({ _id });
+      const post = await forestModel.findById({ _id });
       return post;
     } catch (error) {
       // console.log(_id);
@@ -72,7 +61,7 @@ class ForestService {
 
       const postId = updatePost._id;
       console.log(typeof postId);
-      const post = await forestModel.findByPost({ _id: new Object(postId) });
+      const post = await forestModel.findById({ _id: new Object(postId) });
       if (!post) {
         throw new Error('존재하지 않는 글입니다.');
       }
@@ -93,7 +82,7 @@ class ForestService {
     try {
       const postId = deletePost._id;
       console.log(typeof postId);
-      const post = await forestModel.findByPost({ _id: new Object(postId) });
+      const post = await forestModel.findById({ _id: new Object(postId) });
       if (!post) {
         throw new Error('존재하지 않은 글입니다.');
       }
@@ -110,7 +99,12 @@ class ForestService {
       throw new Error('포스트 삭제에 실패했습니다.');
     }
   }
-  async Forestpaing(page, totalPost) {
+
+  constructor() {
+    this.forestRepository = new forestModel();
+  }
+
+  async paging(page, totalPost, q) {
     const maxPost = 10;
     const maxPage = 10;
     let currentPage = page ? parseInt(page) : 1;
@@ -128,7 +122,22 @@ class ForestService {
       endPage = totalPage;
     }
 
-    return { startPage, endPage, hidePost, maxPost, totalPage, currentPage };
+    // 검색어를 포함한 게시물만 가져오도록 수정
+    const forestPosts = await this.forestRepository.getPagedPosts(
+      currentPage,
+      maxPost,
+      q,
+    );
+
+    return {
+      board: forestPosts,
+      currentPage,
+      startPage,
+      endPage,
+      maxPost,
+      totalPage,
+      hidePost,
+    };
   }
 }
 
