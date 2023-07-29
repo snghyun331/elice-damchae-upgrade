@@ -1,8 +1,8 @@
 import instance from '../utils/axios';
 
-async function getApi(endpoint, params = '') {
+async function getApi(endpoint) {
 	try {
-		return await instance.get(`/${endpoint}/${params}`);
+		return await instance.get(`/${endpoint}`);
 	} catch (error) {
 		return Promise.reject(error);
 	}
