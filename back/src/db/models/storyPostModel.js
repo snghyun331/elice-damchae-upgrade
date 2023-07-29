@@ -21,6 +21,13 @@ class StoryPostModel {
     return story;
   }
 
+  // 조회수 1증가
+  static async findAndIncreaseView({ storyId }) {
+    await StoryPost.updateOne({ _id: storyId }, { $inc: { views: 1 } });
+    const story = await StoryPost.findOne({ _id: storyId });
+    return story;
+  }
+
   static async updateStory({ storyId, fieldToUpdate, newValue }) {
     const filter = { _id: storyId };
     const update = { [fieldToUpdate]: newValue };

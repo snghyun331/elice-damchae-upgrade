@@ -9,7 +9,8 @@ class storyPostController {
       const userId = req.currentUserId;
       const userInfo = userId;
 
-      const { title, content, thumbnail, isPublic, mood, music } = req.body;
+      const { title, content, thumbnail, isPublic, mood, music, views } =
+        req.body;
       const file = req.file ?? null;
       let thumbnailLocal;
       let thumbnailLocalId;
@@ -17,7 +18,7 @@ class storyPostController {
       if (file && !thumbnail) {
         thumbnailLocal = await imageService.uploadImage({ file });
         thumbnailLocalId = thumbnailLocal._id;
-        storyPostInfo = await StoryPostService.addStoryPost({
+        storyPostInfo = await StoryPostService.createStoryPost({
           userInfo,
           title,
           content,
@@ -25,9 +26,10 @@ class storyPostController {
           isPublic,
           mood,
           music,
+          views,
         });
       } else if (!file && thumbnail) {
-        storyPostInfo = await StoryPostService.addStoryPost({
+        storyPostInfo = await StoryPostService.createStoryPost({
           userInfo,
           title,
           content,
@@ -35,9 +37,10 @@ class storyPostController {
           isPublic,
           mood,
           music,
+          views,
         });
       } else if (!file && !thumbnail) {
-        storyPostInfo = await StoryPostService.addStoryPost({
+        storyPostInfo = await StoryPostService.createStoryPost({
           userInfo,
           title,
           content,
@@ -45,6 +48,7 @@ class storyPostController {
           isPublic,
           mood,
           music,
+          views,
         });
       }
 
@@ -115,8 +119,6 @@ class storyPostController {
         throw new Error('스토리 수정 권한이 없습니다.');
       }
 
-      const userInfo = userId;
-
       let thumbnailLocal;
       let thumbnailLocalId;
       let toUpdate;
@@ -152,7 +154,6 @@ class storyPostController {
       }
 
       const updatedStory = await StoryPostService.setStory({
-        userInfo,
         storyId,
         toUpdate,
       });
@@ -190,6 +191,10 @@ class storyPostController {
     try {
       const storyId = req.params.storyId;
       const storyInfo = await StoryPostService.readStoryDetail({ storyId });
+      if (!storyInfo) {
+        throw new Error('스토리를 찾을 수 없습니다');
+      }
+
       const result = await StoryPostService.populateStoryPost(
         storyInfo,
         'userInfo thumbnail',

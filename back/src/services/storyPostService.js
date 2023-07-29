@@ -2,7 +2,7 @@ import { StoryPostModel } from '../db/models/storyPostModel.js';
 import { StoryCommentModel } from '../db/models/storyCommentModel.js';
 
 class StoryPostService {
-  static async addStoryPost({
+  static async createStoryPost({
     userInfo,
     title,
     content,
@@ -10,6 +10,7 @@ class StoryPostService {
     isPublic,
     mood,
     music,
+    views,
   }) {
     if (!title || !content) {
       throw new Error('제목, 내용 모두 입력해주세요');
@@ -22,6 +23,7 @@ class StoryPostService {
       isPublic,
       mood,
       music,
+      views,
     };
     const createdNewStoryPost = await StoryPostModel.createStoryPost({
       newStoryPost,
@@ -29,7 +31,7 @@ class StoryPostService {
     return createdNewStoryPost;
   }
 
-  static async setStory({ userInfo, storyId, toUpdate }) {
+  static async setStory({ storyId, toUpdate }) {
     let story = await StoryPostModel.findOneByStoryId({ storyId });
 
     if (!story) {
@@ -107,7 +109,7 @@ class StoryPostService {
   }
 
   static async readStoryDetail({ storyId }) {
-    const story = await StoryPostModel.findOneByStoryId({ storyId });
+    const story = await StoryPostModel.findAndIncreaseView({ storyId });
     const allComments = await StoryCommentModel.findAllByStoryId({ storyId });
 
     if (!story) {
