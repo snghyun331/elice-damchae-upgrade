@@ -137,6 +137,16 @@ class StoryPostService {
     const result = StoryPostModel.populateStoryPost(info, field);
     return result;
   }
+
+  static async isSameUser(loginUserId, storyId) {
+    const stories = await StoryPostModel.findOneByStoryId({ storyId });
+    const storyUserId = stories.userInfo;
+    if (loginUserId == storyUserId) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 export { StoryPostService };

@@ -76,7 +76,7 @@ class StoryCommentController {
         commentId,
       );
       if (!isSameUser) {
-        throw new Error('댓글 수정 권한이 없습니다.');
+        throw new Error('댓글 삭제 권한이 없습니다.');
       }
       const result = await StoryCommentService.deleteStoryComment({
         commentId,

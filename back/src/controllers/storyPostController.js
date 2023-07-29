@@ -110,6 +110,11 @@ class storyPostController {
       const { title, content, thumbnail, isPublic, mood, music } = req.body;
       const file = req.file ?? null;
       const userId = req.currentUserId;
+      const isSameUser = await StoryPostService.isSameUser(userId, storyId);
+      if (!isSameUser) {
+        throw new Error('스토리 수정 권한이 없습니다.');
+      }
+
       const userInfo = userId;
 
       let thumbnailLocal;
@@ -166,6 +171,14 @@ class storyPostController {
   static async deleteStoryPost(req, res, next) {
     try {
       const storyId = req.params.storyId;
+      const loginUserId = req.currentUserId;
+      const isSameUser = await StoryPostService.isSameUser(
+        loginUserId,
+        storyId,
+      );
+      if (!isSameUser) {
+        throw new Error('스토리 삭제 권한이 없습니다.');
+      }
       const result = await StoryPostService.deleteStory({ storyId });
       return res.status(200).send(result);
     } catch (error) {
