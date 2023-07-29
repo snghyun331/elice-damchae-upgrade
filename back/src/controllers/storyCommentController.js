@@ -64,6 +64,29 @@ class StoryCommentController {
       next(error);
     }
   }
+
+  static async readStoryComment(req, res, next) {
+    try {
+      const storyId = req.params.storyId;
+      const page = parseInt(req.query.page || 1);
+      const limit = 6;
+      const { comments, totalPage, count } =
+        await StoryCommentService.readComments(limit, page, storyId);
+      const populageResult = await StoryCommentService.populateStoryComment(
+        comments,
+        'writerId',
+      );
+      const result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalCommentsCount: count,
+        comments: populageResult,
+      };
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export { StoryCommentController };

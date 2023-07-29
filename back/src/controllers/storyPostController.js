@@ -190,19 +190,22 @@ class storyPostController {
   static async readAllStories(req, res, next) {
     try {
       const page = parseInt(req.query.page || 1); // default 페이지: 1
+      const limit = 8; // 한페이지에 들어갈 스토리 수
       const { stories, totalPage, count } = await StoryPostService.readPosts(
+        limit,
         page,
       );
-      const result = await StoryPostService.populateStoryPost(
+      const populageResult = await StoryPostService.populateStoryPost(
         stories,
         'userInfo thumbnail',
       );
-      return res.status(200).json({
+      const result = {
         currentPage: page,
         totalPage: totalPage,
         totalStoriesCount: count,
-        result,
-      });
+        stories: populageResult,
+      };
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }

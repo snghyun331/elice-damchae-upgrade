@@ -10,6 +10,11 @@ storyCommentRouter.post(
   StoryCommentController.createStoryComment,
 );
 
+storyCommentRouter.get(
+  '/stories/:storyId/comments',
+  StoryCommentController.readStoryComment,
+);
+
 storyCommentRouter.patch(
   '/stories/comments/:commentId',
   loginRequired,
@@ -21,4 +26,5 @@ storyCommentRouter.delete(
   loginRequired,
   StoryCommentController.deleteStoryComment,
 );
+
 export { storyCommentRouter };

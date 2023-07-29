@@ -121,8 +121,7 @@ class StoryPostService {
     return storyInfo;
   }
 
-  static async readPosts(page) {
-    const limit = 8; // 한 페이지당 보여줄 스토리 수
+  static async readPosts(limit, page) {
     const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
 
     const { stories, count } = await StoryPostModel.findAndCountAll(

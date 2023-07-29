@@ -38,11 +38,20 @@ class StoryCommentModel {
     return isCompletedDeleted;
   }
 
-  // static async findAllCommentsByWriterId({ writerId }) {}
-
   static async populateStoryComment(info, field) {
     const result = StoryComment.populate(info, field);
     return result;
+  }
+
+  static async findAndCountAll(skip, limit, storyId) {
+    const comments = await StoryComment.find({ storyId: storyId })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+
+    const count = await StoryComment.countDocuments();
+    return { comments, count };
   }
 }
 
