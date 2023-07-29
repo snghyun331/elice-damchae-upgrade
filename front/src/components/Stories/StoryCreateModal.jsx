@@ -2,23 +2,15 @@ import moment from 'moment';
 import StoryEditor from './StoryEditor';
 import MusicVideo from './MusicVideo';
 
-import useStoryStore from '../../hooks/useStoryStore';
-import { useEffect, useRef, useMemo } from 'react';
+import useStoryStore from '../../store/useStoryStore';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { postApi } from '../../services/api';
 
 const StoryCreateModal = ({ onClose }) => {
-	const {
-		title,
-		content,
-		thumbnail,
-		mood,
-		music,
-		phrase,
+	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
 
-		isPublic,
-		setIsPublic,
-	} = useStoryStore();
+	const [isPublic, setIsPublic] = useState(false);
 
 	const dimmedRef = useRef(null);
 
