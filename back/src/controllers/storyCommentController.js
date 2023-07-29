@@ -7,6 +7,9 @@ class StoryCommentController {
       const storyId = req.params.storyId;
       const writerId = req.currentUserId;
       const { comment } = req.body;
+      if (!comment) {
+        throw new Error('댓글을 입력해주세요');
+      }
       const obj = await axios.post('http://127.0.0.1:5000/predict', {
         text: comment,
       });
@@ -31,7 +34,18 @@ class StoryCommentController {
   static async updateStoryComment(req, res, next) {
     try {
       const commentId = req.params.commentId;
+      const loginUserId = req.currentUserId;
+      const isSameUser = await StoryCommentService.isSameUser(
+        loginUserId,
+        commentId,
+      );
+      if (!isSameUser) {
+        throw new Error('댓글 수정 권한이 없습니다.');
+      }
       const { comment } = req.body;
+      if (!comment) {
+        throw new Error('댓글을 입력해주세요');
+      }
       const obj = await axios.post('http://127.0.0.1:5000/predict', {
         text: comment,
       });
@@ -56,6 +70,14 @@ class StoryCommentController {
   static async deleteStoryComment(req, res, next) {
     try {
       const commentId = req.params.commentId;
+      const loginUserId = req.currentUserId;
+      const isSameUser = await StoryCommentService.isSameUser(
+        loginUserId,
+        commentId,
+      );
+      if (!isSameUser) {
+        throw new Error('댓글 수정 권한이 없습니다.');
+      }
       const result = await StoryCommentService.deleteStoryComment({
         commentId,
       });

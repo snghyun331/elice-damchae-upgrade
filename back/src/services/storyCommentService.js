@@ -67,6 +67,17 @@ class StoryCommentService {
     const totalPage = Math.ceil(count / limit);
     return { comments, totalPage, count };
   }
+
+  static async isSameUser(loginUserId, commentId) {
+    const comments = await StoryCommentModel.findOneByCommentId({ commentId });
+    const commentWriterId = comments.writerId;
+
+    if (loginUserId == commentWriterId) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 export { StoryCommentService };
