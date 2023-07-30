@@ -9,7 +9,8 @@ class storyPostController {
       const userId = req.currentUserId;
       const userInfo = userId;
 
-      const { title, content, thumbnail, isPublic, mood, music } = req.body;
+      const { title, content, thumbnail, isPublic, mood, music, views } =
+        req.body;
       const file = req.file ?? null;
       let thumbnailLocal;
       let thumbnailLocalId;
@@ -17,7 +18,7 @@ class storyPostController {
       if (file && !thumbnail) {
         thumbnailLocal = await imageService.uploadImage({ file });
         thumbnailLocalId = thumbnailLocal._id;
-        storyPostInfo = await StoryPostService.addStoryPost({
+        storyPostInfo = await StoryPostService.createStoryPost({
           userInfo,
           title,
           content,
@@ -25,9 +26,10 @@ class storyPostController {
           isPublic,
           mood,
           music,
+          views,
         });
       } else if (!file && thumbnail) {
-        storyPostInfo = await StoryPostService.addStoryPost({
+        storyPostInfo = await StoryPostService.createStoryPost({
           userInfo,
           title,
           content,
@@ -35,9 +37,10 @@ class storyPostController {
           isPublic,
           mood,
           music,
+          views,
         });
       } else if (!file && !thumbnail) {
-        storyPostInfo = await StoryPostService.addStoryPost({
+        storyPostInfo = await StoryPostService.createStoryPost({
           userInfo,
           title,
           content,
@@ -45,6 +48,7 @@ class storyPostController {
           isPublic,
           mood,
           music,
+          views,
         });
       }
 
@@ -110,7 +114,10 @@ class storyPostController {
       const { title, content, thumbnail, isPublic, mood, music } = req.body;
       const file = req.file ?? null;
       const userId = req.currentUserId;
-      const userInfo = userId;
+      const isSameUser = await StoryPostService.isSameUser(userId, storyId);
+      if (!isSameUser) {
+        throw new Error('스토리 수정 권한이 없습니다.');
+      }
 
       let thumbnailLocal;
       let thumbnailLocalId;
@@ -147,7 +154,6 @@ class storyPostController {
       }
 
       const updatedStory = await StoryPostService.setStory({
-        userInfo,
         storyId,
         toUpdate,
       });
@@ -166,6 +172,14 @@ class storyPostController {
   static async deleteStoryPost(req, res, next) {
     try {
       const storyId = req.params.storyId;
+      const loginUserId = req.currentUserId;
+      const isSameUser = await StoryPostService.isSameUser(
+        loginUserId,
+        storyId,
+      );
+      if (!isSameUser) {
+        throw new Error('스토리 삭제 권한이 없습니다.');
+      }
       const result = await StoryPostService.deleteStory({ storyId });
       return res.status(200).send(result);
     } catch (error) {
@@ -177,6 +191,10 @@ class storyPostController {
     try {
       const storyId = req.params.storyId;
       const storyInfo = await StoryPostService.readStoryDetail({ storyId });
+      if (!storyInfo) {
+        throw new Error('스토리를 찾을 수 없습니다');
+      }
+
       const result = await StoryPostService.populateStoryPost(
         storyInfo,
         'userInfo thumbnail',
@@ -190,19 +208,22 @@ class storyPostController {
   static async readAllStories(req, res, next) {
     try {
       const page = parseInt(req.query.page || 1); // default 페이지: 1
+      const limit = 8; // 한페이지에 들어갈 스토리 수
       const { stories, totalPage, count } = await StoryPostService.readPosts(
+        limit,
         page,
       );
-      const result = await StoryPostService.populateStoryPost(
+      const populageResult = await StoryPostService.populateStoryPost(
         stories,
         'userInfo thumbnail',
       );
-      return res.status(200).json({
+      const result = {
         currentPage: page,
         totalPage: totalPage,
         totalStoriesCount: count,
-        result,
-      });
+        stories: populageResult,
+      };
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }

@@ -33,6 +33,11 @@ const StoryPostSchema = new Schema(
       type: String,
       required: false,
     },
+    views: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
   {
     timestamps: true,

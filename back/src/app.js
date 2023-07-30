@@ -8,7 +8,7 @@ import { storyPostRouter } from './routers/storyPostRouter.js';
 import forestRouter from './routers/forestPostRouter.js';
 import { imageRouter } from './routers/imageRouter.js';
 import { storyCommentRouter } from './routers/storyCommentRouter.js';
-import { forestCommentRouter } from './routers/forestCommentRouter.js';
+// import { forestCommentRouter } from './routers/forestCommentRouter.js';
 
 const app = express();
 app.use('/uploads', express.static('uploads'));
@@ -31,7 +31,7 @@ app.use(storyPostRouter);
 app.use('/forest', forestRouter);
 app.use(imageRouter);
 app.use(storyCommentRouter);
-app.use(forestCommentRouter);
+// app.use(forestCommentRouter);
 app.use(errorMiddleware);
 
 export { app };

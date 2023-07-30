@@ -56,6 +56,28 @@ class StoryCommentService {
     const result = StoryCommentModel.populateStoryComment(info, field);
     return result;
   }
+
+  static async readComments(limit, page, storyId) {
+    const skip = (page - 1) * limit;
+    const { comments, count } = await StoryCommentModel.findAndCountAll(
+      skip,
+      limit,
+      storyId,
+    );
+    const totalPage = Math.ceil(count / limit);
+    return { comments, totalPage, count };
+  }
+
+  static async isSameUser(loginUserId, commentId) {
+    const comments = await StoryCommentModel.findOneByCommentId({ commentId });
+    const commentWriterId = comments.writerId;
+
+    if (loginUserId == commentWriterId) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 export { StoryCommentService };

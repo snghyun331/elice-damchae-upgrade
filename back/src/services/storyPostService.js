@@ -2,7 +2,7 @@ import { StoryPostModel } from '../db/models/storyPostModel.js';
 import { StoryCommentModel } from '../db/models/storyCommentModel.js';
 
 class StoryPostService {
-  static async addStoryPost({
+  static async createStoryPost({
     userInfo,
     title,
     content,
@@ -10,6 +10,7 @@ class StoryPostService {
     isPublic,
     mood,
     music,
+    views,
   }) {
     if (!title || !content) {
       throw new Error('제목, 내용 모두 입력해주세요');
@@ -22,6 +23,7 @@ class StoryPostService {
       isPublic,
       mood,
       music,
+      views,
     };
     const createdNewStoryPost = await StoryPostModel.createStoryPost({
       newStoryPost,
@@ -29,7 +31,7 @@ class StoryPostService {
     return createdNewStoryPost;
   }
 
-  static async setStory({ userInfo, storyId, toUpdate }) {
+  static async setStory({ storyId, toUpdate }) {
     let story = await StoryPostModel.findOneByStoryId({ storyId });
 
     if (!story) {
@@ -107,7 +109,7 @@ class StoryPostService {
   }
 
   static async readStoryDetail({ storyId }) {
-    const story = await StoryPostModel.findOneByStoryId({ storyId });
+    const story = await StoryPostModel.findAndIncreaseView({ storyId });
     const allComments = await StoryCommentModel.findAllByStoryId({ storyId });
 
     if (!story) {
@@ -121,8 +123,7 @@ class StoryPostService {
     return storyInfo;
   }
 
-  static async readPosts(page) {
-    const limit = 8; // 한 페이지당 보여줄 스토리 수
+  static async readPosts(limit, page) {
     const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
 
     const { stories, count } = await StoryPostModel.findAndCountAll(
@@ -137,6 +138,16 @@ class StoryPostService {
     const field = { path: path };
     const result = StoryPostModel.populateStoryPost(info, field);
     return result;
+  }
+
+  static async isSameUser(loginUserId, storyId) {
+    const stories = await StoryPostModel.findOneByStoryId({ storyId });
+    const storyUserId = stories.userInfo;
+    if (loginUserId == storyUserId) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

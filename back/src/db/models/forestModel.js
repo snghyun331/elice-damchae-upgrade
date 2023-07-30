@@ -82,7 +82,7 @@ class forestModel {
     return { stories, count };
   }
 
-  static async populateStoryPost(info, field) {
+  static async populateForestPost(info, field) {
     const result = ForestPost.populate(info, field);
     return result;
   }
