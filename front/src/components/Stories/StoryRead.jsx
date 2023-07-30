@@ -70,6 +70,9 @@ const StoryRead = () => {
 
 					<div className="ms-4 mt-4 absolute top-1 left-1 p-4 z-10 max-w-md">
 						<p className="text-white mb-1">
+							조회수 {isDataLoaded && story.views}
+						</p>
+						<p className="text-white mb-1">
 							{isDataLoaded && formatDate(story.createdAt)}
 						</p>
 						<h5 className="leading-loose text-white text-2xl font-bold">

@@ -9,7 +9,8 @@ import { createPortal } from 'react-dom';
 
 const MyStories = () => {
 	const navigate = useNavigate();
-	const { isLoggedIn } = useUserState();
+	const isLoggedIn = useUserState();
+
 	const { setTitle, setMusic, reset } = useStoryStore();
 	const [storyModal, setStoryModal] = useState(false);
 

@@ -9,8 +9,9 @@ const StoryComment = ({ storyId }) => {
 
 	const fetchData = async () => {
 		try {
-			const res = await getApi(`stories/${storyId}`);
-			setCommentList(res.data.commentList);
+			const res = await getApi(`stories/${storyId}/comments`);
+			console.log(res.data);
+			setCommentList(res.data.comments);
 		} catch (error) {
 			console.log(error);
 		}
@@ -54,7 +55,7 @@ const StoryComment = ({ storyId }) => {
 	};
 	return (
 		<div className="p-6 flex flex-col">
-			<h3 className="font-semibold">댓글</h3>
+			<h3 className="font-semibold">{commentList.length}개의 댓글</h3>
 			<div className="flex flex-row space-x-2">
 				<input
 					className="my-5 w-[90%] border"
