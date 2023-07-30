@@ -3,9 +3,9 @@ import { Editor } from '@toast-ui/react-editor';
 import { postApi } from '../../services/api';
 import useImageUpload from '../../hooks/useImageUpload';
 import useStoryStore from '../../store/useStoryStore';
-import { textToIcon } from '../Util/Util';
+import { textToIcon, textToKorean } from '../Util/Util';
 
-const TextEditor = () => {
+const DaenamuTextEditor = () => {
 	const {
 		title,
 		content,
@@ -24,7 +24,7 @@ const TextEditor = () => {
 
 	const handleSubmit = async () => {
 		try {
-			const response = await postApi('stories/recommend', { content });
+			const response = await postApi('forest/senti-predict', { content });
 
 			console.log(response);
 			setMood(response.data.mood);
@@ -99,8 +99,8 @@ const TextEditor = () => {
 			<div className="flex flex-col space-y-2">
 				<div className="justify-end flex flex-row space-x-2">
 					{mood && (
-						<div className="text-xl">
-							게시글 분석 결과:{mood}
+						<div className="text-lg">
+							게시글 분석 결과 : {textToKorean[mood]}
 							{textToIcon[mood]}
 						</div>
 					)}
@@ -112,17 +112,23 @@ const TextEditor = () => {
 						감정 분석하기
 					</button>
 				</div>
-				<button
-					disabled={!isFormValid}
-					onClick={postStory}
-					type="button"
-					className="w-40 self-end bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-				>
-					작성 완료
-				</button>
+
+				<div className="justify-end flex flex-col">
+					<button
+						disabled={!isFormValid}
+						onClick={postStory}
+						type="button"
+						className="w-40 self-end bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+					>
+						작성 완료
+					</button>
+					{!isFormValid && (
+						<p className="self-end text-red-500 text-xs">빈 칸을 채워주세요.</p>
+					)}
+				</div>
 			</div>
 		</>
 	);
 };
 
-export default TextEditor;
+export default DaenamuTextEditor;

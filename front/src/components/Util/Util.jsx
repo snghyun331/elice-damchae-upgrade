@@ -22,6 +22,15 @@ export const textToIcon = {
 	neutral: '😐',
 };
 
+export const textToKorean = {
+	insecure: '불안',
+	surprise: '놀람',
+	pleasure: '기쁨',
+	sad: '슬픔',
+	anger: '분노',
+	neutral: '중립',
+};
+
 export const mbtiList = [
 	{ value: 'ISTJ', label: 'ISTJ' },
 	{ value: 'ISFJ', label: 'ISFJ' },
