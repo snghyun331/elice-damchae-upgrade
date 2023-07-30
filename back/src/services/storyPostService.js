@@ -134,6 +134,18 @@ class StoryPostService {
     return { stories, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
   }
 
+  static async readSeachQueryPosts(limit, page, searchQuery) {
+    const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
+
+    const { stories, count } = await StoryPostModel.findSearchQueryAndCountAll(
+      skip,
+      limit,
+      searchQuery,
+    );
+    const totalPage = Math.ceil(count / limit);
+    return { stories, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
+  }
+
   static async populateStoryPost(info, path) {
     const field = { path: path };
     const result = StoryPostModel.populateStoryPost(info, field);

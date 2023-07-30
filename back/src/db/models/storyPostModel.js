@@ -57,6 +57,16 @@ class StoryPostModel {
     return { stories, count };
   }
 
+  static async findSearchQueryAndCountAll(skip, limit, searchQuery) {
+    const stories = await StoryPost.find(searchQuery)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    const count = await StoryPost.countDocuments(searchQuery);
+    return { stories, count };
+  }
+
   static async populateStoryPost(info, field) {
     const result = StoryPost.populate(info, field);
     return result;
