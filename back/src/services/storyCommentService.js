@@ -1,4 +1,5 @@
 import { StoryCommentModel } from '../db/models/storyCommentModel.js';
+import { StoryPostModel } from '../db/models/storyPostModel.js';
 
 class StoryCommentService {
   static async createStoryComment({ storyId, writerId, comment, mood }) {
@@ -7,9 +8,13 @@ class StoryCommentService {
     }
 
     const newComment = { storyId, writerId, comment, mood };
+
+    StoryPostModel.findAndIncreaseCommentCount({ storyId });
+
     const createdNewComment = await StoryCommentModel.createStoryComment({
       newComment,
     });
+
     return createdNewComment;
   }
 

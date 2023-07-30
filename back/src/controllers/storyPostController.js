@@ -209,20 +209,98 @@ class storyPostController {
     try {
       const page = parseInt(req.query.page || 1); // default 페이지: 1
       const limit = 8; // 한페이지에 들어갈 스토리 수
-      const { stories, totalPage, count } = await StoryPostService.readPosts(
-        limit,
-        page,
-      );
-      const populageResult = await StoryPostService.populateStoryPost(
-        stories,
-        'userInfo thumbnail',
-      );
-      const result = {
-        currentPage: page,
-        totalPage: totalPage,
-        totalStoriesCount: count,
-        stories: populageResult,
-      };
+
+      const { option, searchword } = req.query;
+      let searchQuery = {};
+      let result;
+      // 제목만 검색
+      if (option === 'title') {
+        searchQuery = { title: new RegExp(searchword, 'i') };
+        const { stories, totalPage, count } =
+          await StoryPostService.readSeachQueryPosts(limit, page, searchQuery);
+        const populateResult = await StoryPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+        // 내용만 검색
+      } else if (option === 'content') {
+        searchQuery = { content: new RegExp(searchword, 'i') };
+        const { stories, totalPage, count } =
+          await StoryPostService.readSeachQueryPosts(limit, page, searchQuery);
+        const populateResult = await StoryPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+        // 제목 + 내용 검색
+      } else if (option === 'title_content') {
+        searchQuery = {
+          $or: [
+            { title: new RegExp(searchword, 'i') },
+            { content: new RegExp(searchword, 'i') },
+          ],
+        };
+        const { stories, totalPage, count } =
+          await StoryPostService.readSeachQueryPosts(limit, page, searchQuery);
+        const populateResult = await StoryPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+        // 모든 스토리 검색
+      } else {
+        const { stories, totalPage, count } = await StoryPostService.readPosts(
+          limit,
+          page,
+        );
+        const populateResult = await StoryPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('스토리가 없습니다');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+      }
+
       return res.status(200).json(result);
     } catch (error) {
       next(error);

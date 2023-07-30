@@ -14,6 +14,7 @@ class ForestController {
       const obj = await axios.post('http://127.0.0.1:5000/predict', {
         text: pureContent,
       });
+      // console.log(obj)  ->  (예) [data: { mood : pleasure }]
       // console.log(obj.data)  ->  (예) { mood : 'pleasure' }
       return res.status(201).json(obj.data);
     } catch (error) {

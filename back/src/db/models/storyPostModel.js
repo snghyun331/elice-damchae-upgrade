@@ -28,6 +28,10 @@ class StoryPostModel {
     return story;
   }
 
+  static async findAndIncreaseCommentCount({ storyId }) {
+    await StoryPost.updateOne({ _id: storyId }, { $inc: { commentCount: 1 } });
+  }
+
   static async updateStory({ storyId, fieldToUpdate, newValue }) {
     const filter = { _id: storyId };
     const update = { [fieldToUpdate]: newValue };
@@ -54,6 +58,16 @@ class StoryPostModel {
       .exec(); // 해당 쿼리 실행하고 프로미스 반환
 
     const count = await StoryPost.countDocuments(); // 전체 스토리 수
+    return { stories, count };
+  }
+
+  static async findSearchQueryAndCountAll(skip, limit, searchQuery) {
+    const stories = await StoryPost.find(searchQuery)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    const count = await StoryPost.countDocuments(searchQuery);
     return { stories, count };
   }
 
