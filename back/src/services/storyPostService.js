@@ -118,6 +118,7 @@ class StoryPostService {
 
     const storyInfo = {
       ...story._doc, // document를 자바스크립트 객체로 변환하기 위해 사용되는 속성
+      // commentCount: allComments.length,
       commentList: allComments,
     };
     return storyInfo;
@@ -129,6 +130,18 @@ class StoryPostService {
     const { stories, count } = await StoryPostModel.findAndCountAll(
       skip,
       limit,
+    );
+    const totalPage = Math.ceil(count / limit);
+    return { stories, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
+  }
+
+  static async readSeachQueryPosts(limit, page, searchQuery) {
+    const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
+
+    const { stories, count } = await StoryPostModel.findSearchQueryAndCountAll(
+      skip,
+      limit,
+      searchQuery,
     );
     const totalPage = Math.ceil(count / limit);
     return { stories, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수

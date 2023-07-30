@@ -1,4 +1,3 @@
-import sharp from 'sharp';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -35,13 +34,20 @@ class imageService {
     const uploadsPath = path.resolve(__dirname, '..', '..', 'uploads');
     const ImagePath = path.join(uploadsPath, fileName);
 
-    const ImageBuffer = await sharp(file.path).toBuffer();
-    await sharp(ImageBuffer).toFile(ImagePath);
+    fs.copyFile(file.path, ImagePath, (err) => {
+      // file.path: 임시 경로, ImagePath: 이미지 복사 경로
+      if (err) {
+        console.error('Error copying image file:', err);
+        throw err;
+      }
+      console.log('Image file copied successfully!');
+    });
 
-    // 이상한 숫자파일 삭제
+    // 이상한 숫자파일 삭제 (filename으로 추정됨)
     fs.unlinkSync(file.path);
 
     const newImage = { fileName: fileName, path: ImagePath };
+
     const createImage = await ImageModel.create({ newImage });
     return createImage;
   }
