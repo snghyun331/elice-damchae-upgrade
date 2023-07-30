@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { gapi } from 'gapi-script';
 import GoogleLogin from 'react-google-login';
 import { useUserActions } from '../../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
@@ -9,16 +7,6 @@ const clientIdData = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const GoogleButton = () => {
 	const { googleRegister, googleLogin } = useUserActions();
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		function start() {
-			gapi.client.init({
-				clientId: clientIdData,
-				scope: 'email',
-			});
-		}
-		gapi.load('client:auth2', start);
-	}, []);
 
 	const onSuccess = async (res) => {
 		console.log(res);
@@ -30,6 +18,8 @@ const GoogleButton = () => {
 		const user = { email, idToken, nickname, mbti, isGoogleLogin: true };
 
 		try {
+			// TODO : googleRegister 요청 한번만 보내고, 백에서 회원가입과 로그인 동시에 수행하도록 수정
+			// TODO : GoogleLogin 라이브러리 사용하지 않도록 수정
 			await googleRegister(user);
 			await googleLogin(user);
 			navigate('/');
@@ -51,6 +41,22 @@ const GoogleButton = () => {
 				buttonText="Google 계정으로 로그인 · 회원가입"
 				className="w-full flex justify-center items-center"
 			/>
+
+			<div
+				id="g_id_onload"
+				data-client_id={clientIdData}
+				data-login_uri="http://localhost:5173"
+				data-auto_prompt="false"
+			></div>
+			<div
+				className="g_id_signin"
+				data-type="standard"
+				data-size="large"
+				data-theme="outline"
+				data-text="sign_in_with"
+				data-shape="rectangular"
+				data-logo_alignment="left"
+			></div>
 		</div>
 	);
 };

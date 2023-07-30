@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StoryCreateModal from '../Stories/StoryCreateModal';
 import BannerCarousel from './BannerCarousel';
@@ -6,13 +7,15 @@ import StoryCardMap from '../Global/StoryCardMap';
 import useUserStore from '../../store/useUserStore';
 
 import { createPortal } from 'react-dom';
-import useStoryStore from '../../hooks/useStoryStore';
+import useStoryStore from '../../store/useStoryStore';
 
 const Home = () => {
 	const { nickname } = useUserStore();
 	const navigate = useNavigate();
 	const { isLoggedIn } = useUserStore();
-	const { storyModal, setStoryModal, reset } = useStoryStore();
+	const { reset } = useStoryStore();
+
+	const [storyModal, setStoryModal] = useState(false);
 
 	const messages = [
 		'행복한 하루 보내세요.',
@@ -27,17 +30,17 @@ const Home = () => {
 	];
 	const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 
+	const onClose = () => {
+		setStoryModal(false);
+		reset();
+	};
+
 	const renderModal = () => {
 		if (!storyModal) return null;
 
 		return createPortal(
 			<div className="overlay">
-				<StoryCreateModal
-					onClose={() => {
-						setStoryModal(false);
-						reset();
-					}}
-				/>
+				<StoryCreateModal onClose={onClose} />
 			</div>,
 			document.getElementById('modal-root'), // Add a div with id="modal-root" in your index.html file
 		);

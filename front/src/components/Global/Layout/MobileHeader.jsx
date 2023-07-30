@@ -13,7 +13,7 @@ const MobileHeader = () => {
 	const { logout } = useUserActions();
 	const mobMenuItems = isLoggedIn
 		? [
-				{ title: '대나무숲', onClick: () => navigate('/mypage') },
+				{ title: '대나무숲', onClick: () => navigate('/daenamus') },
 				{ title: '내 스토리', onClick: () => navigate('/stories') },
 				{ title: '마이 페이지', onClick: () => navigate('/mypage') },
 				{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
@@ -26,7 +26,7 @@ const MobileHeader = () => {
 				},
 		  ]
 		: [
-				{ title: '대나무숲', onClick: () => navigate('/mypage') },
+				{ title: '대나무숲', onClick: () => navigate('/daenamus') },
 				{ title: '내 스토리', onClick: () => navigate('/login') },
 				{ title: '로그인', onClick: () => navigate('/login') },
 		  ];
