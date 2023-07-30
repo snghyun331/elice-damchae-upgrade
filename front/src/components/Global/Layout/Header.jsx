@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Link } from 'react-router-dom';
 
-import useUserStore from '../../../store/useUserStore';
+import { useUserState } from '@/store/useUserStore';
 import MobileHeader from './MobileHeader';
 import ProfileButton from './ProfileButton';
 import LoginButton from './LoginButton';
@@ -10,7 +10,7 @@ import LogoutButton from './LogoutButton';
 
 const Header = () => {
 	const navigate = useNavigate();
-	const { isLoggedIn } = useUserStore();
+	const isLoggedIn = useUserState();
 
 	const handleGuestClick = () => {
 		if (isLoggedIn) {

@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import StoryCreateModal from '../Stories/StoryCreateModal';
 import BannerCarousel from './BannerCarousel';
 import Search from '../Global/Search';
 import StoryCardMap from '../Global/StoryCardMap';
-import useUserStore from '../../store/useUserStore';
+import useUserStore, { useUserState } from '../../store/useUserStore';
 
-import { createPortal } from 'react-dom';
+import ModalPortal from '../Stories/ModalPortal';
 import useStoryStore from '../../store/useStoryStore';
 
 const Home = () => {
 	const { nickname } = useUserStore();
 	const navigate = useNavigate();
-	const { isLoggedIn } = useUserStore();
+	const isLoggedIn = useUserState();
+
 	const { reset } = useStoryStore();
 
 	const [storyModal, setStoryModal] = useState(false);
@@ -33,17 +33,6 @@ const Home = () => {
 	const onClose = () => {
 		setStoryModal(false);
 		reset();
-	};
-
-	const renderModal = () => {
-		if (!storyModal) return null;
-
-		return createPortal(
-			<div className="overlay">
-				<StoryCreateModal onClose={onClose} />
-			</div>,
-			document.getElementById('modal-root'), // Add a div with id="modal-root" in your index.html file
-		);
 	};
 
 	return (
@@ -94,7 +83,9 @@ const Home = () => {
 					<StoryCardMap />
 				</div>
 			</div>
-			<div>{renderModal()}</div>
+			<div>
+				<ModalPortal storyModal={storyModal} onClose={onClose} />
+			</div>
 		</div>
 	);
 };

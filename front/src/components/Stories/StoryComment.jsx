@@ -9,8 +9,9 @@ const StoryComment = ({ storyId }) => {
 
 	const fetchData = async () => {
 		try {
-			const res = await getApi(`stories/${storyId}`);
-			setCommentList(res.data.commentList);
+			const res = await getApi(`stories/${storyId}/comments`);
+			console.log(res.data);
+			setCommentList(res.data.comments);
 		} catch (error) {
 			console.log(error);
 		}
@@ -54,7 +55,7 @@ const StoryComment = ({ storyId }) => {
 	};
 	return (
 		<div className="p-6 flex flex-col">
-			<h3 className="font-semibold">댓글</h3>
+			<h3 className="font-semibold">{commentList.length}개의 댓글</h3>
 			<div className="flex flex-row space-x-2">
 				<input
 					className="my-5 w-[90%] border"
@@ -66,7 +67,8 @@ const StoryComment = ({ storyId }) => {
 					value={comment}
 				/>
 				<button
-					className="h-8 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-orange-300 rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+					disabled={!comment}
+					className="h-8 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-300 disabled:bg-neutral-300 rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 					onClick={handleSubmit}
 				>
 					등록

@@ -13,7 +13,7 @@ const useUserStore = create((set) => {
 	};
 
 	const savedUserData = JSON.parse(localStorage.getItem('userData'));
-	
+
 	const userData = savedUserData
 		? { ...initialUserData, ...savedUserData }
 		: initialUserData;
@@ -108,4 +108,6 @@ const useUserStore = create((set) => {
 });
 
 export const useUserActions = () => useUserStore((state) => state.actions);
+export const useUserState = () => useUserStore((state) => state.isLoggedIn);
+
 export default useUserStore;

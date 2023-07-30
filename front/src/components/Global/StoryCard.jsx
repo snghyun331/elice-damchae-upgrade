@@ -1,17 +1,31 @@
 /* eslint-disable react/prop-types */
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import {
+	EyeIcon,
+	ChatBubbleLeftEllipsisIcon,
+} from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { truncateString, removeTag } from '../Util/Util';
 import { textToIcon, formatRelativeTime } from '../Util/Util';
 
 const StoryCard = ({
-	data: { content, createdAt, mood, thumbnail, title, _id, userInfo },
+	data: {
+		content,
+		createdAt,
+		mood,
+		thumbnail,
+		title,
+		_id,
+		userInfo,
+		views,
+		commentCount,
+	},
 }) => {
 	const moodIcon = textToIcon[mood.toLowerCase()] || '❓'; // fallback to question mark for unknown text
 
 	const imageSrc = thumbnail
-    ? `http://localhost:3000/uploads/${thumbnail.fileName}`
-    : "";
+		? `http://localhost:3000/uploads/${thumbnail.fileName}`
+		: '';
 
 	return (
 		<>
@@ -48,9 +62,23 @@ const StoryCard = ({
 								{truncateString(removeTag(content), 100)}
 							</p>
 						</div>
-						<div className="flex w-16 items-center text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end">
-							<ChevronRightIcon className="w-4 mt-1" />
-							<span className="ml-1">더보기</span>
+
+						<div className="space-y-2">
+							<div className="flex w-16 items-center text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end">
+								<ChevronRightIcon className="w-4 mt-1" />
+								<span className="ml-1">더보기</span>
+							</div>
+							<div className="justify-end flex flex-row space-x-2">
+								<div className="flex flex-row space-x-2">
+									<EyeIcon className="w-4 mt-1" />
+									<p>{views}</p>
+								</div>
+
+								<div className="justify-end flex flex-row space-x-2">
+									<ChatBubbleLeftEllipsisIcon className="w-4 mt-1" />
+									<p>{commentCount}</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</Link>

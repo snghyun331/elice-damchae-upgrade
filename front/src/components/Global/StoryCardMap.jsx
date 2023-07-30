@@ -4,7 +4,6 @@ import StoryCard from './StoryCard';
 import Pagination from './Pagination';
 import { getApi } from '../../services/api';
 
-
 const StoryCardMap = () => {
 	const [stories, setStories] = useState([]);
 	const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -12,7 +11,8 @@ const StoryCardMap = () => {
 	const fetchData = async (page = 1) => {
 		try {
 			const response = await getApi(`stories?page=${page}`);
-			setStories(response.data.result);
+			console.log(response.data);
+			setStories(response.data.stories);
 			setTotalPage(response.data.totalPage);
 			setIsDataLoaded(true);
 		} catch (error) {
@@ -24,7 +24,8 @@ const StoryCardMap = () => {
 	}, []);
 
 	const { currentPage, prev, next, go } = usePagination(
-		isDataLoaded ? stories : [], totalPage
+		isDataLoaded ? stories : [],
+		totalPage,
 	);
 
 	useEffect(() => {

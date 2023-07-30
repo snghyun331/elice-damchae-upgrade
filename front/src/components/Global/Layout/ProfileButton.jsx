@@ -2,12 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { Fragment } from 'react';
+import { classNames } from '../../Util/Util';
 
 const ProfileButton = () => {
-	const classNames = (...classes) => {
-		return classes.filter(Boolean).join(' ');
-	};
-
 	const navigate = useNavigate();
 	const profileItems = [
 		{ title: '마이 페이지', onClick: () => navigate('/mypage') },

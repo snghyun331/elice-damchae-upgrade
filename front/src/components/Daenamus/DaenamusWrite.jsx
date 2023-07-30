@@ -1,4 +1,4 @@
-import TextEditor from '../Global/TextEditor';
+import DaenamuTextEditor from './DaenamuTextEditor';
 
 const DaenamusWrite = () => {
 	return (
@@ -9,7 +9,7 @@ const DaenamusWrite = () => {
 				<h2 className="text-3xl font-bold mb-4">글쓰기</h2>
 
 				<div className="mt-8">
-					<TextEditor />
+					<DaenamuTextEditor />
 				</div>
 
 				<div className="mt-8 flex justify-center">

@@ -1,5 +1,9 @@
 import moment from 'moment';
 
+export const classNames = (...classes) => {
+	return classes.filter(Boolean).join(' ');
+};
+
 export const textToColor = {
 	insecure: '#F1E3FF',
 	surprise: '#FFFBB8',
@@ -16,6 +20,15 @@ export const textToIcon = {
 	sad: '😢',
 	anger: '😡',
 	neutral: '😐',
+};
+
+export const textToKorean = {
+	insecure: '불안',
+	surprise: '놀람',
+	pleasure: '기쁨',
+	sad: '슬픔',
+	anger: '분노',
+	neutral: '중립',
 };
 
 export const mbtiList = [
