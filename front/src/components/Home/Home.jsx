@@ -4,7 +4,7 @@ import StoryCreateModal from '../Stories/StoryCreateModal';
 import BannerCarousel from './BannerCarousel';
 import Search from '../Global/Search';
 import StoryCardMap from '../Global/StoryCardMap';
-import useUserStore from '../../store/useUserStore';
+import useUserStore, { useUserState } from '../../store/useUserStore';
 
 import { createPortal } from 'react-dom';
 import useStoryStore from '../../store/useStoryStore';
@@ -12,7 +12,7 @@ import useStoryStore from '../../store/useStoryStore';
 const Home = () => {
 	const { nickname } = useUserStore();
 	const navigate = useNavigate();
-	const { isLoggedIn } = useUserStore();
+	const { isLoggedIn } = useUserState();
 	const { reset } = useStoryStore();
 
 	const [storyModal, setStoryModal] = useState(false);
