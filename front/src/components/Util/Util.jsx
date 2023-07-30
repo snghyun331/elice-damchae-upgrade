@@ -1,5 +1,9 @@
 import moment from 'moment';
 
+export const classNames = (...classes) => {
+	return classes.filter(Boolean).join(' ');
+};
+
 export const textToColor = {
 	insecure: '#F1E3FF',
 	surprise: '#FFFBB8',
