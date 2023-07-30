@@ -213,6 +213,7 @@ class storyPostController {
       const { option, searchword } = req.query;
       let searchQuery = {};
       let result;
+      // 제목만 검색
       if (option === 'title') {
         searchQuery = { title: new RegExp(searchword, 'i') };
         const { stories, totalPage, count } =
@@ -232,6 +233,7 @@ class storyPostController {
           totalStoriesCount: count,
           stories: populateResult,
         };
+        // 내용만 검색
       } else if (option === 'content') {
         searchQuery = { content: new RegExp(searchword, 'i') };
         const { stories, totalPage, count } =
@@ -251,6 +253,7 @@ class storyPostController {
           totalStoriesCount: count,
           stories: populateResult,
         };
+        // 제목 + 내용 검색
       } else if (option === 'title_content') {
         searchQuery = {
           $or: [
@@ -275,6 +278,7 @@ class storyPostController {
           totalStoriesCount: count,
           stories: populateResult,
         };
+        // 모든 스토리 검색
       } else {
         const { stories, totalPage, count } = await StoryPostService.readPosts(
           limit,
