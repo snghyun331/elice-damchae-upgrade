@@ -5,6 +5,23 @@ import axios from 'axios';
 // import BadRequest from '../middlewares/error/badRequest.js';
 
 class ForestController {
+  // 대나무숲 글 등록 전 감정분석 수행하기
+  static async getPredict(req, res, next) {
+    try {
+      const { content } = req.body;
+      const pureContent = content.replace(/<[^>]+>/g, ' '); // content에 html태그가 섞여오기 때문에 태그 제거하기
+      // flask에서 'text': pureContent 형태로 request로 들어감
+      const obj = await axios.post('http://127.0.0.1:5000/predict', {
+        text: pureContent,
+      });
+      // console.log(obj.data)  ->  (예) { mood : 'pleasure' }
+      return res.status(201).json(obj.data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // 대나무숲 글 등록
   static async createPost(req, res, next) {
     try {
       // 이미 loginRequired.js에서 로그인안한 상태로 등록하면 '로그인한 유저만 가능합니다'msg가 떠서 아래 코드는 없어도 될 것 같습니다
@@ -15,6 +32,8 @@ class ForestController {
       // }
 
       const userId = req.currentUserId; // 로그인한 유저의 ID를 userId에 저장
+
+      // request body에는 제목, 내용, 감정분석 후 나온 감정데이터가 들어갑니다.
       const { title, content, mood } = req.body;
       const newPost = await ForestService.createPost({
         userId,
@@ -22,26 +41,9 @@ class ForestController {
         content,
         mood,
       });
-      const result = await ForestService.populateForestPost(newPost, 'userId'); // userId 필드를 기준으로 populate(자동으로 'User'스키마에 담긴 정보가 참조됨)
+      const result = await ForestService.populateForestPost(newPost, 'userId'); // userId 필드를 기준으로 populate (userId에 자동으로 'User'스키마에 담긴 정보가 참조됨)
 
       return res.status(201).json(result);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async getPredict(req, res, next) {
-    try {
-      const { content } = req.body;
-      const pureContent = content.replace(/<[^>]+>/g, ' '); // html태그가 섞여오기 때문에 태그 제거하기
-      // flask에서 'text': pureContent 형태로 request로 들어감
-      const obj = await axios.post('http://127.0.0.1:5000/predict', {
-        text: pureContent,
-      });
-      // console.log(obj.data)  ->  (예) { mood : 'pleasure' }
-      // const Mood = obj.data.mood
-      // const result = {mood: Mood}
-      return res.status(201).json(obj.data);
     } catch (error) {
       next(error);
     }
