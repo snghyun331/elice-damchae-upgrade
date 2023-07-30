@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { Editor } from '@toast-ui/react-editor';
-import useStoryStore from '../../hooks/useStoryStore';
+import useStoryStore from '../../store/useStoryStore';
 import { postApi } from '../../services/api';
 import RadioOption from '../Global/RadioOption';
 import useImageUpload from '../../hooks/useImageUpload';
@@ -9,7 +9,6 @@ const StoryEditor = () => {
 	const {
 		title,
 		content,
-		music,
 		stableThumbnail,
 
 		setTitle,
@@ -46,6 +45,8 @@ const StoryEditor = () => {
 	};
 
 	const generateImage = async () => {
+		const body = editorRef.current?.getInstance().getHTML() || '';
+		setContent(body);
 		try {
 			const response = await postApi('image/stable', { content });
 			setStableThumbnail(response.data.fileName);
@@ -53,21 +54,11 @@ const StoryEditor = () => {
 			console.log(error);
 		}
 	};
+
 	//TODO: 로딩중 걸기
 
-	const handleGenerate = async () => {
-		const body = editorRef.current?.getInstance().getHTML() || '';
-
-		setContent(body);
-		generateImage();
-	};
-
-	const handleRecommend = () => {
-		recommend();
-		console.log(music);
-	};
-
 	const editorRef = useRef();
+	const fileRef = useRef();
 
 	const onChange = () => {
 		const body = editorRef.current.getInstance().getHTML();
@@ -123,6 +114,7 @@ const StoryEditor = () => {
 								className="rounded-lg block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
 								id="file_input"
 								type="file"
+								ref={fileRef}
 								onChange={handleThumbnailUpload}
 							/>
 						</div>
@@ -135,7 +127,8 @@ const StoryEditor = () => {
 											onClick={() => {
 												setPreview('');
 												setLocalThumbnail('');
-												setThumbnail(null);
+												setThumbnail('');
+												fileRef.current.value = '';
 											}}
 										>
 											X
@@ -161,7 +154,7 @@ const StoryEditor = () => {
 					<div className="w-1/2 ">
 						<div className="h-1/5 flex">
 							<button
-								onClick={handleGenerate}
+								onClick={generateImage}
 								disabled={content?.length <= 16}
 								className="w-full h-8 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 							>
@@ -175,8 +168,8 @@ const StoryEditor = () => {
 										<p className="text-sm text-gray-500">선택된 이미지:</p>
 										<button
 											onClick={() => {
-												setStableThumbnail(null);
-												setThumbnail(null);
+												setStableThumbnail('');
+												setThumbnail('');
 											}}
 										>
 											X
@@ -205,7 +198,7 @@ const StoryEditor = () => {
 
 				<div className="w-full">
 					<button
-						onClick={handleRecommend}
+						onClick={recommend}
 						disabled={content?.length <= 16}
 						className="w-full h-8 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 					>
