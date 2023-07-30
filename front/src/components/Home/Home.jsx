@@ -11,7 +11,8 @@ import useStoryStore from '../../store/useStoryStore';
 const Home = () => {
 	const { nickname } = useUserStore();
 	const navigate = useNavigate();
-	const { isLoggedIn } = useUserState();
+	const isLoggedIn = useUserState();
+
 	const { reset } = useStoryStore();
 
 	const [storyModal, setStoryModal] = useState(false);

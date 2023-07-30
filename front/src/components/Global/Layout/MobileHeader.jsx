@@ -6,7 +6,8 @@ import { classNames } from '../../Util/Util';
 
 const MobileHeader = () => {
 	const navigate = useNavigate();
-	const { isLoggedIn } = useUserState();
+	const isLoggedIn = useUserState();
+
 	const { logout } = useUserActions();
 	const mobMenuItems = isLoggedIn
 		? [

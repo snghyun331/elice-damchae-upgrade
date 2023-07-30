@@ -10,7 +10,7 @@ import LogoutButton from './LogoutButton';
 
 const Header = () => {
 	const navigate = useNavigate();
-	const { isLoggedIn } = useUserState();
+	const isLoggedIn = useUserState();
 
 	const handleGuestClick = () => {
 		if (isLoggedIn) {
