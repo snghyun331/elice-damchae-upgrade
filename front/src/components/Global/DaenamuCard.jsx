@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { truncateString } from '../Util/Util';
-const DaenamusCard = ({ postId }) => {
+const DaenamuCard = ({ forest }) => {
 	// 가상의 게시글 데이터를 대신하여 실제 데이터를 사용해야 합니다.
 	const post = {
 		id: postId,
@@ -40,4 +40,4 @@ const DaenamusCard = ({ postId }) => {
 	);
 };
 
-export default DaenamusCard;
+export default DaenamuCard;
