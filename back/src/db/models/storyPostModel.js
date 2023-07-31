@@ -32,6 +32,13 @@ class StoryPostModel {
     await StoryPost.updateOne({ _id: storyId }, { $inc: { commentCount: 1 } });
   }
 
+  static async findAndDecreaseCommentCount({ storyId }) {
+    await StoryPost.updateOne(
+      { _id: storyId, commentCount: { $gt: 0 } },
+      { $inc: { commentCount: -1 } },
+    );
+  }
+
   static async updateStory({ storyId, fieldToUpdate, newValue }) {
     const filter = { _id: storyId };
     const update = { [fieldToUpdate]: newValue };

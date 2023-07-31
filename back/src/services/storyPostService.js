@@ -1,5 +1,7 @@
 import { StoryPostModel } from '../db/models/storyPostModel.js';
+import { ImageModel } from '../db/models/imageModel.js';
 import { StoryCommentModel } from '../db/models/storyCommentModel.js';
+import fs from 'fs';
 
 class StoryPostService {
   static async createStoryPost({
@@ -31,7 +33,7 @@ class StoryPostService {
     return createdNewStoryPost;
   }
 
-  static async setStory({ storyId, toUpdate }) {
+  static async updateStory({ storyId, toUpdate }) {
     let story = await StoryPostModel.findOneByStoryId({ storyId });
 
     if (!story) {
@@ -69,6 +71,7 @@ class StoryPostService {
     }
 
     if (toUpdate.thumbnail) {
+      // create Image
       const fieldToUpdate = 'thumbnail';
       const newValue = toUpdate.thumbnail;
       story = await StoryPostModel.updateStory({
@@ -160,6 +163,19 @@ class StoryPostService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  static async deletePreviousUploadImage({ storyId }) {
+    const story = await StoryPostModel.findOneByStoryId({ storyId });
+    const previousImage = await ImageModel.findOneByImageId({
+      imageId: story.thumbnail,
+    });
+    const previousImagePath = previousImage.path;
+    if (fs.existsSync(previousImagePath)) {
+      fs.unlinkSync(previousImagePath);
+    } else {
+      console.log('File does not exist, so not deleting.');
     }
   }
 }

@@ -10,9 +10,12 @@ class StoryCommentController {
       if (!comment) {
         throw new Error('댓글을 입력해주세요');
       }
-      const obj = await axios.post('http://127.0.0.1:5000/predict', {
-        text: comment,
-      });
+      const obj = await axios.post(
+        process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL,
+        {
+          text: comment,
+        },
+      );
       const mood = obj.data.mood;
       const newComment = await StoryCommentService.createStoryComment({
         storyId,
@@ -46,13 +49,16 @@ class StoryCommentController {
       if (!comment) {
         throw new Error('댓글을 입력해주세요');
       }
-      const obj = await axios.post('http://127.0.0.1:5000/predict', {
-        text: comment,
-      });
+      const obj = await axios.post(
+        process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL,
+        {
+          text: comment,
+        },
+      );
       const mood = obj.data.mood;
       const toUpdate = { comment, mood };
 
-      const updatedComment = await StoryCommentService.setStoryComment({
+      const updatedComment = await StoryCommentService.updateStoryComment({
         commentId,
         toUpdate,
       });
