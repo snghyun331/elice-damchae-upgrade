@@ -1,7 +1,7 @@
-import { StoryCommentService } from '../services/storyCommentService.js';
+import { storyCommentService } from '../services/storyCommentService.js';
 import axios from 'axios';
 
-class StoryCommentController {
+class storyCommentController {
   static async createStoryComment(req, res, next) {
     try {
       const storyId = req.params.storyId;
@@ -17,14 +17,14 @@ class StoryCommentController {
         },
       );
       const mood = obj.data.mood;
-      const newComment = await StoryCommentService.createStoryComment({
+      const newComment = await storyCommentService.createStoryComment({
         storyId,
         writerId,
         comment,
         mood,
       });
 
-      const result = await StoryCommentService.populateStoryComment(
+      const result = await storyCommentService.populateStoryComment(
         newComment,
         'storyId writerId',
       );
@@ -38,7 +38,7 @@ class StoryCommentController {
     try {
       const commentId = req.params.commentId;
       const loginUserId = req.currentUserId;
-      const isSameUser = await StoryCommentService.isSameUser(
+      const isSameUser = await storyCommentService.isSameUser(
         loginUserId,
         commentId,
       );
@@ -58,12 +58,12 @@ class StoryCommentController {
       const mood = obj.data.mood;
       const toUpdate = { comment, mood };
 
-      const updatedComment = await StoryCommentService.updateStoryComment({
+      const updatedComment = await storyCommentService.updateStoryComment({
         commentId,
         toUpdate,
       });
 
-      const result = await StoryCommentService.populateStoryComment(
+      const result = await storyCommentService.populateStoryComment(
         updatedComment,
         'storyId writerId',
       );
@@ -77,14 +77,14 @@ class StoryCommentController {
     try {
       const commentId = req.params.commentId;
       const loginUserId = req.currentUserId;
-      const isSameUser = await StoryCommentService.isSameUser(
+      const isSameUser = await storyCommentService.isSameUser(
         loginUserId,
         commentId,
       );
       if (!isSameUser) {
         throw new Error('댓글 삭제 권한이 없습니다.');
       }
-      const result = await StoryCommentService.deleteStoryComment({
+      const result = await storyCommentService.deleteStoryComment({
         commentId,
       });
       return res.status(200).send(result);
@@ -99,8 +99,8 @@ class StoryCommentController {
       const page = parseInt(req.query.page || 1);
       const limit = 6;
       const { comments, totalPage, count } =
-        await StoryCommentService.readComments(limit, page, storyId);
-      const populageResult = await StoryCommentService.populateStoryComment(
+        await storyCommentService.readComments(limit, page, storyId);
+      const populageResult = await storyCommentService.populateStoryComment(
         comments,
         'writerId',
       );
@@ -117,4 +117,4 @@ class StoryCommentController {
   }
 }
 
-export { StoryCommentController };
+export { storyCommentController };

@@ -50,6 +50,6 @@ const StoryPostSchema = new Schema(
   },
 );
 
-const StoryPost = model('StoryPost', StoryPostSchema);
+const storyPost = model('StoryPost', StoryPostSchema);
 
-export { StoryPost };
+export { storyPost };
