@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const hateSchema = new Schema(
+const forestLikeSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -13,9 +13,9 @@ const hateSchema = new Schema(
       required: false,
     },
   },
-  { timestamps: true, collection: 'hates' },
+  { timestamps: true, collection: 'forestLikes' },
 );
 
-const hate = model('Hate', hateSchema);
+const forestLike = model('ForestLike', forestLikeSchema);
 
-export { hate };
+export { forestLike };
