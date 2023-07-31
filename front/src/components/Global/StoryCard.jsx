@@ -53,7 +53,7 @@ const StoryCard = ({
 								{truncateString(title, 32)}
 							</h5>
 							<div className="text-sm text-gray-500">
-								{userInfo.nickname}
+								{userInfo ? userInfo.nickname : '알 수 없는 유저'}
 								<span className="text-xs ml-2">
 									{formatRelativeTime(createdAt)}
 								</span>

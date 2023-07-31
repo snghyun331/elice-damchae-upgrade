@@ -6,15 +6,15 @@ import { getApi } from '../../services/api';
 
 const StoryCardMap = () => {
 	const [stories, setStories] = useState([]);
-	const [isDataLoading, setisDataLoading] = useState(false);
+	const [isDataLoading, setIsDataLoading] = useState(false);
 	const [totalPage, setTotalPage] = useState(0);
 	const fetchData = async (page = 1) => {
 		try {
 			const response = await getApi(`stories?page=${page}`);
-			console.log(response.data);
 			setStories(response.data.stories);
 			setTotalPage(response.data.totalPage);
-			setisDataLoading(true);
+			setIsDataLoading(true);
+			console.log(response.data);
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
 		}

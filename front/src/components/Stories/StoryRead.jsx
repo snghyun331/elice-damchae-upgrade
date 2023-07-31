@@ -12,7 +12,7 @@ import StoryComment from './StoryComment';
 const StoryRead = () => {
 	const { storyId } = useParams();
 	const [story, setStory] = useState([]);
-	const [isDataLoading, setisDataLoading] = useState(false);
+	const [isDataLoading, setIsDataLoading] = useState(false);
 	const navigate = useNavigate();
 
 	const { id } = useUserStore();
@@ -22,7 +22,7 @@ const StoryRead = () => {
 			const res = await getApi(`stories/${storyId}`);
 			console.log(res);
 			setStory(res.data);
-			setisDataLoading(true);
+			setIsDataLoading(true);
 		} catch (error) {
 			console.log(error);
 		}
