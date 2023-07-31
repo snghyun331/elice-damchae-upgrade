@@ -12,7 +12,7 @@ import { delApi, getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
 import useUserStore from '../../store/useUserStore';
 import StoryComment from '../Stories/StoryComment';
-import Reaction from './Reaction';
+import ReactionChart from './Reaction';
 
 const DaenamuRead = () => {
 	const { forestId } = useParams();
@@ -67,7 +67,7 @@ const DaenamuRead = () => {
 							<div className="text-2xl">
 								{isDataLoading && textToIcon[forest.mood]}
 							</div>
-							<h5 className="leading-loose text-2xl font-bold">
+							<h5 className="p-5 leading-loose text-2xl font-bold">
 								{forest.title}
 							</h5>
 						</div>
@@ -124,7 +124,7 @@ const DaenamuRead = () => {
 					</div>
 
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
-					<Reaction />
+					<ReactionChart />
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<div>
 						<StoryComment
