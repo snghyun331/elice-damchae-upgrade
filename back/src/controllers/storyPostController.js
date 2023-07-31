@@ -156,7 +156,7 @@ class storyPostController {
       }
 
       // 업뎃
-      const updatedStory = await StoryPostService.setStory({
+      const updatedStory = await StoryPostService.updateStory({
         storyId,
         toUpdate,
       });

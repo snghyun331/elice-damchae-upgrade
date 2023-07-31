@@ -33,7 +33,7 @@ class StoryPostService {
     return createdNewStoryPost;
   }
 
-  static async setStory({ storyId, toUpdate }) {
+  static async updateStory({ storyId, toUpdate }) {
     let story = await StoryPostModel.findOneByStoryId({ storyId });
 
     if (!story) {

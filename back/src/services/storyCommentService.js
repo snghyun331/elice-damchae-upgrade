@@ -18,7 +18,7 @@ class StoryCommentService {
     return createdNewComment;
   }
 
-  static async setStoryComment({ commentId, toUpdate }) {
+  static async updateStoryComment({ commentId, toUpdate }) {
     let comment = await StoryCommentModel.findOneByCommentId({ commentId });
 
     if (!comment) {

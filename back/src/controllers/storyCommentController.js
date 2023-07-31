@@ -52,7 +52,7 @@ class StoryCommentController {
       const mood = obj.data.mood;
       const toUpdate = { comment, mood };
 
-      const updatedComment = await StoryCommentService.setStoryComment({
+      const updatedComment = await StoryCommentService.updateStoryComment({
         commentId,
         toUpdate,
       });
