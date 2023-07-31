@@ -17,5 +17,5 @@ const imageSchema = new Schema(
   },
 );
 
-const image = model('image', imageSchema);
+const image = model('Image', imageSchema);
 export { image };
