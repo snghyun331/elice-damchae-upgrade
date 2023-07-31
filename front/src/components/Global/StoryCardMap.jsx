@@ -26,6 +26,7 @@ const StoryCardMap = () => {
 	const { currentPage, prev, next, go } = usePagination(
 		isDataLoading ? stories : [],
 		totalPage,
+		{ onChange: ({ targetPage }) => fetchData(targetPage) },
 	);
 
 	useEffect(() => {
