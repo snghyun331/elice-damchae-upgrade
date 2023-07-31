@@ -1,7 +1,7 @@
-import { StoryCommentModel } from '../db/models/storyCommentModel.js';
-import { StoryPostModel } from '../db/models/storyPostModel.js';
+import { storyCommentModel } from '../db/models/storyCommentModel.js';
+import { storyPostModel } from '../db/models/storyPostModel.js';
 
-class StoryCommentService {
+class storyCommentService {
   static async createStoryComment({ storyId, writerId, comment, mood }) {
     if (!comment) {
       throw new Error('댓글을 입력해주세요');
@@ -9,9 +9,9 @@ class StoryCommentService {
 
     const newComment = { storyId, writerId, comment, mood };
 
-    StoryPostModel.findAndIncreaseCommentCount({ storyId });
+    storyPostModel.findAndIncreaseCommentCount({ storyId });
 
-    const createdNewComment = await StoryCommentModel.createStoryComment({
+    const createdNewComment = await storyCommentModel.createStoryComment({
       newComment,
     });
 
@@ -19,7 +19,7 @@ class StoryCommentService {
   }
 
   static async updateStoryComment({ commentId, toUpdate }) {
-    let comment = await StoryCommentModel.findOneByCommentId({ commentId });
+    let comment = await storyCommentModel.findOneByCommentId({ commentId });
 
     if (!comment) {
       throw new Error('해당 댓글을 찾을 수 없습니다. 다시 한번 확인해부세요');
@@ -28,7 +28,7 @@ class StoryCommentService {
     if (toUpdate.comment) {
       const fieldToUpdate = 'comment';
       const newValue = toUpdate.comment;
-      comment = await StoryCommentModel.updateComment({
+      comment = await storyCommentModel.updateComment({
         commentId,
         fieldToUpdate,
         newValue,
@@ -38,7 +38,7 @@ class StoryCommentService {
     if (toUpdate.mood) {
       const fieldToUpdate = 'mood';
       const newValue = toUpdate.mood;
-      comment = await StoryCommentModel.updateComment({
+      comment = await storyCommentModel.updateComment({
         commentId,
         fieldToUpdate,
         newValue,
@@ -49,12 +49,12 @@ class StoryCommentService {
   }
 
   static async deleteStoryComment({ commentId }) {
-    const commentInfo = await StoryCommentModel.findOneByCommentId({
+    const commentInfo = await storyCommentModel.findOneByCommentId({
       commentId,
     });
     const storyId = commentInfo.storyId;
-    StoryPostModel.findAndDecreaseCommentCount({ storyId });
-    let isDeleted = await StoryCommentModel.deleteOneByCommentId({ commentId });
+    storyPostModel.findAndDecreaseCommentCount({ storyId });
+    let isDeleted = await storyCommentModel.deleteOneByCommentId({ commentId });
     if (!isDeleted) {
       throw new Error('삭제할 댓글 정보가 없습니다.');
     }
@@ -64,13 +64,13 @@ class StoryCommentService {
 
   static async populateStoryComment(info, path) {
     const field = { path: path };
-    const result = StoryCommentModel.populateStoryComment(info, field);
+    const result = storyCommentModel.populateStoryComment(info, field);
     return result;
   }
 
   static async readComments(limit, page, storyId) {
     const skip = (page - 1) * limit;
-    const { comments, count } = await StoryCommentModel.findAndCountAll(
+    const { comments, count } = await storyCommentModel.findAndCountAll(
       skip,
       limit,
       storyId,
@@ -80,7 +80,7 @@ class StoryCommentService {
   }
 
   static async isSameUser(loginUserId, commentId) {
-    const comments = await StoryCommentModel.findOneByCommentId({ commentId });
+    const comments = await storyCommentModel.findOneByCommentId({ commentId });
 
     const commentWriterId = comments.writerId;
 
@@ -92,4 +92,4 @@ class StoryCommentService {
   }
 }
 
-export { StoryCommentService };
+export { storyCommentService };

@@ -1,15 +1,15 @@
-import { Image } from '../schemas/image.js';
+import { image } from '../schemas/image.js';
 
-class ImageModel {
+class imageModel {
   static async create({ newImage }) {
-    const createdImage = await Image.create(newImage);
+    const createdImage = await image.create(newImage);
     return createdImage;
   }
 
   static async findOneByImageId({ imageId }) {
-    const image = await Image.findOne({ _id: imageId });
+    const image = await image.findOne({ _id: imageId });
     return image;
   }
 }
 
-export { ImageModel };
+export { imageModel };

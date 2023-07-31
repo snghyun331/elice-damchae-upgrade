@@ -19,8 +19,8 @@ def translate_to_english(text):
 def generate_image():
     data = request.get_json()
     # Extract Korean text from request data
-    korean_text = data.get('korean_text', '')
-    english_text = translate_to_english(korean_text)
+    koreanText = data.get('koreanText', '')
+    englishText = translate_to_english(koreanText)
 
     url = "https://api.stability.ai/v1/generation/stable-diffusion-xl-beta-v2-2-2/text-to-image"
 
@@ -34,7 +34,7 @@ def generate_image():
         "style_preset": "enhance",
         "text_prompts": [
             {
-                "text": english_text,
+                "text": englishText,
                 "weight": 1
             }
         ],
@@ -53,9 +53,9 @@ def generate_image():
         return jsonify({"error": "Non-200 response from API"}), 500
 
     data = response.json()
-    base64_value = data['artifacts'][0]['base64']
+    base64Value = data['artifacts'][0]['base64']
 
-    return jsonify({"image_base64": base64_value})
+    return jsonify({"imageBase64": base64Value})
 
 
 if __name__ == '__main__':

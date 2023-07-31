@@ -1,30 +1,30 @@
 import { Router } from 'express';
 import { loginRequired } from '../middlewares/loginRequired.js';
-import { StoryCommentController } from '../controllers/storyCommentController.js';
+import { storyCommentController } from '../controllers/storyCommentController.js';
 
 const storyCommentRouter = Router();
 
 storyCommentRouter.post(
   '/stories/:storyId/comments',
   loginRequired,
-  StoryCommentController.createStoryComment,
+  storyCommentController.createStoryComment,
 );
 
 storyCommentRouter.get(
   '/stories/:storyId/comments',
-  StoryCommentController.readStoryComment,
+  storyCommentController.readStoryComment,
 );
 
 storyCommentRouter.patch(
   '/stories/comments/:commentId',
   loginRequired,
-  StoryCommentController.updateStoryComment,
+  storyCommentController.updateStoryComment,
 );
 
 storyCommentRouter.delete(
   '/stories/comments/:commentId',
   loginRequired,
-  StoryCommentController.deleteStoryComment,
+  storyCommentController.deleteStoryComment,
 );
 
 export { storyCommentRouter };
