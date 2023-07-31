@@ -60,11 +60,8 @@ const useUserStore = create((set) => {
 				await postApi('auth/register', user);
 			},
 
-			googleRegister: async (user) => {
-				await postApi('auth/googleRegister', user);
-			},
-
 			googleLogin: async (user) => {
+				await postApi('auth/googleRegister', user);
 				const response = await postApi('auth/googleLogin', user);
 				const jwtToken = response.data.token;
 
