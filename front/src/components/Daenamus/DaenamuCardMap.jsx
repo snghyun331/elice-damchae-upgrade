@@ -16,7 +16,6 @@ const DaenamuCardMap = () => {
 			setForests(response.data.forests);
 			setTotalPage(response.data.totalPage);
 			setIsDataLoading(true);
-			console.log(response.data);
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
 		}

@@ -44,7 +44,7 @@ const Router = () => {
 
 					<Route path="write" element={<DaenamusWrite />} />
 
-					<Route path=":storyId" element={<DaenamuRead />} />
+					<Route path=":forestId" element={<DaenamuRead />} />
 				</Route>
 			</Route>
 		</Routes>

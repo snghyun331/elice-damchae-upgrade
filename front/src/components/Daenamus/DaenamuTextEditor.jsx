@@ -50,9 +50,9 @@ const DaenamuTextEditor = () => {
 
 			const response = await postApi('forest', post);
 			console.log(response.data);
-			// setTimeout(() => {
-			// 	window.location.href = '/daenamus';
-			// }, 100);
+			setTimeout(() => {
+				window.location.href = '/daenamus';
+			}, 100);
 		} catch (e) {
 			console.error(e);
 		}
