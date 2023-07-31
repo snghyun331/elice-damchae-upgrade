@@ -9,17 +9,17 @@ router.post('/', loginRequired, ForestController.createPost);
 // 글 감정분석
 router.post('/senti-predict', loginRequired, ForestController.getPredict);
 
-// // 글 수정
-// router.put('/:id', loginRequired, ForestController.updatePost);
+// 글 수정
+router.put('/:id', loginRequired, ForestController.updatePost);
 
-// // 글 삭제
-// router.delete('/:id', loginRequired, ForestController.deletePost);
+// 글 삭제
+router.delete('/:id', loginRequired, ForestController.deletePost);
 
-// // 게시글 단일 조회
-// router.get('/search', ForestController.findByForest);
+// 게시글 단일 조회
+router.get('/search', ForestController.findByForest);
 
-// router.get('/:forestId', ForestController.readStoryDetail);
+router.get('/:forestId', ForestController.readStoryDetail);
 
-// router.get('/', ForestController.readAllStories);
+router.get('/', ForestController.readAllStories);
 
 export default router;
