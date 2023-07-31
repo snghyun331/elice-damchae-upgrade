@@ -50,7 +50,7 @@ class StoryCommentModel {
       .limit(limit)
       .exec();
 
-    const count = await StoryComment.countDocuments();
+    const count = await StoryComment.countDocuments({ storyId: storyId });
     return { comments, count };
   }
 }

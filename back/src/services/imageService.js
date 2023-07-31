@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { ImageModel } from '../db/models/imageModel.js';
+import sharp from 'sharp';
 
 class imageService {
   static async generateUniqueFileName(file) {
@@ -34,20 +35,13 @@ class imageService {
     const uploadsPath = path.resolve(__dirname, '..', '..', 'uploads');
     const ImagePath = path.join(uploadsPath, fileName);
 
-    fs.copyFile(file.path, ImagePath, (err) => {
-      // file.path: 임시 경로, ImagePath: 이미지 복사 경로
-      if (err) {
-        console.error('Error copying image file:', err);
-        throw err;
-      }
-      console.log('Image file copied successfully!');
-    });
+    const ImageBuffer = await sharp(file.path).toBuffer();
+    await sharp(ImageBuffer).toFile(ImagePath);
 
-    // 이상한 숫자파일 삭제 (filename으로 추정됨)
+    // 이상한 숫자파일 삭제
     fs.unlinkSync(file.path);
 
     const newImage = { fileName: fileName, path: ImagePath };
-
     const createImage = await ImageModel.create({ newImage });
     return createImage;
   }
