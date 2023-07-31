@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Search from '../Global/Search';
-import DaenamusCard from '../Global/DaenamusCard';
+import DaenamuCardMap from './DaenamuCardMap';
 import { mbtiList } from '../Util/Util';
 import { useNavigate } from 'react-router-dom';
 
@@ -98,15 +98,7 @@ const DaenamusMain = () => {
 					);
 				})}
 
-				<div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-					{Array.from({ length: 12 }).map((_, index) => (
-						<div key={index}>
-							<DaenamusCard />
-						</div>
-					))}
-				</div>
-
-				<div className="mt-8 flex justify-center">{/* 페이지네이션 */}</div>
+				<DaenamuCardMap />
 			</div>
 		</>
 	);

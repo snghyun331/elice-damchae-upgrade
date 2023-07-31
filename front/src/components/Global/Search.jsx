@@ -1,12 +1,28 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-const Search = () => {
+const Search = ({ onSearch }) => {
+	const navigate = useNavigate();
 	const [searchQuery, setSearchQuery] = useState('');
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		navigate(`/stories/search/${searchQuery}`);
+	};
+
+	const handleSearchClick = () => {
+		onSearch && onSearch(searchQuery);
+	};
+
+	const isSearchQueryValid = () => {
+		const validation =
+			searchQuery !== '' && searchQuery.trim() !== '' && searchQuery !== '.';
+		return validation;
+	};
 
 	return (
 		<>
-			<form>
+			<form onSubmit={handleSubmit}>
 				<label
 					htmlFor="default-search"
 					className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -36,16 +52,17 @@ const Search = () => {
 							type="search"
 							id="default-search"
 							className="block w-full p-4 pl-12 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-							placeholder=""
+							placeholder="검색어를 입력하세요."
 							value={searchQuery}
 							onChange={(event) => setSearchQuery(event.target.value)}
 						/>
 						<button
+							onClick={handleSearchClick}
+							disabled={!isSearchQueryValid()}
 							type="submit"
 							className="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-						
-						><Link to={`stories/search/${searchQuery}`}>
-							검색</Link>
+						>
+							검색
 						</button>
 					</div>
 				</div>
@@ -54,4 +71,8 @@ const Search = () => {
 	);
 };
 
+Search.propTypes = {
+	onSearch: PropTypes.func,
+	onSearchClick: PropTypes.func,
+};
 export default Search;

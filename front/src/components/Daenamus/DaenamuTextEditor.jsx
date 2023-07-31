@@ -42,7 +42,7 @@ const DaenamuTextEditor = () => {
 
 	const { handleImageUpload, loading } = useImageUpload();
 
-	const postStory = async (e) => {
+	const postForest = async (e) => {
 		e.preventDefault();
 
 		try {
@@ -50,6 +50,9 @@ const DaenamuTextEditor = () => {
 
 			const response = await postApi('forest', post);
 			console.log(response.data);
+			setTimeout(() => {
+				window.location.href = '/daenamus';
+			}, 100);
 		} catch (e) {
 			console.error(e);
 		}
@@ -116,7 +119,7 @@ const DaenamuTextEditor = () => {
 				<div className="justify-end flex flex-col">
 					<button
 						disabled={!isFormValid}
-						onClick={postStory}
+						onClick={postForest}
 						type="button"
 						className="w-40 self-end bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 					>
