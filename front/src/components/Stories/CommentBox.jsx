@@ -43,7 +43,7 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 	};
 
 	return (
-		<article className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900">
+		<article className="p-6 mb-6 text-sm bg-white rounded-lg dark:bg-gray-900">
 			<footer className="flex justify-between mb-2">
 				<div className="space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 dark:text-white">
 					<p className="text-xl">{textToIcon[commentData.mood]}</p>
