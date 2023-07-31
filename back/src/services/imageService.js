@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { ImageModel } from '../db/models/imageModel.js';
+import { imageModel } from '../db/models/imageModel.js';
 import sharp from 'sharp';
 
 class imageService {
@@ -42,7 +42,7 @@ class imageService {
     fs.unlinkSync(file.path);
 
     const newImage = { fileName: fileName, path: imagePath };
-    const createImage = await ImageModel.create({ newImage });
+    const createImage = await imageModel.create({ newImage });
     return createImage;
   }
 
@@ -56,7 +56,7 @@ class imageService {
       fileName: fileName,
       path: fullFilePath,
     };
-    const createImage = await ImageModel.create({ newImage });
+    const createImage = await imageModel.create({ newImage });
     return createImage;
   }
 }
