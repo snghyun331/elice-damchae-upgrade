@@ -44,6 +44,8 @@ class ForestController {
 
   static async findByForest(req, res, next) {
     try {
+      const page = parseInt(req.query.page || 1);
+      const limit = 8; // 한페이지에 들어갈 스토리 수
       let getAlls = [];
       if (req.query.option == 'title') {
         getAlls = [{ title: new RegExp(req.query.content) }];
@@ -69,24 +71,6 @@ class ForestController {
         throw new Error('존재하지 않는 글입니다');
       }
       return res.status(201).json(post);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async getByMbti(req, res, next) {
-    try {
-      let getMbtis = [];
-      if (req.query.option == 'mbti') {
-        getMbtis = [{ mbti: new RegExp(req.query.mbti) }];
-      } else {
-        throw new Error('해당 MBTI가 없습니다');
-      }
-
-      const mbtis = await ForestService.findByMbti({
-        getMbtis,
-      });
-      return res.status(201).json(mbtis);
     } catch (error) {
       next(error);
     }
@@ -170,11 +154,11 @@ class ForestController {
       const forestInfo = await ForestService.readStoryDetail({
         forestId,
       });
-      const result = await ForestService.populateForestPost(
+      const forests = await ForestService.populateForestPost(
         forestInfo,
         'forestInfo thumbnail',
       );
-      return res.status(200).json(result);
+      return res.status(200).json(forests);
     } catch (error) {
       next(error);
     }
@@ -183,16 +167,16 @@ class ForestController {
   static async readAllStories(req, res, next) {
     try {
       const page = parseInt(req.query.page || 1); // default 페이지: 1
-      const { stories, totalPage, count } = await ForestService.readPosts(page);
-      const result = await ForestService.populateForestPost(
-        stories,
+      const { forest, totalPage, count } = await ForestService.readPosts(page);
+      const forests = await ForestService.populateForestPost(
+        forest,
         'userInfo thumbnail',
       );
       return res.status(200).json({
         currentPage: page,
         totalPage: totalPage,
-        totalStoriesCount: count,
-        result,
+        totalForestsCount: count,
+        forests,
       });
     } catch (error) {
       next(error);

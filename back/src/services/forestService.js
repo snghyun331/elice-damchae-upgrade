@@ -97,15 +97,15 @@ class ForestService {
     const limit = 8; // 한 페이지당 보여줄 스토리 수
     const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
 
-    const { stories, count } = await forestModel.findAndCountAll(skip, limit);
+    const { forest, count } = await forestModel.findAndCountAll(skip, limit);
     const totalPage = Math.ceil(count / limit);
-    return { stories, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
+    return { forest, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
   }
 
   static async populateForestPost(info, path) {
     const field = { path: path };
-    const result = forestModel.populateForestPost(info, field);
-    return result;
+    const forest = forestModel.populateForestPost(info, field);
+    return forest;
   }
 }
 export default ForestService;

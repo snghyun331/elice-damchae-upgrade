@@ -65,19 +65,19 @@ class forestModel {
   }
 
   static async findAndCountAll(skip, limit) {
-    const stories = await ForestPost.find({})
+    const forest = await ForestPost.find({})
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .exec();
 
     const count = await ForestPost.countDocuments();
-    return { stories, count };
+    return { forest, count };
   }
 
   static async populateForestPost(info, field) {
-    const result = ForestPost.populate(info, field);
-    return result;
+    const forest = ForestPost.populate(info, field);
+    return forest;
   }
 }
 
