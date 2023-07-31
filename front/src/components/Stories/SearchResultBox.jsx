@@ -1,48 +1,59 @@
-/* eslint-disable react/prop-types */
-import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import PropTypes from 'prop-types';
 import {
-	EyeIcon,
-	ChatBubbleLeftEllipsisIcon,
-} from '@heroicons/react/24/outline';
+	removeTag,
+	truncateString,
+	colorQueryText,
+	formatRelativeTime,
+	textToKorean,
+} from '../Util/Util';
+import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { truncateString, removeTag } from '../Util/Util';
-import { textToIcon, formatRelativeTime } from '../Util/Util';
 
-const SearchResultBox = ({
-	data: {
-		content,
-		createdAt,
-		mood,
-		thumbnail,
-		title,
-		_id,
-		userInfo,
-		views,
-		commentCount,
-	},
-}) => {
-	const moodIcon = textToIcon[mood.toLowerCase()] || '❓'; // fallback to question mark for unknown text
-
-	const imageSrc = thumbnail
-		? `http://localhost:3000/uploads/${thumbnail.fileName}`
-		: '';
+const SearchResultBox = ({ data }) => {
+	const params = useParams();
+	const { commentCount, content, createdAt, mood, title, userInfo, _id } = data;
 
 	return (
 		<>
-			<p className="mb-3 text-lg text-gray-500 md:text-xl dark:text-gray-400">
-				Deliver great service experiences fast - without the complexity of
-				traditional ITSM solutions.Accelerate critical development work and
-				deploy.
-			</p>
-			<p className="text-gray-500 dark:text-gray-400">
-				Track work across the enterprise through an open, collaborative
-				platform. Link issues across Jira and ingest data from other software
-				development tools, so your IT support and operations teams have richer
-				contextual information to rapidly respond to requests, incidents, and
-				changes.
-			</p>
+			<div className="text-gray-500 dark:text-gray-400">
+				<p className="mb-3 text-lg md:text-xl hover:underline">
+					{' '}
+					<Link to={`/stories/${_id}`}>
+						{colorQueryText({
+							text: truncateString(removeTag(title), 30),
+							query: params.searchQuery,
+						})}
+						{commentCount && commentCount > 0 ? (
+							<span className="text-sm text-blue-700"> ({commentCount})</span>
+						) : null}
+					</Link>
+				</p>
+				<p className="my-3">
+					{colorQueryText({
+						text: truncateString(removeTag(content), 100),
+						query: params.searchQuery,
+					})}
+				</p>
+				<span>{userInfo ? userInfo.nickname : '알 수 없는 사용자'}</span> |{' '}
+				<span>{formatRelativeTime(createdAt)}</span> |{' '}
+				<span>{mood ? textToKorean[mood] : ''}</span>
+				<hr className="my-5" />
+			</div>
 		</>
 	);
 };
 
+SearchResultBox.propTypes = {
+	data: PropTypes.shape({
+		commentCount: PropTypes.number,
+		content: PropTypes.string,
+		createdAt: PropTypes.string,
+		mood: PropTypes.string,
+		title: PropTypes.string,
+		userInfo: PropTypes.shape({
+			nickname: PropTypes.string,
+		}),
+		_id: PropTypes.string,
+	}),
+};
 export default SearchResultBox;
