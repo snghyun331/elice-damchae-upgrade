@@ -49,10 +49,16 @@ class StoryCommentService {
   }
 
   static async deleteStoryComment({ commentId }) {
+    const commentInfo = await StoryCommentModel.findOneByCommentId({
+      commentId,
+    });
+    const storyId = commentInfo.storyId;
+    StoryPostModel.findAndDecreaseCommentCount({ storyId });
     let isDeleted = await StoryCommentModel.deleteOneByCommentId({ commentId });
     if (!isDeleted) {
       throw new Error('삭제할 댓글 정보가 없습니다.');
     }
+
     return { result: 'Success' };
   }
 
@@ -75,6 +81,7 @@ class StoryCommentService {
 
   static async isSameUser(loginUserId, commentId) {
     const comments = await StoryCommentModel.findOneByCommentId({ commentId });
+
     const commentWriterId = comments.writerId;
 
     if (loginUserId == commentWriterId) {
