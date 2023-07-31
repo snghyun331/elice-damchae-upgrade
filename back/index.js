@@ -1,8 +1,9 @@
 import 'dotenv/config';
 import { app } from './src/app.js';
 import mongoose from 'mongoose';
+import { ALTERNATIVE_SERVER_PORT } from './src/utills/constant.js';
 
-const PORT = process.env.SERVER_PORT || 3001;
+const PORT = process.env.SERVER_PORT || ALTERNATIVE_SERVER_PORT;
 const DB_URL = process.env.MONGODB_URL || process.env.MONGODB_ALTERNATIVE_URL;
 
 mongoose.connect(DB_URL);

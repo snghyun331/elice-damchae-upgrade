@@ -2,12 +2,13 @@ import { Router } from 'express';
 import multer from 'multer';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { storyPostController } from '../controllers/storyPostController.js';
+import { fileSize } from '../utills/constant.js';
 
 const storyPostRouter = Router();
 
 const upload = multer({
   dest: 'uploads/',
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: fileSize },
 });
 
 storyPostRouter.post(
