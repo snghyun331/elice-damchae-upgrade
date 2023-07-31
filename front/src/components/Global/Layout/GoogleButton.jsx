@@ -58,6 +58,7 @@ const GoogleButton = () => {
 				await googleLogin(user);
 				navigate('/');
 			} catch (error) {
+				alert('구글 로그인에 실패했습니다.')
 				console.log(error.response?.data?.errorMessage);
 			}
 		}
