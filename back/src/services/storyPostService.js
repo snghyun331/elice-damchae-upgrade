@@ -33,75 +33,75 @@ class StoryPostService {
     return createdNewStoryPost;
   }
 
-  static async updateStory({ storyId, toUpdate }) {
-    let story = await StoryPostModel.findOneByStoryId({ storyId });
+  // static async updateStory({ storyId, toUpdate }) {
+  //   let story = await StoryPostModel.findOneByStoryId({ storyId });
 
-    if (!story) {
-      throw new Error('해당 스토리를 찾을 수 없습니다. 다시 한번 확인해주세요');
-    }
+  //   if (!story) {
+  //     throw new Error('해당 스토리를 찾을 수 없습니다. 다시 한번 확인해주세요');
+  //   }
 
-    if (toUpdate.title) {
-      const fieldToUpdate = 'title';
-      const newValue = toUpdate.title;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
+  //   if (toUpdate.title) {
+  //     const fieldToUpdate = 'title';
+  //     const newValue = toUpdate.title;
+  //     story = await StoryPostModel.updateStory({
+  //       storyId,
+  //       fieldToUpdate,
+  //       newValue,
+  //     });
+  //   }
 
-    if (toUpdate.content) {
-      const fieldToUpdate = 'content';
-      const newValue = toUpdate.content;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
+  //   if (toUpdate.content) {
+  //     const fieldToUpdate = 'content';
+  //     const newValue = toUpdate.content;
+  //     story = await StoryPostModel.updateStory({
+  //       storyId,
+  //       fieldToUpdate,
+  //       newValue,
+  //     });
+  //   }
 
-    if (toUpdate.isPublic) {
-      const fieldToUpdate = 'isPublic';
-      const newValue = toUpdate.isPublic;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
+  //   if (toUpdate.isPublic) {
+  //     const fieldToUpdate = 'isPublic';
+  //     const newValue = toUpdate.isPublic;
+  //     story = await StoryPostModel.updateStory({
+  //       storyId,
+  //       fieldToUpdate,
+  //       newValue,
+  //     });
+  //   }
 
-    if (toUpdate.thumbnail) {
-      // create Image
-      const fieldToUpdate = 'thumbnail';
-      const newValue = toUpdate.thumbnail;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
+  //   if (toUpdate.thumbnail) {
+  //     // create Image
+  //     const fieldToUpdate = 'thumbnail';
+  //     const newValue = toUpdate.thumbnail;
+  //     story = await StoryPostModel.updateStory({
+  //       storyId,
+  //       fieldToUpdate,
+  //       newValue,
+  //     });
+  //   }
 
-    if (toUpdate.mood) {
-      const fieldToUpdate = 'mood';
-      const newValue = toUpdate.mood;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
+  //   if (toUpdate.mood) {
+  //     const fieldToUpdate = 'mood';
+  //     const newValue = toUpdate.mood;
+  //     story = await StoryPostModel.updateStory({
+  //       storyId,
+  //       fieldToUpdate,
+  //       newValue,
+  //     });
+  //   }
 
-    if (toUpdate.music) {
-      const fieldToUpdate = 'music';
-      const newValue = toUpdate.music;
-      story = await StoryPostModel.updateStory({
-        storyId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
-    return story;
-  }
+  //   if (toUpdate.music) {
+  //     const fieldToUpdate = 'music';
+  //     const newValue = toUpdate.music;
+  //     story = await StoryPostModel.updateStory({
+  //       storyId,
+  //       fieldToUpdate,
+  //       newValue,
+  //     });
+  //   }
+  //   return story;
+  // }
 
   static async deleteStory({ storyId }) {
     let isDeleted = await StoryPostModel.deleteOneByStoryId({ storyId });
@@ -166,18 +166,18 @@ class StoryPostService {
     }
   }
 
-  static async deletePreviousUploadImage({ storyId }) {
-    const story = await StoryPostModel.findOneByStoryId({ storyId });
-    const previousImage = await ImageModel.findOneByImageId({
-      imageId: story.thumbnail,
-    });
-    const previousImagePath = previousImage.path;
-    if (fs.existsSync(previousImagePath)) {
-      fs.unlinkSync(previousImagePath);
-    } else {
-      console.log('File does not exist, so not deleting.');
-    }
-  }
+  // static async deletePreviousUploadImage({ storyId }) {
+  //   const story = await StoryPostModel.findOneByStoryId({ storyId });
+  //   const previousImage = await ImageModel.findOneByImageId({
+  //     imageId: story.thumbnail,
+  //   });
+  //   const previousImagePath = previousImage.path;
+  //   if (fs.existsSync(previousImagePath)) {
+  //     fs.unlinkSync(previousImagePath);
+  //   } else {
+  //     console.log('File does not exist, so not deleting.');
+  //   }
+  // }
 }
 
 export { StoryPostService };

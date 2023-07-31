@@ -24,12 +24,12 @@ storyPostRouter.post(
   storyPostController.getPredict,
 );
 
-storyPostRouter.patch(
-  '/stories/:storyId',
-  loginRequired,
-  upload.single('thumbnail'),
-  storyPostController.updateStoryPost,
-);
+// storyPostRouter.patch(
+//   '/stories/:storyId',
+//   loginRequired,
+//   upload.single('thumbnail'),
+//   storyPostController.updateStoryPost,
+// );
 
 storyPostRouter.delete(
   '/stories/:storyId',
