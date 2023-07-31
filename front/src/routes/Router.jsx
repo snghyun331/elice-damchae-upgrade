@@ -9,6 +9,7 @@ import StoryRead from '../components/Stories/StoryRead';
 import DaenamusMain from '../components/Daenamus/DaenamusMain';
 import DaenamusWrite from '../components/Daenamus/DaenamusWrite';
 import DaenamusCardDetail from '../components/Daenamus/DaenamusCardDetail';
+import SearchResults from '../components/Stories/SearchResults';
 
 const MainLayout = () => {
 	return (
@@ -35,6 +36,7 @@ const Router = () => {
 				<Route path="stories" element={<Outlet />}>
 					<Route index element={<MyStories />} />
 					<Route path=":storyId" element={<StoryRead />} />
+					<Route path="search/:searchQuery" element={<SearchResults />} />
 				</Route>
 
 				<Route path="daenamus" element={<Outlet />}>

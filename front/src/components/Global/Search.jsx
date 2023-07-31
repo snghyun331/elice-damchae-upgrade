@@ -1,25 +1,12 @@
 import { useState } from 'react';
-import { getApi } from '../../services/api';
+import { Link } from 'react-router-dom';
 
 const Search = () => {
 	const [searchQuery, setSearchQuery] = useState('');
-	const handleSubmit = async (event) => {
-		event.preventDefault();
-		console.log(searchQuery);
-		try {
-			const response = await getApi(
-				`stories?option=title_content&searchword=${searchQuery}`,
-			);
-			console.log(response);
-		} catch (err) {
-			console.log(err.response.data.message);
-			alert(err.response.data.message);
-		}
-	};
 
 	return (
 		<>
-			<form onSubmit={handleSubmit}>
+			<form>
 				<label
 					htmlFor="default-search"
 					className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -56,8 +43,9 @@ const Search = () => {
 						<button
 							type="submit"
 							className="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-						>
-							검색
+						
+						><Link to={`stories/search/${searchQuery}`}>
+							검색</Link>
 						</button>
 					</div>
 				</div>

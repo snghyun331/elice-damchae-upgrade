@@ -224,7 +224,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다');
+          throw new Error('검색 결과가 없습니다.');
         }
 
         result = {
@@ -244,7 +244,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다');
+          throw new Error('검색 결과가 없습니다.');
         }
 
         result = {
@@ -269,7 +269,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다');
+          throw new Error('검색 결과가 없습니다.');
         }
 
         result = {
