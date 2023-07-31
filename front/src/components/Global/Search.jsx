@@ -1,7 +1,25 @@
+import { useState } from 'react';
+import { getApi } from '../../services/api';
+
 const Search = () => {
+	const [searchQuery, setSearchQuery] = useState('');
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		console.log(searchQuery);
+		try {
+			const response = await getApi(
+				`stories?option=title_content&searchword=${searchQuery}`,
+			);
+			console.log(response);
+		} catch (err) {
+			console.log(err.response.data.message);
+			alert(err.response.data.message);
+		}
+	};
+
 	return (
 		<>
-			<form>
+			<form onSubmit={handleSubmit}>
 				<label
 					htmlFor="default-search"
 					className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -32,6 +50,8 @@ const Search = () => {
 							id="default-search"
 							className="block w-full p-4 pl-12 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder=""
+							value={searchQuery}
+							onChange={(event) => setSearchQuery(event.target.value)}
 						/>
 						<button
 							type="submit"
