@@ -1,12 +1,22 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types'
 
-const Search = () => {
+const Search = ({ onSearch }) => {
+	const navigate = useNavigate();
 	const [searchQuery, setSearchQuery] = useState('');
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		navigate(`/stories/search/${searchQuery}`);
+	};
+
+	const handleSearchClick = () => {
+		onSearch && onSearch(search);
+	};
 
 	return (
 		<>
-			<form>
+			<form onSubmit={handleSubmit}>
 				<label
 					htmlFor="default-search"
 					className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -41,11 +51,11 @@ const Search = () => {
 							onChange={(event) => setSearchQuery(event.target.value)}
 						/>
 						<button
+							onClick={handleSearchClick}
 							type="submit"
 							className="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-						
-						><Link to={`stories/search/${searchQuery}`}>
-							검색</Link>
+						>
+							검색
 						</button>
 					</div>
 				</div>
@@ -54,4 +64,7 @@ const Search = () => {
 	);
 };
 
+Search.propTypes = {
+	onSearchClick: PropTypes.func,
+}
 export default Search;
