@@ -8,10 +8,12 @@ const DaenamuCardMap = () => {
 	const [forests, setForests] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
 	const [totalPage, setTotalPage] = useState(0);
+
 	const fetchData = async (page = 1) => {
 		try {
-			const response = await getApi(`stories?page=${page}`);
-			setForests(response.data.stories);
+			const response = await getApi(`forest?page=${page}`);
+
+			setForests(response.data.forests);
 			setTotalPage(response.data.totalPage);
 			setIsDataLoading(true);
 			console.log(response.data);
@@ -38,11 +40,12 @@ const DaenamuCardMap = () => {
 	return (
 		<>
 			<div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-				{Array.from({ length: 12 }).map((_, index) => (
-					<div key={index}>
-						<DaenamuCard data={forests} />
-					</div>
-				))}
+				{isDataLoading &&
+					forests.map((forest) => (
+						<div key={forest._id}>
+							<DaenamuCard data={forest} />
+						</div>
+					))}
 			</div>
 
 			<div className="flex justify-center mt-10">
