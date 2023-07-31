@@ -6,7 +6,7 @@ import { getApi } from '../../services/api';
 
 const StoryCardMap = () => {
 	const [stories, setStories] = useState([]);
-	const [isDataLoaded, setIsDataLoaded] = useState(false);
+	const [isDataLoading, setisDataLoading] = useState(false);
 	const [totalPage, setTotalPage] = useState(0);
 	const fetchData = async (page = 1) => {
 		try {
@@ -14,7 +14,7 @@ const StoryCardMap = () => {
 			console.log(response.data);
 			setStories(response.data.stories);
 			setTotalPage(response.data.totalPage);
-			setIsDataLoaded(true);
+			setisDataLoading(true);
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
 		}
@@ -24,12 +24,12 @@ const StoryCardMap = () => {
 	}, []);
 
 	const { currentPage, prev, next, go } = usePagination(
-		isDataLoaded ? stories : [],
+		isDataLoading ? stories : [],
 		totalPage,
 	);
 
 	useEffect(() => {
-		if (isDataLoaded) {
+		if (isDataLoading) {
 			fetchData(currentPage);
 		}
 	}, [currentPage]);
@@ -38,7 +38,7 @@ const StoryCardMap = () => {
 		<>
 			<div className="font-bold mb-8 md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-base font-medium">
-					{isDataLoaded &&
+					{isDataLoading &&
 						stories.map((story) => (
 							<div key={story._id}>
 								<StoryCard data={story} />
