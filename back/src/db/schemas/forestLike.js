@@ -13,7 +13,7 @@ const forestLikeSchema = new Schema(
       required: false,
     },
   },
-  { timestamps: true, collection: 'forestLikes' },
+  { collection: 'forestLikes' },
 );
 
 const forestLike = model('ForestLike', forestLikeSchema);
