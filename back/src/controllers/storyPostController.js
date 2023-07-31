@@ -186,6 +186,7 @@ class storyPostController {
       if (!isSameUser) {
         throw new Error('스토리 삭제 권한이 없습니다.');
       }
+      await StoryPostService.deleteUploadImage({ storyId }); // uploads 폴더 이미지 삭제
       const result = await StoryPostService.deleteStory({ storyId });
       return res.status(200).send(result);
     } catch (error) {
