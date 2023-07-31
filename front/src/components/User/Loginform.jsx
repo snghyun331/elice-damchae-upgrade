@@ -87,6 +87,7 @@ const LoginForm = () => {
 											name="email"
 											id="email"
 											placeholder="elice@gmail.com"
+											autoComplete='false'
 											value={email}
 											onChange={handleChangeInput}
 											onFocus={() => {
@@ -126,6 +127,7 @@ const LoginForm = () => {
 											name="password"
 											id="password"
 											placeholder="********"
+											autoComplete='false'
 											value={password}
 											onChange={handleChangeInput}
 											onFocus={() => {
