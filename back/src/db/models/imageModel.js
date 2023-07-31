@@ -7,8 +7,8 @@ class imageModel {
   }
 
   static async findOneByImageId({ imageId }) {
-    const image = await image.findOne({ _id: imageId });
-    return image;
+    const findedImage = await image.findOne({ _id: imageId });
+    return findedImage;
   }
 }
 
