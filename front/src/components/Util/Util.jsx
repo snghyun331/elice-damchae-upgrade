@@ -89,3 +89,27 @@ export const formatRelativeTime = (string) => {
 		return date.format('YYYY-MM-DD');
 	}
 };
+
+export const colorQueryText = ({ text, query }) => {
+	if (!text.includes(query)) {
+		return <>{text}</>;
+	}
+
+	const textParts = text.split(query);
+	const lastIndex = textParts.length - 1;
+
+	return (
+		<>
+			{textParts.map((part, index) =>
+				index !== lastIndex ? (
+					<>
+						{part}
+						<span className="text-blue-600 font-semibold">{query}</span>
+					</>
+				) : (
+					<>{part}</>
+				),
+			)}
+		</>
+	);
+};
