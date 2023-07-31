@@ -66,9 +66,12 @@ class storyPostController {
     try {
       const { content } = req.body;
       const pureContent = content.replace(/<[^>]+>/g, ' ');
-      const obj = await axios.post('http://127.0.0.1:5000/predict', {
-        text: pureContent,
-      });
+      const obj = await axios.post(
+        process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL,
+        {
+          text: pureContent,
+        },
+      );
       // obj.data = { mood: '슬픔' }
       const Mood = obj.data.mood;
 
@@ -123,6 +126,7 @@ class storyPostController {
       let thumbnailLocalId;
       let toUpdate;
       if (file && !thumbnail) {
+        await StoryPostService.deletePreviousUploadImage({ storyId }); // 이전 uploads 폴더 이미지 삭제
         thumbnailLocal = await imageService.uploadImage({ file });
         thumbnailLocalId = thumbnailLocal._id;
         toUpdate = {
@@ -134,6 +138,7 @@ class storyPostController {
           music,
         };
       } else if (!file && thumbnail) {
+        await StoryPostService.deletePreviousUploadImage({ storyId }); // 이전 uploads 폴더 이미지 삭제
         toUpdate = {
           title,
           content,
@@ -153,7 +158,8 @@ class storyPostController {
         };
       }
 
-      const updatedStory = await StoryPostService.setStory({
+      // 업뎃
+      const updatedStory = await StoryPostService.updateStory({
         storyId,
         toUpdate,
       });
