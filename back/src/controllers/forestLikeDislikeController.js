@@ -1,5 +1,6 @@
 import { forestLike } from '../db/schemas/forestLike.js';
 import { forestDislike } from '../db/schemas/forestDislike.js';
+import mongoose from 'mongoose';
 
 class forestLikeDislikeController {
   static async readForestPostLikes(req, res, next) {
@@ -23,6 +24,8 @@ class forestLikeDislikeController {
   }
 
   static async createForestPostLike(req, res, next) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
       // 좋아요를 클릭했을 때, 좋아요 누른 사용자ID와 포스트ID가 받아와짐
       const postId = req.params.postId;
@@ -36,13 +39,22 @@ class forestLikeDislikeController {
         .findOneAndDelete({ userId: userId, postId: postId })
         .exec();
 
+      // 트랜잭션 커밋
+      await session.commitTransaction();
+      session.endSession();
+
       return res.status(201).json({ result: 'Success' });
     } catch (error) {
+      // 트랜잭션 롤백
+      await session.abortTransaction();
+      session.endSession();
       next(error);
     }
   }
 
   static async createForestPostDislike(req, res, next) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
       // 싫어요를 클릭했을 때, 싫어요 누른 사용자ID와 포스트ID가 받아와짐
       const postId = req.params.postId;
@@ -56,8 +68,15 @@ class forestLikeDislikeController {
         .findOneAndDelete({ userId: userId, postId: postId })
         .exec();
 
+      // 트랜잭션 커밋
+      await session.commitTransaction();
+      session.endSession();
+
       return res.status(201).json({ result: 'Success' });
     } catch (error) {
+      // 트랜잭션 롤백
+      await session.abortTransaction();
+      session.endSession();
       next(error);
     }
   }
