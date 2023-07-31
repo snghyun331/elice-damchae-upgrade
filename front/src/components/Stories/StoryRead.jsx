@@ -12,7 +12,7 @@ import StoryComment from './StoryComment';
 const StoryRead = () => {
 	const { storyId } = useParams();
 	const [story, setStory] = useState([]);
-	const [isDataLoaded, setIsDataLoaded] = useState(false);
+	const [isDataLoading, setIsDataLoading] = useState(false);
 	const navigate = useNavigate();
 
 	const { id } = useUserStore();
@@ -22,7 +22,7 @@ const StoryRead = () => {
 			const res = await getApi(`stories/${storyId}`);
 			console.log(res);
 			setStory(res.data);
-			setIsDataLoaded(true);
+			setIsDataLoading(true);
 		} catch (error) {
 			console.log(error);
 		}
@@ -53,7 +53,7 @@ const StoryRead = () => {
 			<div
 				className={`w-full max-w-2xl border border-gray-200 rounded-lg shadow mx-auto bg-white dark:bg-gray-800`}
 				style={{
-					backgroundColor: isDataLoaded ? textToColor[story.mood] : '#FFFFFF',
+					backgroundColor: isDataLoading ? textToColor[story.mood] : '#FFFFFF',
 				}}
 			>
 				<div className="relative h-52 overflow-hidden rounded-t-lg">
@@ -70,17 +70,17 @@ const StoryRead = () => {
 
 					<div className="ms-4 mt-4 absolute top-1 left-1 p-4 z-10 max-w-md">
 						<p className="text-white mb-1">
-							조회수 {isDataLoaded && story.views}
+							조회수 {isDataLoading && story.views}
 						</p>
 						<p className="text-white mb-1">
-							{isDataLoaded && formatDate(story.createdAt)}
+							{isDataLoading && formatDate(story.createdAt)}
 						</p>
 						<h5 className="leading-loose text-white text-2xl font-bold">
 							{story.title}
 						</h5>
 					</div>
 					<div className="text-sm text-end absolute top-1 right-1 mt-4 me-4">
-						{isDataLoaded && story.userInfo._id == id && (
+						{isDataLoading && story.userInfo._id == id && (
 							<>
 								<button
 									onClick={handleDelete}
@@ -96,27 +96,27 @@ const StoryRead = () => {
 				<div className="flex flex-col">
 					<div className="relative -top-20 left-6 max-w-md">
 						<div className="text-9xl">
-							{isDataLoaded && textToIcon[story.mood]}
+							{isDataLoading && textToIcon[story.mood]}
 						</div>
 					</div>
 
 					<div className="relative top-0 p-10">
-						{isDataLoaded && <Viewer initialValue={story.content} />}
+						{isDataLoading && <Viewer initialValue={story.content} />}
 					</div>
 
 					<div>
 						<div className="w-12 h-12 mx-auto mt-6 rounded-full overflow-hidden">
 							<img
 								className="w-full h-full object-cover"
-								src={isDataLoaded && story.userInfo.profileImg}
+								src={isDataLoading && story.userInfo.profileImg}
 								alt="작성자 프로필 이미지"
 							/>
 						</div>
 						<h5 className="text-center text-gray-700 mx-auto mt-2">
-							{isDataLoaded && story.userInfo.nickname}
+							{isDataLoading && story.userInfo.nickname}
 						</h5>
 						<p className="text-gray-400 text-xs text-center mt-1 mb-5">
-							{isDataLoaded && story.userInfo.mbti}
+							{isDataLoading && story.userInfo.mbti}
 						</p>
 					</div>
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />

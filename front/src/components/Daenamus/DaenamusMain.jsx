@@ -9,11 +9,19 @@ const DaenamusMain = () => {
 	const [selectedTab, setSelectedTab] = useState('전체글');
 	const navigate = useNavigate();
 
+	const select = (value) => {
+		setSelectedMBTI([...selectedMBTI, value]);
+	};
+
+	const deselect = (value) => {
+		setSelectedMBTI(selectedMBTI.filter((item) => item !== value));
+	};
+
 	const toggleMBTI = (value) => {
 		if (selectedMBTI.includes(value)) {
-			setSelectedMBTI(selectedMBTI.filter((item) => item !== value));
+			deselect(value);
 		} else {
-			setSelectedMBTI([...selectedMBTI, value]);
+			select(value);
 		}
 	};
 

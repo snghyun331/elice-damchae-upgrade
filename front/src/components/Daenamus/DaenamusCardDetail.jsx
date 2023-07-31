@@ -1,3 +1,6 @@
+/**
+ * @param {{ match: {id: string } }} props
+ */
 const DaenamusCardDetail = ({ match }) => {
 	const post = {
 		id: match.params.id,
