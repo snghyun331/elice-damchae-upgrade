@@ -1,7 +1,9 @@
 import { StoryPostModel } from '../db/models/storyPostModel.js';
+import { ImageModel } from '../db/models/imageModel.js';
 import { StoryPostService } from '../services/storyPostService.js';
 import { imageService } from '../services/imageService.js';
 import axios from 'axios';
+import fs from 'fs';
 
 class storyPostController {
   static async createStoryPost(req, res, next) {
@@ -123,6 +125,7 @@ class storyPostController {
       let thumbnailLocalId;
       let toUpdate;
       if (file && !thumbnail) {
+        await StoryPostService.deletePreviousUploadImage({ storyId });
         thumbnailLocal = await imageService.uploadImage({ file });
         thumbnailLocalId = thumbnailLocal._id;
         toUpdate = {
@@ -134,6 +137,7 @@ class storyPostController {
           music,
         };
       } else if (!file && thumbnail) {
+        await StoryPostService.deletePreviousUploadImage({ storyId });
         toUpdate = {
           title,
           content,
@@ -153,6 +157,7 @@ class storyPostController {
         };
       }
 
+      // 업뎃
       const updatedStory = await StoryPostService.setStory({
         storyId,
         toUpdate,
