@@ -26,65 +26,58 @@ class forestModel {
   }
 
   static async updatePost({ updatePost }) {
-    console.log('model까지', updatePost);
-    if (!(updatePost.imageUrl == 'None')) {
-      console.log(1);
-      const updateForestPost = await ForestPost.updateOne(
-        { userId: updatePost.userId, _id: updatePost._id },
-        {
-          title: updatePost.title,
-          content: updatePost.content,
-          imageUrl: updatePost.imageUrl,
-        },
-      );
-      return updateForestPost;
-    } else {
-      console.log(2);
-      const updateForestPost = await ForestPost.updateOne(
-        { userId: updatePost.userId, _id: updatePost._id },
-        { title: updatePost.title, content: updatePost.content },
-      );
-      return updateForestPost;
-    }
+    const { _id, userId, title, content, imageUrl } = updatePost;
+
+    const updateForestPost = await ForestPost.updateOne(
+      { userId, _id },
+      {
+        title,
+        content,
+        ...(imageUrl !== 'None' && { imageUrl }),
+      },
+    );
+    return updateForestPost;
   }
+  //   } else {
+  //     const updateForestPost = await ForestPost.updateOne(
+  //       { userId: updatePost.userId, _id: updatePost._id },
+  //       { title: updatePost.title, content: updatePost.content },
+  //     );
+  //     return updateForestPost;
+  //   }
+  // }
 
   static async deletePost({ deletePost }) {
-    console.log('model까지', deletePost);
-    if (!(deletePost.imageUrl == 'None')) {
-      console.log(1);
-      const deleteForestPost = await ForestPost.deleteOne(
-        { userId: deletePost.userId, _id: deletePost._id },
-        {
-          title: deletePost.title,
-          content: deletePost.content,
-          imageUrl: deletePost.imageUrl,
-        },
-      );
-      return deleteForestPost;
-    } else {
-      console.log(2);
-      const deleteForestPost = await ForestPost.deleteOne(
-        { userId: deletePost.userId, _id: deletePost._id },
-        { title: deletePost.title, content: deletePost.content },
-      );
-      return deleteForestPost;
-    }
+    const { _id, userId, title, content, imageUrl } = deletePost;
+
+    const forestDeletePost = await ForestPost.deleteOne(
+      { userId, _id },
+      { title, content, ...(imageUrl !== 'None' && { imageUrl }) },
+    );
+    return forestDeletePost;
+    // } else {
+    //   const deleteForestPost = await ForestPost.deleteOne(
+    //     { userId: deletePost.userId, _id: deletePost._id },
+    //     { title: deletePost.title, content: deletePost.content },
+    //   );
+    //   return deleteForestPost;
+    // }
   }
 
   static async findAndCountAll(skip, limit) {
-    const stories = await ForestPost.find({})
+    const forest = await ForestPost.find({})
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .exec();
 
     const count = await ForestPost.countDocuments();
-    return { stories, count };
+    return { forest, count };
   }
 
   static async populateForestPost(info, field) {
-    const result = ForestPost.populate(info, field);
-    return result;
+    const forest = ForestPost.populate(info, field);
+    return forest;
   }
 }
 

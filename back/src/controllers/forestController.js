@@ -14,7 +14,6 @@ class ForestController {
       const obj = await axios.post('http://127.0.0.1:5000/predict', {
         text: pureContent,
       });
-      // console.log(obj)  ->  (예) [data: { mood : pleasure }]
       // console.log(obj.data)  ->  (예) { mood : 'pleasure' }
       return res.status(201).json(obj.data);
     } catch (error) {
@@ -25,13 +24,6 @@ class ForestController {
   // 대나무숲 글 등록
   static async createPost(req, res, next) {
     try {
-      // 이미 loginRequired.js에서 로그인안한 상태로 등록하면 '로그인한 유저만 가능합니다'msg가 떠서 아래 코드는 없어도 될 것 같습니다
-      // if (!req.currentUserId) {
-      //   return res
-      //     .status(400)
-      //     .json({ message: '글을 등록하려면 로그인이 필요합니다.' });
-      // }
-
       const userId = req.currentUserId; // 로그인한 유저의 ID를 userId에 저장
 
       // request body에는 제목, 내용, 감정분석 후 나온 감정데이터가 들어갑니다.
@@ -50,171 +42,145 @@ class ForestController {
     }
   }
 
-  // static async findByForest(req, res, next) {
-  //   try {
-  //     const forestServiceInstance = new ForestService();
+  static async findByForest(req, res, next) {
+    try {
+      const page = parseInt(req.query.page || 1);
+      const limit = 8; // 한페이지에 들어갈 스토리 수
+      let getAlls = [];
+      if (req.query.option == 'title') {
+        getAlls = [{ title: new RegExp(req.query.content) }];
+      } else if (req.query.option == 'content') {
+        getAlls = [{ content: new RegExp(req.query.content) }];
+      } else if (req.query.option == 'mbti') {
+        getAlls = [{ mbti: new RegExp(req.query.mbti) }];
+      }
 
-  //     let getAlls = [];
-  //     if (req.query.option == 'title') {
-  //       getAlls = [{ title: new RegExp(req.query.content) }];
-  //     } else if (req.query.option == 'content') {
-  //       getAlls = [{ content: new RegExp(req.query.content) }];
-  //     } else if (req.query.option == 'mbti') {
-  //       getAlls = [{ mbti: new RegExp(req.query.mbti) }];
-  //     }
+      const posts = await ForestService.findByForest({ getAlls });
 
-  //     const posts = await forestServiceInstance.findByForest({ getAlls });
+      return res.status(201).json(posts);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-  //     statusCode.setResponseCode200(res);
-  //     res.send(posts);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+  static async findById(req, res, next) {
+    try {
+      const _id = req.currentUserId;
+      const post = await ForestService.findById({ _id });
+      if (!post) {
+        throw new Error('존재하지 않는 글입니다');
+      }
+      return res.status(201).json(post);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-  // static async findById(req, res, next) {
-  //   try {
-  //     const _id = req.currentUserId;
-  //     const forestServiceInstance = new ForestService();
-  //     const post = await forestServiceInstance.findById({ _id });
-  //     if (!post) {
-  //       throw new Error('존재하지 않는 글입니다');
-  //     }
-  //     statusCode.setResponseCode200(res);
-  //     res.send(post);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+  static async updatePost(req, res, next) {
+    try {
+      const { title, content, imageUrl } = req.body;
+      const postId = req.params.id;
 
-  // static async getByMbti(req, res, next) {
-  //   try {
-  //     const forestServiceInstance = new ForestService();
+      if (!title || !content) {
+        throw new Request('Title과 content는 필수 입력 사항입니다.');
+      }
 
-  //     let getMbtis = [];
-  //     if (req.query.option == 'mbti') {
-  //       getMbtis = [{ mbti: new RegExp(req.query.mbti) }];
-  //     } else {
-  //       throw new Error('해당 MBTI가 없습니다');
-  //     }
+      const userId = req.currentUserId;
 
-  //     const mbtis = await forestServiceInstance.findByMbti({
-  //       getMbtis,
-  //     });
-  //     statusCode.setResponseCode200(res);
-  //     res.send(mbtis);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+      let updatePost = {};
+      if (!imageUrl) {
+        updatePost = {
+          _id: postId,
+          title,
+          content,
+          userId,
+          imageUrl: imageUrl ?? 'None',
+        };
+      } else {
+        updatePost = { _id: postId, title, content, userId, imageUrl };
+      }
+      const updatedPost = await ForestService.updatePost(updatePost);
 
-  // static async updatePost(req, res, next) {
-  //   try {
-  //     // 로그인 상태 확인
-  //     if (!req.currentUserId) {
-  //       return res
-  //         .status(400)
-  //         .json({ message: '글을 수정하려면 로그인이 필요합니다.' });
-  //     }
-  //     // console.log(req.body);
-  //     const { title, content, imageUrl } = req.body;
-  //     const postId = req.params.id;
+      if (!updatedPost) {
+        throw new Error('존재하지 않는 글입니다.');
+      }
 
-  //     if (!title || !content) {
-  //       throw new BadRequest('Title과 content는 필수 입력 사항입니다.');
-  //     }
+      return res.status(201).json(updatePost);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-  //     const userId = req.currentUserId;
+  static async deletePost(req, res, next) {
+    try {
+      // 로그인 상태 확인
+      if (!req.currentUserId) {
+        return res
+          .status(400)
+          .json({ message: '글을 삭제하려면 로그인이 필요합니다.' });
+      }
 
-  //     const forestServiceInstance = new ForestService();
-  //     let updatePost = {};
-  //     if (!imageUrl) {
-  //       const imageUrl = 'None';
-  //       updatePost = { _id: postId, title, content, userId, imageUrl };
-  //     } else {
-  //       updatePost = { _id: postId, title, content, userId, imageUrl };
-  //     }
-  //     const updatedPost = await forestServiceInstance.updatePost(updatePost);
+      const { title, content, imageUrl } = req.body;
+      const postId = req.params.id;
 
-  //     if (!updatedPost) {
-  //       throw new Error('존재하지 않는 글입니다.');
-  //     }
+      const userId = req.currentUserId;
 
-  //     statusCode.setResponseCode200(res);
-  //     res.send(updatedPost);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+      let deletePost = {};
+      if (!imageUrl) {
+        deletePost = {
+          _id: postId,
+          title,
+          content,
+          userId,
+          imageUrl: imageUrl ?? 'None',
+        };
+      } else {
+        deletePost = { _id: postId, title, content, userId, imageUrl };
+      }
+      const deletedPost = await ForestService.deletePost(deletePost);
 
-  // static async deletePost(req, res, next) {
-  //   try {
-  //     // 로그인 상태 확인
-  //     if (!req.currentUserId) {
-  //       return res
-  //         .status(400)
-  //         .json({ message: '글을 삭제하려면 로그인이 필요합니다.' });
-  //     }
+      if (!deletedPost) {
+        throw new Error('존재하지 않는 글입니다.');
+      }
 
-  //     const { title, content, imageUrl } = req.body;
-  //     const postId = req.params.id;
+      return res.status(201).json(deletedPost);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async readStoryDetail(req, res, next) {
+    try {
+      const forestId = req.params.forestId;
+      const forestInfo = await ForestService.readStoryDetail({
+        forestId,
+      });
+      const forests = await ForestService.populateForestPost(
+        forestInfo,
+        'forestInfo thumbnail',
+      );
+      return res.status(200).json(forests);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-  //     const userId = req.currentUserId;
-
-  //     const forestServiceInstance = new ForestService();
-  //     let deletePost = {};
-  //     if (!imageUrl) {
-  //       const imageUrl = 'None';
-  //       deletePost = { _id: postId, title, content, userId, imageUrl };
-  //     } else {
-  //       deletePost = { _id: postId, title, content, userId, imageUrl };
-  //     }
-  //     const deletedPost = await forestServiceInstance.deletePost(deletePost);
-
-  //     if (!deletedPost) {
-  //       throw new Error('존재하지 않는 글입니다.');
-  //     }
-
-  //     statusCode.setResponseCode200(res);
-  //     res.send({ message: '글을 삭제했습니다.' });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-  // static async readStoryDetail(req, res, next) {
-  //   try {
-  //     const forestServiceInstance = new ForestService();
-  //     const forestId = req.params.forestId;
-  //     const forestInfo = await forestServiceInstance.readStoryDetail({
-  //       forestId,
-  //     });
-  //     const result = await ForestService.populateStoryPost(
-  //       forestInfo,
-  //       'forestInfo thumbnail',
-  //     );
-  //     return res.status(200).json(result);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-
-  // static async readAllStories(req, res, next) {
-  //   try {
-  //     const page = parseInt(req.query.page || 1); // default 페이지: 1
-  //     const { stories, totalPage, count } = await ForestService.readPosts(page);
-  //     const result = await ForestService.populateStoryPost(
-  //       stories,
-  //       'userInfo thumbnail',
-  //     );
-  //     return res.status(200).json({
-  //       currentPage: page,
-  //       totalPage: totalPage,
-  //       totalStoriesCount: count,
-  //       result,
-  //     });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+  static async readAllStories(req, res, next) {
+    try {
+      const page = parseInt(req.query.page || 1); // default 페이지: 1
+      const { forest, totalPage, count } = await ForestService.readPosts(page);
+      const forests = await ForestService.populateForestPost(
+        forest,
+        'userInfo thumbnail',
+      );
+      return res.status(200).json({
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
+        forests,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 export default ForestController;
