@@ -13,7 +13,7 @@ const forestDislikeSchema = new Schema(
       required: false,
     },
   },
-  { timestamps: true, collection: 'forestDislikes' },
+  { collection: 'forestDislikes' },
 );
 
 const forestDislike = model('ForestDislike', forestDislikeSchema);
