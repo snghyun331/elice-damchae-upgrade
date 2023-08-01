@@ -65,10 +65,12 @@ const StoryCard = ({
 						</div>
 
 						<div className="space-y-2 mt-8">
-							<div className="absolute bottom-8 flex text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-								<ChevronRightIcon className="w-4 mt-1" />
-								<span className="ml-1 mr-10">더보기</span>
-								<div className="justify-end flex flex-row space-x-2">
+							<div className="w-full absolute bottom-8 flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+								<div className="flex items-center">
+									<ChevronRightIcon className="w-4 mt-1" />
+									<span className="ml-1">더보기</span>
+								</div>
+								<div className="flex flex-row space-x-2 pr-16">
 									<EyeIcon className="w-4 mt-1" />
 									<p>{views}</p>
 									<ChatBubbleLeftEllipsisIcon className="w-4 mt-1" />
