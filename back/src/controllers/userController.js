@@ -1,9 +1,8 @@
 import is from '@sindresorhus/is';
 import { userService } from '../services/userService.js';
 import { OAuth2Client } from 'google-auth-library';
-
-const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const client = new OAuth2Client(CLIENT_ID); // CLIENT_ID를 애플리케이션의 Google CLIENT_ID로 대체하세요.
+import smtpTransport from '../utills/emailAuth.js';
+import { imageService } from '../services/imageService.js';
 
 class userAuthController {
   static async userRegister(req, res, next) {
@@ -26,16 +25,18 @@ class userAuthController {
       });
 
       return res.status(201).json(newUser);
-    } catch (error) {
+    } catch (err) {
       res
         .status(400)
         .send({ errorMessage: '요청한 데이터 형식이 올바르지 않습니다.' });
-      next(error);
     }
   }
 
   //구글 가입용
   static async googleRegister(req, res, next) {
+    const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+    const client = new OAuth2Client(CLIENT_ID); // CLIENT_ID를 애플리케이션의 Google CLIENT_ID로 대체하세요.
+
     try {
       if (is.emptyObject(req.body)) {
         throw new Error(
@@ -118,16 +119,73 @@ class userAuthController {
     }
   }
 
+  // 이메일 인증
+  static async sendAuthCode(req, res, next) {
+    const email = req.body.email;
+    const emailString = await userService.createAuthString();
+    try {
+      const mailOptions = {
+        from: 'MBTI 커뮤니티',
+        to: email,
+        subject: '[MBTI 커뮤니티] 이메일 확인 인증코드 안내',
+        text: `아래 코드를 인증코드란에 입력해주세요.\n
+            인증코드 👉 ${emailString}\n
+            인증코드는 3분 후에 만료됩니다.`,
+      };
+
+      smtpTransport.sendMail(mailOptions, (error) => {
+        if (error) {
+          res.status(500).json({
+            message: `${email}로 보내는 인증메일 전송에 실패하였습니다.`,
+          });
+        } else {
+          res.status(200).json({
+            message: `${email} 로 인증메일 전송에 성공했습니다.`,
+          });
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // 유저가 입력한 이메일 인증코드 확인
+  static async validateString(req, res, next) {
+    try {
+      const string = req.body.string;
+      const isVerified = await userService.readAuthString({ string });
+
+      if (isVerified === null) {
+        return res
+          .status(400)
+          .json({
+            errorMessage: '잘못된 인증코드입니다. 다시 한 번 확인해주세요.',
+          });
+      } else if (isVerified === string) {
+        return res
+          .status(200)
+          .json({ message: '이메일 인증에 성공하였습니다.' });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async userUpdate(req, res, next) {
     try {
       // URI로부터 사용자 id를 추출함.
       const userId = req.params.userId;
       // body data 로부터 업데이트할 사용자 정보를 추출함.
+
       const password = req.body.password ?? null;
       const nickname = req.body.nickname ?? null;
       const mbti = req.body.mbti ?? null;
+      const file = req.file ?? null;
 
-      const toUpdate = { password, nickname, mbti };
+      const profileImg = await imageService.uploadImage({ file });
+      const profileImgId = profileImg._id;
+
+      const toUpdate = { password, nickname, mbti, profileImg: profileImgId };
 
       // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
       const updatedUser = await userService.updateUser({ userId, toUpdate });
