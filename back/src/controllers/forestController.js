@@ -142,16 +142,15 @@ class ForestController {
         //     forests: populateResult,
         //   };
       } else {
-        const { forests, totalPage, count } = await ForestService.readPosts(
+        const { forests, totalPage, count } = await ForestService.findByForest(
           limit,
           page,
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo.mbti',
+          'userInfo thumbnail',
         );
-        console.log('안녕');
-        console.log(populateResult);
+
         if (populateResult.length === 0) {
           throw new Error('스토리가 없습니다');
         }
