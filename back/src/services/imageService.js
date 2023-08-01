@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import { UPLOAD_PATH } from '../constants.js/path.js';
+import { UPLOAD_PATH } from '../utills/path.js';
 import { imageModel } from '../db/models/imageModel.js';
 
 class imageService {
