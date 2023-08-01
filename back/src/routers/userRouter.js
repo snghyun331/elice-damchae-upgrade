@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { userAuthController } from '../controllers/userController.js';
+import { loginRequired } from '../middlewares/loginRequired.js';
 import { outUserValidation } from '../middlewares/outUserValidation.js';
+import { upload } from '../utills/multer.js';
+
 const userAuthRouter = Router();
 
 userAuthRouter.post('/auth/register', userAuthController.userRegister);
@@ -19,15 +22,18 @@ userAuthRouter.post(
   userAuthController.googleLogin,
 );
 
-userAuthRouter.put('/users/:userId', userAuthController.userUpdate);
+userAuthRouter.put(
+  '/users/:userId',
+  upload.single('profileImg'),
+  userAuthController.userUpdate,
+);
 
-// 닉네임 중복확인
 userAuthRouter.get('/auth/checkNickname', userAuthController.checkNickname);
 
 userAuthRouter.put('/auth/out', userAuthController.userDelete);
 
-// userRouter.get('user/stories', async function (req, res, next) {});
-// userRouter.get('user/postLikes', async function (req, res, next) {});
-// userRouter.get('user/comments', async function (req, res, next) {});
+userAuthRouter.post('/auth/sendEmailCode', userAuthController.sendAuthCode);
+
+userAuthRouter.post('/auth/checkEmailCode', userAuthController.validateString);
 
 export { userAuthRouter };

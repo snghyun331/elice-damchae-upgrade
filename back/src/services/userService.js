@@ -1,9 +1,8 @@
 import User from '../db/models/userModel.js';
 import bcrypt from 'bcrypt';
-// import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
-
 import { OAuth2Client } from 'google-auth-library';
+import { generateRandomString } from '../utills/emailAuth.js';
 
 class userService {
   static async createUser({ email, password, mbti, nickname, isGoogleLogin }) {
@@ -14,8 +13,6 @@ class userService {
         '이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.';
       return { errorMessage };
     }
-
-    // 이메일 인증
 
     let hashedPassword;
     // 비밀번호 해쉬화 (비밀번호가 제공된 경우에만 수행)
@@ -34,6 +31,23 @@ class userService {
     // db에 저장
     const createdNewUser = await User.create({ newUser });
     return createdNewUser;
+  }
+
+  // 이메일 인증코드 생성
+  static async createAuthString() {
+    const string = generateRandomString(10);
+    const createdString = await User.createAuthString({ string });
+    return createdString.authString;
+  }
+
+  // 이메일 인증코드 확인
+  static async readAuthString({ string }) {
+    const searchString = await User.findAuthString({ string });
+    if (searchString === null) {
+      return null;
+    }
+    const resultString = searchString.authString;
+    return resultString;
   }
 
   static async readUser({ email, password }) {
@@ -113,6 +127,12 @@ class userService {
       user = await User.update({ userId, fieldToUpdate, newValue });
     }
 
+    if (toUpdate.profileImg) {
+      const fieldToUpdate = 'profileImg';
+      const newValue = toUpdate.profileImg;
+      user = await User.update({ userId, fieldToUpdate, newValue });
+    }
+
     return user;
   }
 
@@ -178,6 +198,7 @@ class userService {
     }
     return forests;
   }
+
   //구글 로그인용
   static async readGoogleUser({ email, idToken }) {
     const user = await User.findByEmail({ email });
