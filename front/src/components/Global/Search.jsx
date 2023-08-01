@@ -52,7 +52,7 @@ const Search = ({ onSearch }) => {
 							type="search"
 							id="default-search"
 							className="block w-full p-4 pl-12 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-							placeholder="검색어를 입력하세요."
+							placeholder="스토리 검색어를 입력하세요."
 							value={searchQuery}
 							onChange={(event) => setSearchQuery(event.target.value)}
 						/>

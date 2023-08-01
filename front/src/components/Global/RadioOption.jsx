@@ -22,7 +22,7 @@ const RadioOption = ({
 	};
 
 	return (
-		<div className="mb-10 flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+		<div className="mb-5 flex items-center pl-1">
 			<input
 				id={id}
 				value={value}

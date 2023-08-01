@@ -11,19 +11,11 @@ const ProfileButton = () => {
 		{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
 	];
 	return (
-		<Menu as="div" className="relative inline-block text-left">
+		<Menu as="div" className="xs:hidden sm:hidden md:flex relative inline-block text-left">
 			<div>
-				<Menu.Button
-					className="whitespace-nowrap hidden md:block px-4 py-2 pt-3 text-center shadow-inner inline-flex w-full justify-center gap-x-1.5 rounded-md bg-gray-200 px-3 py-2 text-lg font-semibold hover:bg-[#FFFAEE] shadow text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-					style={{
-						boxShadow: '2px 2px 1px 1px rgba(0, 0, 0, 0.1)',
-					}}
-				>
-					<div className="flex flex-row">
-						<UserCircleIcon
-							className="-mr-1 h-5 w-5 text-gray-400"
-							aria-hidden="true"
-						/>
+				<Menu.Button>
+					<div className="mt-2">
+						<UserCircleIcon className="w-10 text-white" aria-hidden="true" />
 					</div>
 				</Menu.Button>
 			</div>
@@ -37,7 +29,7 @@ const ProfileButton = () => {
 				leaveFrom="transform opacity-100 scale-100"
 				leaveTo="transform opacity-0 scale-95"
 			>
-				<Menu.Items className="whitespace-nowrap absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 nav-item cursor-pointer focus:outline-none">
+				<Menu.Items className="text-center whitespace-nowrap absolute right-0 z-10 mt-12 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 nav-item cursor-pointer focus:outline-none">
 					<div className="py-1">
 						{profileItems.map((item, index) => (
 							<Menu.Item key={index}>
@@ -46,7 +38,7 @@ const ProfileButton = () => {
 										onClick={item.onClick}
 										className={classNames(
 											active ? 'bg-gray-100 text-blue-900' : 'text-gray-700',
-											'block px-4 py-2 text-lg',
+											'block px-4 py-2',
 										)}
 									>
 										{item.title}

@@ -41,7 +41,7 @@ const StoryCardMap = () => {
 					{isDataLoading ? (
 						<>
 							{stories && stories.length > 0 ? ( // Check if stories is not empty
-								<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-base font-medium">
+								<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 gap-4 text-base font-medium">
 									{stories.map((story) => (
 										<div key={story._id}>
 											<StoryCard data={story} />
@@ -55,7 +55,7 @@ const StoryCardMap = () => {
 					) : (
 						<div>Loading...</div>
 					)}
-				<div className="flex justify-center mt-10">
+				<div className="flex justify-center mt-20">
 					<Pagination
 						currentPage={currentPage}
 						totalPages={totalPage}
