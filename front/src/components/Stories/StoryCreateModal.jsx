@@ -6,11 +6,11 @@ import useStoryStore from '../../store/useStoryStore';
 import { useEffect, useRef, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { postApi } from '../../services/api';
-import './StoryCreateModal.css'
+import './StoryCreateModal.css';
 
 const StoryCreateModal = ({ onClose }) => {
 	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
-
+	console.log(mood);
 	const [isPublic, setIsPublic] = useState(false);
 
 	const dimmedRef = useRef(null);
@@ -30,23 +30,25 @@ const StoryCreateModal = ({ onClose }) => {
 	const postStory = async (e) => {
 		e.preventDefault();
 
-		try {
-			const post = { title, content, thumbnail, isPublic, mood, music };
-			console.log(post);
-			const formData = new FormData();
-			for (const key in post) {
-				formData.append(key, post[key]);
+		if (confirm('스토리는 수정이 불가합니다. 등록하시겠습니까?')) {
+			try {
+				const post = { title, content, thumbnail, isPublic, mood, music };
+				console.log(post);
+				const formData = new FormData();
+				for (const key in post) {
+					formData.append(key, post[key]);
+				}
+
+				const response = await postApi('stories', formData);
+				console.log(response.data);
+				onClose();
+
+				setTimeout(() => {
+					window.location.href = '/stories';
+				}, 100);
+			} catch (e) {
+				console.error(e);
 			}
-
-			const response = await postApi('stories', formData);
-			console.log(response.data);
-			onClose();
-
-			setTimeout(() => {
-				window.location.href = '/stories';
-			}, 100);
-		} catch (e) {
-			console.error(e);
 		}
 	};
 
@@ -72,7 +74,7 @@ const StoryCreateModal = ({ onClose }) => {
 					tabIndex="-1"
 					aria-hidden="true"
 					className="relative w-full max-w-2xl p-4 overflow-x-hidden overflow-y-auto max-h-screen modal-content"
-					>
+				>
 					<div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
 						<div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
 							<h3 className="text-xl font-semibold text-gray-900 dark:text-white my-2">
@@ -129,7 +131,7 @@ const StoryCreateModal = ({ onClose }) => {
 							</div>
 						)}
 
-						<div className="flex-row p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+						<div className="flex-row p-6 border-t border-gray-200 rounded-b dark:border-gray-600">
 							<div className="flex flex-col">
 								<div className="justify-end flex flex-row">
 									<button
@@ -155,7 +157,6 @@ const StoryCreateModal = ({ onClose }) => {
 									</p>
 								)}
 							</div>
-							<div></div>
 						</div>
 					</div>
 				</div>

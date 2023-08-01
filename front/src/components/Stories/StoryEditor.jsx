@@ -5,6 +5,7 @@ import { postApi } from '../../services/api';
 import RadioOption from '../Global/RadioOption';
 import useImageUpload from '../../hooks/useImageUpload';
 import { MusicalNoteIcon } from '@heroicons/react/24/solid';
+
 const StoryEditor = () => {
 	const {
 		title,
@@ -20,9 +21,11 @@ const StoryEditor = () => {
 		setLocalThumbnail,
 		setStableThumbnail,
 	} = useStoryStore();
-
+	console.log('stableThumbnail', stableThumbnail);
 	const [preview, setPreview] = useState('');
 	const [selectedOption, setSelectedOption] = useState('');
+
+	console.log(selectedOption);
 
 	const handleThumbnailUpload = async (e) => {
 		e.preventDefault();
@@ -85,6 +88,7 @@ const StoryEditor = () => {
 			<label className="block font-semibold text-gray-900 dark:text-white">
 				본문
 			</label>
+
 			<div>
 				<Editor
 					initialValue=" "
@@ -107,19 +111,27 @@ const StoryEditor = () => {
 						addImageBlobHook: handleImageUpload,
 					}}
 				/>
-				{content?.length <= 16 && (
-					<p className="text-right text-red-400 text-sm mt-2">
-						10자 이상 입력해주세요.
-					</p>
-				)}
+				<p>
+					{content?.length <= 16 && (
+						<span className="text-right text-red-400 text-sm mt-2">
+							10자 이상 입력해주세요.
+						</span>
+					)}　
+				</p>
 			</div>
 			<div className="flex flex-col space-y-2">
 				<label className="block font-semibold text-gray-900 dark:text-white">
-					썸네일
+					썸네일 선택
 				</label>
 				<div className="flex flex-row space-x-2 mb-5">
 					<div className="w-1/2 px-3 pr-5 border-r">
-						<h3 className="text-center mb-2 text-sm">직접 업로드</h3>
+						<h3 className="text-center mb-2 text-sm">
+							{' '}
+							<span className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+								직접 업로드
+							</span>
+						</h3>
+
 						<div className="h-1/5 items-end">
 							<input
 								className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -132,8 +144,8 @@ const StoryEditor = () => {
 						{preview && (
 							<div>
 								<div>
-									<div className="flex flex-row justify-between">
-										<p className="text-sm text-gray-500">선택된 이미지:</p>
+									<div className="flex flex-row justify-between mb-2">
+										<p className="text-sm text-gray-500">미리보기</p>
 										<button
 											onClick={() => {
 												setPreview('');
@@ -141,12 +153,17 @@ const StoryEditor = () => {
 												setThumbnail('');
 												fileRef.current.value = '';
 											}}
+											className="text-sm text-gray-500"
 										>
 											×
 										</button>
 									</div>
 									<img
-										className="h-40"
+										className={`h-40 ${
+											selectedOption === 'local-thumbnail'
+												? 'border-2 border-blue-600 rounded'
+												: ''
+										}`}
 										src={preview}
 										alt="Selected Thumbnail"
 									/>
@@ -163,12 +180,17 @@ const StoryEditor = () => {
 						)}
 					</div>
 					<div className="w-1/2 px-3">
-						<h3 className="text-center mb-2 text-sm">AI로 이미지 생성</h3>
+						<h3 className="text-center mb-2 text-sm">
+							{' '}
+							<span className="bg-purple-100 text-purple-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-purple-900 dark:text-purple-300">
+								AI로 이미지 생성
+							</span>
+						</h3>
 						<div className="h-1/5 flex">
 							<button
 								onClick={generateImage}
 								disabled={content?.length <= 16}
-								className="w-full h-10 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
 							>
 								이미지 생성하기
 							</button>
@@ -176,22 +198,27 @@ const StoryEditor = () => {
 						{stableThumbnail && (
 							<div>
 								<div>
-									<div className="flex flex-row justify-between">
-										<p className="text-sm text-gray-500">선택된 이미지:</p>
+									<div className="flex flex-row justify-between mb-2">
+										<p className="text-sm text-gray-500">미리보기</p>
 										<button
 											onClick={() => {
 												setStableThumbnail('');
 												setThumbnail('');
 											}}
+											className="text-sm text-gray-500"
 										>
 											×
 										</button>
 									</div>
 
 									<img
-										className="h-full"
+										className={`h-full ${
+											selectedOption === 'stable-thumbnail'
+												? 'border-2 border-blue-600 rounded'
+												: ''
+										}`}
 										src={`http://localhost:3000/uploads/${stableThumbnail}`}
-										alt="Thumbnail"
+										alt="AI로 생성된 이미지"
 									/>
 								</div>
 								<RadioOption
@@ -207,16 +234,17 @@ const StoryEditor = () => {
 					</div>
 				</div>
 				{loading && <div>이미지 업로드 중...</div>}
-
-				<div className="w-full">
+				<label className="block font-semibold text-gray-900 dark:text-white pt-3">
+					감정 분석
+				</label>
+				<div className="relative">
 					<button
 						onClick={recommend}
 						disabled={content?.length <= 16}
-						className="w-full h-10 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+						className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
 					>
-						기분에 맞는 음악 추천받기
+						감정 분석하고 음악 추천받기
 					</button>
-					<MusicalNoteIcon className="h-10 border rounded-full border-gray-300 p-2 " />
 				</div>
 			</div>
 		</>

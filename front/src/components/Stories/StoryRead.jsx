@@ -86,9 +86,6 @@ const StoryRead = () => {
 						<div className="absolute inset-0 bg-black opacity-60">
 							<div className="ms-4 mt-4 absolute top-1 left-1 p-4 z-10 max-w-md">
 								<p className="text-white mb-1">
-									조회수 {isDataLoading && story.views}
-								</p>
-								<p className="text-white mb-1">
 									{isDataLoading && formatDate(story.createdAt)}
 								</p>
 								<h5 className="leading-loose text-white text-2xl font-bold">
@@ -96,6 +93,9 @@ const StoryRead = () => {
 								</h5>
 							</div>
 							<div className="text-sm text-end absolute top-1 right-1 mt-4 me-4">
+								<p className="text-white mb-1">
+									조회 {isDataLoading && story.views}
+								</p>
 								{isDataLoading && story.userInfo._id == id && (
 									<>
 										<button
@@ -110,16 +110,16 @@ const StoryRead = () => {
 						</div>
 					</div>
 
-				<div className="flex flex-col">
-					<div className="relative -top-16 left-6 max-w-md">
-						<div className="text-9xl">
-							{isDataLoading && textToIcon[story.mood]}
+					<div className="flex flex-col">
+						<div className="relative -top-16 left-6 max-w-md">
+							<div className="text-9xl">
+								{isDataLoading && textToIcon[story.mood]}
+							</div>
 						</div>
-					</div>
 
-					<div className="relative -top-20 p-10">
-						{isDataLoading && <Viewer initialValue={story.content} />}
-					</div>
+						<div className="relative -top-20 p-10">
+							{isDataLoading && <Viewer initialValue={story.content} />}
+						</div>
 
 						<div>
 							<div className="w-12 h-12 mx-auto -mt-24 rounded-full overflow-hidden">
