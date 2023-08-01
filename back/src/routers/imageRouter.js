@@ -1,15 +1,9 @@
 import { Router } from 'express';
-import multer from 'multer';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { imageController } from '../controllers/imageController.js';
-import { fileSize } from '../utills/constant.js';
+import { upload } from '../utills/multer.js';
 
 const imageRouter = Router();
-
-const upload = multer({
-  dest: 'uploads/',
-  limits: { fileSize: fileSize },
-});
 
 imageRouter.post(
   '/image/upload',
