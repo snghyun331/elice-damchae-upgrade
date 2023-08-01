@@ -2,7 +2,8 @@
 
 // import { forestCommentModel } from '../db/models/forestCommentModel.js';
 import { forestModel } from '../db/models/forestModel.js';
-
+// import User from '../db/models/userModel.js';
+// import UserModel from '../db/schemas/user.js';
 class ForestService {
   static async createPost({ userId, title, content, mood }) {
     if (!title || !content) {
@@ -21,16 +22,18 @@ class ForestService {
     return createdForestPost;
   }
 
-  static async findByForest({ getAlls }) {
-    try {
-      // console.log(getAlls, getAlls.content);
-      const posts = await forestModel.findByForest({ getAlls });
-      console.log(posts);
-      return posts;
-    } catch (error) {
-      // console.log(error);
-      throw new Error('포스트 조회에 실패했습니다.');
-    }
+  static async findByForest(limit, page, getAlls) {
+    const skip = (page - 1) * limit;
+    // console.log(getAlls, getAlls.content);
+
+    const { forests, count } = await forestModel.findByForest(
+      skip,
+      limit,
+      getAlls,
+    );
+    const totalPage = Math.ceil(count / limit);
+
+    return { forests, totalPage, count };
   }
 
   static async updatePost(updatePost) {
@@ -93,13 +96,12 @@ class ForestService {
     return forest;
   }
 
-  static async readPosts(page) {
-    const limit = 8; // 한 페이지당 보여줄 스토리 수
+  static async readPosts(limit, page) {
     const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
 
-    const { forest, count } = await forestModel.findAndCountAll(skip, limit);
+    const { forests, count } = await forestModel.findAndCountAll(skip, limit);
     const totalPage = Math.ceil(count / limit);
-    return { forest, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
+    return { forests, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
   }
 
   static async populateForestPost(info, path) {
@@ -107,5 +109,15 @@ class ForestService {
     const forest = forestModel.populateForestPost(info, field);
     return forest;
   }
+
+  // static async ForestMbti({ mbti }) {
+  //   try {
+  //     const usersWithMbti = await User.findByMbti({ mbti });
+  //     return usersWithMbti;
+  //   } catch (error) {
+  //     console.log(error);
+  //     throw new Error('MBTI로 사용자 검색에 실패했습니다.');
+  //   }
+  // }
 }
 export default ForestService;

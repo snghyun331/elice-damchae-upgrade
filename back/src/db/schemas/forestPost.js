@@ -22,6 +22,10 @@ const ForestPostSchema = new Schema(
       type: String,
       required: true,
     },
+    mbti: {
+      type: String,
+      required: true,
+    },
     // like: {
     //   type: Number,
     //   default: 0,
