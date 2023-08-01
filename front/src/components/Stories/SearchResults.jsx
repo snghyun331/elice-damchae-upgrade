@@ -54,7 +54,7 @@ const SearchResults = () => {
 				<span className="text-blue-600 font-semibold">
 					{searchQuery.searchQuery}
 				</span>{' '}
-				에 대한 검색 결과{' '}
+				에 대한 스토리 검색 결과{' '}
 				<span className="text-lg">
 					({results.totalStoriesCount ? results.totalStoriesCount : '0'}건)
 				</span>
@@ -68,7 +68,7 @@ const SearchResults = () => {
 					className="p-4 mb-4 text-md text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 font-medium"
 					role="alert"
 				>
-					검색 결과가 없습니다.
+					스토리 검색 결과가 없습니다.
 				</div>
 			)}
 			<div className="flex justify-center mt-10">

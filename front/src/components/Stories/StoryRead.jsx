@@ -1,7 +1,6 @@
 import { textToIcon, textToColor, formatDate } from '../Util/Util';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
-
 import { Link } from 'react-router-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import { delApi, getApi } from '../../services/api';
@@ -111,19 +110,19 @@ const StoryRead = () => {
 						</div>
 					</div>
 
-					<div className="flex flex-col">
-						<div className="relative -top-20 left-6 max-w-md">
-							<div className="text-9xl">
-								{isDataLoading && textToIcon[story.mood]}
-							</div>
+				<div className="flex flex-col">
+					<div className="relative -top-16 left-6 max-w-md">
+						<div className="text-9xl">
+							{isDataLoading && textToIcon[story.mood]}
 						</div>
+					</div>
 
-						<div className="relative top-0 p-10">
-							{isDataLoading && <Viewer initialValue={story.content} />}
-						</div>
+					<div className="relative -top-20 p-10">
+						{isDataLoading && <Viewer initialValue={story.content} />}
+					</div>
 
 						<div>
-							<div className="w-12 h-12 mx-auto mt-6 rounded-full overflow-hidden">
+							<div className="w-12 h-12 mx-auto -mt-24 rounded-full overflow-hidden">
 								<img
 									className="w-full h-full object-cover"
 									src={isDataLoading && story.userInfo.profileImg}
@@ -137,7 +136,7 @@ const StoryRead = () => {
 								{isDataLoading && story.userInfo.mbti}
 							</p>
 						</div>
-						<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
+						<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
 						<div>
 							<StoryComment storyId={storyId} commentList={story.commentList} />
 						</div>
