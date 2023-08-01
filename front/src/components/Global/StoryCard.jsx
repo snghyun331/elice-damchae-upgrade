@@ -30,7 +30,7 @@ const StoryCard = ({
 	return (
 		<>
 			<div
-				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 pl-5 pr-5 my-4 ms-5 relative h-full`}
+				className={`border border-[0.1rem] border-solid rounded-2xl pt-4 px-4 my-3 mx-2 relative h-full`}
 			>
 				<Link to={`/stories/${_id}`}>
 					<div className="flex items-center justify-center">
@@ -47,6 +47,7 @@ const StoryCard = ({
 						</figure>
 						<span className="absolute top-36 right-2 text-8xl">{moodIcon}</span>
 					</div>
+
 					<div className="px-4 pt-10 flex flex-col justify-between">
 						<div>
 							<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -63,18 +64,13 @@ const StoryCard = ({
 							</p>
 						</div>
 
-						<div className="space-y-2">
-							<div className="flex text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+						<div className="space-y-2 mt-8">
+							<div className="absolute bottom-8 flex text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 								<ChevronRightIcon className="w-4 mt-1" />
-								<span className="ml-1">더보기</span>
-							</div>
-							<div className="justify-end flex flex-row space-x-2">
-								<div className="flex flex-row space-x-2">
+								<span className="ml-1 mr-10">더보기</span>
+								<div className="justify-end flex flex-row space-x-2">
 									<EyeIcon className="w-4 mt-1" />
 									<p>{views}</p>
-								</div>
-
-								<div className="justify-end flex flex-row space-x-2">
 									<ChatBubbleLeftEllipsisIcon className="w-4 mt-1" />
 									<p>{commentCount}</p>
 								</div>
