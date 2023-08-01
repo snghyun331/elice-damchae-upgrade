@@ -29,7 +29,7 @@ const ProfileButton = () => {
 				leaveFrom="transform opacity-100 scale-100"
 				leaveTo="transform opacity-0 scale-95"
 			>
-				<Menu.Items className="whitespace-nowrap absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 nav-item cursor-pointer focus:outline-none">
+				<Menu.Items className="text-center whitespace-nowrap absolute right-0 z-10 mt-12 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 nav-item cursor-pointer focus:outline-none">
 					<div className="py-1">
 						{profileItems.map((item, index) => (
 							<Menu.Item key={index}>
@@ -38,7 +38,7 @@ const ProfileButton = () => {
 										onClick={item.onClick}
 										className={classNames(
 											active ? 'bg-gray-100 text-blue-900' : 'text-gray-700',
-											'block px-4 py-2 text-lg',
+											'block px-4 py-2',
 										)}
 									>
 										{item.title}

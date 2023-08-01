@@ -216,7 +216,6 @@ const StoryEditor = () => {
 					>
 						기분에 맞는 음악 추천받기
 					</button>
-					<MusicalNoteIcon className="h-10 border rounded-full border-gray-300 p-2 " />
 				</div>
 			</div>
 		</>
