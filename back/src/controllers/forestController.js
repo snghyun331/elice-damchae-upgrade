@@ -1,8 +1,6 @@
 // forestController.js
 import ForestService from '../services/forestService.js';
 import axios from 'axios';
-// import { statusCode } from '../utills/statusCode.js';
-// import BadRequest from '../middlewares/error/badRequest.js';
 
 class ForestController {
   // 대나무숲 글 등록 전 감정분석 수행하기
@@ -44,10 +42,10 @@ class ForestController {
 
   static async findByForest(req, res, next) {
     try {
-      const page = parseInt(req.query.page || 1);
+      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
       const limit = 12; // 한페이지에 들어갈 스토리 수
 
-      const { option, searchword, searchOption } = req.query;
+      const { option, searchword } = req.query;
       let getAlls = {};
       let result;
 
