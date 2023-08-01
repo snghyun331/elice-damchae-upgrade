@@ -4,6 +4,7 @@ import { getApi, putApi } from '../../services/api';
 import Select from 'react-select';
 import useUserStore, { useUserActions } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const InfoChange = () => {
 	const navigate = useNavigate();
@@ -20,8 +21,6 @@ const InfoChange = () => {
 		setProfileImg,
 	} = useUserStore();
 
-	console.log(nickname)
-	
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
@@ -86,11 +85,11 @@ const InfoChange = () => {
 			);
 
 			if (response.data.nicknameState == 'usableNickname') {
-				alert(response.data.usableNickname);
+				toast.success(response.data.usableNickname);
 				setNicknameCheck(true);
 			}
 			if (response.data.nicknameState == 'unusableNickname') {
-				alert(response.data.unusableNickname);
+				toast.error(response.data.unusableNickname);
 				setNicknameCheck(false);
 			}
 		} catch (error) {
@@ -111,16 +110,15 @@ const InfoChange = () => {
 			};
 
 			try {
-				console.log(toUpdate);
 				const res = await putApi(`users/${id}`, toUpdate);
 				if (res.status === 200) {
-					alert('정보를 수정하였습니다.');
+					toast.success('정보를 수정하였습니다.');
 					setNickname(toUpdate.nickname);
 					setMbti(toUpdate.mbti);
 					setProfileImg(toUpdate.profileImg);
 					infoChange(toUpdate);
 				} else {
-					alert('정보 수정에 실패하였습니다.');
+					toast.error('정보 수정에 실패하였습니다.');
 				}
 			} catch (err) {
 				console.log(err);
@@ -135,7 +133,7 @@ const InfoChange = () => {
 			try {
 				const response = await putApi(`auth/out`, { userId: id });
 				if (response.status === 200) {
-					alert('정상적으로 회원탈퇴가 완료되었습니다.');
+					toast.success('정상적으로 회원탈퇴가 완료되었습니다.');
 					logout();
 					navigate('/');
 				}
@@ -147,7 +145,7 @@ const InfoChange = () => {
 
 	return (
 		<>
-			<section className=''>
+			<section className="">
 				<div className="flex justify-center px-6 py-8 mx-auto lg:py-0 my-20">
 					<div className="w-full bg-white rounded-sm shadow-xl dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700 ">
 						<div className="p-6 space-y-4 md:space-y-6 sm:p-8">

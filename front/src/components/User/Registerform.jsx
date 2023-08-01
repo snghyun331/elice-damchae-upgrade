@@ -7,6 +7,7 @@ import { mbtiList } from '../Util/Util';
 import { getApi } from '../../services/api';
 import { useUserActions } from '../../store/useUserStore';
 import ProfilePicker from './ProfilePicker';
+import toast from 'react-hot-toast';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
@@ -126,11 +127,11 @@ const RegisterForm = () => {
 			console.log(response.data);
 
 			if (response.data.nicknameState == 'usableNickname') {
-				alert(response.data.usableNickname);
+				toast.success(response.data.usableNickname);
 				setNicknameCheck(true);
 			}
 			if (response.data.nicknameState == 'unusableNickname') {
-				alert(response.data.unusableNickname);
+				toast.error(response.data.unusableNickname);
 				setNicknameCheck(false);
 			}
 		} catch (error) {

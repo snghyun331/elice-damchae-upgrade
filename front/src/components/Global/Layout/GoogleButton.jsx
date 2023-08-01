@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useUserActions } from '../../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -58,7 +59,7 @@ const GoogleButton = () => {
 				await googleLogin(user);
 				navigate('/');
 			} catch (error) {
-				alert('구글 로그인에 실패했습니다.')
+				toast.error('구글 로그인에 실패했습니다.')
 				console.log(error.response?.data?.errorMessage);
 			}
 		}
