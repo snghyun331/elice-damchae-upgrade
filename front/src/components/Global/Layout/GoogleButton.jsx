@@ -66,9 +66,7 @@ const GoogleButton = () => {
 	};
 
 	return (
-		<div>
 			<div id="google-signin-button"></div>
-		</div>
 	);
 };
 

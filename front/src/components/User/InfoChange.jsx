@@ -101,16 +101,26 @@ const InfoChange = () => {
 		async (e) => {
 			e.preventDefault();
 
-			// passwordToChange가 빈 문자열이라면 password는 toUpdate에 추가하지 않습니다.
 			const toUpdate = {
 				email,
 				...(passwordToChange !== '' && { password: passwordToChange }),
+				// ...(profileImgToChange !== '' && { profileImg: profileImgToChange }),
+				profileImgToChange,
 				nickname: nicknameToChange,
 				mbti: mbtiToChange.value,
 			};
 
+			const formData = new FormData();
+			for (const key in toUpdate) {
+				formData.append(key, toUpdate[key]);
+			}
+
+			for (let key of formData.keys()) {
+				console.log(key, ':', formData.get(key));
+			}
+
 			try {
-				const res = await putApi(`users/${id}`, toUpdate);
+				const res = await putApi(`users/${id}`, formData);
 				if (res.status === 200) {
 					toast.success('정보를 수정하였습니다.');
 					setNickname(toUpdate.nickname);
