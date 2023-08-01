@@ -6,6 +6,7 @@ import useStoryStore from '../../store/useStoryStore';
 import { useEffect, useRef, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { postApi } from '../../services/api';
+import './StoryCreateModal.css'
 
 const StoryCreateModal = ({ onClose }) => {
 	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
@@ -70,11 +71,11 @@ const StoryCreateModal = ({ onClose }) => {
 					data-modal-backdrop="static"
 					tabIndex="-1"
 					aria-hidden="true"
-					className="relative w-full max-w-2xl p-4 overflow-x-hidden overflow-y-auto"
-				>
+					className="relative w-full max-w-2xl p-4 overflow-x-hidden overflow-y-auto max-h-screen modal-content"
+					>
 					<div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
 						<div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-							<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+							<h3 className="text-xl font-semibold text-gray-900 dark:text-white my-2">
 								{currentDate}의 스토리 작성하기
 							</h3>
 							<button
@@ -123,7 +124,7 @@ const StoryCreateModal = ({ onClose }) => {
 						</div>
 
 						{music && (
-							<div className="p-6 border-t border-gray-200 dark:border-gray-600">
+							<div className="px-3 border-t border-gray-200 dark:border-gray-600">
 								<MusicVideo music={music} phrase={phrase} mood={mood} />
 							</div>
 						)}
@@ -149,7 +150,7 @@ const StoryCreateModal = ({ onClose }) => {
 									</button>
 								</div>
 								{!isFormValid && (
-									<p className="self-end text-red-500 text-xs">
+									<p className="self-end text-red-500 text-sm mt-2">
 										빈 칸을 채워주세요.
 									</p>
 								)}
