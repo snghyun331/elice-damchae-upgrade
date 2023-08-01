@@ -2,10 +2,10 @@
 import ForestPost from '../schemas/forestPost.js';
 // import UserModel from '../schemas/user.js';
 class forestModel {
-  // static async create({ newForestPost }) {
-  //   const createdForest = await ForestPost.create(newForestPost);
-  //   return createdForest;
-  // }
+  static async create({ newForestPost }) {
+    const createdForest = await ForestPost.create(newForestPost);
+    return createdForest;
+  }
 
   static async findByForest(skip, limit, getAlls) {
     const forests = await ForestPost.find(getAlls)
@@ -48,15 +48,15 @@ class forestModel {
     return updateForestPost;
   }
 
-  // static async deletePost({ deletePost }) {
-  //   const { _id, userId, title, content, imageUrl } = deletePost;
+  static async deletePost({ deletePost }) {
+    const { _id, userId, title, content, imageUrl } = deletePost;
 
-  //   const forestDeletePost = await ForestPost.deleteOne(
-  //     { userId, _id },
-  //     { title, content, ...(imageUrl !== 'None' && { imageUrl }) },
-  //   );
-  //   return forestDeletePost;
-  // }
+    const forestDeletePost = await ForestPost.deleteOne(
+      { userId, _id },
+      { title, content, ...(imageUrl !== 'None' && { imageUrl }) },
+    );
+    return forestDeletePost;
+  }
 
   static async findAndCountAll(skip, limit) {
     const forest = await ForestPost.find({})
