@@ -28,7 +28,6 @@ class User {
 
   static async findByMbti({ mbti }) {
     const user = await UserModel.find({ mbti });
-    console.log(mbti);
     return user;
   }
 

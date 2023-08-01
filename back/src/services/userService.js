@@ -1,6 +1,5 @@
 import User from '../db/models/userModel.js';
 import bcrypt from 'bcrypt';
-// import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 import { generateRandomString } from '../utills/emailAuth.js';
@@ -48,7 +47,6 @@ class userService {
       return null;
     }
     const resultString = searchString.authString;
-    console.log(resultString);
     return resultString;
   }
 
@@ -201,7 +199,6 @@ class userService {
     return forests;
   }
 
-  }
   //구글 로그인용
   static async readGoogleUser({ email, idToken }) {
     const user = await User.findByEmail({ email });
