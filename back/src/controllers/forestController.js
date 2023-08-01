@@ -152,6 +152,7 @@ class ForestController {
           forests,
           'userInfo.mbti',
         );
+        console.log('안녕');
         console.log(populateResult);
         if (populateResult.length === 0) {
           throw new Error('스토리가 없습니다');
