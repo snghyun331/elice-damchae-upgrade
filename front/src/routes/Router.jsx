@@ -8,8 +8,8 @@ import RegisterForm from '../components/User/Registerform';
 import StoryRead from '../components/Stories/StoryRead';
 import DaenamusMain from '../components/Daenamus/DaenamusMain';
 import DaenamusWrite from '../components/Daenamus/DaenamusWrite';
-import DaenamusCardDetail from '../components/Daenamus/DaenamusCardDetail';
 import SearchResults from '../components/Stories/SearchResults';
+import DaenamuRead from '../components/Daenamus/DaenamuRead';
 
 const MainLayout = () => {
 	return (
@@ -44,7 +44,7 @@ const Router = () => {
 
 					<Route path="write" element={<DaenamusWrite />} />
 
-					<Route path="read" element={<DaenamusCardDetail />} />
+					<Route path=":forestId" element={<DaenamuRead />} />
 				</Route>
 			</Route>
 		</Routes>

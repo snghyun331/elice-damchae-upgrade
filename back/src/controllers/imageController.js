@@ -19,11 +19,11 @@ class imageController {
       const result = await axios.post(
         process.env.STABLE_DIFFUSION_FLASK_SERVER_URL,
         {
-          korean_text: pureContent,
+          koreanText: pureContent,
         },
       );
-      const image_data = Buffer.from(result.data.image_base64, 'base64');
-      const createImage = await imageService.uploadStableImage(image_data);
+      const imageData = Buffer.from(result.data.imageBase64, 'base64');
+      const createImage = await imageService.uploadStableImage(imageData);
 
       res.status(201).json(createImage);
     } catch (error) {
