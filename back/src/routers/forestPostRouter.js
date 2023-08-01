@@ -16,10 +16,10 @@ router.put('/:id', loginRequired, ForestController.updatePost);
 router.delete('/:id', loginRequired, ForestController.deletePost);
 
 // 게시글 단일 조회
-router.get('/search', ForestController.findByForest);
+router.get('/', ForestController.findByForest);
 
 router.get('/:forestId', ForestController.readStoryDetail);
 
-router.get('/', ForestController.readAllStories);
+router.get('/search', ForestController.readAllStories);
 
 export default router;
