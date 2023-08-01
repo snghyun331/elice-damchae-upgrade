@@ -30,7 +30,7 @@ const StoryCard = ({
 	return (
 		<>
 			<div
-				className={`border border-[0.1rem] border-solid rounded-2xl pt-4 px-4 my-3 mx-2 relative h-full`}
+				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 px-5 pb-6 my-3 mx-2 relative h-full`}
 			>
 				<Link to={`/stories/${_id}`}>
 					<div className="flex items-center justify-center">
@@ -48,7 +48,7 @@ const StoryCard = ({
 						<span className="absolute top-36 right-2 text-8xl">{moodIcon}</span>
 					</div>
 
-					<div className="px-4 pt-10 flex flex-col justify-between">
+					<div className="pl-2 pt-10 flex flex-col justify-between">
 						<div>
 							<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 								{truncateString(title, 32)}
@@ -59,7 +59,7 @@ const StoryCard = ({
 									{formatRelativeTime(createdAt)}
 								</span>
 							</div>
-							<p className="text-sm mb-3 font-normal text-gray-700 dark:text-gray-400">
+							<p className="text-sm my-3 font-normal text-gray-700 dark:text-gray-400">
 								{truncateString(removeTag(content), 100)}
 							</p>
 						</div>

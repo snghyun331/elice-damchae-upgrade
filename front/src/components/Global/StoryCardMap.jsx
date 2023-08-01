@@ -55,7 +55,7 @@ const StoryCardMap = () => {
 					) : (
 						<div>Loading...</div>
 					)}
-				<div className="flex justify-center mt-10">
+				<div className="flex justify-center mt-20">
 					<Pagination
 						currentPage={currentPage}
 						totalPages={totalPage}
