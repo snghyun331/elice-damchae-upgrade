@@ -11,7 +11,7 @@ const ProfileButton = () => {
 		{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
 	];
 	return (
-		<Menu as="div" className="sm:hidden md:flex relative inline-block text-left">
+		<Menu as="div" className="xs:hidden sm:hidden md:flex relative inline-block text-left">
 			<div>
 				<Menu.Button>
 					<div className="mt-2">
