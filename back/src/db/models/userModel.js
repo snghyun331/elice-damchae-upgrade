@@ -1,5 +1,5 @@
 import UserModel from '../schemas/user.js';
-import { StoryPost } from '../schemas/storyPost.js';
+import { storyPost } from '../schemas/storyPost.js';
 import ForestPost from '../schemas/forestPost.js';
 import AuthModel from '../schemas/authString.js';
 
@@ -28,6 +28,7 @@ class User {
 
   static async findByMbti({ mbti }) {
     const user = await UserModel.find({ mbti });
+    console.log(mbti);
     return user;
   }
 
@@ -75,7 +76,7 @@ class User {
   }
 
   static async findStoriesById({ userId }) {
-    const stories = await StoryPost.find({ userInfo: userId });
+    const stories = await storyPost.find({ userInfo: userId });
     return stories;
   }
 

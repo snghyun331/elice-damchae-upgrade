@@ -6,11 +6,8 @@ const LoginButton = () => {
 		<button
 			onClick={() => navigate('/login')}
 			type="button"
-			className="whitespace-nowrap hidden md:block text-white shadow-inner bg-blue-500 hover:bg-neutral-500 focus:ring-4 focus:outline-none focus:ring-[#9BB1BB] font-medium rounded-lg text-lg px-4 py-2 pt-3 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-			style={{
-				boxShadow: '2px 2px 1px 1px rgba(0, 0, 0, 0.1)',
-			}}
-		>
+			className="text-white pt-2.5 pb-2.5 px-4 mr-2 text-sm font-medium text-gray-900 focus:outline-none rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
+			>
 			로그인
 		</button>
 	);

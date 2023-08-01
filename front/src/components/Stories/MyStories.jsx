@@ -1,27 +1,29 @@
+import { useState } from 'react';
 import Search from '../Global/Search';
 import StoryCreateModal from './StoryCreateModal';
 import StoryCardMap from '../Global/StoryCardMap';
-import useStoryStore from '../../hooks/useStoryStore';
-import useUserStore from '../../store/useUserStore';
+import useStoryStore from '../../store/useStoryStore';
+import { useUserState } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 
 const MyStories = () => {
 	const navigate = useNavigate();
-	const { isLoggedIn } = useUserStore();
-	const { setTitle, setMusic, storyModal, setStoryModal, reset } =
-		useStoryStore();
+	const isLoggedIn = useUserState();
+
+	const { setTitle, setMusic, reset } = useStoryStore();
+	const [storyModal, setStoryModal] = useState(false);
+
+	const onClose = () => {
+		setStoryModal(false);
+		reset();
+	};
 
 	const renderModal = () => {
 		if (!storyModal) return null;
 
 		return createPortal(
-			<StoryCreateModal
-				onClose={() => {
-					setStoryModal(false);
-					reset();
-				}}
-			/>,
+			<StoryCreateModal onClose={onClose} />,
 			document.getElementById('modal-root'), // Add a div with id="modal-root" in your index.html file
 		);
 	};

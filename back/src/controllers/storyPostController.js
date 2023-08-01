@@ -1,5 +1,5 @@
-import { StoryPostModel } from '../db/models/storyPostModel.js';
-import { StoryPostService } from '../services/storyPostService.js';
+import { storyPostModel } from '../db/models/storyPostModel.js';
+import { storyPostService } from '../services/storyPostService.js';
 import { imageService } from '../services/imageService.js';
 import axios from 'axios';
 
@@ -9,7 +9,8 @@ class storyPostController {
       const userId = req.currentUserId;
       const userInfo = userId;
 
-      const { title, content, thumbnail, isPublic, mood, music } = req.body;
+      const { title, content, thumbnail, isPublic, mood, music, views } =
+        req.body;
       const file = req.file ?? null;
       let thumbnailLocal;
       let thumbnailLocalId;
@@ -17,7 +18,7 @@ class storyPostController {
       if (file && !thumbnail) {
         thumbnailLocal = await imageService.uploadImage({ file });
         thumbnailLocalId = thumbnailLocal._id;
-        storyPostInfo = await StoryPostService.addStoryPost({
+        storyPostInfo = await storyPostService.createStoryPost({
           userInfo,
           title,
           content,
@@ -25,9 +26,10 @@ class storyPostController {
           isPublic,
           mood,
           music,
+          views,
         });
       } else if (!file && thumbnail) {
-        storyPostInfo = await StoryPostService.addStoryPost({
+        storyPostInfo = await storyPostService.createStoryPost({
           userInfo,
           title,
           content,
@@ -35,9 +37,10 @@ class storyPostController {
           isPublic,
           mood,
           music,
+          views,
         });
       } else if (!file && !thumbnail) {
-        storyPostInfo = await StoryPostService.addStoryPost({
+        storyPostInfo = await storyPostService.createStoryPost({
           userInfo,
           title,
           content,
@@ -45,10 +48,11 @@ class storyPostController {
           isPublic,
           mood,
           music,
+          views,
         });
       }
 
-      const result = await StoryPostService.populateStoryPost(
+      const result = await storyPostService.populateStoryPost(
         storyPostInfo,
         'userInfo thumbnail',
       );
@@ -62,9 +66,12 @@ class storyPostController {
     try {
       const { content } = req.body;
       const pureContent = content.replace(/<[^>]+>/g, ' ');
-      const obj = await axios.post('http://127.0.0.1:5000/predict', {
-        text: pureContent,
-      });
+      const obj = await axios.post(
+        process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL,
+        {
+          text: pureContent,
+        },
+      );
       // obj.data = { mood: '슬픔' }
       const Mood = obj.data.mood;
 
@@ -85,9 +92,10 @@ class storyPostController {
         return Music;
       };
 
-      const phrasePromise =
-        StoryPostModel.getPhraseData().then(handlePhraseData);
-      const musicPromise = StoryPostModel.getMusicData().then(handleMusicData);
+      const phrasePromise = storyPostModel
+        .getPhraseData()
+        .then(handlePhraseData);
+      const musicPromise = storyPostModel.getMusicData().then(handleMusicData);
 
       // phrasePromise와 musicPromise를 한번에 처리
       Promise.all([phrasePromise, musicPromise])
@@ -104,69 +112,83 @@ class storyPostController {
     }
   }
 
-  static async updateStoryPost(req, res, next) {
-    try {
-      const storyId = req.params.storyId;
-      const { title, content, thumbnail, isPublic, mood, music } = req.body;
-      const file = req.file ?? null;
-      const userId = req.currentUserId;
-      const userInfo = userId;
+  // static async updateStoryPost(req, res, next) {
+  //   try {
+  //     const storyId = req.params.storyId;
+  //     const { title, content, thumbnail, isPublic, mood, music } = req.body;
+  //     const file = req.file ?? null;
+  //     const userId = req.currentUserId;
+  //     const isSameUser = await storyPostService.isSameUser(userId, storyId);
+  //     if (!isSameUser) {
+  //       throw new Error('스토리 수정 권한이 없습니다.');
+  //     }
 
-      let thumbnailLocal;
-      let thumbnailLocalId;
-      let toUpdate;
-      if (file && !thumbnail) {
-        thumbnailLocal = await imageService.uploadImage({ file });
-        thumbnailLocalId = thumbnailLocal._id;
-        toUpdate = {
-          title,
-          content,
-          thumbnail: thumbnailLocalId,
-          isPublic,
-          mood,
-          music,
-        };
-      } else if (!file && thumbnail) {
-        toUpdate = {
-          title,
-          content,
-          thumbnail,
-          isPublic,
-          mood,
-          music,
-        };
-      } else if (!file && !thumbnail) {
-        toUpdate = {
-          title,
-          content,
-          thumbnail: null,
-          isPublic,
-          mood,
-          music,
-        };
-      }
+  //     let thumbnailLocal;
+  //     let thumbnailLocalId;
+  //     let toUpdate;
+  //     if (file && !thumbnail) {
+  //       await storyPostService.deletePreviousUploadImage({ storyId }); // 이전 uploads 폴더 이미지 삭제
+  //       thumbnailLocal = await imageService.uploadImage({ file });
+  //       thumbnailLocalId = thumbnailLocal._id;
+  //       toUpdate = {
+  //         title,
+  //         content,
+  //         thumbnail: thumbnailLocalId,
+  //         isPublic,
+  //         mood,
+  //         music,
+  //       };
+  //     } else if (!file && thumbnail) {
+  //       await storyPostService.deletePreviousUploadImage({ storyId }); // 이전 uploads 폴더 이미지 삭제
+  //       toUpdate = {
+  //         title,
+  //         content,
+  //         thumbnail,
+  //         isPublic,
+  //         mood,
+  //         music,
+  //       };
+  //     } else if (!file && !thumbnail) {
+  //       toUpdate = {
+  //         title,
+  //         content,
+  //         thumbnail: null,
+  //         isPublic,
+  //         mood,
+  //         music,
+  //       };
+  //     }
 
-      const updatedStory = await StoryPostService.setStory({
-        userInfo,
-        storyId,
-        toUpdate,
-      });
+  //     // 업뎃
+  //     const updatedStory = await storyPostService.updateStory({
+  //       storyId,
+  //       toUpdate,
+  //     });
 
-      const result = await StoryPostService.populateStoryPost(
-        updatedStory,
-        'userInfo thumbnail',
-      );
+  //     const result = await storyPostService.populateStoryPost(
+  //       updatedStory,
+  //       'userInfo thumbnail',
+  //     );
 
-      return res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
-  }
+  //     return res.status(200).json(result);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 
   static async deleteStoryPost(req, res, next) {
     try {
       const storyId = req.params.storyId;
-      const result = await StoryPostService.deleteStory({ storyId });
+      const loginUserId = req.currentUserId;
+      const isSameUser = await storyPostService.isSameUser(
+        loginUserId,
+        storyId,
+      );
+      if (!isSameUser) {
+        throw new Error('스토리 삭제 권한이 없습니다.');
+      }
+      await storyPostService.deleteUploadImage({ storyId }); // uploads 폴더 이미지 삭제
+      const result = await storyPostService.deleteStory({ storyId });
       return res.status(200).send(result);
     } catch (error) {
       next(error);
@@ -176,8 +198,12 @@ class storyPostController {
   static async readStoryDetail(req, res, next) {
     try {
       const storyId = req.params.storyId;
-      const storyInfo = await StoryPostService.readStoryDetail({ storyId });
-      const result = await StoryPostService.populateStoryPost(
+      const storyInfo = await storyPostService.readStoryDetail({ storyId });
+      if (!storyInfo) {
+        throw new Error('스토리를 찾을 수 없습니다');
+      }
+
+      const result = await storyPostService.populateStoryPost(
         storyInfo,
         'userInfo thumbnail',
       );
@@ -190,16 +216,100 @@ class storyPostController {
   static async readAllStories(req, res, next) {
     try {
       const page = parseInt(req.query.page || 1); // default 페이지: 1
-      const { stories, totalPage, count } = await StoryPostService.readPosts(
-        page,
-      );
+      const limit = 8; // 한페이지에 들어갈 스토리 수
 
-      return res.status(200).json({
-        currentPage: page,
-        totalPage: totalPage,
-        totalStoriesCount: count,
-        stories,
-      });
+      const { option, searchword } = req.query;
+      let searchQuery = {};
+      let result;
+      // 제목만 검색
+      if (option === 'title') {
+        searchQuery = { title: new RegExp(searchword, 'i') };
+        const { stories, totalPage, count } =
+          await storyPostService.readSeachQueryPosts(limit, page, searchQuery);
+        const populateResult = await storyPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+        // 내용만 검색
+      } else if (option === 'content') {
+        searchQuery = { content: new RegExp(searchword, 'i') };
+        const { stories, totalPage, count } =
+          await storyPostService.readSeachQueryPosts(limit, page, searchQuery);
+        const populateResult = await storyPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+        // 제목 + 내용 검색
+      } else if (option === 'title_content') {
+        searchQuery = {
+          $or: [
+            { title: new RegExp(searchword, 'i') },
+            { content: new RegExp(searchword, 'i') },
+          ],
+        };
+        const { stories, totalPage, count } =
+          await storyPostService.readSeachQueryPosts(limit, page, searchQuery);
+        const populateResult = await storyPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+        // 모든 스토리 검색
+      } else {
+        const { stories, totalPage, count } = await storyPostService.readPosts(
+          limit,
+          page,
+        );
+        const populateResult = await storyPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('스토리가 없습니다');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+      }
+
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }

@@ -2,23 +2,16 @@ import moment from 'moment';
 import StoryEditor from './StoryEditor';
 import MusicVideo from './MusicVideo';
 
-import useStoryStore from '../../hooks/useStoryStore';
-import { useEffect, useRef } from 'react';
+import useStoryStore from '../../store/useStoryStore';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { postApi } from '../../services/api';
+import './StoryCreateModal.css';
 
 const StoryCreateModal = ({ onClose }) => {
-	const {
-		title,
-		content,
-		thumbnail,
-		mood,
-		music,
-		phrase,
-
-		isPublic,
-		setIsPublic,
-	} = useStoryStore();
+	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
+	console.log(mood);
+	const [isPublic, setIsPublic] = useState(false);
 
 	const dimmedRef = useRef(null);
 
@@ -34,23 +27,35 @@ const StoryCreateModal = ({ onClose }) => {
 
 	const currentDate = moment().format('YYYY년 M월 D일');
 
-	const poststory = async (e) => {
+	const postStory = async (e) => {
 		e.preventDefault();
 
-		try {
-			const post = { title, content, thumbnail, isPublic, mood, music };
-			console.log(post);
-			const formData = new FormData();
-			for (const key in post) {
-				formData.append(key, post[key]);
-			}
+		if (confirm('스토리는 수정이 불가합니다. 등록하시겠습니까?')) {
+			try {
+				const post = { title, content, thumbnail, isPublic, mood, music };
+				console.log(post);
+				const formData = new FormData();
+				for (const key in post) {
+					formData.append(key, post[key]);
+				}
 
-			const response = await postApi('stories', formData);
-			console.log(response.data);
-		} catch (e) {
-			console.error(e);
+				const response = await postApi('stories', formData);
+				console.log(response.data);
+				onClose();
+
+				setTimeout(() => {
+					window.location.href = '/stories';
+				}, 100);
+			} catch (e) {
+				console.error(e);
+			}
 		}
 	};
+
+	const isFormValid = useMemo(
+		() => title && content && mood && music,
+		[title, content, mood, music],
+	);
 
 	return (
 		<div className="fixed inset-0 flex justify-center items-center">
@@ -68,11 +73,11 @@ const StoryCreateModal = ({ onClose }) => {
 					data-modal-backdrop="static"
 					tabIndex="-1"
 					aria-hidden="true"
-					className="relative w-full max-w-2xl p-4 overflow-x-hidden overflow-y-auto"
+					className="relative w-full max-w-2xl p-4 overflow-x-hidden overflow-y-auto max-h-screen modal-content"
 				>
 					<div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
 						<div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-							<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+							<h3 className="text-xl font-semibold text-gray-900 dark:text-white my-2">
 								{currentDate}의 스토리 작성하기
 							</h3>
 							<button
@@ -121,27 +126,37 @@ const StoryCreateModal = ({ onClose }) => {
 						</div>
 
 						{music && (
-							<div className="p-6 border-t border-gray-200 dark:border-gray-600">
+							<div className="px-3 border-t border-gray-200 dark:border-gray-600">
 								<MusicVideo music={music} phrase={phrase} mood={mood} />
 							</div>
 						)}
 
-						<div className="justify-end flex p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-							<button
-								onClick={poststory}
-								type="button"
-								className="self-end text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-							>
-								작성 완료
-							</button>
-							<button
-								onClick={onClose}
-								data-modal-hide="staticModal"
-								type="button"
-								className="self-end text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-md border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-							>
-								닫기
-							</button>
+						<div className="flex-row p-6 border-t border-gray-200 rounded-b dark:border-gray-600">
+							<div className="flex flex-col">
+								<div className="justify-end flex flex-row">
+									<button
+										disabled={!isFormValid}
+										onClick={postStory}
+										type="button"
+										className="bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+									>
+										작성 완료
+									</button>
+									<button
+										onClick={onClose}
+										data-modal-hide="staticModal"
+										type="button"
+										className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-md border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+									>
+										닫기
+									</button>
+								</div>
+								{!isFormValid && (
+									<p className="self-end text-red-500 text-sm mt-2">
+										빈 칸을 채워주세요.
+									</p>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>

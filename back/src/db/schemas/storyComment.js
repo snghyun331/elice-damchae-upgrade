@@ -27,6 +27,6 @@ const StoryCommentSchema = new Schema(
   },
 );
 
-const StoryComment = model('StoryComment', StoryCommentSchema);
+const storyComment = model('StoryComment', StoryCommentSchema);
 
-export { StoryComment };
+export { storyComment };

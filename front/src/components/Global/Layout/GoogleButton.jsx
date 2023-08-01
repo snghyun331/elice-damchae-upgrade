@@ -1,56 +1,72 @@
 import { useEffect } from 'react';
-import { gapi } from 'gapi-script';
-import GoogleLogin from 'react-google-login';
 import { useUserActions } from '../../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 
-const clientIdData = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const GoogleButton = () => {
-	const { googleRegister, googleLogin } = useUserActions();
+	const { googleLogin } = useUserActions();
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		function start() {
-			gapi.client.init({
-				clientId: clientIdData,
-				scope: 'email',
-			});
-		}
-		gapi.load('client:auth2', start);
+		window.google.accounts.id.initialize({
+			client_id: clientId,
+			callback: handleOnSignIn,
+			auto_prompt: false,
+		});
+
+		window.google.accounts.id.renderButton(
+			document.getElementById('google-signin-button'),
+			{
+				type: 'standard',
+				size: 'large',
+				theme: 'outline',
+				text: 'sign_in_with',
+				shape: 'rectangular',
+				logo_alignment: 'left',
+			},
+		);
+
+		return () => {
+			window.google.accounts.id.cancel();
+		};
 	}, []);
 
-	const onSuccess = async (res) => {
-		console.log(res);
-		const email = res.wt.cu;
-		const idToken = res.tokenId; //사용하지 않을 가상 비밀번호 생성
-		const nickname = res.wt.Ad;
-		const mbti = '미설정';
-
-		const user = { email, idToken, nickname, mbti, isGoogleLogin: true };
-
+	const decode = (token) => {
 		try {
-			await googleRegister(user);
-			await googleLogin(user);
-			navigate('/');
+			const base64Url = token.split('.')[1];
+			const base64 = base64Url.replace('-', '+').replace('_', '/');
+			return JSON.parse(window.atob(base64));
 		} catch (error) {
-			console.log(error.response?.data?.errorMessage);
+			console.error('Failed to decode JWT token:', error);
+			return null;
 		}
 	};
 
-	const onFailure = (res) => {
-		console.log(res);
+	const handleOnSignIn = async (response) => {
+		const responsePayload = decode(response.credential);
+
+		if (response) {
+			const email = responsePayload.email;
+			const idToken = response.credential;
+			const nickname = responsePayload.given_name;
+			const mbti = '미설정';
+
+			const user = { email, idToken, nickname, mbti, isGoogleLogin: true };
+
+			try {
+				await googleLogin(user);
+				navigate('/');
+			} catch (error) {
+				alert('구글 로그인에 실패했습니다.')
+				console.log(error.response?.data?.errorMessage);
+			}
+		}
 	};
 
 	return (
 		<div>
-			<GoogleLogin
-				clientId={clientIdData}
-				onSuccess={onSuccess}
-				onFailure={onFailure}
-				buttonText="Google 계정으로 로그인 · 회원가입"
-				className="w-full flex justify-center items-center"
-			/>
+			<div id="google-signin-button"></div>
 		</div>
 	);
 };

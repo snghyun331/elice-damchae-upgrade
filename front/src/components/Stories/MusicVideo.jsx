@@ -14,14 +14,14 @@ const MusicVideo = ({ music, phrase }) => {
 		}
 	};
 
-	// Create a debounced version of the updateVideoWidth function
-	const handleResize = debounce(updateVideoWidth, 200); // Adjust the debounce wait time as needed (e.g., 200ms)
+	const handleResize = debounce(updateVideoWidth, 200);
 
 	useEffect(() => {
-		// Add the event listener on component mount
+		updateVideoWidth();
+		handleResize();
+
 		window.addEventListener('resize', handleResize);
 
-		// Clean up the event listener on component unmount
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};

@@ -10,10 +10,6 @@ const ForestPostSchema = new Schema(
       ref: 'User',
       required: true,
     },
-    image: {
-      type: String,
-      required: false, // 선택적 필드로 변경
-    },
     title: {
       type: String,
       required: true,
@@ -22,16 +18,24 @@ const ForestPostSchema = new Schema(
       type: String,
       required: true,
     },
-    // mbti: {
-    // 	type: String,
-    // 	required: true,
-    // },
-    views: {
-      type: Number,
-      default: 0,
+    mood: {
+      type: String,
+      required: true,
     },
+    mbti: {
+      type: String,
+      required: true,
+    },
+    // like: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // dislike: {
+    //   type: Number,
+    //   default: 0,
+    // },
   },
-  { timestamps: true },
+  { timestamps: true, collection: 'forestPosts' },
 );
 
 const ForestPost = model('ForestPost', ForestPostSchema);

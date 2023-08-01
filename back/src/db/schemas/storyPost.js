@@ -33,6 +33,16 @@ const StoryPostSchema = new Schema(
       type: String,
       required: false,
     },
+    views: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    commentCount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
   {
     timestamps: true,
@@ -40,6 +50,6 @@ const StoryPostSchema = new Schema(
   },
 );
 
-const StoryPost = model('StoryPost', StoryPostSchema);
+const storyPost = model('StoryPost', StoryPostSchema);
 
-export { StoryPost };
+export { storyPost };

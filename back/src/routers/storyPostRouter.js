@@ -1,14 +1,9 @@
 import { Router } from 'express';
-import multer from 'multer';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { storyPostController } from '../controllers/storyPostController.js';
+import { upload } from '../utills/multer.js';
 
 const storyPostRouter = Router();
-
-const upload = multer({
-  dest: 'uploads/',
-  limits: { fileSize: 5 * 1024 * 1024 },
-});
 
 storyPostRouter.post(
   '/stories',
@@ -23,12 +18,12 @@ storyPostRouter.post(
   storyPostController.getPredict,
 );
 
-storyPostRouter.patch(
-  '/stories/:storyId',
-  loginRequired,
-  upload.single('thumbnail'),
-  storyPostController.updateStoryPost,
-);
+// storyPostRouter.patch(
+//   '/stories/:storyId',
+//   loginRequired,
+//   upload.single('thumbnail'),
+//   storyPostController.updateStoryPost,
+// );
 
 storyPostRouter.delete(
   '/stories/:storyId',

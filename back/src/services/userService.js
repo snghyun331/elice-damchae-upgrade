@@ -201,6 +201,7 @@ class userService {
     return forests;
   }
 
+  }
   //구글 로그인용
   static async readGoogleUser({ email, idToken }) {
     const user = await User.findByEmail({ email });

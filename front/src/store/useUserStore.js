@@ -13,9 +13,20 @@ const useUserStore = create((set) => {
 	};
 
 	const savedUserData = JSON.parse(localStorage.getItem('userData'));
+
 	const userData = savedUserData
 		? { ...initialUserData, ...savedUserData }
 		: initialUserData;
+
+	const saveUserDataToLocalStorage = (newUserData) => {
+		localStorage.setItem('userData', JSON.stringify(newUserData));
+	};
+
+	const updateUserData = (updatedUserData) => {
+		const newUserData = { ...userData, ...updatedUserData };
+		saveUserDataToLocalStorage(newUserData);
+		set(newUserData);
+	};
 
 	return {
 		...userData,
@@ -40,7 +51,6 @@ const useUserStore = create((set) => {
 					mbti: response.data.mbti,
 				};
 
-				// Save the user data in local storage
 				localStorage.setItem('userData', JSON.stringify(userData));
 
 				set(userData);
@@ -50,11 +60,8 @@ const useUserStore = create((set) => {
 				await postApi('auth/register', user);
 			},
 
-			googleRegister: async (user) => {
-				await postApi('auth/googleRegister', user);
-			},
-
 			googleLogin: async (user) => {
+				await postApi('auth/googleRegister', user);
 				const response = await postApi('auth/googleLogin', user);
 				const jwtToken = response.data.token;
 
@@ -89,9 +96,15 @@ const useUserStore = create((set) => {
 				});
 				alert('로그아웃 하였습니다.');
 			},
+
+			infoChange: (updatedUserData) => {
+				updateUserData(updatedUserData);
+			},
 		},
 	};
 });
 
 export const useUserActions = () => useUserStore((state) => state.actions);
+export const useUserState = () => useUserStore((state) => state.isLoggedIn);
+
 export default useUserStore;
