@@ -6,6 +6,7 @@ import { mbtiList } from '../Util/Util';
 
 import { getApi } from '../../services/api';
 import { useUserActions } from '../../store/useUserStore';
+import ProfilePicker from './ProfilePicker';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
@@ -141,11 +142,12 @@ const RegisterForm = () => {
 		<>
 			<section className="bg-gray-50 dark:bg-gray-900">
 				<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-					<div className="w-full bg-white rounded-sm shadow dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+					<div className="overflow-y-auto w-full bg-white rounded-sm shadow dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 						<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
 							<h1 className="text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
 								회원가입
 							</h1>
+							<ProfilePicker />
 							<form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
 								<div className="flex flex-col">
 									<label

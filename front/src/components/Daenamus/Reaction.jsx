@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { textToKorean } from '../Util/Util';
 
 const ReactionChart = () => {
 	const textToColor = {
