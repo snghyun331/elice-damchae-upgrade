@@ -40,12 +40,23 @@ const DaenamuCardMap = () => {
 	return (
 		<>
 			<div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-				{isDataLoading &&
-					forests.map((forest) => (
-						<div key={forest._id}>
-							<DaenamuCard data={forest} />
-						</div>
-					))}
+				{isDataLoading ? (
+					<>
+						{forests && forests.length > 0 ? ( // Check if forests is not empty
+							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-base font-medium">
+								{forests.map((forest) => (
+									<div key={forest._id}>
+										<DaenamuCard data={forest} />
+									</div>
+								))}
+							</div>
+						) : (
+							<div>등록된 게시글이 없습니다.</div> // Display this message when stories is empty
+						)}
+					</>
+				) : (
+					<div>Loading...</div>
+				)}
 			</div>
 
 			<div className="flex justify-center mt-10">
