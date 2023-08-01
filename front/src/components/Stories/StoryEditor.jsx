@@ -4,7 +4,7 @@ import useStoryStore from '../../store/useStoryStore';
 import { postApi } from '../../services/api';
 import RadioOption from '../Global/RadioOption';
 import useImageUpload from '../../hooks/useImageUpload';
-
+import { MusicalNoteIcon } from '@heroicons/react/24/solid';
 const StoryEditor = () => {
 	const {
 		title,
@@ -69,9 +69,11 @@ const StoryEditor = () => {
 
 	return (
 		<>
-			<h3 className="font-semibold">제목</h3>
+			<label className="block font-semibold text-gray-900 dark:text-white -mb-3">
+				제목
+			</label>
 			<input
-				className="border"
+				className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				onChange={(e) => {
 					setTitle(e.target.value);
 				}}
@@ -79,8 +81,11 @@ const StoryEditor = () => {
 				id="title"
 				value={title}
 			/>
-			<h3 className="font-semibold">본문</h3>
-			<div className="mt-5">
+
+			<label className="block font-semibold text-gray-900 dark:text-white">
+				본문
+			</label>
+			<div>
 				<Editor
 					initialValue=" "
 					placeholder="내용을 입력하세요."
@@ -103,15 +108,21 @@ const StoryEditor = () => {
 					}}
 				/>
 				{content?.length <= 16 && (
-					<p className="text-right text-red-400">10자 이상 입력해주세요.</p>
+					<p className="text-right text-red-400 text-sm mt-2">
+						10자 이상 입력해주세요.
+					</p>
 				)}
 			</div>
 			<div className="flex flex-col space-y-2">
+				<label className="block font-semibold text-gray-900 dark:text-white">
+					썸네일
+				</label>
 				<div className="flex flex-row space-x-2 mb-5">
-					<div className="w-1/2">
+					<div className="w-1/2 px-3 pr-5 border-r">
+						<h3 className="text-center mb-2 text-sm">직접 업로드</h3>
 						<div className="h-1/5 items-end">
 							<input
-								className="rounded-lg block w-full text-sm text-gray-900 border border-gray-300 cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+								className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 								id="file_input"
 								type="file"
 								ref={fileRef}
@@ -131,7 +142,7 @@ const StoryEditor = () => {
 												fileRef.current.value = '';
 											}}
 										>
-											X
+											×
 										</button>
 									</div>
 									<img
@@ -144,21 +155,22 @@ const StoryEditor = () => {
 									id="local-thumbnail"
 									value="local-thumbnail"
 									name="hosting"
-									label="로컬 이미지 선택"
+									label="직접 업로드한 이미지 선택"
 									selectedOption={selectedOption}
 									setSelectedOption={setSelectedOption}
 								/>
 							</div>
 						)}
 					</div>
-					<div className="w-1/2 ">
+					<div className="w-1/2 px-3">
+						<h3 className="text-center mb-2 text-sm">AI로 이미지 생성</h3>
 						<div className="h-1/5 flex">
 							<button
 								onClick={generateImage}
 								disabled={content?.length <= 16}
-								className="w-full h-8 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								className="w-full h-10 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 							>
-								썸네일 이미지 생성하기
+								이미지 생성하기
 							</button>
 						</div>
 						{stableThumbnail && (
@@ -172,7 +184,7 @@ const StoryEditor = () => {
 												setThumbnail('');
 											}}
 										>
-											X
+											×
 										</button>
 									</div>
 
@@ -200,10 +212,11 @@ const StoryEditor = () => {
 					<button
 						onClick={recommend}
 						disabled={content?.length <= 16}
-						className="w-full h-8 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+						className="w-full h-10 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 					>
 						기분에 맞는 음악 추천받기
 					</button>
+					<MusicalNoteIcon className="h-10 border rounded-full border-gray-300 p-2 " />
 				</div>
 			</div>
 		</>

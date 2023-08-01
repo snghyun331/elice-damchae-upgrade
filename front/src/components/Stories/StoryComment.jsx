@@ -55,20 +55,25 @@ const StoryComment = ({ storyId }) => {
 	};
 	return (
 		<div className="p-6 flex flex-col">
-			<h3 className="font-semibold">{commentList.length}개의 댓글</h3>
+			<h3 className="font-semibold">
+				<span className="text-blue-600 text-2xl">{commentList.length}</span>{' '}
+				개의 댓글
+			</h3>
 			<div className="flex flex-row space-x-2">
-				<input
-					className="my-5 w-[90%] border"
+				<textarea
+					className="p-3 my-5 w-[90%] border text-sm rounded-md"
 					onChange={(e) => {
 						setComment(e.target.value);
 					}}
-					type="text"
 					id="comment"
+					maxLength={200} // Add this line
 					value={comment}
+					placeholder="댓글을 입력하세요."
 				/>
+
 				<button
 					disabled={!comment}
-					className="h-8 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-300 disabled:bg-neutral-300 rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+					className="h-16 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-500 disabled:bg-neutral-300 rounded-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 					onClick={handleSubmit}
 				>
 					등록

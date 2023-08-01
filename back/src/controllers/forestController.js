@@ -45,19 +45,127 @@ class ForestController {
   static async findByForest(req, res, next) {
     try {
       const page = parseInt(req.query.page || 1);
-      const limit = 8; // 한페이지에 들어갈 스토리 수
-      let getAlls = [];
-      if (req.query.option == 'title') {
-        getAlls = [{ title: new RegExp(req.query.content) }];
-      } else if (req.query.option == 'content') {
-        getAlls = [{ content: new RegExp(req.query.content) }];
-      } else if (req.query.option == 'mbti') {
-        getAlls = [{ mbti: new RegExp(req.query.mbti) }];
+      const limit = 12; // 한페이지에 들어갈 스토리 수
+
+      const { option, searchword, searchOption } = req.query;
+      let getAlls = {};
+      let result;
+
+      if (option === 'title') {
+        getAlls = { title: new RegExp(searchword, 'i') };
+        const { forests, totalPage, count } = await ForestService.findByForest(
+          limit,
+          page,
+          getAlls,
+        );
+        const populateResult = await ForestService.populateForestPost(
+          forests,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalForestsCount: count,
+          forests: populateResult,
+        };
+      } else if (option === 'content') {
+        getAlls = { content: new RegExp(searchword, 'i') };
+        const { forests, totalPage, count } = await ForestService.findByForest(
+          limit,
+          page,
+          getAlls,
+        );
+        const populateResult = await ForestService.populateForestPost(
+          forests,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalforestsCount: count,
+          forests: populateResult,
+        };
+      } else if (option === 'title_content') {
+        getAlls = {
+          $or: [
+            { title: new RegExp(searchword, 'i') },
+            { content: new RegExp(searchword, 'i') },
+          ],
+        };
+        const { forests, totalPage, count } = await ForestService.findByForest(
+          limit,
+          page,
+          getAlls,
+        );
+        const populateResult = await ForestService.populateForestPost(
+          forests,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+        // 모든 스토리 검색
+        // } else if (searchOption === 'mbti') {
+        //   const mbtiQuery = { 'userInfo.mbti': searchword };
+        //   const { forests, totalPage, count } = await ForestService.findByForest(
+        //     limit,
+        //     page,
+        //     mbtiQuery,
+        //   );
+        //   const populateResult = await ForestService.populateForestPost(
+        //     forests,
+        //     'userInfo thumbnail',
+        //   );
+        //   if (populateResult.length === 0) {
+        //     throw new Error('검색 결과가 없습니다.');
+        //   }
+        //   result = {
+        //     currentPage: page,
+        //     totalPage: totalPage,
+        //     totalForestsCount: count,
+        //     forests: populateResult,
+        //   };
+      } else {
+        const { forests, totalPage, count } = await ForestService.readPosts(
+          limit,
+          page,
+        );
+        const populateResult = await ForestService.populateForestPost(
+          forests,
+          'userInfo.mbti',
+        );
+        console.log(populateResult);
+        if (populateResult.length === 0) {
+          throw new Error('스토리가 없습니다');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalForestsCount: count,
+          forests: populateResult,
+        };
       }
 
-      const posts = await ForestService.findByForest({ getAlls });
-
-      return res.status(201).json(posts);
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
@@ -65,8 +173,8 @@ class ForestController {
 
   static async findById(req, res, next) {
     try {
-      const _id = req.currentUserId;
-      const post = await ForestService.findById({ _id });
+      const forestId = req.currentUserId;
+      const post = await ForestService.findById({ forestId });
       if (!post) {
         throw new Error('존재하지 않는 글입니다');
       }
@@ -79,7 +187,7 @@ class ForestController {
   static async updatePost(req, res, next) {
     try {
       const { title, content, imageUrl } = req.body;
-      const postId = req.params.id;
+      const forestId = req.params.id;
 
       if (!title || !content) {
         throw new Request('Title과 content는 필수 입력 사항입니다.');
@@ -90,15 +198,16 @@ class ForestController {
       let updatePost = {};
       if (!imageUrl) {
         updatePost = {
-          _id: postId,
+          _id: forestId,
           title,
           content,
           userId,
           imageUrl: imageUrl ?? 'None',
         };
       } else {
-        updatePost = { _id: postId, title, content, userId, imageUrl };
+        updatePost = { _id: forestId, title, content, userId, imageUrl };
       }
+
       const updatedPost = await ForestService.updatePost(updatePost);
 
       if (!updatedPost) {
@@ -148,6 +257,7 @@ class ForestController {
       next(error);
     }
   }
+
   static async readStoryDetail(req, res, next) {
     try {
       const forestId = req.params.forestId;

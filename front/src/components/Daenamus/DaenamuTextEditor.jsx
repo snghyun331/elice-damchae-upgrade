@@ -94,7 +94,7 @@ const DaenamuTextEditor = () => {
 					}}
 				/>
 				{content?.length <= 16 && (
-					<p className="text-right text-red-400">10자 이상 입력해주세요.</p>
+					<p className="text-right text-red-400 text-sm mt-2">10자 이상 입력해주세요.</p>
 				)}
 			</div>
 
