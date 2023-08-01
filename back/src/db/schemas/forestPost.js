@@ -5,7 +5,7 @@ const { Schema, model } = mongoose;
 
 const ForestPostSchema = new Schema(
   {
-    userId: {
+    userInfo: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
@@ -22,10 +22,7 @@ const ForestPostSchema = new Schema(
       type: String,
       required: true,
     },
-    mbti: {
-      type: String,
-      required: true,
-    },
+
     // like: {
     //   type: Number,
     //   default: 0,
