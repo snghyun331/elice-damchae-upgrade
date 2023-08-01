@@ -14,7 +14,7 @@ const DaenamuCardMap = () => {
 			const response = await getApi(`forest?page=${page}`);
 			console.log(response);
 
-			setForests(response.data.forests);
+			setForests(response.data.forests ? response.data.forests : []);
 			setTotalPage(response.data.totalPage);
 			setIsDataLoading(true);
 		} catch (error) {
