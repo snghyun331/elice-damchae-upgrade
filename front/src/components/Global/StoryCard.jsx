@@ -30,7 +30,7 @@ const StoryCard = ({
 	return (
 		<>
 			<div
-				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 pl-5 pr-5 my-4 ms-5 relative`}
+				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 pl-5 pr-5 my-4 ms-5 relative h-full`}
 			>
 				<Link to={`/stories/${_id}`}>
 					<div className="flex items-center justify-center">
@@ -47,7 +47,7 @@ const StoryCard = ({
 						</figure>
 						<span className="absolute top-36 right-2 text-8xl">{moodIcon}</span>
 					</div>
-					<div className="px-4 py-8 flex flex-col justify-between">
+					<div className="px-4 pt-10 flex flex-col justify-between">
 						<div>
 							<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 								{truncateString(title, 32)}
@@ -64,7 +64,7 @@ const StoryCard = ({
 						</div>
 
 						<div className="space-y-2">
-							<div className="flex w-16 items-center text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 self-end">
+							<div className="flex text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 								<ChevronRightIcon className="w-4 mt-1" />
 								<span className="ml-1">더보기</span>
 							</div>

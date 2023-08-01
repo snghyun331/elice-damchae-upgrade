@@ -34,8 +34,8 @@ const SearchResultBox = ({ data }) => {
 						query: params.searchQuery,
 					})}
 				</p>
-				<span>{userInfo ? userInfo.nickname : '알 수 없는 사용자'}</span> |{' '}
-				<span>{formatRelativeTime(createdAt)}</span> |{' '}
+				<span>{userInfo ? userInfo.nickname : '알 수 없는 사용자'}</span> | {' '}
+				<span>{formatRelativeTime(createdAt)}</span> | {' '}
 				<span>{mood ? textToKorean[mood] : ''}</span>
 				<hr className="my-5" />
 			</div>
