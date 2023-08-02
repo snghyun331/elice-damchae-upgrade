@@ -34,7 +34,7 @@ const StoryRead = () => {
 	const handleDelete = async () => {
 		try {
 			await delApi(`stories/${storyId}`);
-			navigate('/stories');
+			navigate(-1);
 		} catch (error) {
 			console.log(error);
 		}
