@@ -25,7 +25,10 @@ const Header = () => {
 					to="/"
 					className="self-center text-2xl text-white font-semibold whitespace-nowrap dark:text-white"
 				>
-					Damchae
+					<img
+						className="self-end w-40 h-12 object-cover"
+						src="images/damchae.png"
+					/>
 				</Link>
 
 				<div className="flex justify-end md:order-2 gap-1">
