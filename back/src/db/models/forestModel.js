@@ -17,22 +17,16 @@ class forestModel {
     return { forests, count };
   }
 
-  // static async findByForest({ getAlls }) {
-  //   // console.log(getAlls);
-  //   // console.log(getAlls.$or);
-  //   // const getAll = getAlls.$or[0];
-  //   // console.log(getAll);
-  //   const findAllForest = await ForestPost.find(
-  //     getAlls[0],
-  //     // title: getAlls.$or[0].title,
-  //     // content: getAlls.$or[0].content,
-  //   );
-  //   return findAllForest;
-  // }
+  static async findOneAndDelete({ forestId }) {
+    const deletedPost = await ForestPost.deleteOne({ _id: forestId });
+    return deletedPost;
+  }
 
-  static async findById({ forestId }) {
-    const Forest = await ForestPost.findOne({ _id: forestId });
-    return Forest;
+  static async readOneById({ forestId }) {
+    console.log('forestId모델 in readOneById:', forestId); // forestId 확인용 로그
+    const forest = await ForestPost.findOne({ id: forestId });
+    console.log('forestId모델 in readOneById:', forest); // 조회 결과 확인용 로그
+    return forest;
   }
 
   static async updatePost({ updatePost }) {
@@ -77,6 +71,7 @@ class forestModel {
 
   static async findByMbti(skip, limit, getMbti) {
     console.log('findByMbti - getMbti:', getMbti);
+
     const forests = await ForestPost.find(getMbti)
       .sort({ createdAt: -1 })
       .skip(skip)
