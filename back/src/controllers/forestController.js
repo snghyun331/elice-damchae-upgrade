@@ -1,5 +1,6 @@
 // forestController.js
 // import { forestModel } from '../db/models/forestModel.js';
+import { forestModel } from '../db/models/forestModel.js';
 import User from '../db/models/userModel.js';
 import ForestService from '../services/forestService.js';
 import axios from 'axios';
@@ -207,20 +208,13 @@ class ForestController {
     try {
       const forestId = req.params.id;
       const userId = req.currentUserId; // 로그인한 사용자의 ID
-      const postuser = await ForestService.readOneById(forestId);
-
-      if (!postuser) {
-        // 게시글이 없을 때
-        return res.status(404).json({ error: '삭제할 게시물이 없습니다.' });
-      }
+      const postuser = await ForestService.readOneById({ forestId });
 
       // 로그인한 사용자와 게시글 작성자 비교
       if (!postuser || !userId) {
-        return res
-          .status(403)
-          .json({ error: '해당 글을 삭제할 권한이 없습니다.' });
+        throw new Error('스토리 삭제 권한이 없습니다.');
       }
-      // 게시글 조회
+
       const post = await ForestService.deletePost({ forestId });
       return res.status(201).json(post);
     } catch (error) {
@@ -231,6 +225,7 @@ class ForestController {
   static async readForestDetail(req, res, next) {
     try {
       const forestId = req.params.forestId;
+      console.log('forestiff', forestId);
       const forestInfo = await ForestService.readForestDetail({
         forestId,
       });
@@ -248,60 +243,71 @@ class ForestController {
     }
   }
 
-  static async readForestByMbti(req, res, next) {
+  // static async readForestByMbti(req, res, next) {
+  //   try {
+  //     // console.log(req.currentUserId);
+
+  //     const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
+  //     const limit = 12; // 한 페이지에 들어갈 스토리 수
+  //     const userId = req.currentUserId;
+  //     const { option, searchword } = req.query;
+
+  //     let getMbti = {};
+  //     let result;
+
+  //     if (option === 'mbti') {
+  //       // 'option'이 'mbti'인 경우 'searchword'를 제목(title)에 대한 검색어로 사용하여 MBTI를 검색합니다.
+
+  //       // 데이터베이스에서 사용자의 MBTI 정보를 조회합니다.
+  //       const user = await User.readById(userId);
+  //       if (!user) {
+  //         throw new Error('사용자를 찾을 수 없습니다.');
+  //       }
+  //       const mbtiInfo = user.mbti;
+
+  //       // 사용자의 MBTI에 해당하는 대나무숲 글을 찾습니다.
+  //       getMbti = { mbti: new RegExp(searchword, 'i') };
+  //       const forests = await ForestService.findByUserMbti(
+  //         userId,
+  //         limit,
+  //         page,
+  //         getMbti,
+  //       );
+  //       const populatedForests = await ForestService.populateForestPost(
+  //         forests,
+  //         'userInfo',
+  //       );
+
+  //       if (populatedForests.length === 0) {
+  //         throw new Error('해당 MBTI에 해당하는 대나무숲 글이 없습니다.');
+  //       }
+
+  //       result = {
+  //         currentPage: page,
+  //         totalPage: forests.totalPage,
+  //         totalForestsCount: forests.count,
+  //         forests: populatedForests,
+  //       };
+  //       console.log('forestPost', forests);
+  //     } else {
+  //       // 'option'이 'mbti'가 아닌 경우, 오류를 발생시킵니다.
+  //       throw new Error('잘못된 옵션입니다.');
+  //     }
+
+  //     return res.status(200).json(result);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
+  static async getPostsByAuthorMBTI(req, res) {
+    const mbti = req.params.mbti; // 라우트에서 MBTI 파라미터를 가져옵니다.
+
     try {
-      // console.log(req.currentUserId);
+      const posts = await forestModel.findByForestMbti(mbti);
 
-      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
-      const limit = 12; // 한 페이지에 들어갈 스토리 수
-      const userId = req.currentUserId;
-      const { option, searchword } = req.query;
-
-      let getMbti = {};
-      let result;
-
-      if (option === 'mbti') {
-        // 'option'이 'mbti'인 경우 'searchword'를 제목(title)에 대한 검색어로 사용하여 MBTI를 검색합니다.
-
-        // 데이터베이스에서 사용자의 MBTI 정보를 조회합니다.
-        const user = await User.readById(userId);
-        if (!user) {
-          throw new Error('사용자를 찾을 수 없습니다.');
-        }
-        const mbtiInfo = user.mbti;
-
-        // 사용자의 MBTI에 해당하는 대나무숲 글을 찾습니다.
-        getMbti = { mbti: new RegExp(searchword, 'i') };
-        const forests = await ForestService.findByUserMbti(
-          userId,
-          limit,
-          page,
-          getMbti,
-        );
-        const populatedForests = await ForestService.populateForestPost(
-          forests,
-          'userInfo',
-        );
-
-        if (populatedForests.length === 0) {
-          throw new Error('해당 MBTI에 해당하는 대나무숲 글이 없습니다.');
-        }
-
-        result = {
-          currentPage: page,
-          totalPage: forests.totalPage,
-          totalForestsCount: forests.count,
-          forests: populatedForests,
-        };
-        console.log('forestPost', forests);
-      } else {
-        // 'option'이 'mbti'가 아닌 경우, 오류를 발생시킵니다.
-        throw new Error('잘못된 옵션입니다.');
-      }
-
-      return res.status(200).json(result);
+      res.json(posts);
     } catch (error) {
-      next(error);
+      res.status(500).json({ error: error.message });
     }
   }
 }
