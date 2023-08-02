@@ -20,6 +20,7 @@ const RegisterForm = () => {
 		code,
 		errMsg,
 		nicknameCheck,
+		profileImg,
 
 		setEmail,
 		setPassword,
@@ -98,11 +99,12 @@ const RegisterForm = () => {
 		],
 	);
 
-	const user = { email, password, nickname, mbti };
-	console.log(user);
+	const user = { email, password, nickname, mbti, profileImg };
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
+			console.log(user);
 			await register(user);
 			navigate('/login');
 		} catch (error) {
