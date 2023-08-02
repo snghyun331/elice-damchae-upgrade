@@ -1,12 +1,12 @@
 import { textToIcon, textToColor, formatDate } from '../Util/Util';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
-import { Link } from 'react-router-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import { delApi, getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
 import { useUserId } from '../../store/useUserStore';
 import StoryComment from './StoryComment';
+import { BackButton } from '../Global/BackButton';
 
 const StoryRead = () => {
 	const { storyId } = useParams();
@@ -45,13 +45,7 @@ const StoryRead = () => {
 
 	return (
 		<div className={`w-4/5 max-w-2xl mx-auto dark:bg-gray-800`}>
-			<button
-				type="button"
-				className="text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-4 py-1 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-			>
-				<Link to="/stories">목록으로</Link>
-			</button>
-
+			<BackButton />
 			{!isPublicStory ? (
 				<div
 					className={`flex items-center w-full h-80 max-w-2xl border border-gray-200 rounded-lg shadow mx-auto bg-white dark:bg-gray-800`}
