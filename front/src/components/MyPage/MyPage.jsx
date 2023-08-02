@@ -52,15 +52,15 @@ const MyPage = () => {
 
 			<div className="flex justify-center flex-wrap">
 				<div className="flex flex-col md:flex-row">
-					<div className="md:w-1/2 lg:w-1/2 p-1">
+					<div className="md:w-1/2 lg:w-1/2 px-3">
 						<MyCalendar dateMoodData={dummyData} />
 					</div>
-					<div className="md:w-1/2 lg:w-1/2 p-2">
+					<div className="md:w-1/2 lg:w-1/2 px-3">
 						<div className="md:flex md:flex-col md:h-full">
-							<div className="p-4">
+							<div className="pt-5">
 								<MyMainMood />
 							</div>
-							<div className="p-4">
+							<div className="pt-7">
 								<MyMoodStat />
 							</div>
 						</div>

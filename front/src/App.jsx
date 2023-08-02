@@ -3,6 +3,7 @@ import Router from './routes/Router';
 import { useLocation } from 'react-router-dom';
 import Layout from './components/Global/Layout/Layout';
 import { Toaster } from 'react-hot-toast';
+import { Tooltip } from 'react-tooltip'
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => {
 						}
 					>
 						<Router />
+						<Tooltip id="tooltip" />
 						<Toaster />
 					</div>
 				</Layout>
