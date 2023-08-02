@@ -35,4 +35,10 @@ storyPostRouter.get('/stories/:storyId', storyPostController.readStoryDetail);
 
 storyPostRouter.get('/stories', storyPostController.readAllStories);
 
+storyPostRouter.get(
+  '/stories/my/:userId',
+  loginRequired,
+  storyPostController.readUserStory,
+);
+
 export { storyPostRouter };

@@ -5,7 +5,7 @@ const { Schema, model } = mongoose;
 
 const ForestPostSchema = new Schema(
   {
-    userId: {
+    userInfo: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,

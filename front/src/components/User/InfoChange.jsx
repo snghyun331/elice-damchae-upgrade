@@ -4,6 +4,7 @@ import { getApi, putApi } from '../../services/api';
 import Select from 'react-select';
 import useUserStore, { useUserActions } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const InfoChange = () => {
 	const navigate = useNavigate();
@@ -16,21 +17,20 @@ const InfoChange = () => {
 		isGoogleLogin,
 		profileImg,
 		setNickname,
-		setMbti,
+		setMbti, 
 		setProfileImg,
 	} = useUserStore();
 
-	console.log(nickname)
-	
+	const [preview, setPreview] = useState('');
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
 		mbtiList.find((item) => item.value === mbti),
 	);
 	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
+	console.log('profileImg', profileImg);
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [nicknameCheck, setNicknameCheck] = useState(true);
-
 	const isPasswordValid = useMemo(() => {
 		const passwordRegex =
 			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
@@ -59,7 +59,7 @@ const InfoChange = () => {
 
 	const handleChangeInput = useCallback(({ target }) => {
 		const { name, value, files } = target;
-
+		console.log('이미지 변경 동작')
 		switch (name) {
 			case 'password':
 				setPasswordToChange(value);
@@ -72,8 +72,12 @@ const InfoChange = () => {
 				setConfirmPassword(value);
 				break;
 			case 'profileImg': {
+				console.log('이미지 변경 동작')
 				const file = files[0];
-				setProfileImgToChange(URL.createObjectURL(file));
+				setProfileImgToChange(file);
+				console.log('파일', file)
+				console.log('이미지 변경 동작 후 ', profileImgToChange);
+				setPreview(URL.createObjectURL(file));
 				break;
 			}
 		}
@@ -86,11 +90,11 @@ const InfoChange = () => {
 			);
 
 			if (response.data.nicknameState == 'usableNickname') {
-				alert(response.data.usableNickname);
+				toast.success(response.data.usableNickname);
 				setNicknameCheck(true);
 			}
 			if (response.data.nicknameState == 'unusableNickname') {
-				alert(response.data.unusableNickname);
+				toast.error(response.data.unusableNickname);
 				setNicknameCheck(false);
 			}
 		} catch (error) {
@@ -102,25 +106,34 @@ const InfoChange = () => {
 		async (e) => {
 			e.preventDefault();
 
-			// passwordToChange가 빈 문자열이라면 password는 toUpdate에 추가하지 않습니다.
 			const toUpdate = {
 				email,
 				...(passwordToChange !== '' && { password: passwordToChange }),
+				profileImg: profileImgToChange,
 				nickname: nicknameToChange,
 				mbti: mbtiToChange.value,
 			};
+			console.log(typeof(profileImgToChange))
+			console.log(profileImgToChange)
+			const formData = new FormData();
+			for (const key in toUpdate) {
+				formData.append(key, toUpdate[key]);
+			}
+
+			for (let key of formData.keys()) {
+				console.log(key, ':', formData.get(key));
+			}
 
 			try {
-				console.log(toUpdate);
-				const res = await putApi(`users/${id}`, toUpdate);
+				const res = await putApi(`users/${id}`, formData);
 				if (res.status === 200) {
-					alert('정보를 수정하였습니다.');
+					toast.success('정보를 수정하였습니다.');
 					setNickname(toUpdate.nickname);
 					setMbti(toUpdate.mbti);
 					setProfileImg(toUpdate.profileImg);
 					infoChange(toUpdate);
 				} else {
-					alert('정보 수정에 실패하였습니다.');
+					toast.error('정보 수정에 실패하였습니다.');
 				}
 			} catch (err) {
 				console.log(err);
@@ -135,7 +148,7 @@ const InfoChange = () => {
 			try {
 				const response = await putApi(`auth/out`, { userId: id });
 				if (response.status === 200) {
-					alert('정상적으로 회원탈퇴가 완료되었습니다.');
+					toast.success('정상적으로 회원탈퇴가 완료되었습니다.');
 					logout();
 					navigate('/');
 				}
@@ -147,7 +160,7 @@ const InfoChange = () => {
 
 	return (
 		<>
-			<section className=''>
+			<section className="">
 				<div className="flex justify-center px-6 py-8 mx-auto lg:py-0 my-20">
 					<div className="w-full bg-white rounded-sm shadow-xl dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700 ">
 						<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -171,17 +184,15 @@ const InfoChange = () => {
 									/>
 
 									<div className="mt-4">
-										{profileImgToChange ? (
+										{preview && (
 											<>
 												<p className="text-sm text-gray-500">선택된 이미지:</p>
 												<img
 													className="mt-2 max-w-xs"
-													src={profileImgToChange}
+													src={preview}
 													alt="Selected Thumbnail"
 												/>
 											</>
-										) : (
-											''
 										)}
 									</div>
 								</div>

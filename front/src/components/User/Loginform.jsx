@@ -158,8 +158,6 @@ const LoginForm = () => {
 										{errMsg && (
 											<p className="text-red-500 text-xs">{errMsg}</p>
 										)}
-										{/* <GoogleLoginButton /> */}
-
 										<GoogleButton />
 									</div>
 								</form>
