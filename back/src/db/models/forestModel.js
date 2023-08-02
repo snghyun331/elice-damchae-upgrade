@@ -1,6 +1,6 @@
 // // forestModel.js
 import ForestPost from '../schemas/forestPost.js';
-// import UserModel from '../schemas/user.js';
+import UserModel from '../schemas/user.js';
 class forestModel {
   static async create({ newForestPost }) {
     const createdForest = await ForestPost.create(newForestPost);
@@ -16,6 +16,7 @@ class forestModel {
     const count = await ForestPost.countDocuments(forests);
     return { forests, count };
   }
+
   // static async findByForest({ getAlls }) {
   //   // console.log(getAlls);
   //   // console.log(getAlls.$or);
@@ -29,8 +30,8 @@ class forestModel {
   //   return findAllForest;
   // }
 
-  static async findById({ _id }) {
-    const Forest = await ForestPost.findOne({ _id });
+  static async findById({ forestId }) {
+    const Forest = await ForestPost.findOne({ _id: forestId });
     return Forest;
   }
 
@@ -74,10 +75,17 @@ class forestModel {
     return forest;
   }
 
-  // static async ForestMbti({ forestId }) {
-  //   const forest = UserModel.findOne({ _id: forestId });
-  //   return forest;
-  // }
+  static async findByMbti(skip, limit, getMbti) {
+    console.log('findByMbti - getMbti:', getMbti);
+    const forests = await ForestPost.find(getMbti)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+
+    const count = await ForestPost.countDocuments(forests);
+    return { forests, count };
+  }
 }
 
 export { forestModel };

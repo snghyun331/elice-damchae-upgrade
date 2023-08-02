@@ -81,28 +81,17 @@ class storyPostModel {
     return { stories, count };
   }
 
-  // static async findAndCountAll(skip, limit) {
-  //   const stories = await storyPost
-  //     .find({}) // 공개 글만 모두 가져오기
-  //     .sort({ createdAt: -1 }) // 생성일 필드를 기준으로 내림차순 정렬
-  //     .skip(skip) // 처음 몇 개의 스토리를 건너뛸지(1페이지에 10개 스토리 보여준다고 가정할 때 사용자가 2페이지를 요청하면 1페이지에서 10개 스토리를 건너뛰어야함)
-  //     .limit(limit) // 한 페이지에 몇 개의 스토리를 보여줄지
-  //     .exec(); // 해당 쿼리 실행하고 프로미스 반환
+  static async findMyAndCountAll(skip, limit, userId) {
+    const stories = await storyPost
+      .find({ userInfo: userId }) // 공개 글만 모두 가져오기
+      .sort({ createdAt: -1 }) // 생성일 필드를 기준으로 내림차순 정렬
+      .skip(skip) // 처음 몇 개의 스토리를 건너뛸지(1페이지에 10개 스토리 보여준다고 가정할 때 사용자가 2페이지를 요청하면 1페이지에서 10개 스토리를 건너뛰어야함)
+      .limit(limit) // 한 페이지에 몇 개의 스토리를 보여줄지
+      .exec(); // 해당 쿼리 실행하고 프로미스 반환
 
-  //   const count = await storyPost.countDocuments({}); // 전체 공개 스토리 수
-  //   return { stories, count };
-  // }
-
-  // static async findSearchQueryAndCountAll(skip, limit, searchQuery) {
-  //   const stories = await storyPost
-  //     .find(searchQuery)
-  //     .sort({ createdAt: -1 })
-  //     .skip(skip)
-  //     .limit(limit)
-  //     .exec();
-  //   const count = await storyPost.countDocuments(searchQuery);
-  //   return { stories, count };
-  // }
+    const count = await storyPost.countDocuments({ userInfo: userId }); // 전체 공개 스토리 수
+    return { stories, count };
+  }
 
   static async populateStoryPost(info, field) {
     const result = storyPost.populate(info, field);
