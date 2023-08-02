@@ -5,7 +5,7 @@ import smtpTransport from '../utills/emailAuth.js';
 import { imageService } from '../services/imageService.js';
 
 class userAuthController {
-  static async userRegister(req, res, next) {
+  static async registerUser(req, res, next) {
     try {
       if (is.emptyObject(req.body)) {
         throw new Error(
@@ -156,11 +156,9 @@ class userAuthController {
       const isVerified = await userService.readAuthString({ string });
 
       if (isVerified === null) {
-        return res
-          .status(400)
-          .json({
-            errorMessage: '잘못된 인증코드입니다. 다시 한 번 확인해주세요.',
-          });
+        return res.status(400).json({
+          errorMessage: '잘못된 인증코드입니다. 다시 한 번 확인해주세요.',
+        });
       } else if (isVerified === string) {
         return res
           .status(200)
@@ -171,7 +169,7 @@ class userAuthController {
     }
   }
 
-  static async userUpdate(req, res, next) {
+  static async updateUser(req, res, next) {
     try {
       // URI로부터 사용자 id를 추출함.
       const userId = req.params.userId;
@@ -207,7 +205,7 @@ class userAuthController {
     }
   }
 
-  static async userDelete(req, res, next) {
+  static async deleteUser(req, res, next) {
     try {
       const userId = req.body.userId;
       // 사용자를 비활성화 처리하기 위해 `isOut` 필드를 `true`로 설정
@@ -223,24 +221,6 @@ class userAuthController {
   }
 }
 
-class userServiceController {
-  static async userStories(req, res, next) {
-    const userId = req.params.userId;
-    const stories = await userService.readStories({ userId });
-
-    return res.json(stories);
-  }
-
-  static async userForests(req, res, next) {
-    try {
-      const userId = req.params.userId;
-      const forests = await userService.readForests({ userId });
-
-      return res.json(forests);
-    } catch (error) {
-      res.status(500);
-    }
-  }
-}
+class userServiceController {}
 
 export { userAuthController, userServiceController };

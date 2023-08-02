@@ -78,6 +78,11 @@ class forestModel {
   //   const forest = UserModel.findOne({ _id: forestId });
   //   return forest;
   // }
+
+  static async findForestsById({ userId }) {
+    const forests = await ForestPost.find({ userInfo: userId });
+    return forests;
+  }
 }
 
 export { forestModel };

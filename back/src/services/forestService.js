@@ -119,5 +119,15 @@ class ForestService {
   //     throw new Error('MBTI로 사용자 검색에 실패했습니다.');
   //   }
   // }
+
+  static async readForests({ userId }) {
+    const forests = await forestModel.findForestsById({ userId });
+    if (!forests) {
+      const errorState = 'error';
+      const errorMessage = '게시글 작성내역이 존재하지 않습니다.';
+      return { errorState, errorMessage };
+    }
+    return forests;
+  }
 }
 export default ForestService;

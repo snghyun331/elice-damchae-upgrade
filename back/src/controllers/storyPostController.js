@@ -314,6 +314,17 @@ class storyPostController {
       next(error);
     }
   }
+
+  static async readUserStories(req, res, next) {
+    try {
+      const userId = req.params.userId;
+      const stories = await storyPostService.readStories({ userId });
+
+      return res.json(stories);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export { storyPostController };

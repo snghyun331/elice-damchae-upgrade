@@ -22,4 +22,6 @@ router.get('/:forestId', ForestController.readStoryDetail);
 
 router.get('/search', ForestController.readAllStories);
 
+router.get('/user/forests/:userId', ForestController.readUserForests);
+
 export default router;

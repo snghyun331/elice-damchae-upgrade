@@ -290,5 +290,16 @@ class ForestController {
       next(error);
     }
   }
+
+  static async readUserForests(req, res, next) {
+    try {
+      const userId = req.params.userId;
+      const forests = await ForestService.readForests({ userId });
+
+      return res.status(200).json(forests);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 export default ForestController;
