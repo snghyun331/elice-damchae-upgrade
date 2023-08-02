@@ -209,14 +209,17 @@ class ForestController {
       const forestId = req.params.id;
       const userId = req.currentUserId; // 로그인한 사용자의 ID
       const postuser = await ForestService.readOneById({ forestId });
-
       // 로그인한 사용자와 게시글 작성자 비교
       if (!postuser || !userId) {
         throw new Error('스토리 삭제 권한이 없습니다.');
       }
-
-      const post = await ForestService.deletePost({ forestId });
-      return res.status(201).json(post);
+      // 로그인한 사용자와 게시글 작성자 비교
+      if (postuser.userInfo.toString() === userId) {
+        const post = await ForestService.deletePost({ forestId });
+        return res.status(201).json(post);
+      } else {
+        throw new Error('스토리 삭제 권한이 없습니다.');
+      }
     } catch (error) {
       next(error);
     }
@@ -303,7 +306,7 @@ class ForestController {
     const mbti = req.params.mbti; // 라우트에서 MBTI 파라미터를 가져옵니다.
 
     try {
-      const posts = await forestModel.findByForestMbti(mbti);
+      const posts = await ForestService.findByForestMbti(mbti);
 
       res.json(posts);
     } catch (error) {

@@ -127,7 +127,7 @@ class ForestService {
       const userIds = usersWithMBTI.map((user) => user._id);
       // 작성자가 ISTJ인 블로그 포스트들을 찾습니다.
       const posts = await forestModel.readPostsByAuthors({
-        author: { $in: userIds },
+        userIds,
       });
       return posts;
     } catch (error) {
