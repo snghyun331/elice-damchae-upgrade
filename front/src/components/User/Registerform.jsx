@@ -1,5 +1,5 @@
 import useRegisterStore from '../../hooks/useRegisterStore';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { mbtiList } from '../Util/Util';
@@ -41,6 +41,7 @@ const RegisterForm = () => {
 		switch (name) {
 			case 'email':
 				setEmail(value);
+				setIsCodeConfirmed(false);
 				break;
 			case 'password':
 				setPassword(value);
@@ -81,6 +82,7 @@ const RegisterForm = () => {
 		() => password === confirmPassword,
 		[password, confirmPassword],
 	);
+	const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
 
 	const isFormValid = useMemo(
 		() =>
@@ -89,7 +91,8 @@ const RegisterForm = () => {
 			isPasswordSame &&
 			isNicknameValid &&
 			nicknameCheck &&
-			Boolean(mbti),
+			Boolean(mbti) &&
+			isCodeConfirmed,
 		[
 			isEmailValid,
 			isPasswordValid,
@@ -97,6 +100,7 @@ const RegisterForm = () => {
 			isNicknameValid,
 			nicknameCheck,
 			mbti,
+			code,
 		],
 	);
 
@@ -113,7 +117,7 @@ const RegisterForm = () => {
 		}
 	};
 
-	const handleEmailCheck = async () => {
+	const handleEmailSend = async () => {
 		try {
 			const response = await postApi('auth/sendEmailCode', { email: email });
 			console.log(response);
@@ -128,7 +132,11 @@ const RegisterForm = () => {
 			const response = await postApi('auth/checkEmailCode', { string: code });
 			console.log(response);
 			toast.success('이메일 인증이 완료되었습니다.');
+			if (response.status === 200) {
+				setIsCodeConfirmed(true);
+			}
 		} catch (error) {
+			toast.error(error.response.data.errorMessage)
 			console.log(error.response);
 		}
 	};
@@ -182,8 +190,8 @@ const RegisterForm = () => {
 										/>
 										<button
 											type="button"
-											onClick={handleEmailCheck}
-											disabled={!email || !isEmailValid}
+											onClick={handleEmailSend}
+											disabled={!email || !isEmailValid || isCodeConfirmed }
 											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
 											style={{ height: '45px' }}
 										>
@@ -202,7 +210,7 @@ const RegisterForm = () => {
 											: '　'}
 									</p>
 								</div>
-
+								<div className="flex flex-col">
 								<div className="flex flex-row space-x-2 justify-end">
 									<input
 										value={code}
@@ -218,14 +226,21 @@ const RegisterForm = () => {
 									<button
 										type="button"
 										onClick={handleCodeCheck}
-										disabled={!code}
+										disabled={!code || isCodeConfirmed }
 										className="-mt-5 flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
 										style={{ height: '45px' }}
 									>
 										확인
 									</button>
 								</div>
-
+								<p
+									className={`mb-3 text-xs ${
+										isCodeConfirmed ? 'text-green-500' : 'text-transparent'
+									}`}
+								>
+									{isCodeConfirmed ? '이메일 인증이 완료되었습니다.' : '　'}
+								</p>
+								</div>
 								<div>
 									<label
 										htmlFor="password"
