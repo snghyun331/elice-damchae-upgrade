@@ -114,70 +114,6 @@ class storyPostController {
     }
   }
 
-  // static async updateStoryPost(req, res, next) {
-  //   try {
-  //     const storyId = req.params.storyId;
-  //     const { title, content, thumbnail, isPublic, mood, music } = req.body;
-  //     const file = req.file ?? null;
-  //     const userId = req.currentUserId;
-  //     const isSameUser = await storyPostService.isSameUser(userId, storyId);
-  //     if (!isSameUser) {
-  //       throw new Error('스토리 수정 권한이 없습니다.');
-  //     }
-
-  //     let thumbnailLocal;
-  //     let thumbnailLocalId;
-  //     let toUpdate;
-  //     if (file && !thumbnail) {
-  //       await storyPostService.deletePreviousUploadImage({ storyId }); // 이전 uploads 폴더 이미지 삭제
-  //       thumbnailLocal = await imageService.uploadImage({ file });
-  //       thumbnailLocalId = thumbnailLocal._id;
-  //       toUpdate = {
-  //         title,
-  //         content,
-  //         thumbnail: thumbnailLocalId,
-  //         isPublic,
-  //         mood,
-  //         music,
-  //       };
-  //     } else if (!file && thumbnail) {
-  //       await storyPostService.deletePreviousUploadImage({ storyId }); // 이전 uploads 폴더 이미지 삭제
-  //       toUpdate = {
-  //         title,
-  //         content,
-  //         thumbnail,
-  //         isPublic,
-  //         mood,
-  //         music,
-  //       };
-  //     } else if (!file && !thumbnail) {
-  //       toUpdate = {
-  //         title,
-  //         content,
-  //         thumbnail: null,
-  //         isPublic,
-  //         mood,
-  //         music,
-  //       };
-  //     }
-
-  //     // 업뎃
-  //     const updatedStory = await storyPostService.updateStory({
-  //       storyId,
-  //       toUpdate,
-  //     });
-
-  //     const result = await storyPostService.populateStoryPost(
-  //       updatedStory,
-  //       'userInfo thumbnail',
-  //     );
-
-  //     return res.status(200).json(result);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-
   static async deleteStoryPost(req, res, next) {
     try {
       const storyId = req.params.storyId;
@@ -383,10 +319,6 @@ class storyPostController {
         )
         .lean(); // toObject()대신 lean()사용
 
-      if (!posts) {
-        return res.status(200).json({ result: 'No Stories' });
-      }
-
       // posts 배열 내의 각 포스트에 대해 createdAt 값을 한국 시간대로 변환하여 koreaCreatedAt 필드에 저장
       const postsWithKoreaTime = posts.map((post) => {
         const koreaCreatedAt = moment(post.createdAt).add(9, 'hours');
@@ -397,7 +329,14 @@ class storyPostController {
         };
         return result;
       });
-      return res.status(200).json({ result: 'Success', postsWithKoreaTime });
+
+      if (postsWithKoreaTime.length === 0) {
+        return res.status(204).json({ result: 'No Stories' });
+      }
+
+      return res
+        .status(200)
+        .json({ result: 'Success', posts: postsWithKoreaTime });
     } catch (error) {
       next(error);
     }
@@ -407,12 +346,17 @@ class storyPostController {
     try {
       const userId = req.currentUserId;
       const myStories = await storyPostModel.findByUserId({ userId });
-      // console.log(myStories);
+
+      if (!myStories) {
+        return res.status(204).json({ result: 'No Stories' });
+      }
+
+      // 감정만 모두 추출
       let allMoods = [];
       myStories.forEach((myStory) => {
         allMoods.push(myStory.mood);
       });
-      console.log(allMoods);
+
       const valueCount = allMoods.reduce((counts, value) => {
         if (!counts[value]) {
           counts[value] = 1;
@@ -427,7 +371,6 @@ class storyPostController {
       for (const value in valueCount) {
         valuePercentage[value] = (valueCount[value] / totalCount) * 100;
       }
-      console.log(valuePercentage);
       return res.status(200).json({ result: 'Success', valuePercentage });
     } catch (error) {
       next(error);
