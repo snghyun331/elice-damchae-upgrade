@@ -1,9 +1,6 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-
 import Router from './routes/Router';
-
 import { useLocation } from 'react-router-dom';
-
 import Layout from './components/Global/Layout/Layout';
 import { Toaster } from 'react-hot-toast';
 

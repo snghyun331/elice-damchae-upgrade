@@ -27,7 +27,7 @@ function MyCalendar({ dateMoodData }) {
 	return (
 		<div>
 			<Calendar
-				className="mt-5" // Add the custom CSS class to Calendar
+				className="mt-5 p-1.5" // Add the custom CSS class to Calendar
 				onChange={(newValue) => setValue(newValue)}
 				value={value}
 				tileContent={renderTileContent}
