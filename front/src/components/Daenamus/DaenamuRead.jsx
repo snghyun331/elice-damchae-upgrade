@@ -24,7 +24,7 @@ const DaenamuRead = () => {
 
 	const fetchData = async () => {
 		try {
-			const res = await getApi(`stories/64c76bedb41a51e9e05d63c5`);
+			const res = await getApi(`forest/${forestId}`);
 			console.log(res);
 			setForest(res.data);
 			setIsDataLoading(true);
