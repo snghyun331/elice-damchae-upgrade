@@ -7,6 +7,7 @@ import {
 import { Link } from 'react-router-dom';
 import { truncateString, removeTag } from '../Util/Util';
 import { textToIcon, formatRelativeTime } from '../Util/Util';
+import { LockClosedIcon } from '@heroicons/react/24/outline';
 
 const StoryCard = ({
 	data: {
@@ -14,6 +15,7 @@ const StoryCard = ({
 		createdAt,
 		mood,
 		thumbnail,
+		isPublic,
 		title,
 		_id,
 		userInfo,
@@ -52,6 +54,15 @@ const StoryCard = ({
 						<div>
 							<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 								{truncateString(title, 32)}
+								{!isPublic ? (
+									<LockClosedIcon
+										data-tooltip-id="tooltip"
+										data-tooltip-content="나만 볼 수 있는 스토리입니다."
+										className="ml-1 w-4 inline mb-0.5"
+									/>
+								) : (
+									''
+								)}
 							</h5>
 							<div className="text-sm text-gray-500">
 								{userInfo ? userInfo.nickname : '알 수 없는 유저'}

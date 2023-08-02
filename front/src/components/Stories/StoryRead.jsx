@@ -90,10 +90,9 @@ const StoryRead = () => {
 								<p className="text-white mb-1">
 									{isDataLoading && story.isPublic && <>조회 {story.views}</>}
 									{isDataLoading && !story.isPublic && (
-										<>
 											<LockClosedIcon 				data-tooltip-id="tooltip"
 				data-tooltip-content="나만 볼 수 있는 스토리입니다." className="w-4 inline mb-0.5" />
-										</>
+
 									)}
 								</p>
 								{isDataLoading && story.userInfo._id == id && (
