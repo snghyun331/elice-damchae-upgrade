@@ -50,7 +50,7 @@ class storyPostService {
     }
 
     const storyInfo = {
-      ...story._doc, // document를 자바스크립트 객체로 변환하기 위해 사용되는 속성
+      ...story,
       // commentCount: allComments.length,
       commentList: allComments,
     };
