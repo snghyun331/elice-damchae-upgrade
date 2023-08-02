@@ -264,17 +264,17 @@ class ForestController {
 
   static async readForestByMbti(req, res, next) {
     try {
-      console.log(req.currentUserId);
+      // console.log(req.currentUserId);
 
       const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
       const limit = 12; // 한 페이지에 들어갈 스토리 수
       const userId = req.currentUserId;
       const { option, searchword } = req.query;
 
-      console.log('MBTI 데이터 요청 확인:');
-      console.log('userId:', userId);
-      console.log('option:', option);
-      console.log('searchword:', searchword);
+      // console.log('MBTI 데이터 요청 확인:');
+      // console.log('userId:', userId);
+      // console.log('option:', option);
+      // console.log('searchword:', searchword);
 
       let getMbti = {};
       let result;
@@ -287,7 +287,7 @@ class ForestController {
         if (!user) {
           throw new Error('사용자를 찾을 수 없습니다.');
         }
-        // const mbtiInfo = user.mbti;
+        const mbtiInfo = user.mbti;
 
         // 사용자의 MBTI에 해당하는 대나무숲 글을 찾습니다.
         getMbti = { mbti: new RegExp(searchword, 'i') };
@@ -299,7 +299,7 @@ class ForestController {
         );
         const populatedForests = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'userInfo',
         );
 
         if (populatedForests.length === 0) {

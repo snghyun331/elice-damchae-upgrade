@@ -121,7 +121,7 @@ class ForestService {
     }
   }
 
-  static async findByUserMbti(userId, limit, page, getMbti) {
+  static async findByUserMbti(limit, page, getMbti) {
     const skip = (page - 1) * limit;
     // console.log(getAlls, getAlls.content);
 
@@ -130,11 +130,11 @@ class ForestService {
       limit,
       getMbti,
     );
-    console.log('findByUserMbti 함수에서 조회한 결과:');
-    console.log('findByUserMbti - getMbti:', getMbti);
+    // console.log('findByUserMbti 함수에서 조회한 결과:');
+    // console.log('findByUserMbti - getMbti:', getMbti);
 
-    console.log('forests:', forests);
-    console.log('count:', count);
+    // console.log('forests:', forests);
+    // console.log('count:', count);
     const totalPage = Math.ceil(count / limit);
 
     return { forests, totalPage, count };
