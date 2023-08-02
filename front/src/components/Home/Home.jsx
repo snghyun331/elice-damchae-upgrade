@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import BannerCarousel from './BannerCarousel';
 import Search from '../Global/Search';
 import StoryCardMap from '../Global/StoryCardMap';
-import useUserStore, { useUserState } from '../../store/useUserStore';
+import useUserStore, { useIsLoggedIn } from '../../store/useUserStore';
 
 import ModalPortal from '../Stories/ModalPortal';
 import useStoryStore from '../../store/useStoryStore';
@@ -21,7 +21,7 @@ const Home = () => {
 	});
 	const { nickname } = useUserStore();
 	const navigate = useNavigate();
-	const isLoggedIn = useUserState();
+	const isLoggedIn = useIsLoggedIn();
 
 	const { reset } = useStoryStore();
 

@@ -3,17 +3,16 @@ import Search from '../Global/Search';
 import StoryCreateModal from './StoryCreateModal';
 import StoryCardMap from '../Global/StoryCardMap';
 import useStoryStore from '../../store/useStoryStore';
-import useUserStore, { useUserState } from '../../store/useUserStore';
+import { useIsLoggedIn } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 
 const MyStories = () => {
 	const navigate = useNavigate();
-	const isLoggedIn = useUserState();
+	const isLoggedIn = useIsLoggedIn();
 
 	const { setTitle, setMusic, reset } = useStoryStore();
 	const [storyModal, setStoryModal] = useState(false);
-	const { id } = useUserStore();
 
 	const onClose = () => {
 		setStoryModal(false);
