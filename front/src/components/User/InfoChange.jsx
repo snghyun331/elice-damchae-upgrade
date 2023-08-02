@@ -17,19 +17,20 @@ const InfoChange = () => {
 		isGoogleLogin,
 		profileImg,
 		setNickname,
-		setMbti,
+		setMbti, 
 		setProfileImg,
 	} = useUserStore();
 
+	const [preview, setPreview] = useState('');
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
 		mbtiList.find((item) => item.value === mbti),
 	);
 	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
+	console.log('profileImg', profileImg);
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [nicknameCheck, setNicknameCheck] = useState(true);
-
 	const isPasswordValid = useMemo(() => {
 		const passwordRegex =
 			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
@@ -58,7 +59,7 @@ const InfoChange = () => {
 
 	const handleChangeInput = useCallback(({ target }) => {
 		const { name, value, files } = target;
-
+		console.log('이미지 변경 동작')
 		switch (name) {
 			case 'password':
 				setPasswordToChange(value);
@@ -71,8 +72,12 @@ const InfoChange = () => {
 				setConfirmPassword(value);
 				break;
 			case 'profileImg': {
+				console.log('이미지 변경 동작')
 				const file = files[0];
-				setProfileImgToChange(URL.createObjectURL(file));
+				setProfileImgToChange(file);
+				console.log('파일', file)
+				console.log('이미지 변경 동작 후 ', profileImgToChange);
+				setPreview(URL.createObjectURL(file));
 				break;
 			}
 		}
@@ -104,12 +109,12 @@ const InfoChange = () => {
 			const toUpdate = {
 				email,
 				...(passwordToChange !== '' && { password: passwordToChange }),
-				// ...(profileImgToChange !== '' && { profileImg: profileImgToChange }),
-				profileImgToChange,
+				profileImg: profileImgToChange,
 				nickname: nicknameToChange,
 				mbti: mbtiToChange.value,
 			};
-
+			console.log(typeof(profileImgToChange))
+			console.log(profileImgToChange)
 			const formData = new FormData();
 			for (const key in toUpdate) {
 				formData.append(key, toUpdate[key]);
@@ -179,17 +184,15 @@ const InfoChange = () => {
 									/>
 
 									<div className="mt-4">
-										{profileImgToChange ? (
+										{preview && (
 											<>
 												<p className="text-sm text-gray-500">선택된 이미지:</p>
 												<img
 													className="mt-2 max-w-xs"
-													src={profileImgToChange}
+													src={preview}
 													alt="Selected Thumbnail"
 												/>
 											</>
-										) : (
-											''
 										)}
 									</div>
 								</div>
