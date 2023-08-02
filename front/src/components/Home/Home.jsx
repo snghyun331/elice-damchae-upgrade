@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BannerCarousel from './BannerCarousel';
 import Search from '../Global/Search';
@@ -8,7 +8,15 @@ import useUserStore, { useUserState } from '../../store/useUserStore';
 import ModalPortal from '../Stories/ModalPortal';
 import useStoryStore from '../../store/useStoryStore';
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 const Home = () => {
+	useEffect(() => {
+		AOS.init({
+			duration: 1000,
+		});
+	});
 	const { nickname } = useUserStore();
 	const navigate = useNavigate();
 	const isLoggedIn = useUserState();
@@ -38,9 +46,14 @@ const Home = () => {
 	return (
 		<div>
 			<div className="z-50">
-				<BannerCarousel />
+				<div className="space-y-5">
+					<BannerCarousel />
+				</div>
 				<br />
-				<div className="mt-16 mb-16 flex justify-center items-center flex-col">
+				<div
+					data-aos="zoom-in"
+					className="mt-16 mb-16 flex justify-center items-center flex-col"
+				>
 					<span className="text-2xl">
 						{nickname ? nickname + ' 님, ' : ''}
 						{randomMessage}
@@ -78,7 +91,7 @@ const Home = () => {
 					<Search />
 				</div>
 				<hr className="mt-20" />
-				<div>
+				<div data-aos="fade-right">
 					<div className="mt-10 text-3xl font-semibold">우리들의 스토리</div>
 					<StoryCardMap />
 				</div>
