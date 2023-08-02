@@ -18,27 +18,35 @@ storyPostRouter.post(
   storyPostController.getPredict,
 );
 
-// storyPostRouter.patch(
-//   '/stories/:storyId',
-//   loginRequired,
-//   upload.single('thumbnail'),
-//   storyPostController.updateStoryPost,
-// );
-
 storyPostRouter.delete(
   '/stories/:storyId',
   loginRequired,
   storyPostController.deleteStoryPost,
 );
 
-storyPostRouter.get('/stories/:storyId', storyPostController.readStoryDetail);
-
-storyPostRouter.get('/stories', storyPostController.readAllStories);
-
+// 감정 통계
 storyPostRouter.get(
-  '/stories/my/:userId',
+  '/stories/my/moodStat',
+  loginRequired,
+  storyPostController.readMyMoodStatistic,
+);
+
+// 한달치 내 스토리별 감정 조회 (감정 정보만 return)
+storyPostRouter.get(
+  '/stories/myCalender',
+  loginRequired,
+  storyPostController.readMyCalender,
+);
+
+// 내 스토리 전체 조회 (스토리 전체 정보 return)
+storyPostRouter.get(
+  '/stories/my',
   loginRequired,
   storyPostController.readUserStory,
 );
+
+storyPostRouter.get('/stories/:storyId', storyPostController.readStoryDetail);
+
+storyPostRouter.get('/stories', storyPostController.readAllStories);
 
 export { storyPostRouter };

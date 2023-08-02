@@ -33,76 +33,6 @@ class storyPostService {
     return createdNewStoryPost;
   }
 
-  // static async updateStory({ storyId, toUpdate }) {
-  //   let story = await storyPostModel.findOneByStoryId({ storyId });
-
-  //   if (!story) {
-  //     throw new Error('해당 스토리를 찾을 수 없습니다. 다시 한번 확인해주세요');
-  //   }
-
-  //   if (toUpdate.title) {
-  //     const fieldToUpdate = 'title';
-  //     const newValue = toUpdate.title;
-  //     story = await storyPostModel.updateStory({
-  //       storyId,
-  //       fieldToUpdate,
-  //       newValue,
-  //     });
-  //   }
-
-  //   if (toUpdate.content) {
-  //     const fieldToUpdate = 'content';
-  //     const newValue = toUpdate.content;
-  //     story = await storyPostModel.updateStory({
-  //       storyId,
-  //       fieldToUpdate,
-  //       newValue,
-  //     });
-  //   }
-
-  //   if (toUpdate.isPublic) {
-  //     const fieldToUpdate = 'isPublic';
-  //     const newValue = toUpdate.isPublic;
-  //     story = await storyPostModel.updateStory({
-  //       storyId,
-  //       fieldToUpdate,
-  //       newValue,
-  //     });
-  //   }
-
-  //   if (toUpdate.thumbnail) {
-  //     // create Image
-  //     const fieldToUpdate = 'thumbnail';
-  //     const newValue = toUpdate.thumbnail;
-  //     story = await storyPostModel.updateStory({
-  //       storyId,
-  //       fieldToUpdate,
-  //       newValue,
-  //     });
-  //   }
-
-  //   if (toUpdate.mood) {
-  //     const fieldToUpdate = 'mood';
-  //     const newValue = toUpdate.mood;
-  //     story = await storyPostModel.updateStory({
-  //       storyId,
-  //       fieldToUpdate,
-  //       newValue,
-  //     });
-  //   }
-
-  //   if (toUpdate.music) {
-  //     const fieldToUpdate = 'music';
-  //     const newValue = toUpdate.music;
-  //     story = await storyPostModel.updateStory({
-  //       storyId,
-  //       fieldToUpdate,
-  //       newValue,
-  //     });
-  //   }
-  //   return story;
-  // }
-
   static async deleteStory({ storyId }) {
     let isDeleted = await storyPostModel.deleteOneByStoryId({ storyId });
     if (!isDeleted) {
@@ -120,7 +50,7 @@ class storyPostService {
     }
 
     const storyInfo = {
-      ...story._doc, // document를 자바스크립트 객체로 변환하기 위해 사용되는 속성
+      ...story,
       // commentCount: allComments.length,
       commentList: allComments,
     };
@@ -183,11 +113,14 @@ class storyPostService {
     const uploadImage = await imageModel.findOneByImageId({
       imageId: story.thumbnail,
     });
-    const uploadImagePath = uploadImage.path;
-    if (fs.existsSync(uploadImagePath)) {
-      fs.unlinkSync(uploadImagePath);
+    if (uploadImage) {
+      const uploadImagePath = uploadImage.path;
+      if (fs.existsSync(uploadImagePath)) {
+        fs.unlinkSync(uploadImagePath);
+      } else {
+        console.log('File does not exist, so not deleting.');
+      }
     } else {
-      console.log('File does not exist, so not deleting.');
     }
   }
 }
