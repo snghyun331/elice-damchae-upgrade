@@ -10,7 +10,7 @@ import './StoryCreateModal.css';
 
 const StoryCreateModal = ({ onClose }) => {
 	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
-	console.log(mood);
+
 	const [isPublic, setIsPublic] = useState(false);
 
 	const dimmedRef = useRef(null);
@@ -44,7 +44,7 @@ const StoryCreateModal = ({ onClose }) => {
 				onClose();
 
 				setTimeout(() => {
-					window.location.href = '/stories';
+					window.location.href = '/';
 				}, 100);
 			} catch (e) {
 				console.error(e);

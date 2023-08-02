@@ -4,17 +4,16 @@ import StoryCard from './StoryCard';
 import Pagination from './Pagination';
 import { getApi } from '../../services/api';
 
-const StoryCardMap = () => {
+const StoryCardMap = ({ endpoint }) => {
 	const [stories, setStories] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
 	const [totalPage, setTotalPage] = useState(0);
 	const fetchData = async (page = 1) => {
 		try {
-			const response = await getApi(`stories?page=${page}`);
+			const response = await getApi(`${endpoint}?page=${page}`);
 			setStories(response.data.stories);
 			setTotalPage(response.data.totalPage);
 			setIsDataLoading(true);
-			console.log(response.data);
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
 		}

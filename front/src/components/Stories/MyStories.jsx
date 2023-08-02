@@ -3,7 +3,7 @@ import Search from '../Global/Search';
 import StoryCreateModal from './StoryCreateModal';
 import StoryCardMap from '../Global/StoryCardMap';
 import useStoryStore from '../../store/useStoryStore';
-import { useUserState } from '../../store/useUserStore';
+import useUserStore, { useUserState } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 
@@ -13,6 +13,7 @@ const MyStories = () => {
 
 	const { setTitle, setMusic, reset } = useStoryStore();
 	const [storyModal, setStoryModal] = useState(false);
+	const { id } = useUserStore();
 
 	const onClose = () => {
 		setStoryModal(false);
@@ -60,7 +61,7 @@ const MyStories = () => {
 				<div>{renderModal()}</div>
 				<div style={{ overflow: storyModal ? 'hidden' : 'auto' }}>
 					<Search />
-					<StoryCardMap />
+					<StoryCardMap endpoint={`stories/my`} />
 				</div>
 			</div>
 		</>

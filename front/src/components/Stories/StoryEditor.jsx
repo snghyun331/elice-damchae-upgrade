@@ -21,7 +21,7 @@ const StoryEditor = () => {
 		setLocalThumbnail,
 		setStableThumbnail,
 	} = useStoryStore();
-	console.log('stableThumbnail', stableThumbnail);
+
 	const [preview, setPreview] = useState('');
 	const [selectedOption, setSelectedOption] = useState('');
 
@@ -116,7 +116,8 @@ const StoryEditor = () => {
 						<span className="text-right text-red-400 text-sm mt-2">
 							10자 이상 입력해주세요.
 						</span>
-					)}　
+					)}
+					　
 				</p>
 			</div>
 			<div className="flex flex-col space-y-2">
