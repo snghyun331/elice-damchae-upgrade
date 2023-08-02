@@ -9,7 +9,6 @@ import { useUserId } from '../../store/useUserStore';
 const StoryCardMap = () => {
 	const location = useLocation();
 	const id = useUserId();
-	console.log(id);
 	const [stories, setStories] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
 	const [totalPage, setTotalPage] = useState(0);

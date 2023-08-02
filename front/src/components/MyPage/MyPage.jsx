@@ -20,7 +20,7 @@ const MyPage = () => {
 	];
 
 	return (
-		<div className="lg:px-52">
+		<div className="2xl:px-52">
 			<h3 className="text-3xl text-gray-700 font-semibold">나의 활동</h3>
 			<br />
 			<hr className="my-8" />
