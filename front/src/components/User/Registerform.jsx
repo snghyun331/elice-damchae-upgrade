@@ -136,7 +136,7 @@ const RegisterForm = () => {
 				setIsCodeConfirmed(true);
 			}
 		} catch (error) {
-			toast.error(error.response.data.errorMessage)
+			toast.error(error.response.data.errorMessage);
 			console.log(error.response);
 		}
 	};
@@ -191,7 +191,7 @@ const RegisterForm = () => {
 										<button
 											type="button"
 											onClick={handleEmailSend}
-											disabled={!email || !isEmailValid || isCodeConfirmed }
+											disabled={!email || !isEmailValid || isCodeConfirmed}
 											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
 											style={{ height: '45px' }}
 										>
@@ -211,35 +211,42 @@ const RegisterForm = () => {
 									</p>
 								</div>
 								<div className="flex flex-col">
-								<div className="flex flex-row space-x-2 justify-end">
-									<input
-										value={code}
-										onChange={handleChangeInput}
-										type="text"
-										name="code"
-										id="verification-code"
-										placeholder="인증번호 입력"
-										className="-mt-5 h-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										required=""
-									/>
+									<div className="flex flex-row space-x-2 justify-end">
+										<input
+											value={code}
+											onChange={handleChangeInput}
+											type="text"
+											name="code"
+											id="verification-code"
+											placeholder="인증번호 입력"
+											className="-mt-5 h-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+											required=""
+										/>
 
-									<button
-										type="button"
-										onClick={handleCodeCheck}
-										disabled={!code || isCodeConfirmed }
-										className="-mt-5 flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
-										style={{ height: '45px' }}
-									>
-										확인
-									</button>
-								</div>
-								<p
-									className={`mb-3 text-xs ${
-										isCodeConfirmed ? 'text-green-500' : 'text-transparent'
-									}`}
-								>
-									{isCodeConfirmed ? '이메일 인증이 완료되었습니다.' : '　'}
-								</p>
+										<button
+											type="button"
+											onClick={handleCodeCheck}
+											disabled={!code || isCodeConfirmed}
+											className="-mt-5 flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+											style={{ height: '45px' }}
+										>
+											확인
+										</button>
+									</div>
+									<div>
+										<span
+											className={`mb-3 text-xs ${
+												isCodeConfirmed ? 'text-green-500' : ''
+											}`}
+										>
+											{isCodeConfirmed ? '이메일 인증이 완료되었습니다.' : ''}
+										</span>{' '}
+										<span className="text-xs text-red-500">
+											{isEmailValid && !isCodeConfirmed
+												? '이메일 인증을 진행해주세요.'
+												: ''}
+										</span>
+									</div>
 								</div>
 								<div>
 									<label
