@@ -83,6 +83,11 @@ class User {
     const forests = await ForestPost.find({ userInfo: userId });
     return forests;
   }
+  // Mbti 실험용
+  static async readById({ userId }) {
+    const user = await UserModel.find({ _id: userId });
+    return user;
+  }
 }
 
 export default User;
