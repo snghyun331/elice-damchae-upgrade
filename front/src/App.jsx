@@ -5,6 +5,7 @@ import Router from './routes/Router';
 import { useLocation } from 'react-router-dom';
 
 import Layout from './components/Global/Layout/Layout';
+import { Toaster } from 'react-hot-toast';
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => {
 						}
 					>
 						<Router />
+						<Toaster />
 					</div>
 				</Layout>
 			</div>
