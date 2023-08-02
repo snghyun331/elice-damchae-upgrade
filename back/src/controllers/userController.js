@@ -121,9 +121,17 @@ class userAuthController {
 
   // 이메일 인증
   static async sendAuthCode(req, res, next) {
-    const email = req.body.email;
-    const emailString = await userService.createAuthString();
     try {
+      const email = req.body.email;
+      const isDuplicated = await userService.readUserEmail({ email });
+      const emailString = await userService.createAuthString();
+
+      if (isDuplicated) {
+        return res
+          .status(400)
+          .json({ errorMessage: '이미 가입내역이 존재하는 이메일입니다.' });
+      }
+
       const mailOptions = {
         from: 'MBTI 커뮤니티',
         to: email,

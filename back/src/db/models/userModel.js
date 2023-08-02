@@ -1,5 +1,4 @@
 import UserModel from '../schemas/user.js';
-import ForestPost from '../schemas/forestPost.js';
 import AuthModel from '../schemas/authString.js';
 
 class User {
