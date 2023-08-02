@@ -20,7 +20,6 @@ const InfoChange = () => {
 		setMbti,
 		setProfileImg,
 	} = useUserStore();
-
 	const [preview, setPreview] = useState('');
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);

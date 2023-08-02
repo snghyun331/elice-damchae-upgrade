@@ -32,11 +32,13 @@ const StoryRead = () => {
 	};
 
 	const handleDelete = async () => {
-		try {
-			await delApi(`stories/${storyId}`);
-			navigate(-1);
-		} catch (error) {
-			console.log(error);
+		if (confirm('정말로 삭제하시겠습니까?')) {
+			try {
+				await delApi(`stories/${storyId}`);
+				navigate(-1);
+			} catch (error) {
+				console.log(error);
+			}
 		}
 	};
 
@@ -90,9 +92,11 @@ const StoryRead = () => {
 								<p className="text-white mb-1">
 									{isDataLoading && story.isPublic && <>조회 {story.views}</>}
 									{isDataLoading && !story.isPublic && (
-											<LockClosedIcon 				data-tooltip-id="tooltip"
-				data-tooltip-content="나만 볼 수 있는 스토리입니다." className="w-4 inline mb-0.5" />
-
+										<LockClosedIcon
+											data-tooltip-id="tooltip"
+											data-tooltip-content="나만 볼 수 있는 스토리입니다."
+											className="w-4 inline mb-0.5"
+										/>
 									)}
 								</p>
 								{isDataLoading && story.userInfo._id == id && (
