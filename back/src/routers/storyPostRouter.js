@@ -24,16 +24,22 @@ storyPostRouter.delete(
   storyPostController.deleteStoryPost,
 );
 
-storyPostRouter.get('/stories/:storyId', storyPostController.readStoryDetail);
+// 한달치 내 스토리별 감정 조회 ()
+storyPostRouter.get(
+  '/stories/myCalender',
+  loginRequired,
+  storyPostController.readMyCalender,
+);
 
-storyPostRouter.get('/stories', storyPostController.readAllStories);
-
+// 내 스토리 전체 조회 (스토리 전체 정보 return)
 storyPostRouter.get(
   '/stories/my/:userId',
   loginRequired,
   storyPostController.readUserStory,
 );
 
-// storyPostRouter.get('/stores/my', loginRequired, storyPostController)
+storyPostRouter.get('/stories/:storyId', storyPostController.readStoryDetail);
+
+storyPostRouter.get('/stories', storyPostController.readAllStories);
 
 export { storyPostRouter };

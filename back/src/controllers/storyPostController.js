@@ -1,7 +1,9 @@
 import { storyPostModel } from '../db/models/storyPostModel.js';
+import { storyPost } from '../db/schemas/storyPost.js';
 import { storyPostService } from '../services/storyPostService.js';
 import { imageService } from '../services/imageService.js';
 import axios from 'axios';
+import moment from 'moment';
 
 class storyPostController {
   static async createStoryPost(req, res, next) {
@@ -346,6 +348,52 @@ class storyPostController {
       };
 
       return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async readMyCalender(req, res, next) {
+    try {
+      const userId = req.currentUserId;
+
+      const today = moment().utcOffset(9);
+      const searchYear = parseInt(req.query.year || today.year());
+      const searchMonth = parseInt(req.query.month || today.month() + 1);
+
+      // 월의 첫 날과 마지막 날 계산
+      const startOfMonth = moment({
+        year: searchYear,
+        month: searchMonth - 1,
+      })
+        .startOf('month')
+        .utcOffset(9);
+      const endOfMonth = moment(startOfMonth).endOf('month').utcOffset(9);
+
+      const posts = await storyPost
+        .find(
+          {
+            userInfo: userId,
+            createdAt: {
+              $gte: startOfMonth.toDate(), // 한국시간을 잠시 utc시간으로 변환 후 범위 계산 (creadAt이 utc기준이므로)
+              $lte: endOfMonth.toDate(),
+            },
+          },
+          { _id: true, mood: true, createdAt: true },
+        )
+        .lean(); // toObject()대신 lean()사용
+
+      // posts 배열 내의 각 포스트에 대해 createdAt 값을 한국 시간대로 변환하여 koreaCreatedAt 필드에 저장
+      const postsWithKoreaTime = posts.map((post) => {
+        const koreaCreatedAt = moment(post.createdAt).add(9, 'hours');
+        const result = {
+          // ...post.toObject(),
+          ...post,
+          koreaCreatedAt: koreaCreatedAt,
+        };
+        return result;
+      });
+      return res.status(200).json(postsWithKoreaTime);
     } catch (error) {
       next(error);
     }
