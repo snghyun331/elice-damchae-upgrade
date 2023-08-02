@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import { delApi, getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
-import useUserStore from '../../store/useUserStore';
+import { useUserId } from '../../store/useUserStore';
 import StoryComment from '../Stories/StoryComment';
 import ReactionChart from './Reaction';
 
@@ -19,8 +19,7 @@ const DaenamuRead = () => {
 	const [forest, setForest] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
 	const navigate = useNavigate();
-
-	const { id } = useUserStore();
+	const id = useUserId();
 
 	const fetchData = async () => {
 		try {

@@ -1,16 +1,21 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import usePagination from '../../hooks/usePagination';
 import StoryCard from './StoryCard';
 import Pagination from './Pagination';
 import { getApi } from '../../services/api';
+import { useUserId } from '../../store/useUserStore';
 
 const StoryCardMap = () => {
+	const location = useLocation();
+	const id = useUserId();
+	console.log(id);
 	const [stories, setStories] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
 	const [totalPage, setTotalPage] = useState(0);
 	const fetchData = async (page = 1) => {
 		try {
-			const response = await getApi(`stories?page=${page}`);
+			const response = location.pathname === '/' ? await getApi(`stories?page=${page}`) : await getApi(`stories/my/${id}?page=${page}`) ;
 			setStories(response.data.stories);
 			setTotalPage(response.data.totalPage);
 			setIsDataLoading(true);

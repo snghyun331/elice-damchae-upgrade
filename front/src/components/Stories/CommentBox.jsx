@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { textToIcon, formatCreatedAt } from '../Util/Util';
-import useUserStore from '../../store/useUserStore';
+import { useUserId } from '../../store/useUserStore';
 import PropTypes from 'prop-types';
 
 const CommentBox = ({ commentData, onDelete, onEdit }) => {
-	const { id } = useUserStore();
+	const id = useUserId();
 	const [editMode, setEditMode] = useState(false);
 	const [editedComment, setEditedComment] = useState(commentData.comment);
 
