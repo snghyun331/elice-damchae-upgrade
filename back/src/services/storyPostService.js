@@ -183,11 +183,14 @@ class storyPostService {
     const uploadImage = await imageModel.findOneByImageId({
       imageId: story.thumbnail,
     });
-    const uploadImagePath = uploadImage.path;
-    if (fs.existsSync(uploadImagePath)) {
-      fs.unlinkSync(uploadImagePath);
+    if (uploadImage) {
+      const uploadImagePath = uploadImage.path;
+      if (fs.existsSync(uploadImagePath)) {
+        fs.unlinkSync(uploadImagePath);
+      } else {
+        console.log('File does not exist, so not deleting.');
+      }
     } else {
-      console.log('File does not exist, so not deleting.');
     }
   }
 }
