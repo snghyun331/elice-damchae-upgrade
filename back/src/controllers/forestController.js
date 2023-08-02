@@ -203,40 +203,26 @@ class ForestController {
       next(error);
     }
   }
-
   static async deletePost(req, res, next) {
     try {
-      // 로그인 상태 확인
-      if (!req.currentUserId) {
+      const forestId = req.params.id;
+      const userId = req.currentUserId; // 로그인한 사용자의 ID
+      const postuser = await ForestService.readOneById(forestId);
+
+      if (!postuser) {
+        // 게시글이 없을 때
+        return res.status(404).json({ error: '삭제할 게시물이 없습니다.' });
+      }
+
+      // 로그인한 사용자와 게시글 작성자 비교
+      if (!postuser || !userId) {
         return res
-          .status(400)
-          .json({ message: '글을 삭제하려면 로그인이 필요합니다.' });
+          .status(403)
+          .json({ error: '해당 글을 삭제할 권한이 없습니다.' });
       }
-
-      const { title, content, imageUrl } = req.body;
-      const postId = req.params.id;
-
-      const userId = req.currentUserId;
-
-      let deletePost = {};
-      if (!imageUrl) {
-        deletePost = {
-          _id: postId,
-          title,
-          content,
-          userId,
-          imageUrl: imageUrl ?? 'None',
-        };
-      } else {
-        deletePost = { _id: postId, title, content, userId, imageUrl };
-      }
-      const deletedPost = await ForestService.deletePost(deletePost);
-
-      if (!deletedPost) {
-        throw new Error('존재하지 않는 글입니다.');
-      }
-
-      return res.status(201).json(deletedPost);
+      // 게시글 조회
+      const post = await ForestService.deletePost({ forestId });
+      return res.status(201).json(post);
     } catch (error) {
       next(error);
     }
@@ -270,11 +256,6 @@ class ForestController {
       const limit = 12; // 한 페이지에 들어갈 스토리 수
       const userId = req.currentUserId;
       const { option, searchword } = req.query;
-
-      // console.log('MBTI 데이터 요청 확인:');
-      // console.log('userId:', userId);
-      // console.log('option:', option);
-      // console.log('searchword:', searchword);
 
       let getMbti = {};
       let result;
