@@ -314,6 +314,42 @@ class storyPostController {
       next(error);
     }
   }
+
+  static async readUserStory(req, res, next) {
+    try {
+      const page = parseInt(req.query.page || 1); // default 페이지: 1
+      const limit = 8; // 한페이지에 들어갈 스토리 수
+      const userId = req.params.userId;
+      const loginUserId = req.currentUserId;
+      if (userId !== loginUserId) {
+        throw new Error('로그인 유저와 userId가 불일치합니다');
+      }
+      const { stories, totalPage, count } = await storyPostService.readMyPosts(
+        limit,
+        page,
+        userId,
+      );
+      const populateResult = await storyPostService.populateStoryPost(
+        stories,
+        'userInfo thumbnail',
+      );
+
+      if (populateResult.length === 0) {
+        throw new Error('내 스토리가 없습니다');
+      }
+
+      const result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalStoriesCount: count,
+        stories: populateResult,
+      };
+
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export { storyPostController };
