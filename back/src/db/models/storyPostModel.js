@@ -44,18 +44,6 @@ class storyPostModel {
     );
   }
 
-  // static async updateStory({ storyId, fieldToUpdate, newValue }) {
-  //   const filter = { _id: storyId };
-  //   const update = { [fieldToUpdate]: newValue };
-  //   const option = { returnOriginal: false };
-  //   const updatedStory = await storyPost.findOneAndUpdate(
-  //     filter,
-  //     update,
-  //     option,
-  //   );
-  //   return updatedStory;
-  // }
-
   static async deleteOneByStoryId({ storyId }) {
     const deletedStory = await storyPost.deleteOne({ _id: storyId });
     const isCompleteDeleted = deletedStory.deletedCount === 1;
