@@ -236,7 +236,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('스토리가 없습니다');
+          return res.status(200).json({ result: 'No Stories' });
         }
 
         result = {
@@ -270,7 +270,7 @@ class storyPostController {
       );
 
       if (populateResult.length === 0) {
-        throw new Error('내 스토리가 없습니다');
+        return res.status(200).json({ result: 'No Stories' });
       }
 
       const result = {
