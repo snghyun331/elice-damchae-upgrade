@@ -11,6 +11,8 @@ import useStoryStore from '../../store/useStoryStore';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
+import HomeMusicVideo from './HomeMusicVideo';
+
 const Home = () => {
 	useEffect(() => {
 		AOS.init({
@@ -47,6 +49,9 @@ const Home = () => {
 		<div>
 			<div className="z-50">
 				<div className="space-y-5">
+					{/* <div className="px-3 border-t border-gray-200 dark:border-gray-600">
+						<HomeMusicVideo music={'FAMKcwTBh7Q'} />
+					</div> */}
 					<BannerCarousel />
 				</div>
 				<br />
@@ -91,7 +96,7 @@ const Home = () => {
 					<Search />
 				</div>
 				<hr className="mt-20" />
-				<div data-aos="fade-right">
+				<div className="mx-4 sm:mx-10 md:mx-20 lg:mx-40" data-aos="fade-right">
 					<div className="mt-10 text-3xl font-semibold">우리들의 스토리</div>
 					<StoryCardMap />
 				</div>
