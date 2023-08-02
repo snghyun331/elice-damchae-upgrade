@@ -358,8 +358,8 @@ class storyPostController {
       const userId = req.currentUserId;
 
       const today = moment().utcOffset(9);
-      const searchYear = parseInt(req.query.year || today.year());
-      const searchMonth = parseInt(req.query.month || today.month() + 1);
+      const searchYear = parseInt(req.query.year || today.year()); // default: 이번년도
+      const searchMonth = parseInt(req.query.month || today.month() + 1); // default: 이번달
 
       // 월의 첫 날과 마지막 날 계산
       const startOfMonth = moment({
@@ -383,6 +383,10 @@ class storyPostController {
         )
         .lean(); // toObject()대신 lean()사용
 
+      if (!posts) {
+        return res.status(200).json({ result: 'No Stories' });
+      }
+
       // posts 배열 내의 각 포스트에 대해 createdAt 값을 한국 시간대로 변환하여 koreaCreatedAt 필드에 저장
       const postsWithKoreaTime = posts.map((post) => {
         const koreaCreatedAt = moment(post.createdAt).add(9, 'hours');
@@ -393,7 +397,7 @@ class storyPostController {
         };
         return result;
       });
-      return res.status(200).json(postsWithKoreaTime);
+      return res.status(200).json({ result: 'Success', postsWithKoreaTime });
     } catch (error) {
       next(error);
     }
@@ -424,7 +428,7 @@ class storyPostController {
         valuePercentage[value] = (valueCount[value] / totalCount) * 100;
       }
       console.log(valuePercentage);
-      return res.status(200).json(valuePercentage);
+      return res.status(200).json({ result: 'Success', valuePercentage });
     } catch (error) {
       next(error);
     }
