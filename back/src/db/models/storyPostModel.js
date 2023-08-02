@@ -26,6 +26,22 @@ class storyPostModel {
     return stories;
   }
 
+  static async findMoodInPeriod(userId, startOfMonth, endOfMonth) {
+    const stories = await storyPost
+      .find(
+        {
+          userInfo: userId,
+          createdAt: {
+            $gte: startOfMonth.toDate(), // 한국시간을 잠시 utc시간으로 변환 후 범위 계산 (creadAt이 utc기준이므로)
+            $lte: endOfMonth.toDate(),
+          },
+        },
+        { _id: true, mood: true, createdAt: true },
+      )
+      .lean();
+    return stories;
+  }
+
   // 조회수 1증가
   static async findAndIncreaseView({ storyId }) {
     await storyPost.updateOne({ _id: storyId }, { $inc: { views: 1 } });

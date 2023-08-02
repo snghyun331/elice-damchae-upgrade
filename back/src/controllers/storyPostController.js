@@ -303,18 +303,11 @@ class storyPostController {
         .utcOffset(9);
       const endOfMonth = moment(startOfMonth).endOf('month').utcOffset(9);
 
-      const posts = await storyPost
-        .find(
-          {
-            userInfo: userId,
-            createdAt: {
-              $gte: startOfMonth.toDate(), // 한국시간을 잠시 utc시간으로 변환 후 범위 계산 (creadAt이 utc기준이므로)
-              $lte: endOfMonth.toDate(),
-            },
-          },
-          { _id: true, mood: true, createdAt: true },
-        )
-        .lean(); // toObject()대신 lean()사용
+      const posts = await storyPostModel.findMoodInPeriod(
+        userId,
+        startOfMonth,
+        endOfMonth,
+      );
 
       // posts 배열 내의 각 포스트에 대해 createdAt 값을 한국 시간대로 변환하여 koreaCreatedAt 필드에 저장
       const postsWithKoreaTime = posts.map((post) => {
@@ -328,7 +321,7 @@ class storyPostController {
       });
 
       if (postsWithKoreaTime.length === 0) {
-        return res.status(204).json({ result: 'No Stories' });
+        return res.status(200).json({ result: 'No Stories' });
       }
 
       return res
@@ -345,7 +338,7 @@ class storyPostController {
       const myStories = await storyPostModel.findByUserId({ userId });
 
       if (!myStories) {
-        return res.status(204).json({ result: 'No Stories' });
+        return res.status(200).json({ result: 'No Stories' });
       }
 
       // 감정만 모두 추출
