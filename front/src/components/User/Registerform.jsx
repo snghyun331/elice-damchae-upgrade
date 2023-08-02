@@ -115,8 +115,9 @@ const RegisterForm = () => {
 
 	const handleEmailCheck = async () => {
 		try {
-			const response = await postApi('auth/sendEmailCode', {email: email});
+			const response = await postApi('auth/sendEmailCode', { email: email });
 			console.log(response);
+			toast.success('이메일로 인증코드가 발송 되었습니다.');
 		} catch (error) {
 			console.log(error.response);
 		}
@@ -124,8 +125,9 @@ const RegisterForm = () => {
 
 	const handleCodeCheck = async () => {
 		try {
-			const response = await postApi('auth/checkEmailCode', {string: code});
+			const response = await postApi('auth/checkEmailCode', { string: code });
 			console.log(response);
+			toast.success('이메일 인증이 완료되었습니다.');
 		} catch (error) {
 			console.log(error.response);
 		}
@@ -185,11 +187,11 @@ const RegisterForm = () => {
 											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
 											style={{ height: '45px' }}
 										>
-											이메일 인증
+											인증코드 발송
 										</button>
 									</div>
 									<p
-										className={`text-xs ${
+										className={`mb-3 text-xs ${
 											!isEmailValid && email
 												? 'text-red-500'
 												: 'text-transparent'
