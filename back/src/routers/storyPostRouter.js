@@ -40,7 +40,7 @@ storyPostRouter.get(
 
 // 내 스토리 전체 조회 (스토리 전체 정보 return)
 storyPostRouter.get(
-  '/stories/my/:userId',
+  '/stories/my',
   loginRequired,
   storyPostController.readUserStory,
 );
