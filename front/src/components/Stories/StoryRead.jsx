@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useUserId } from '../../store/useUserStore';
 import StoryComment from './StoryComment';
 import { BackButton } from '../Global/BackButton';
+import { LockClosedIcon } from '@heroicons/react/24/outline';
 
 const StoryRead = () => {
 	const { storyId } = useParams();
@@ -87,7 +88,13 @@ const StoryRead = () => {
 							</div>
 							<div className="text-sm text-end absolute top-1 right-1 mt-4 me-4">
 								<p className="text-white mb-1">
-									조회 {isDataLoading && story.views}
+									{isDataLoading && story.isPublic && <>조회 {story.views}</>}
+									{isDataLoading && !story.isPublic && (
+										<>
+											<LockClosedIcon 				data-tooltip-id="tooltip"
+				data-tooltip-content="나만 볼 수 있는 스토리입니다." className="w-4 inline mb-0.5" />
+										</>
+									)}
 								</p>
 								{isDataLoading && story.userInfo._id == id && (
 									<>
