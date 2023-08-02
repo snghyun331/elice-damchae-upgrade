@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { mbtiList } from '../Util/Util';
 
-import { getApi } from '../../services/api';
+import { getApi, postApi } from '../../services/api';
 import { useUserActions } from '../../store/useUserStore';
 import ProfilePicker from './ProfilePicker';
 import toast from 'react-hot-toast';
@@ -113,14 +113,22 @@ const RegisterForm = () => {
 		}
 	};
 
-	const handleEmailCheck = () => {
-		// Logic for email verification
-		// You can implement your own email verification functionality here
+	const handleEmailCheck = async () => {
+		try {
+			const response = await postApi('auth/sendEmailCode', {email: email});
+			console.log(response);
+		} catch (error) {
+			console.log(error.response);
+		}
 	};
 
-	const handleCodeCheck = () => {
-		// Logic for verification code verification
-		// You can implement your own verification code verification functionality here
+	const handleCodeCheck = async () => {
+		try {
+			const response = await postApi('auth/checkEmailCode', {string: code});
+			console.log(response);
+		} catch (error) {
+			console.log(error.response);
+		}
 	};
 
 	const handleNicknameCheck = async () => {
@@ -196,8 +204,9 @@ const RegisterForm = () => {
 								<div className="flex flex-row space-x-2 justify-end">
 									<input
 										value={code}
+										onChange={handleChangeInput}
 										type="text"
-										name="Code"
+										name="code"
 										id="verification-code"
 										placeholder="인증번호 입력"
 										className="-mt-5 h-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
