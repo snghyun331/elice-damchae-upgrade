@@ -64,29 +64,28 @@ class ForestService {
     }
   }
 
-  static async deletePost(deletePost) {
+  static async deletePost({ forestId }) {
+    const deletedPost = await forestModel.findOneAndDelete({ forestId });
+    if (!deletedPost) {
+      throw new Error('삭제할 게시글 정보가 없습니다.');
+    }
+    return deletedPost;
+  }
+
+  static async readOneById({ forestId }) {
     try {
-      const forestId = deletePost._id;
-      console.log(typeof forestId);
-      const post = await forestModel.findAndCountAll({
-        _id: new Object(forestId),
-      });
-      if (!post) {
-        throw new Error('존재하지 않은 글입니다.');
+      console.log('forestId:', forestId); // forestId 확인용 로그
+      const forest = await forestModel.readOneById({ _id: forestId });
+      console.log('forest:', forest); // 조회 결과 확인용 로그
+      if (!forest) {
+        throw new Error('존재하지 않는 글입니다.');
       }
-
-      if (post.userId.toString() !== deletePost.userId) {
-        throw new Error('해당 글을 수정할 권한이 없습니다.');
-      }
-
-      const deleteForestPost = await forestModel.deletePost({ deletePost });
-
-      return deleteForestPost;
+      return forest;
     } catch (error) {
-      console.log(error);
-      throw new Error('포스트 삭제에 실패했습니다.');
+      throw new Error('글 조회에 실패했습니다.');
     }
   }
+
   static async readForestDetail({ forestId }) {
     const forest = await forestModel.findById(forestId);
     // const comment = await forestCommentModel.findAllByForestId({ forestId });
@@ -115,7 +114,7 @@ class ForestService {
   }
   static async findById(forestId) {
     try {
-      return await forestModel.findById(forestId);
+      return await forestModel.readOneById(forestId);
     } catch (error) {
       throw new Error('An error occurred while fetching the forest.');
     }
