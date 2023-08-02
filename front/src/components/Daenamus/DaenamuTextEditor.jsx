@@ -29,7 +29,7 @@ const DaenamuTextEditor = () => {
 			console.log(response);
 			setMood(response.data.mood);
 		} catch (error) {
-			console.log(error.response.data.errorMessage);
+			console.log(error);
 		}
 	};
 
@@ -52,7 +52,7 @@ const DaenamuTextEditor = () => {
 			console.log(response.data);
 			setTimeout(() => {
 				window.location.href = '/daenamus';
-			}, 100);
+			}, 50);
 		} catch (e) {
 			console.error(e);
 		}
@@ -94,7 +94,9 @@ const DaenamuTextEditor = () => {
 					}}
 				/>
 				{content?.length <= 16 && (
-					<p className="text-right text-red-400 text-sm mt-2">10자 이상 입력해주세요.</p>
+					<p className="text-right text-red-400 text-sm mt-2">
+						10자 이상 입력해주세요.
+					</p>
 				)}
 			</div>
 

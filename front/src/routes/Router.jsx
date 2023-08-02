@@ -1,20 +1,29 @@
+import { lazy, Suspense } from 'react';
 import { Route, Routes, Outlet } from 'react-router-dom';
-import Home from '../components/Home/Home';
-import MyPage from '../components/MyPage/MyPage';
-import InfoChange from '../components/User/InfoChange';
-import MyStories from '../components/Stories/MyStories';
-import LoginForm from '../components/User/Loginform';
-import RegisterForm from '../components/User/Registerform';
-import StoryRead from '../components/Stories/StoryRead';
-import DaenamusMain from '../components/Daenamus/DaenamusMain';
-import DaenamusWrite from '../components/Daenamus/DaenamusWrite';
-import SearchResults from '../components/Stories/SearchResults';
-import DaenamuRead from '../components/Daenamus/DaenamuRead';
+import { ErrorBoundary } from 'react-error-boundary'; // Import the ErrorBoundary component from the library
+
+const Home = lazy(() => import('../components/Home/Home'));
+const MyPage = lazy(() => import('../components/MyPage/MyPage'));
+const InfoChange = lazy(() => import('../components/User/InfoChange'));
+const MyStories = lazy(() => import('../components/Stories/MyStories'));
+const LoginForm = lazy(() => import('../components/User/Loginform'));
+const RegisterForm = lazy(() => import('../components/User/Registerform'));
+const StoryRead = lazy(() => import('../components/Stories/StoryRead'));
+const DaenamusMain = lazy(() => import('../components/Daenamus/DaenamusMain'));
+const DaenamusWrite = lazy(() =>
+	import('../components/Daenamus/DaenamusWrite'),
+);
+const SearchResults = lazy(() => import('../components/Stories/SearchResults'));
+const DaenamuRead = lazy(() => import('../components/Daenamus/DaenamuRead'));
 
 const MainLayout = () => {
 	return (
 		<div className="main-container">
-			<Outlet />
+			<ErrorBoundary FallbackComponent={<div>Error...</div>}>
+				<Suspense fallback={<div>Loading...</div>}>
+					<Outlet />
+				</Suspense>
+			</ErrorBoundary>
 		</div>
 	);
 };

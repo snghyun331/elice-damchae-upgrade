@@ -12,7 +12,9 @@ const queryClient = new QueryClient();
 const App = () => {
 	const location = useLocation();
 	const currentPath = location.pathname;
-	const shouldRenderMarginTop = !['/login', '/register'].includes(currentPath);
+	const shouldRenderMarginTop = !['/', '/login', '/register'].includes(
+		currentPath,
+	);
 
 	return (
 		<QueryClientProvider client={queryClient}>
@@ -21,7 +23,7 @@ const App = () => {
 					<div
 						className={
 							shouldRenderMarginTop
-								? 'mt-10 mb-20 mx-4 sm:mx-10 md:mx-20 lg:mx-40'
+								? 'mt-5 mb-20 mx-4 sm:mx-10 md:mx-20 lg:mx-40'
 								: ''
 						}
 					>

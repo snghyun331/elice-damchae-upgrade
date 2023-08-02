@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
-import { useUserActions, useUserState } from '../../../store/useUserStore';
+import { useIsLoggedIn, useUserActions } from '../../../store/useUserStore';
 import { classNames } from '../../Util/Util';
 import { Bars3Icon } from '@heroicons/react/24/solid';
 const MobileHeader = () => {
 	const navigate = useNavigate();
-	const isLoggedIn = useUserState();
+	const isLoggedIn = useIsLoggedIn();
 
 	const { logout } = useUserActions();
 	const mobMenuItems = isLoggedIn

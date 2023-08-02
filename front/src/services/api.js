@@ -14,6 +14,7 @@ async function postApi(endpoint, data) {
 		console.log('Request data:', data);
 		return await instance.post(`/${endpoint}`, data);
 	} catch (error) {
+		console.log(error);
 		return Promise.reject(error);
 	}
 }
