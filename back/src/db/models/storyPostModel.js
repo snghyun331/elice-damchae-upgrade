@@ -21,10 +21,31 @@ class storyPostModel {
     return story;
   }
 
+  static async findByUserId({ userId }) {
+    const stories = await storyPost.find({ userInfo: userId });
+    return stories;
+  }
+
+  static async findMoodInPeriod(userId, startOfMonth, endOfMonth) {
+    const stories = await storyPost
+      .find(
+        {
+          userInfo: userId,
+          createdAt: {
+            $gte: startOfMonth.toDate(), // 한국시간을 잠시 utc시간으로 변환 후 범위 계산 (creadAt이 utc기준이므로)
+            $lte: endOfMonth.toDate(),
+          },
+        },
+        { _id: true, mood: true, createdAt: true },
+      )
+      .lean();
+    return stories;
+  }
+
   // 조회수 1증가
   static async findAndIncreaseView({ storyId }) {
     await storyPost.updateOne({ _id: storyId }, { $inc: { views: 1 } });
-    const story = await storyPost.findOne({ _id: storyId });
+    const story = await storyPost.findOne({ _id: storyId }).lean();
     return story;
   }
 
@@ -38,18 +59,6 @@ class storyPostModel {
       { $inc: { commentCount: -1 } },
     );
   }
-
-  // static async updateStory({ storyId, fieldToUpdate, newValue }) {
-  //   const filter = { _id: storyId };
-  //   const update = { [fieldToUpdate]: newValue };
-  //   const option = { returnOriginal: false };
-  //   const updatedStory = await storyPost.findOneAndUpdate(
-  //     filter,
-  //     update,
-  //     option,
-  //   );
-  //   return updatedStory;
-  // }
 
   static async deleteOneByStoryId({ storyId }) {
     const deletedStory = await storyPost.deleteOne({ _id: storyId });
@@ -65,7 +74,7 @@ class storyPostModel {
       .limit(limit) // 한 페이지에 몇 개의 스토리를 보여줄지
       .exec(); // 해당 쿼리 실행하고 프로미스 반환
 
-    const count = await storyPost.countDocuments({ isPublic: true }); // 전체 공개 스토리 수
+    const count = await storyPost.countDocuments({ isPublic: true });
     return { stories, count };
   }
 
@@ -83,13 +92,13 @@ class storyPostModel {
 
   static async findMyAndCountAll(skip, limit, userId) {
     const stories = await storyPost
-      .find({ userInfo: userId }) // 공개 글만 모두 가져오기
-      .sort({ createdAt: -1 }) // 생성일 필드를 기준으로 내림차순 정렬
-      .skip(skip) // 처음 몇 개의 스토리를 건너뛸지(1페이지에 10개 스토리 보여준다고 가정할 때 사용자가 2페이지를 요청하면 1페이지에서 10개 스토리를 건너뛰어야함)
-      .limit(limit) // 한 페이지에 몇 개의 스토리를 보여줄지
-      .exec(); // 해당 쿼리 실행하고 프로미스 반환
+      .find({ userInfo: userId })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
 
-    const count = await storyPost.countDocuments({ userInfo: userId }); // 전체 공개 스토리 수
+    const count = await storyPost.countDocuments({ userInfo: userId });
     return { stories, count };
   }
 
