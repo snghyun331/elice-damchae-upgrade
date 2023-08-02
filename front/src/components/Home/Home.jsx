@@ -45,6 +45,40 @@ const Home = () => {
 		reset();
 	};
 
+	const messageDiv = (
+		<>
+			<span className="text-2xl">
+				{nickname ? nickname + ' 님, ' : ''}
+				{randomMessage}
+			</span>
+			<br />
+			<div className="mb-10">
+				<button
+					onClick={
+						isLoggedIn ? () => navigate('/stories') : () => navigate('/login')
+					}
+					type="button"
+					className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+				>
+					내 스토리
+				</button>
+				<button
+					onClick={
+						isLoggedIn
+							? () => {
+									setStoryModal(true);
+							  }
+							: () => navigate('/login')
+					}
+					type="button"
+					className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+				>
+					스토리 쓰기
+				</button>
+			</div>
+		</>
+	);
+
 	return (
 		<div>
 			<div className="z-50">
@@ -53,52 +87,23 @@ const Home = () => {
 						<HomeMusicVideo music={'FAMKcwTBh7Q'} />
 					</div> */}
 					<BannerCarousel />
-				</div>
-				<br />
-				<div
-					data-aos="zoom-in"
-					className="mt-16 mb-16 flex justify-center items-center flex-col"
-				>
-					<span className="text-2xl">
-						{nickname ? nickname + ' 님, ' : ''}
-						{randomMessage}
-					</span>
-					<br />
-					<div className="mb-10">
-						<button
-							onClick={
-								isLoggedIn
-									? () => navigate('/stories')
-									: () => navigate('/login')
-							}
-							type="button"
-							className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-						>
-							내 스토리
-						</button>
-						<button
-							onClick={
-								isLoggedIn
-									? () => {
-											setStoryModal(true);
-									  }
-									: () => navigate('/login')
-							}
-							type="button"
-							className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-						>
-							스토리 쓰기
-						</button>
+
+					<div
+						data-aos="zoom-in"
+						className="p-6 md:p-10 mt-16 mb-16 flex justify-center items-center flex-col"
+					>
+						{messageDiv}
 					</div>
 				</div>
 
-				<div className="items-center">
-					<Search />
-				</div>
-				<hr className="mt-20" />
+				<hr className="mt-10" />
+
 				<div className="mx-4 sm:mx-10 md:mx-20 lg:mx-40" data-aos="fade-right">
 					<div className="mt-10 text-3xl font-semibold">우리들의 스토리</div>
-					<StoryCardMap />
+					<div className="mt-20 items-center">
+						<Search />
+					</div>
+					<StoryCardMap endpoint="stories" />
 				</div>
 			</div>
 			<div>

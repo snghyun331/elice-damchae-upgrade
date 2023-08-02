@@ -8,7 +8,7 @@ const HomeMusicVideo = ({ music }) => {
 
 	const updateVideoWidth = () => {
 		if (window.innerWidth >= 1500) {
-			setVideoWidth('1800');
+			setVideoWidth('1500');
 		} else {
 			setVideoWidth(window.innerWidth * 0.7);
 		}

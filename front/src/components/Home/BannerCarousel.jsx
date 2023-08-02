@@ -5,7 +5,7 @@ const BannerCarousel = () => {
 		<>
 			<div
 				data-aos="flip-left"
-				className="relative h-56 overflow-hidden rounded-lg md:h-96"
+				className="mb-16 relative h-56 overflow-hidden rounded-lg md:h-[500px]"
 			>
 				<img
 					src={banner1}
