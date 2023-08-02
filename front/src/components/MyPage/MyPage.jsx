@@ -4,7 +4,7 @@ import MyMainMood from './MyMainMood';
 import MyMoodStat from './MyMoodStat';
 import MyDaenamus from './MyDaenamus';
 import MyLikedDaenamus from './MyLikedDaenamus';
-
+import { Link } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 
 const MyPage = () => {
@@ -29,7 +29,7 @@ const MyPage = () => {
 				<h3 className="text-2xl text-gray-700 font-semibold">내가 쓴 스토리</h3>
 				<div className="text-base mt-4 mb-4 text-gray-700">
 					<ChevronRightIcon className="w-4 inline mb-1" />
-					<span className="inline">&nbsp;전체보기</span>
+					<span className="inline"><Link to='/stories'>&nbsp;전체보기</Link></span>
 				</div>
 			</div>
 
