@@ -24,7 +24,14 @@ storyPostRouter.delete(
   storyPostController.deleteStoryPost,
 );
 
-// 한달치 내 스토리별 감정 조회 ()
+// 감정 통계
+storyPostRouter.get(
+  '/stories/my/moodStat',
+  loginRequired,
+  storyPostController.readMyMoodStatistic,
+);
+
+// 한달치 내 스토리별 감정 조회 (감정 정보만 return)
 storyPostRouter.get(
   '/stories/myCalender',
   loginRequired,

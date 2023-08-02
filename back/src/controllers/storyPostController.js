@@ -398,6 +398,37 @@ class storyPostController {
       next(error);
     }
   }
+
+  static async readMyMoodStatistic(req, res, next) {
+    try {
+      const userId = req.currentUserId;
+      const myStories = await storyPostModel.findByUserId({ userId });
+      // console.log(myStories);
+      let allMoods = [];
+      myStories.forEach((myStory) => {
+        allMoods.push(myStory.mood);
+      });
+      console.log(allMoods);
+      const valueCount = allMoods.reduce((counts, value) => {
+        if (!counts[value]) {
+          counts[value] = 1;
+        } else {
+          counts[value]++;
+        }
+        return counts;
+      }, {});
+
+      let valuePercentage = {};
+      const totalCount = allMoods.length;
+      for (const value in valueCount) {
+        valuePercentage[value] = (valueCount[value] / totalCount) * 100;
+      }
+      console.log(valuePercentage);
+      return res.status(200).json(valuePercentage);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export { storyPostController };

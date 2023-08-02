@@ -21,6 +21,11 @@ class storyPostModel {
     return story;
   }
 
+  static async findByUserId({ userId }) {
+    const stories = await storyPost.find({ userInfo: userId });
+    return stories;
+  }
+
   // 조회수 1증가
   static async findAndIncreaseView({ storyId }) {
     await storyPost.updateOne({ _id: storyId }, { $inc: { views: 1 } });
