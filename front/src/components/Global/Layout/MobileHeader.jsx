@@ -55,7 +55,7 @@ const MobileHeader = () => {
 										onClick={item.onClick}
 										className={classNames(
 											active ? 'bg-gray-100 text-blue-900' : 'text-gray-700',
-											'block px-4 py-2',
+											'cursor-pointer block px-4 py-2',
 										)}
 									>
 										{item.title}

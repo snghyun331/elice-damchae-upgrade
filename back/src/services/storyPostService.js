@@ -108,7 +108,7 @@ class storyPostService {
     }
   }
 
-  static async deleteUploadImage({ storyId }) {
+  static async deleteUploadedImage({ storyId }) {
     const story = await storyPostModel.findOneByStoryId({ storyId });
     const uploadImage = await imageModel.findOneByImageId({
       imageId: story.thumbnail,
@@ -122,7 +122,7 @@ class storyPostService {
       }
     } else {
     }
-  }
+}
 }
 
 export { storyPostService };

@@ -1,12 +1,13 @@
 import { textToIcon, textToColor, formatDate } from '../Util/Util';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
-import { Link } from 'react-router-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import { delApi, getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
-import useUserStore from '../../store/useUserStore';
+import { useUserId } from '../../store/useUserStore';
 import StoryComment from './StoryComment';
+import { BackButton } from '../Global/BackButton';
+import { LockClosedIcon } from '@heroicons/react/24/outline';
 
 const StoryRead = () => {
 	const { storyId } = useParams();
@@ -16,8 +17,7 @@ const StoryRead = () => {
 
 	const navigate = useNavigate();
 
-	const { id } = useUserStore();
-
+	const id = useUserId();
 	const fetchData = async () => {
 		try {
 			const res = await getApi(`stories/${storyId}`);
@@ -32,11 +32,13 @@ const StoryRead = () => {
 	};
 
 	const handleDelete = async () => {
-		try {
-			await delApi(`stories/${storyId}`);
-			navigate('/stories');
-		} catch (error) {
-			console.log(error);
+		if (confirm('정말로 삭제하시겠습니까?')) {
+			try {
+				await delApi(`stories/${storyId}`);
+				navigate(-1);
+			} catch (error) {
+				console.log(error);
+			}
 		}
 	};
 
@@ -46,13 +48,7 @@ const StoryRead = () => {
 
 	return (
 		<div className={`w-4/5 max-w-2xl mx-auto dark:bg-gray-800`}>
-			<button
-				type="button"
-				className="text-blue-500 hover:text-white border border-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-4 py-1 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-			>
-				<Link to="/stories">목록으로</Link>
-			</button>
-
+			<BackButton />
 			{!isPublicStory ? (
 				<div
 					className={`flex items-center w-full h-80 max-w-2xl border border-gray-200 rounded-lg shadow mx-auto bg-white dark:bg-gray-800`}
@@ -94,7 +90,14 @@ const StoryRead = () => {
 							</div>
 							<div className="text-sm text-end absolute top-1 right-1 mt-4 me-4">
 								<p className="text-white mb-1">
-									조회 {isDataLoading && story.views}
+									{isDataLoading && story.isPublic && <>조회 {story.views}</>}
+									{isDataLoading && !story.isPublic && (
+										<LockClosedIcon
+											data-tooltip-id="tooltip"
+											data-tooltip-content="나만 볼 수 있는 스토리입니다."
+											className="w-4 inline mb-0.5"
+										/>
+									)}
 								</p>
 								{isDataLoading && story.userInfo._id == id && (
 									<>

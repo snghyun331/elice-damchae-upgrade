@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import { mbtiList } from '../Util/Util';
 import { getApi, putApi } from '../../services/api';
 import Select from 'react-select';
@@ -17,10 +17,9 @@ const InfoChange = () => {
 		isGoogleLogin,
 		profileImg,
 		setNickname,
-		setMbti, 
+		setMbti,
 		setProfileImg,
 	} = useUserStore();
-
 	const [preview, setPreview] = useState('');
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
@@ -28,7 +27,6 @@ const InfoChange = () => {
 		mbtiList.find((item) => item.value === mbti),
 	);
 	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
-	console.log('profileImg', profileImg);
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [nicknameCheck, setNicknameCheck] = useState(true);
 	const isPasswordValid = useMemo(() => {
@@ -58,8 +56,7 @@ const InfoChange = () => {
 	);
 
 	const handleChangeInput = useCallback(({ target }) => {
-		const { name, value, files } = target;
-		console.log('이미지 변경 동작')
+		const { name, value } = target;
 		switch (name) {
 			case 'password':
 				setPasswordToChange(value);
@@ -71,15 +68,6 @@ const InfoChange = () => {
 			case 'confirmPassword':
 				setConfirmPassword(value);
 				break;
-			case 'profileImg': {
-				console.log('이미지 변경 동작')
-				const file = files[0];
-				setProfileImgToChange(file);
-				console.log('파일', file)
-				console.log('이미지 변경 동작 후 ', profileImgToChange);
-				setPreview(URL.createObjectURL(file));
-				break;
-			}
 		}
 	}, []);
 
@@ -105,7 +93,6 @@ const InfoChange = () => {
 	const handleSubmit = useCallback(
 		async (e) => {
 			e.preventDefault();
-
 			const toUpdate = {
 				email,
 				...(passwordToChange !== '' && { password: passwordToChange }),
@@ -113,8 +100,6 @@ const InfoChange = () => {
 				nickname: nicknameToChange,
 				mbti: mbtiToChange.value,
 			};
-			console.log(typeof(profileImgToChange))
-			console.log(profileImgToChange)
 			const formData = new FormData();
 			for (const key in toUpdate) {
 				formData.append(key, toUpdate[key]);
@@ -139,7 +124,14 @@ const InfoChange = () => {
 				console.log(err);
 			}
 		},
-		[email, id, mbtiToChange, nicknameToChange, passwordToChange],
+		[
+			email,
+			id,
+			mbtiToChange,
+			nicknameToChange,
+			passwordToChange,
+			profileImgToChange,
+		],
 	);
 
 	const handleOut = async () => {
@@ -157,6 +149,18 @@ const InfoChange = () => {
 			}
 		}
 	};
+
+	const handleImgUpload = async (e) => {
+		e.preventDefault();
+		const file = e.target.files[0];
+		setProfileImgToChange(file);
+		setPreview(URL.createObjectURL(file));
+	};
+
+	useEffect(() => {
+	}, [profileImgToChange]);
+
+	const fileRef = useRef();
 
 	return (
 		<>
@@ -179,8 +183,9 @@ const InfoChange = () => {
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										id="file_input"
 										name="profileImg"
+										ref={fileRef}
 										type="file"
-										onChange={handleChangeInput}
+										onChange={handleImgUpload}
 									/>
 
 									<div className="mt-4">

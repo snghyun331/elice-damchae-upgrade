@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import usePagination from '../../hooks/usePagination';
 import StoryCard from './StoryCard';
 import Pagination from './Pagination';
 import { getApi } from '../../services/api';
+import { useUserId } from '../../store/useUserStore';
 
 const StoryCardMap = ({ endpoint }) => {
 	const [stories, setStories] = useState([]);
