@@ -9,6 +9,7 @@ import forestRouter from './routers/forestPostRouter.js';
 import { imageRouter } from './routers/imageRouter.js';
 import { storyCommentRouter } from './routers/storyCommentRouter.js';
 import { forestLikeDislikeRouter } from './routers/forestLikeDislikeRouter.js';
+import { forestCommentRouter } from './routers/forestCommentRouter.js';
 // import { forestCommentRouter } from './routers/forestCommentRouter.js';
 
 const app = express();
@@ -34,6 +35,7 @@ app.use('/forest', forestRouter);
 app.use(imageRouter);
 app.use(storyCommentRouter);
 app.use(forestLikeDislikeRouter);
+app.use(forestCommentRouter);
 // app.use(forestCommentRouter);
 app.use(errorMiddleware);
 

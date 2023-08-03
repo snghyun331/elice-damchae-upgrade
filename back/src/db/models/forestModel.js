@@ -73,13 +73,11 @@ class forestModel {
     return forest;
   }
 
-  static async readPostsByAuthors(userIds) {
-    try {
-      const posts = await ForestPost.find({ author: { $in: userIds } });
-      return posts;
-    } catch (error) {
-      throw new Error(`Error reading posts by authors: ${error.message}`);
-    }
+  static async findAndIncreaseCommentCount({ forestId }) {
+    await ForestPost.updateOne(
+      { _id: forestId },
+      { $inc: { commentCount: 1 } },
+    );
   }
 
   static async findByForestMbti(mbtiList) {
