@@ -1,21 +1,60 @@
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { Fragment } from 'react';
 import { classNames } from '../../Util/Util';
-
+import { useUserProfileImg } from '../../../store/useUserStore';
+import { defaultUser } from '../../Util/Util';
 const ProfileButton = () => {
 	const navigate = useNavigate();
+	const profileImg = useUserProfileImg();
+	const [profileImgSrc, setProfileImgSrc] = useState(defaultUser);
 	const profileItems = [
 		{ title: '마이 페이지', onClick: () => navigate('/mypage') },
 		{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
 	];
+
+	console.log(profileImg);
+
+	useEffect(() => {
+		if (profileImg && Object.keys(profileImg).length !== 0) {
+			if (typeof profileImg === 'string') {
+				setProfileImgSrc(profileImg);
+			} else if (profileImg instanceof File) {
+				const imageUrl = URL.createObjectURL(profileImg);
+				setProfileImgSrc(imageUrl);
+
+				return () => {
+					URL.revokeObjectURL(imageUrl);
+				};
+			}
+		} else {
+			setProfileImgSrc(defaultUser);
+		}
+	}, [profileImg]);
+
 	return (
-		<Menu as="div" className="xs:hidden sm:hidden md:flex relative inline-block text-left">
+		<Menu
+			as="div"
+			className="xs:hidden sm:hidden md:flex relative inline-block text-left"
+		>
 			<div>
 				<Menu.Button>
 					<div className="mt-2">
-						<UserCircleIcon className="w-10 text-white" aria-hidden="true" />
+						<img
+							className="w-10 rounded-full "
+							src={
+								profileImg && Object.keys(profileImg).length !== 0
+									? typeof profileImg === 'string'
+										? profileImg
+										: URL.createObjectURL(profileImg)
+									: defaultUser
+							}
+							alt="Profile Image"
+						/>
+
+						{/* <UserCircleIcon className="w-10 text-white" aria-hidden="true" /> */}
 					</div>
 				</Menu.Button>
 			</div>

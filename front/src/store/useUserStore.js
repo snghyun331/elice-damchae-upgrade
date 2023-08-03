@@ -108,5 +108,7 @@ const useUserStore = create((set) => {
 export const useUserActions = () => useUserStore((state) => state.actions);
 export const useIsLoggedIn = () => useUserStore((state) => state.isLoggedIn);
 export const useUserId = () => useUserStore((state) => state.id);
+export const useUserProfileImg = () =>
+	useUserStore((state) => state.profileImg);
 
 export default useUserStore;

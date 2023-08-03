@@ -29,13 +29,17 @@ const InfoChange = () => {
 		setProfileImg,
 	} = useUserStore();
 
+	console.log(profileImg);
+
 	const [preview, setPreview] = useState(profileImg);
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
 		mbtiList.find((item) => item.value === mbti),
 	);
-	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
+	const [profileImgToChange, setProfileImgToChange] = useState(
+		profileImg || defaultUser,
+	);
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [nicknameCheck, setNicknameCheck] = useState(true);
 
@@ -102,6 +106,7 @@ const InfoChange = () => {
 		}
 	}, [nicknameToChange]);
 
+	console.log(preview);
 	const handleSubmit = useCallback(
 		async (e) => {
 			e.preventDefault();
@@ -171,7 +176,9 @@ const InfoChange = () => {
 			if (typeof profileImg === 'string') {
 				setPreview(profileImg);
 			} else if (profileImg instanceof File) {
+				console.log('파일변경실행');
 				const imageUrl = URL.createObjectURL(profileImg);
+				console.log(imageUrl);
 				setPreview(imageUrl);
 
 				return () => {
@@ -182,8 +189,6 @@ const InfoChange = () => {
 			setPreview('');
 		}
 	}, [profileImg]);
-
-	// const fileRef = useRef();
 
 	return (
 		<>
@@ -198,7 +203,7 @@ const InfoChange = () => {
 								<div className="flex justify-center">
 									<img
 										className="w-32 h-32 rounded-full border -mb-2"
-										src={preview ? preview : defaultUser}
+										src={preview !== '' ? preview : defaultUser}
 										alt="Rounded avatar"
 									/>
 								</div>
@@ -213,28 +218,6 @@ const InfoChange = () => {
 									</button>
 
 									<ProfilePicker />
-
-									{/* <input
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										id="file_input"
-										name="profileImg"
-										ref={fileRef}
-										type="file"
-										onChange={handleImgUpload}
-									/> */}
-
-									<div className="mt-2">
-										{/* {preview && (
-											<>
-												<p className="text-sm text-gray-500">업로드 이미지:</p>
-												<img
-													className="max-w-xs"
-													src={preview}
-													alt="Selected Thumbnail"
-												/>
-											</>
-										)} */}
-									</div>
 								</div>
 								<div className="flex flex-col">
 									<label

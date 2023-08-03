@@ -3,6 +3,7 @@ import useUserStore, { useUserActions } from '../../store/useUserStore';
 import PropTypes from 'prop-types';
 import { putApi } from '../../services/api';
 import toast from 'react-hot-toast';
+
 const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 	const [selectedFile, setSelectedFile] = useState(null);
 	const { setProfileImg } = useUserStore();
@@ -20,7 +21,6 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 		e.preventDefault();
 		if (selectedFile) {
 			setProfileImg(selectedFile);
-			closeModal();
 		} else {
 			console.log('No file selected');
 		}
@@ -34,6 +34,7 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 				toast.success('프로필 사진을 수정하였습니다.');
 				setProfileImg(selectedFile);
 				infoChange({ profileImg: selectedFile });
+				closeModal();
 			} else {
 				toast.error('프로필 사진 수정에 실패했습니다.');
 			}
