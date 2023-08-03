@@ -30,39 +30,41 @@ const MyMoodStat = () => {
 	}, []);
 
 	useEffect(() => {
-		Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
+		if (isDataLoading) {
+			Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
-		const chart = new Chart(chartRef.current, {
-			type: 'doughnut',
-			data: {
-				labels: Object.keys(moods),
-				datasets: [
-					{
-						data: Object.values(moods),
-						backgroundColor: Object.keys(moods).map(
-							(key) => textToDeepColor[key],
-						),
-						hoverOffset: 4,
-					},
-				],
-			},
-			options: {
-				responsive: true,
-				plugins: {
-					legend: {
-						position: 'right',
-						labels: {
-							usePointStyle: true,
-							pointStyle: 'circle',
+			const chart = new Chart(chartRef.current, {
+				type: 'doughnut',
+				data: {
+					labels: Object.keys(moods),
+					datasets: [
+						{
+							data: Object.values(moods),
+							backgroundColor: Object.keys(moods).map(
+								(key) => textToDeepColor[key],
+							),
+							hoverOffset: 4,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					plugins: {
+						legend: {
+							position: 'right',
+							labels: {
+								usePointStyle: true,
+								pointStyle: 'circle',
+							},
 						},
 					},
 				},
-			},
-		});
+			});
 
-		return () => {
-			chart.destroy();
-		};
+			return () => {
+				chart.destroy();
+			};
+		}
 	}, [moods]);
 
 	return (

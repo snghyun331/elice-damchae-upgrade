@@ -1,26 +1,44 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import { getApi } from '../../services/api';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { textToIcon } from '../Util/Util';
 
 const MyMainMood = () => {
-	const [moods, setMoods] = useState([]);
-	const [isDataLoading, setIsDataLoading] = useState(false);
+	const [posts, setPosts] = useState([]);
+	const [mainMood, setMainMood] = useState('');
 
 	const fetchData = async () => {
 		try {
 			const response = await getApi('stories/my/calendar');
-			console.log(response.data);
-			setIsDataLoading(true);
-			setMoods(response.posts);
+			setPosts(response.data.posts);
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
-	useState(() => {
+	useEffect(() => {
 		fetchData();
 	}, []);
+
+	useEffect(() => {
+		const moodFrequency = {};
+
+		posts.forEach((post) => {
+			if (post.mood in moodFrequency) {
+				moodFrequency[post.mood] += 1;
+			} else {
+				moodFrequency[post.mood] = 1;
+			}
+		});
+
+		const mostFrequentMood = Object.keys(moodFrequency).reduce(
+			(a, b) => (moodFrequency[a] > moodFrequency[b] ? a : b),
+			'',
+		);
+
+		setMainMood(mostFrequentMood);
+	}, [posts]);
 
 	const currentMonth = moment().format('M');
 	return (
@@ -33,7 +51,9 @@ const MyMainMood = () => {
 			<h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 				{currentMonth}월의 주요 감정
 			</h5>
-			<p className="text-7xl text-gray-700 dark:text-gray-400">😊</p>
+			<p className="text-7xl text-gray-700 dark:text-gray-400">
+				{textToIcon[mainMood]}
+			</p>
 		</div>
 	);
 };
