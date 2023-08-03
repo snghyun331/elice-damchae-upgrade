@@ -1,26 +1,11 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
-import { getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
 import { textToIcon } from '../Util/Util';
+import PropTypes from 'prop-types';
 
-const MyMainMood = () => {
-	const [posts, setPosts] = useState([]);
+const MyMainMood = ({ posts }) => {
 	const [mainMood, setMainMood] = useState('');
-
-	const fetchData = async () => {
-		try {
-			const response = await getApi('stories/my/calendar');
-			setPosts(response.data.posts);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	useEffect(() => {
-		fetchData();
-	}, []);
-
 	useEffect(() => {
 		const moodFrequency = {};
 
@@ -56,6 +41,10 @@ const MyMainMood = () => {
 			</p>
 		</div>
 	);
+};
+
+MyMainMood.propTypes = {
+	posts: PropTypes.array.isRequired,
 };
 
 export default MyMainMood;

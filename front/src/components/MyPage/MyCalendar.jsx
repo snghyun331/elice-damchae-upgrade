@@ -1,13 +1,27 @@
 import { useState } from 'react';
 import Calendar from 'react-calendar';
 import PropTypes from 'prop-types';
+import { textToIcon } from '../Util/Util';
 
-function MyCalendar({ dateMoodData }) {
+function MyCalendar({ posts }) {
 	const [value, setValue] = useState(new Date());
+	const simplePost = posts.map(({ koreaCreatedAt, mood, _id }) => ({
+		date: new Date(koreaCreatedAt).toISOString().split('T')[0],
+		mood: textToIcon[mood],
+		_id,
+	}));
 
 	const getMoodFromDate = (date) => {
-		const dateString = date.toISOString().split('T')[0];
-		const foundMood = dateMoodData.find((item) => item.date === dateString);
+		const dateString = new Date(date)
+			.toLocaleDateString('ko-KR', {
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit',
+			})
+			.replaceAll('.', '-')
+			.slice(0, -1)
+			.replaceAll(' ', '');
+		const foundMood = simplePost.find((item) => item.date === dateString);
 		return foundMood ? foundMood.mood : null;
 	};
 
@@ -34,16 +48,15 @@ function MyCalendar({ dateMoodData }) {
 				formatDay={(locale, date) =>
 					date.toLocaleString('en', { day: 'numeric' })
 				}
-				formatShortWeekday={(
-					locale,
-					date, // Add this prop for customizing weekday names
-				) => date.toLocaleString('en', { weekday: 'short' })}
+				formatShortWeekday={(locale, date) =>
+					date.toLocaleString('en', { weekday: 'short' })
+				}
 			/>
 		</div>
 	);
 }
 MyCalendar.propTypes = {
-	dateMoodData: PropTypes.array.isRequired,
+	posts: PropTypes.array.isRequired,
 };
 
 export default MyCalendar;
