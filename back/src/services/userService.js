@@ -5,7 +5,14 @@ import { OAuth2Client } from 'google-auth-library';
 import { generateRandomString } from '../utills/emailAuth.js';
 
 class userService {
-  static async createUser({ email, password, mbti, nickname, isGoogleLogin }) {
+  static async createUser({
+    profileImg,
+    email,
+    password,
+    mbti,
+    nickname,
+    isGoogleLogin,
+  }) {
     // 이메일 중복 확인
     const user = await User.findByEmail({ email });
     if (user) {
@@ -21,6 +28,7 @@ class userService {
     }
 
     const newUser = {
+      profileImg,
       email,
       password: isGoogleLogin ? password : hashedPassword,
       mbti,
@@ -149,6 +157,11 @@ class userService {
     return user;
   }
 
+  static async readUserEmail({ email }) {
+    const user = await User.findByEmail({ email });
+    return user;
+  }
+
   static async readUserNickname({ nickname }) {
     const user = await User.findByNickname({ nickname });
 
@@ -177,26 +190,6 @@ class userService {
     }
     const isOut = user.isOut;
     return isOut;
-  }
-
-  static async readStories(userId) {
-    const stories = await User.findStoriesById(userId);
-    if (!stories) {
-      const errorState = 'error';
-      const errorMessage = '스토리 작성내역이 존재하지 않습니다.';
-      return { errorState, errorMessage };
-    }
-    return stories;
-  }
-
-  static async readForests({ userId }) {
-    const forests = await User.findForestsById({ userId });
-    if (!forests) {
-      const errorState = 'error';
-      const errorMessage = '게시글 작성내역이 존재하지 않습니다.';
-      return { errorState, errorMessage };
-    }
-    return forests;
   }
 
   //구글 로그인용

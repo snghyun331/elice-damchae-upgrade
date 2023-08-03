@@ -1,26 +1,45 @@
-import { useState } from 'react';
 import Calendar from 'react-calendar';
 import PropTypes from 'prop-types';
+import { textToIcon, calendarDateToString } from '../Util/Util';
+import { useNavigate } from 'react-router-dom';
+function MyCalendar({ posts }) {
+	const navigate = useNavigate();
+	const simplePost = posts.map(({ koreaCreatedAt, mood, _id }) => ({
+		date: new Date(koreaCreatedAt).toISOString().split('T')[0],
+		mood: textToIcon[mood],
+		_id,
+	}));
 
-function MyCalendar({ dateMoodData }) {
-	const [value, setValue] = useState(new Date());
-
-	const getMoodFromDate = (date) => {
-		const dateString = date.toISOString().split('T')[0];
-		const foundMood = dateMoodData.find((item) => item.date === dateString);
-		return foundMood ? foundMood.mood : null;
+	const getDataFromDate = (date) => {
+		const dateString = calendarDateToString(date);
+		const data = simplePost.find((item) => item.date === dateString);
+		return data;
 	};
 
-	const renderTileContent = ({ date, view }) => {
-		const mood = getMoodFromDate(date);
-		if (view === 'month') {
+	const renderTileContent = ({ date, view, activeStartDate }) => {
+		const currentMonthInView = activeStartDate.getMonth();
+		const dateMonth = date.getMonth();
+		const data = getDataFromDate(date);
+
+		if (view === 'month' && currentMonthInView === dateMonth) {
 			return (
 				<div className="tileContentWrapper">
-					<span className="text-4xl">{mood ? mood : '⚪'}</span>
+					<span className="text-3xl">{data ? data.mood : '⚪'}</span>
 				</div>
 			);
 		} else {
-			return null;
+			return (
+				<div className="tileContentWrapper">
+					<span className="text-4xl">{'　'}</span>
+				</div>
+			);
+		}
+	};
+
+	const handleDateClick = (date) => {
+		const data = getDataFromDate(date);
+		if (data) {
+			navigate(`/stories/${data._id}`);
 		}
 	};
 
@@ -28,22 +47,20 @@ function MyCalendar({ dateMoodData }) {
 		<div>
 			<Calendar
 				className="mt-5 p-1.5" // Add the custom CSS class to Calendar
-				onChange={(newValue) => setValue(newValue)}
-				value={value}
 				tileContent={renderTileContent}
 				formatDay={(locale, date) =>
 					date.toLocaleString('en', { day: 'numeric' })
 				}
-				formatShortWeekday={(
-					locale,
-					date, // Add this prop for customizing weekday names
-				) => date.toLocaleString('en', { weekday: 'short' })}
+				formatShortWeekday={(locale, date) =>
+					date.toLocaleString('en', { weekday: 'short' })
+				}
+				onClickDay={handleDateClick}
 			/>
 		</div>
 	);
 }
 MyCalendar.propTypes = {
-	dateMoodData: PropTypes.array.isRequired,
+	posts: PropTypes.array.isRequired,
 };
 
 export default MyCalendar;

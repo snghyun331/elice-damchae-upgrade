@@ -76,7 +76,7 @@ const StoryCard = ({
 						</div>
 
 						<div className="space-y-2 mt-8">
-							<div className="w-full absolute bottom-8 flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+							<div className="whitespace-nowrap w-full absolute bottom-8 flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 								<div className="flex items-center">
 									<ChevronRightIcon className="w-4 mt-1" />
 									<span className="ml-1">더보기</span>

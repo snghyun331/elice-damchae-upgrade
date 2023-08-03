@@ -1,7 +1,7 @@
 .react-calendar__tile--now .react-calendar__tile__num,
 .react-calendar__month-view__days__day abbr {
-	display: none;
-	font-size: 0.7em;
+	/* display: none; */
+	font-size: 0.5em;
 	position: inherit;
 }
 
@@ -36,7 +36,7 @@ abbr[title] {
     color: #d10000;
    } */
 .react-calendar__tile {
-	padding: 12px;
+	padding: 3.5px;
 }
 
 .react-calendar__tile:enabled:hover,

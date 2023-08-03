@@ -54,9 +54,9 @@ const MyComments = () => {
 
 			<div className="flex justify-center mt-10">
 				<ul className="w-full max-w-6xl text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-					{dummyData.map((comment) => (
+					{dummyData.map((comment, index) => (
 						<li
-							key={comment._id}
+							key={index}
 							className="text-gray-700 w-full px-6 py-3 border-b border-gray-200 dark:border-gray-600 bg-slate-100"
 						>
 							<span className="font-bold text-gray-900">댓글</span>{' '}

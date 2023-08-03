@@ -118,6 +118,11 @@ class storyPostModel {
     const result = storyPost.populate(info, field);
     return result;
   }
+
+  static async findStoriesById({ userId }) {
+    const stories = await storyPost.find({ userInfo: userId });
+    return stories;
+  }
 }
 
 export { storyPostModel };
