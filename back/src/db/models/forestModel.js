@@ -1,75 +1,122 @@
 // // forestModel.js
 import ForestPost from '../schemas/forestPost.js';
 import UserModel from '../schemas/user.js';
-
 class forestModel {
   static async create({ newForestPost }) {
     const createdForest = await ForestPost.create(newForestPost);
     return createdForest;
   }
 
-  static async findAll({ getAlls }) {
-    // console.log(getAlls);
-    // console.log(getAlls.$or);
-    // const getAll = getAlls.$or[0];
-    // console.log(getAll);
-    const findAllForest = await ForestPost.find(
-      getAlls[0],
-      // title: getAlls.$or[0].title,
-      // content: getAlls.$or[0].content,
-    );
-    return findAllForest;
+  static async findByForest(skip, limit, getAlls) {
+    const forests = await ForestPost.find(getAlls)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    const count = await ForestPost.countDocuments(forests);
+    return { forests, count };
   }
 
-  static async findByPost({ _id }) {
-    const getForest = await ForestPost.findOne({ _id });
-    return getForest;
+  static async findOneAndDelete({ forestId }) {
+    const deletedPost = await ForestPost.deleteOne({ _id: forestId });
+    return deletedPost;
+  }
+
+  static async readOneById({ forestId }) {
+    const forest = await ForestPost.findOne({ forestId });
+    return forest;
+  }
+
+  // static async findById({ userId }) {
+  //   const forest = await ForestPost.find({ userInfo: userId });
+  //   return forest;
+  // }
+  // 조회수 1증가
+  static async findAndIncreaseView({ forestId }) {
+    await ForestPost.updateOne({ _id: forestId }, { $inc: { views: 1 } });
+    const forest = await ForestPost.findOne({ _id: forestId }).lean();
+    return forest;
   }
 
   static async updatePost({ updatePost }) {
-    console.log('model까지', updatePost);
-    if (!(updatePost.imageUrl = 'None')) {
-      console.log(1);
-      const updateForestPost = await ForestPost.updateOne(
-        { userId: updatePost.userId, _id: updatePost._id },
-        {
-          title: updatePost.title,
-          content: updatePost.content,
-          imageUrl: updatePost.imageUrl,
-        },
-      );
-      return updateForestPost;
-    } else {
-      console.log(2);
-      const updateForestPost = await ForestPost.updateOne(
-        { userId: updatePost.userId, _id: updatePost._id },
-        { title: updatePost.title, content: updatePost.content },
-      );
-      return updateForestPost;
-    }
+    const { _id, userId, title, content, imageUrl } = updatePost;
+
+    const updateForestPost = await ForestPost.updateOne(
+      { userId, _id },
+      {
+        title,
+        content,
+        ...(imageUrl !== 'None' && { imageUrl }),
+      },
+    );
+    return updateForestPost;
   }
 
-  static async deletePost({ deletePost }) {
-    console.log('model까지', deletePost);
-    if (!(deletePost.imageUrl = 'None')) {
-      console.log(1);
-      const deleteForestPost = await ForestPost.deleteOne(
-        { userId: deletePost.userId, _id: deletePost._id },
-        {
-          title: deletePost.title,
-          content: deletePost.content,
-          imageUrl: deletePost.imageUrl,
-        },
-      );
-      return deleteForestPost;
-    } else {
-      console.log(2);
-      const deleteForestPost = await ForestPost.deleteOne(
-        { userId: deletePost.userId, _id: deletePost._id },
-        { title: deletePost.title, content: deletePost.content },
-      );
-      return deleteForestPost;
+  // static async deletePost({ deletePost }) {
+  //   const { _id, userId, title, content, imageUrl } = deletePost;
+
+  //   const forestDeletePost = await ForestPost.deleteOne(
+  //     { userId, _id },
+  //     { title, content, ...(imageUrl !== 'None' && { imageUrl }) },
+  //   );
+  //   return forestDeletePost;
+  // }
+
+  static async findAndCountAll(skip, limit) {
+    const forest = await ForestPost.find({})
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+
+    const count = await ForestPost.countDocuments();
+    return { forest, count };
+  }
+
+  static async populateForestPost(info, field) {
+    const forest = ForestPost.populate(info, field);
+    return forest;
+  }
+
+  static async readPostsByAuthors(userIds) {
+    try {
+      const posts = await ForestPost.find({ author: { $in: userIds } });
+      return posts;
+    } catch (error) {
+      throw new Error(`Error reading posts by authors: ${error.message}`);
     }
+  }
+  // static async findByForestMbti(mbti) {
+  //   try {
+  //     // 작성자 MBTI가 'ISTJ'인 사용자들을 찾습니다.
+  //     const usersWithMBTI = await UserModel.find({ mbti: mbti });
+  //     // 찾은 사용자들의 _id 목록을 추출합니다.
+  //     const userIds = usersWithMBTI.map((user) => user._id);
+  //     // 작성자가 ISTJ인 블로그 포스트들을 찾습니다.
+  //     const posts = await ForestPost.find({ author: { $in: userIds } });
+  //     return posts;
+  //   } catch (error) {
+  //     throw new Error(`Error finding
+  // blog posts by author's MBTI: ${error.message}`);
+  //   }
+  // }
+
+  // static async findByMbti(skip, limit, getMbti) {
+  //   console.log('findByMbti - getMbti:', getMbti);
+
+  //   const forests = await ForestPost.find(getMbti)
+  //     .sort({ createdAt: -1 })
+  //     .skip(skip)
+  //     .limit(limit)
+  //     .exec();
+
+  //   const count = await ForestPost.countDocuments(forests);
+  //   return { forests, count };
+  // }
+
+  static async findForestsById({ userId }) {
+    const forests = await ForestPost.find({ userInfo: userId });
+    return forests;
   }
 }
 

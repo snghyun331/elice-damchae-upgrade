@@ -1,14 +1,14 @@
-import { StoryComment } from '../schemas/storyComment.js';
+import { storyComment } from '../schemas/storyComment.js';
 
-class StoryCommentModel {
+class storyCommentModel {
   static async createStoryComment({ newComment }) {
-    const createdNewComment = await StoryComment.create(newComment);
+    const createdNewComment = await storyComment.create(newComment);
     return createdNewComment;
   }
 
   static async findAllByStoryId({ storyId }) {
-    const storyComments = await StoryComment.find({ storyId: storyId });
-    const populatedComments = await StoryComment.populate(storyComments, {
+    const storyComments = await storyComment.find({ storyId: storyId });
+    const populatedComments = await storyComment.populate(storyComments, {
       path: 'writerId',
     });
 
@@ -16,7 +16,7 @@ class StoryCommentModel {
   }
 
   static async findOneByCommentId({ commentId }) {
-    const comment = await StoryComment.findOne({ _id: commentId });
+    const comment = await storyComment.findOne({ _id: commentId });
     return comment;
   }
 
@@ -24,7 +24,7 @@ class StoryCommentModel {
     const filter = { _id: commentId };
     const update = { [fieldToUpdate]: newValue };
     const option = { returnOriginal: false };
-    const updatedComment = await StoryComment.findOneAndUpdate(
+    const updatedComment = await storyComment.findOneAndUpdate(
       filter,
       update,
       option,
@@ -33,17 +33,27 @@ class StoryCommentModel {
   }
 
   static async deleteOneByCommentId({ commentId }) {
-    const deletedComment = await StoryComment.deleteOne({ _id: commentId });
+    const deletedComment = await storyComment.deleteOne({ _id: commentId });
     const isCompletedDeleted = deletedComment.deletedCount === 1;
     return isCompletedDeleted;
   }
 
-  // static async findAllCommentsByWriterId({ writerId }) {}
-
   static async populateStoryComment(info, field) {
-    const result = StoryComment.populate(info, field);
+    const result = storyComment.populate(info, field);
     return result;
+  }
+
+  static async findAndCountAll(skip, limit, storyId) {
+    const comments = await storyComment
+      .find({ storyId: storyId })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+
+    const count = await storyComment.countDocuments({ storyId: storyId });
+    return { comments, count };
   }
 }
 
-export { StoryCommentModel };
+export { storyCommentModel };

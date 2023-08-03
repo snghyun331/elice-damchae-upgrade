@@ -2,6 +2,11 @@ import { Schema, model } from 'mongoose';
 
 const UserSchema = new Schema(
   {
+    profileImg: {
+      type: Schema.Types.ObjectId,
+      ref: 'Img',
+      required: false,
+    },
     email: {
       type: String,
       required: true,
@@ -32,6 +37,7 @@ const UserSchema = new Schema(
   },
   {
     timestamps: true,
+    collection: 'users',
   },
 );
 

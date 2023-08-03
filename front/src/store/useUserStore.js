@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
+import { toast } from 'react-hot-toast';
 
 const useUserStore = create((set) => {
 	const initialUserData = {
@@ -13,9 +14,20 @@ const useUserStore = create((set) => {
 	};
 
 	const savedUserData = JSON.parse(localStorage.getItem('userData'));
+
 	const userData = savedUserData
 		? { ...initialUserData, ...savedUserData }
 		: initialUserData;
+
+	const saveUserDataToLocalStorage = (newUserData) => {
+		localStorage.setItem('userData', JSON.stringify(newUserData));
+	};
+
+	const updateUserData = (updatedUserData) => {
+		const newUserData = { ...userData, ...updatedUserData };
+		saveUserDataToLocalStorage(newUserData);
+		set(newUserData);
+	};
 
 	return {
 		...userData,
@@ -40,7 +52,6 @@ const useUserStore = create((set) => {
 					mbti: response.data.mbti,
 				};
 
-				// Save the user data in local storage
 				localStorage.setItem('userData', JSON.stringify(userData));
 
 				set(userData);
@@ -50,11 +61,8 @@ const useUserStore = create((set) => {
 				await postApi('auth/register', user);
 			},
 
-			googleRegister: async (user) => {
-				await postApi('auth/googleRegister', user);
-			},
-
 			googleLogin: async (user) => {
+				await postApi('auth/googleRegister', user);
 				const response = await postApi('auth/googleLogin', user);
 				const jwtToken = response.data.token;
 
@@ -87,11 +95,18 @@ const useUserStore = create((set) => {
 					isGoogleLogin: false,
 					isLoggedIn: false,
 				});
-				alert('로그아웃 하였습니다.');
+				toast.success('로그아웃 하였습니다.');
+			},
+
+			infoChange: (updatedUserData) => {
+				updateUserData(updatedUserData);
 			},
 		},
 	};
 });
 
 export const useUserActions = () => useUserStore((state) => state.actions);
+export const useIsLoggedIn = () => useUserStore((state) => state.isLoggedIn);
+export const useUserId = () => useUserStore((state) => state.id);
+
 export default useUserStore;

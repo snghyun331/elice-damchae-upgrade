@@ -1,20 +1,54 @@
+import moment from 'moment';
+
+export const classNames = (...classes) => {
+	return classes.filter(Boolean).join(' ');
+};
+
+//배경색용, 연한 버전
 export const textToColor = {
 	insecure: '#F1E3FF',
 	surprise: '#FFFBB8',
-	happy: '#FFE3F0',
+	pleasure: '#d6f0d7',
 	sad: '#ECF1FF',
-	angry: '#F9EBDE',
+	anger: '#F9EBDE',
 	neutral: '#E0E0E0',
 };
 
-// TODO : pleasure-기쁨, sad-슬픔, insecure(불안), anger(분노), neutral(중립), surprise(놀람) 으로 변경 예정.
+//통계색용, 진한 버전
+export const textToDeepColor = {
+	불안: '#A593E0',
+	놀람: '#F6B352',
+	기쁨: '#8CD790',
+	슬픔: '#6AAFE6',
+	분노: '#FF7761',
+	중립: '#B8B8B8',
+};
+
 export const textToIcon = {
 	insecure: '😨',
 	surprise: '😮',
-	happy: '😊',
+	pleasure: '😊',
 	sad: '😢',
-	angry: '😡',
+	anger: '😡',
 	neutral: '😐',
+};
+
+export const textToKorean = {
+	insecure: '불안',
+	surprise: '놀람',
+	pleasure: '기쁨',
+	sad: '슬픔',
+	anger: '분노',
+	neutral: '중립',
+};
+
+export const objectToKorean = (obj) => {
+	const result = {};
+	for (let key in obj) {
+		const value = obj[key].toFixed(2); // 소수점 2자리까지 나타냄
+		result[textToKorean[key]] = parseFloat(value);
+	}
+	return result;
 };
 
 export const mbtiList = [
@@ -43,4 +77,71 @@ export const truncateString = (string, length) => {
 
 export const removeTag = (string) => {
 	return string.replace(/<[^>]*>?/g, '');
+};
+
+export const formatDate = (string) => {
+	const date = moment(string);
+	const formattedDate = date.format('YYYY년 MM월 DD일');
+	return formattedDate;
+};
+
+export const formatCreatedAt = (string) => {
+	const formattedTime = moment(string).format('YYYY-MM-DD HH:mm');
+	return formattedTime;
+};
+
+export const formatRelativeTime = (string) => {
+	const now = moment();
+	const date = moment(string);
+
+	const duration = moment.duration(now.diff(date));
+	const daysElapsed = duration.asDays();
+
+	if (duration.asSeconds() < 60) {
+		return '방금';
+	} else if (duration.asMinutes() < 60) {
+		return `${Math.floor(duration.asMinutes())}분 전`;
+	} else if (duration.asHours() < 24) {
+		return `${Math.floor(duration.asHours())}시간 전`;
+	} else if (daysElapsed <= 3) {
+		return `${Math.floor(daysElapsed)}일 전`;
+	} else {
+		return date.format('YYYY-MM-DD');
+	}
+};
+
+export const colorQueryText = ({ text, query }) => {
+	if (!text.includes(query)) {
+		return <>{text}</>;
+	}
+
+	const textParts = text.split(query);
+	const lastIndex = textParts.length - 1;
+
+	return (
+		<>
+			{textParts.map((part, index) =>
+				index !== lastIndex ? (
+					<>
+						{part}
+						<span className="text-blue-600 font-semibold">{query}</span>
+					</>
+				) : (
+					<>{part}</>
+				),
+			)}
+		</>
+	);
+};
+
+export const calendarDateToString = (date) => {
+	return new Date(date)
+		.toLocaleDateString('ko-KR', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+		})
+		.replaceAll('.', '-')
+		.slice(0, -1)
+		.replaceAll(' ', '');
 };
