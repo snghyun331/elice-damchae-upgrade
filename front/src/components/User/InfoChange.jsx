@@ -5,9 +5,12 @@ import Select from 'react-select';
 import useUserStore, { useUserActions } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import ProfilePicker from '../User/ProfilePicker';
+import ProfileImgUploadModal from './ProfileImgUploadModal';
 
 const InfoChange = () => {
 	const navigate = useNavigate();
+	const [showModal, setShowModal] = useState(false);
 	const { logout, infoChange } = useUserActions();
 	const {
 		id,
@@ -20,6 +23,7 @@ const InfoChange = () => {
 		setMbti,
 		setProfileImg,
 	} = useUserStore();
+	console.log(profileImg);
 	const [preview, setPreview] = useState('');
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
@@ -70,6 +74,11 @@ const InfoChange = () => {
 				break;
 		}
 	}, []);
+
+	const handleMbtiChange = (selectedOption) => {
+		setMbtiToChange(selectedOption);
+		setMbti(selectedOption.value);
+	};
 
 	const handleNicknameCheck = useCallback(async () => {
 		try {
@@ -150,17 +159,33 @@ const InfoChange = () => {
 		}
 	};
 
-	const handleImgUpload = async (e) => {
-		e.preventDefault();
-		const file = e.target.files[0];
-		setProfileImgToChange(file);
-		setPreview(URL.createObjectURL(file));
-	};
+	// const handleImgUpload = async (e) => {
+	// 	e.preventDefault();
+	// 	const file = e.target.files[0];
+	// 	setProfileImgToChange(file);
+	// 	setPreview(URL.createObjectURL(file));
+	// };
+
+	useEffect(() => {}, [profileImg]);
 
 	useEffect(() => {
-	}, [profileImgToChange]);
+		if (profileImg) {
+			if (typeof profileImg === 'string') {
+				setPreview(profileImg);
+			} else if (profileImg instanceof File) {
+				const imageUrl = URL.createObjectURL(profileImg);
+				setPreview(imageUrl);
 
-	const fileRef = useRef();
+				return () => {
+					URL.revokeObjectURL(imageUrl);
+				};
+			}
+		} else {
+			setPreview('');
+		}
+	}, [profileImg]);
+
+	// const fileRef = useRef();
 
 	return (
 		<>
@@ -168,37 +193,49 @@ const InfoChange = () => {
 				<div className="flex justify-center px-6 py-8 mx-auto lg:py-0 my-20">
 					<div className="w-full bg-white rounded-sm shadow-xl dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700 ">
 						<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-							<h1 className="text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+							<h1 className="mb-10 text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
 								회원정보 수정
 							</h1>
 							<form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+								<div className="flex justify-center">
+									<img
+										className="w-32 h-32 rounded-full border -mb-2"
+										src={preview}
+										alt="Rounded avatar"
+									/>
+								</div>
+
 								<div>
-									<label
-										className="block mb-2 font-semibold text-gray-900 dark:text-white"
-										htmlFor="file_input"
+									<button
+										type="button"
+										onClick={() => setShowModal(true)}
+										className="relative top-8 left-32 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-1 mx-1 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
 									>
-										프로필 이미지
-									</label>
-									<input
+										직접 업로드
+									</button>
+
+									<ProfilePicker />
+
+									{/* <input
 										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										id="file_input"
 										name="profileImg"
 										ref={fileRef}
 										type="file"
 										onChange={handleImgUpload}
-									/>
+									/> */}
 
-									<div className="mt-4">
-										{preview && (
+									<div className="mt-2">
+										{/* {preview && (
 											<>
-												<p className="text-sm text-gray-500">선택된 이미지:</p>
+												<p className="text-sm text-gray-500">업로드 이미지:</p>
 												<img
-													className="mt-2 max-w-xs"
+													className="max-w-xs"
 													src={preview}
 													alt="Selected Thumbnail"
 												/>
 											</>
-										)}
+										)} */}
 									</div>
 								</div>
 								<div className="flex flex-col">
@@ -344,11 +381,11 @@ const InfoChange = () => {
 										htmlFor="mbti"
 										className="block mb-2 font-semibold text-gray-900 dark:text-white"
 									>
-										MBTI
+										MBTI 선택
 									</label>
 									<Select
 										defaultValue={mbtiToChange}
-										onChange={setMbtiToChange}
+										onChange={handleMbtiChange} // Update this line
 										options={mbtiList}
 										placeholder="MBTI "
 										classNamePrefix="react-select"
@@ -375,6 +412,11 @@ const InfoChange = () => {
 					</div>
 				</div>
 			</section>
+
+			<ProfileImgUploadModal
+				isVisible={showModal}
+				closeModal={() => setShowModal(false)}
+			/>
 		</>
 	);
 };
