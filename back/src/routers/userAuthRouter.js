@@ -6,7 +6,11 @@ import { upload } from '../utills/multer.js';
 
 const userAuthRouter = Router();
 
-userAuthRouter.post('/auth/register', userAuthController.registerUser);
+userAuthRouter.post(
+  '/auth/register',
+  upload.single('profileImg'),
+  userAuthController.registerUser,
+);
 
 userAuthRouter.post('/auth/googleRegister', userAuthController.googleRegister);
 
@@ -23,7 +27,8 @@ userAuthRouter.post(
 );
 
 userAuthRouter.put(
-  '/users/:userId',
+  '/auth/update',
+  loginRequired,
   upload.single('profileImg'),
   userAuthController.updateUser,
 );

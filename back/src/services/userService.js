@@ -5,7 +5,14 @@ import { OAuth2Client } from 'google-auth-library';
 import { generateRandomString } from '../utills/emailAuth.js';
 
 class userService {
-  static async createUser({ email, password, mbti, nickname, isGoogleLogin }) {
+  static async createUser({
+    profileImg,
+    email,
+    password,
+    mbti,
+    nickname,
+    isGoogleLogin,
+  }) {
     // 이메일 중복 확인
     const user = await User.findByEmail({ email });
     if (user) {
@@ -21,6 +28,7 @@ class userService {
     }
 
     const newUser = {
+      profileImg,
       email,
       password: isGoogleLogin ? password : hashedPassword,
       mbti,
