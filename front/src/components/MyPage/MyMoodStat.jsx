@@ -1,5 +1,5 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
 	Chart,
 	DoughnutController,
@@ -7,56 +7,65 @@ import {
 	Tooltip,
 	Legend,
 } from 'chart.js';
+import { getApi } from '../../services/api';
+import { objectToKorean, textToDeepColor } from '../Util/Util';
 const MyMoodStat = () => {
 	const chartRef = useRef(null);
 
-	const dummyData = {
-		분노: 21,
-		당황: 7,
-		기쁨: 44,
-		슬픔: 19,
-		중립: 12,
+	const [moods, setMoods] = useState([]);
+	const [isDataLoading, setIsDataLoading] = useState(false);
+
+	const fetchData = async () => {
+		try {
+			const response = await getApi('stories/my/moodStat');
+			setIsDataLoading(true);
+			setMoods(objectToKorean(response.data.valuePercentage));
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	useEffect(() => {
-		Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
+		fetchData();
+	}, []);
 
-		const chart = new Chart(chartRef.current, {
-			type: 'doughnut',
-			data: {
-				labels: Object.keys(dummyData),
-				datasets: [
-					{
-						data: Object.values(dummyData),
-						backgroundColor: [
-							'#FF6B6B',
-							'#FDB922',
-							'#45CE30',
-							'#1DACFF',
-							'#868E96',
-						],
-						hoverOffset: 4,
-					},
-				],
-			},
-			options: {
-				responsive: true,
-				plugins: {
-					legend: {
-						position: 'right',
-						labels: {
-							usePointStyle: true,
-							pointStyle: 'circle',
+	useEffect(() => {
+		if (isDataLoading) {
+			Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
+
+			const chart = new Chart(chartRef.current, {
+				type: 'doughnut',
+				data: {
+					labels: Object.keys(moods),
+					datasets: [
+						{
+							data: Object.values(moods),
+							backgroundColor: Object.keys(moods).map(
+								(key) => textToDeepColor[key],
+							),
+							hoverOffset: 4,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					plugins: {
+						legend: {
+							position: 'right',
+							labels: {
+								usePointStyle: true,
+								pointStyle: 'circle',
+							},
 						},
 					},
 				},
-			},
-		});
+			});
 
-		return () => {
-			chart.destroy();
-		};
-	}, []);
+			return () => {
+				chart.destroy();
+			};
+		}
+	}, [moods]);
 
 	return (
 		<div className="relative block pt-4 bg-slate-50 border border-gray-200 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col items-center justify-center">
@@ -69,10 +78,12 @@ const MyMoodStat = () => {
 				나의 감정 통계
 			</h5>
 			<div>
-				<canvas
-					ref={chartRef}
-					style={{ height: '200px', width: '200px' }}
-				></canvas>
+				{isDataLoading && (
+					<canvas
+						ref={chartRef}
+						style={{ height: '200px', width: '200px' }}
+					></canvas>
+				)}
 			</div>
 		</div>
 	);
