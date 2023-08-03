@@ -13,11 +13,12 @@ class storyPostController {
       const { title, content, thumbnail, isPublic, mood, music, views } =
         req.body;
       const file = req.file ?? null;
+      console.log(file);
       let thumbnailLocal;
       let thumbnailLocalId;
       let storyPostInfo;
       if (file && !thumbnail) {
-        thumbnailLocal = await imageService.uploadImage({ file });
+        thumbnailLocal = await imageService.uploadImageInS3({ file }); // 로컬은 uploadImage({file})
         thumbnailLocalId = thumbnailLocal._id;
         storyPostInfo = await storyPostService.createStoryPost({
           userInfo,
@@ -124,7 +125,8 @@ class storyPostController {
       if (!isSameUser) {
         throw new Error('스토리 삭제 권한이 없습니다.');
       }
-      await storyPostService.deleteUploadedImage({ storyId }); // uploads 폴더 이미지 삭제
+      // await storyPostService.deleteUploadedImage({ storyId }); // uploads 폴더 이미지 삭제
+      await imageService.deleteStoryImageInS3({ storyId });
       const result = await storyPostService.deleteStory({ storyId });
       return res.status(200).send(result);
     } catch (error) {

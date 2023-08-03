@@ -10,6 +10,11 @@ class imageModel {
     const findedImage = await image.findOne({ _id: imageId });
     return findedImage;
   }
+
+  static async deleteImage({ imageId }) {
+    await image.findByIdAndDelete({ _id: imageId });
+    return;
+  }
 }
 
 export { imageModel };

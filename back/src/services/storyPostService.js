@@ -122,21 +122,21 @@ class storyPostService {
     }
   }
 
-  static async deleteUploadedImage({ storyId }) {
-    const story = await storyPostModel.findOneByStoryId({ storyId });
-    const uploadImage = await imageModel.findOneByImageId({
-      imageId: story.thumbnail,
-    });
-    if (uploadImage) {
-      const uploadImagePath = uploadImage.path;
-      if (fs.existsSync(uploadImagePath)) {
-        fs.unlinkSync(uploadImagePath);
-      } else {
-        console.log('File does not exist, so not deleting.');
-      }
-    } else {
-    }
-  }
+  // static async deleteUploadedImage({ storyId }) {
+  //   const story = await storyPostModel.findOneByStoryId({ storyId });
+  //   const uploadImage = await imageModel.findOneByImageId({
+  //     imageId: story.thumbnail,
+  //   });
+  //   if (uploadImage) {
+  //     const uploadImagePath = uploadImage.path;
+  //     if (fs.existsSync(uploadImagePath)) {
+  //       fs.unlinkSync(uploadImagePath);
+  //     } else {
+  //       console.log('File does not exist, so not deleting.');
+  //     }
+  //   } else {
+  //   }
+  // }
 
   static async readStories(userId) {
     const stories = await storyPostModel.findStoriesById(userId);
