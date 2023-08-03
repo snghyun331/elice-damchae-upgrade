@@ -1,16 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-
 import { Link } from 'react-router-dom';
-
-import { useUserState } from '@/store/useUserStore';
 import MobileHeader from './MobileHeader';
 import ProfileButton from './ProfileButton';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
+import { useIsLoggedIn } from '../../../store/useUserStore';
 
 const Header = () => {
 	const navigate = useNavigate();
-	const isLoggedIn = useUserState();
+	const isLoggedIn = useIsLoggedIn();
 
 	const handleGuestClick = () => {
 		if (isLoggedIn) {
@@ -27,7 +25,10 @@ const Header = () => {
 					to="/"
 					className="self-center text-2xl text-white font-semibold whitespace-nowrap dark:text-white"
 				>
-					Damchae
+					<img
+						className="self-end w-40 h-12 object-cover"
+						src="images/damchae.png"
+					/>
 				</Link>
 
 				<div className="flex justify-end md:order-2 gap-1">

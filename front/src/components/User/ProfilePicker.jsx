@@ -45,7 +45,12 @@ const ProfilePicker = () => {
 	if (!mbti) {
 		return (
 			<div>
-				<h1>프로필 이미지 설정</h1>
+				<label
+					htmlFor="profile"
+					className="block mb-2 font-semibold text-gray-900 dark:text-white"
+				>
+					프로필 이미지 설정
+				</label>
 				<div>선택된 MBTI가 없습니다.</div>
 			</div>
 		);
@@ -63,14 +68,13 @@ const ProfilePicker = () => {
 				{profileData[mbti]?.map((image, index) => {
 					return (
 						<img
-							className="w-1/5 rounded object-cover"
+							className={`w-1/5 rounded object-cover ${
+								profileImg === image ? 'border-4 border-blue-500' : ''
+							}`}
 							key={`${mbti}-${index}`}
 							src={image}
 							alt={`Profile ${mbti}-${index + 1}`}
 							onClick={() => handleProfileClick(image)} // Pass the image URL to the handler
-							style={{
-								border: profileImg === image ? '2px solid blue' : 'none', // Check if the image is selected
-							}}
 						/>
 					);
 				})}
@@ -79,7 +83,7 @@ const ProfilePicker = () => {
 				{profileImg && ( // Only display if a selected image exists
 					<div className="mt-5">
 						<img
-							className="w-36 h-36 rounded-full object-cover"
+							className="border-4 border-neutral-300 w-36 h-36 rounded-full object-cover"
 							src={profileImg}
 							alt={`Selected Profile`}
 						/>

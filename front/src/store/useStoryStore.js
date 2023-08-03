@@ -8,7 +8,7 @@ const useStoryStore = create((set) => ({
 	phrase: '',
 	thumbnail: '',
 	localThumbnail: '',
-	stableThumbnail: 'thumbnail-1690526042990-912987342.jpg',
+	stableThumbnail: '',
 	isPublic: false,
 	storyModal: false,
 	errMsg: '',
@@ -31,7 +31,7 @@ const useStoryStore = create((set) => ({
 			phrase: '',
 			thumbnail: '',
 			localThumbnail: '',
-			stableThumbnail: 'thumbnail-1690526042990-912987342.jpg',
+			stableThumbnail: '',
 		}),
 }));
 
