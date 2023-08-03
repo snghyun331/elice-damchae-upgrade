@@ -137,6 +137,16 @@ class storyPostService {
     } else {
     }
   }
+
+  static async readStories(userId) {
+    const stories = await storyPostModel.findStoriesById(userId);
+    if (!stories) {
+      const errorState = 'error';
+      const errorMessage = '스토리 작성내역이 존재하지 않습니다.';
+      return { errorState, errorMessage };
+    }
+    return stories;
+  }
 }
 
 export { storyPostService };

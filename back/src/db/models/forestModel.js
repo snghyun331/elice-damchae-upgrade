@@ -113,6 +113,11 @@ class forestModel {
   //   const count = await ForestPost.countDocuments(forests);
   //   return { forests, count };
   // }
+
+  static async findForestsById({ userId }) {
+    const forests = await ForestPost.find({ userInfo: userId });
+    return forests;
+  }
 }
 
 export { forestModel };

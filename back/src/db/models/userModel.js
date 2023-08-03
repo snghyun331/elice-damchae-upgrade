@@ -1,6 +1,4 @@
 import UserModel from '../schemas/user.js';
-import { storyPost } from '../schemas/storyPost.js';
-import ForestPost from '../schemas/forestPost.js';
 import AuthModel from '../schemas/authString.js';
 
 class User {
@@ -72,21 +70,6 @@ class User {
   static async findDeletedUsers() {
     const users = await User.find({ isOut: true });
     return users;
-  }
-
-  static async findStoriesById({ userId }) {
-    const stories = await storyPost.find({ userInfo: userId });
-    return stories;
-  }
-
-  static async findForestsById({ userId }) {
-    const forests = await ForestPost.find({ userInfo: userId });
-    return forests;
-  }
-  // Mbti 실험용
-  static async readById({ userId }) {
-    const user = await UserModel.find({ _id: userId });
-    return user;
   }
 }
 
