@@ -36,7 +36,6 @@ const ProfilePicker = () => {
 			setProfileImg(null);
 		}
 	}, [mbti]);
-	console.log(typeof profileImg, profileImg);
 
 	const handleProfileClick = (imageURL) => {
 		setProfileImg(imageURL);

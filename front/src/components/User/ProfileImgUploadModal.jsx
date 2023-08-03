@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import useUserStore from '../../store/useUserStore';
+import useUserStore, { useUserActions } from '../../store/useUserStore';
 import PropTypes from 'prop-types';
-
+import { putApi } from '../../services/api';
+import toast from 'react-hot-toast';
 const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
-	const [selectedFile, setSelectedFile] = useState(null); // selectedFile를 저장할 useState 생성
-	const { profileImg, setProfileImg } = useUserStore();
+	const [selectedFile, setSelectedFile] = useState(null);
+	const { setProfileImg } = useUserStore();
 	const [preview, setPreview] = useState('');
+	const { infoChange } = useUserActions();
 
 	const handleImgUpload = async (e) => {
 		e.preventDefault();
@@ -17,11 +19,26 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (selectedFile) {
-			// 선택된 파일이 있을 경우에만 실행
 			setProfileImg(selectedFile);
 			closeModal();
 		} else {
 			console.log('No file selected');
+		}
+
+		const formData = new FormData();
+		formData.append('profileImg', selectedFile);
+
+		try {
+			const res = await putApi(`auth/update`, formData);
+			if (res.status === 200) {
+				toast.success('프로필 사진을 수정하였습니다.');
+				setProfileImg(selectedFile);
+				infoChange({ profileImg: selectedFile });
+			} else {
+				toast.error('프로필 사진 수정에 실패했습니다.');
+			}
+		} catch (err) {
+			console.log(err);
 		}
 	};
 
@@ -30,13 +47,13 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 			<div
 				className={`${
 					isVisible ? 'block' : 'hidden'
-				} fixed inset-0 bg-gray-500 opacity-70`}
+				} fixed inset-0 bg-gray-600 opacity-70 z-20`}
 				onClick={closeModal}
 			></div>
 			<div
 				id="small-modal"
 				tabIndex="-1"
-				className="fixed inset-0 z-10 flex items-center justify-center"
+				className="fixed inset-0 z-30 flex items-center justify-center"
 			>
 				<div className="w-full max-w-md p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full">
 					<div className="bg-white rounded-lg shadow dark:bg-gray-700">
@@ -106,7 +123,7 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 								className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 								onClick={handleSubmit}
 							>
-								진행
+								수정하기
 							</button>
 							<button
 								data-modal-hide="small-modal"

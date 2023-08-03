@@ -1,5 +1,10 @@
-import { useCallback, useMemo, useState, useRef, useEffect } from 'react';
-import { mbtiList, defaultUser } from '../Util/Util';
+import { useCallback, useMemo, useState, useEffect } from 'react';
+import {
+	mbtiList,
+	defaultUser,
+	passwordRegex,
+	nicknameRegex,
+} from '../Util/Util';
 import { getApi, putApi } from '../../services/api';
 import Select from 'react-select';
 import useUserStore, { useUserActions } from '../../store/useUserStore';
@@ -23,8 +28,8 @@ const InfoChange = () => {
 		setMbti,
 		setProfileImg,
 	} = useUserStore();
-	console.log(profileImg);
-	const [preview, setPreview] = useState('');
+
+	const [preview, setPreview] = useState(profileImg);
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
@@ -33,14 +38,12 @@ const InfoChange = () => {
 	const [profileImgToChange, setProfileImgToChange] = useState(profileImg);
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [nicknameCheck, setNicknameCheck] = useState(true);
+
 	const isPasswordValid = useMemo(() => {
-		const passwordRegex =
-			/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
 		return passwordToChange ? passwordRegex.test(passwordToChange) : true;
 	}, [passwordToChange]);
 
 	const isNicknameValid = useMemo(() => {
-		const nicknameRegex = /^[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,16}$/;
 		return nicknameRegex.test(nicknameToChange);
 	}, [nicknameToChange]);
 	const isPasswordSame = useMemo(
@@ -119,7 +122,7 @@ const InfoChange = () => {
 			}
 
 			try {
-				const res = await putApi(`users/${id}`, formData);
+				const res = await putApi(`auth/update`, formData);
 				if (res.status === 200) {
 					toast.success('정보를 수정하였습니다.');
 					setNickname(toUpdate.nickname);
@@ -159,14 +162,9 @@ const InfoChange = () => {
 		}
 	};
 
-	// const handleImgUpload = async (e) => {
-	// 	e.preventDefault();
-	// 	const file = e.target.files[0];
-	// 	setProfileImgToChange(file);
-	// 	setPreview(URL.createObjectURL(file));
-	// };
-
-	useEffect(() => {}, [profileImg]);
+	useEffect(() => {
+		setProfileImgToChange(profileImg);
+	}, [profileImg]);
 
 	useEffect(() => {
 		if (profileImg) {
