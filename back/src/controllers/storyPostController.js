@@ -293,7 +293,7 @@ class storyPostController {
       const today = moment().utcOffset(9);
       const searchYear = parseInt(req.query.year || today.year()); // default: 이번년도
       const searchMonth = parseInt(req.query.month || today.month() + 1); // default: 이번달
-      console.log(searchMonth)
+
       // 월의 첫 날과 마지막 날 계산
       const startOfMonth = moment({
         year: searchYear,
