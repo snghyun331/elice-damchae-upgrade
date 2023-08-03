@@ -51,7 +51,8 @@ const StoryEditor = () => {
 		setContent(body);
 		try {
 			const response = await postApi('image/stable', { content });
-			setStableThumbnail(response.data.fileName);
+			console.log(response);
+			setStableThumbnail(response.data.path);
 		} catch (error) {
 			console.log(error);
 		}
@@ -216,7 +217,7 @@ const StoryEditor = () => {
 												? 'border-2 border-blue-600 rounded'
 												: ''
 										}`}
-										src={`http://localhost:3000/uploads/${stableThumbnail}`}
+										src={stableThumbnail}
 										alt="AI로 생성된 이미지"
 									/>
 								</div>
