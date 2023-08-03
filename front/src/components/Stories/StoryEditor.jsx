@@ -4,7 +4,6 @@ import useStoryStore from '../../store/useStoryStore';
 import { postApi } from '../../services/api';
 import RadioOption from '../Global/RadioOption';
 import useImageUpload from '../../hooks/useImageUpload';
-import { MusicalNoteIcon } from '@heroicons/react/24/solid';
 
 const StoryEditor = () => {
 	const {
@@ -117,7 +116,6 @@ const StoryEditor = () => {
 							<p>10자 이상 입력해주세요.</p>
 						</div>
 					)}
-					　
 				</div>
 			</div>
 			<div className="flex flex-col space-y-2">
