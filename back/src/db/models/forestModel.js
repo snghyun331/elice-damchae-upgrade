@@ -23,9 +23,18 @@ class forestModel {
   }
 
   static async readOneById({ forestId }) {
-    console.log('forestId모델 in readOneById:', forestId); // forestId 확인용 로그
-    const forest = await ForestPost.findOne({ _id: forestId });
-    console.log('forestId모델 in readOneById:', forest); // 조회 결과 확인용 로그
+    const forest = await ForestPost.findOne({ forestId });
+    return forest;
+  }
+
+  // static async findById({ userId }) {
+  //   const forest = await ForestPost.find({ userInfo: userId });
+  //   return forest;
+  // }
+  // 조회수 1증가
+  static async findAndIncreaseView({ forestId }) {
+    await ForestPost.updateOne({ _id: forestId }, { $inc: { views: 1 } });
+    const forest = await ForestPost.findOne({ _id: forestId }).lean();
     return forest;
   }
 
