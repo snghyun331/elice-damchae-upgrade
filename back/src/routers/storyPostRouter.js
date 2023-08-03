@@ -33,7 +33,7 @@ storyPostRouter.get(
 
 // 한달치 내 스토리별 감정 조회 (감정 정보만 return)
 storyPostRouter.get(
-  '/stories/myCalender',
+  '/stories/my/calender',
   loginRequired,
   storyPostController.readMyCalender,
 );

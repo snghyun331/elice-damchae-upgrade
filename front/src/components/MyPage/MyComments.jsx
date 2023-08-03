@@ -1,7 +1,6 @@
 import Pagination from '../Global/Pagination';
 import usePagination from '../../hooks/usePagination';
 
-
 const MyComments = () => {
 	const dummyData = [
 		{

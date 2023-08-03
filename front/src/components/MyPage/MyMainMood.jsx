@@ -1,7 +1,27 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
+import { getApi } from '../../services/api';
+import { useState } from 'react';
 
 const MyMainMood = () => {
+	const [moods, setMoods] = useState([]);
+	const [isDataLoading, setIsDataLoading] = useState(false);
+
+	const fetchData = async () => {
+		try {
+			const response = await getApi('stories/my/calender');
+			console.log(response);
+			setIsDataLoading(true);
+			setMoods(response.posts);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useState(() => {
+		fetchData();
+	}, []);
+
 	const currentMonth = moment().format('M');
 	return (
 		<div className="relative block p-4 pb-5 bg-slate-50 border border-gray-200 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col items-center justify-center">
