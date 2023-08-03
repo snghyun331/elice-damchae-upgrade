@@ -26,12 +26,11 @@ class imageService {
   static async uploadStableImage(imageData) {
     const uniqueSuffix = `${Date.now()}`;
     const fileName = `stable-${uniqueSuffix}.png`;
-    const filePath = `uploads/${fileName}`;
+    const filePath = `${UPLOAD_PATH}/${fileName}`;
     fs.writeFileSync(filePath, imageData);
-    const fullFilePath = path.resolve(filePath);
     const newImage = {
       fileName: fileName,
-      path: fullFilePath,
+      path: filePath,
     };
     const createImage = await imageModel.create({ newImage });
     return createImage;

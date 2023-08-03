@@ -7,6 +7,7 @@ import {
 import { Link } from 'react-router-dom';
 import { truncateString, removeTag } from '../Util/Util';
 import { textToIcon, formatRelativeTime } from '../Util/Util';
+import { LockClosedIcon } from '@heroicons/react/24/outline';
 
 const StoryCard = ({
 	data: {
@@ -14,6 +15,7 @@ const StoryCard = ({
 		createdAt,
 		mood,
 		thumbnail,
+		isPublic,
 		title,
 		_id,
 		userInfo,
@@ -30,7 +32,7 @@ const StoryCard = ({
 	return (
 		<>
 			<div
-				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 px-5 pb-6 my-3 mx-2 relative h-full`}
+				className={`border border-[0.2rem] border-neutral-200 border-solid rounded-2xl pt-5 px-5 pb-6 my-3 mx-2 relative h-full`}
 			>
 				<Link to={`/stories/${_id}`}>
 					<div className="flex items-center justify-center">
@@ -52,6 +54,15 @@ const StoryCard = ({
 						<div>
 							<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 								{truncateString(title, 32)}
+								{!isPublic ? (
+									<LockClosedIcon
+										data-tooltip-id="tooltip"
+										data-tooltip-content="나만 볼 수 있는 스토리입니다."
+										className="ml-1 w-4 inline mb-0.5"
+									/>
+								) : (
+									''
+								)}
 							</h5>
 							<div className="text-sm text-gray-500">
 								{userInfo ? userInfo.nickname : '알 수 없는 유저'}
@@ -65,7 +76,7 @@ const StoryCard = ({
 						</div>
 
 						<div className="space-y-2 mt-8">
-							<div className="w-full absolute bottom-8 flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+							<div className="whitespace-nowrap w-full absolute bottom-8 flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 								<div className="flex items-center">
 									<ChevronRightIcon className="w-4 mt-1" />
 									<span className="ml-1">더보기</span>

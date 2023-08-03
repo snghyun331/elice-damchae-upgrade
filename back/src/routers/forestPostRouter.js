@@ -18,9 +18,12 @@ router.delete('/:id', loginRequired, ForestController.deletePost);
 // 게시글 단일 조회
 router.get('/', ForestController.findByForest);
 
-router.get('/:forestId', ForestController.readStoryDetail);
+router.get('/:forestId', ForestController.readForestDetail);
 
-router.get('/search', ForestController.readAllStories);
+// 사용자의 MBTI에 해당하는 게시글 조회
+// router.get('/mbti', loginRequired, ForestController.readForestByMbti);
+
+router.get('/mbti', loginRequired, ForestController.getPostsByAuthorMBTI);
 
 router.get('/user/forests/:userId', ForestController.readUserForests);
 

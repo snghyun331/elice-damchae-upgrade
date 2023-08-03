@@ -4,13 +4,24 @@ export const classNames = (...classes) => {
 	return classes.filter(Boolean).join(' ');
 };
 
+//배경색용, 연한 버전
 export const textToColor = {
 	insecure: '#F1E3FF',
 	surprise: '#FFFBB8',
-	pleasure: '#FFE3F0',
+	pleasure: '#d6f0d7',
 	sad: '#ECF1FF',
 	anger: '#F9EBDE',
 	neutral: '#E0E0E0',
+};
+
+//통계색용, 진한 버전
+export const textToDeepColor = {
+	불안: '#A593E0',
+	놀람: '#F6B352',
+	기쁨: '#8CD790',
+	슬픔: '#6AAFE6',
+	분노: '#FF7761',
+	중립: '#B8B8B8',
 };
 
 export const textToIcon = {
@@ -29,6 +40,15 @@ export const textToKorean = {
 	sad: '슬픔',
 	anger: '분노',
 	neutral: '중립',
+};
+
+export const objectToKorean = (obj) => {
+	const result = {};
+	for (let key in obj) {
+		const value = obj[key].toFixed(2); // 소수점 2자리까지 나타냄
+		result[textToKorean[key]] = parseFloat(value);
+	}
+	return result;
 };
 
 export const mbtiList = [
@@ -112,4 +132,16 @@ export const colorQueryText = ({ text, query }) => {
 			)}
 		</>
 	);
+};
+
+export const calendarDateToString = (date) => {
+	return new Date(date)
+		.toLocaleDateString('ko-KR', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+		})
+		.replaceAll('.', '-')
+		.slice(0, -1)
+		.replaceAll(' ', '');
 };

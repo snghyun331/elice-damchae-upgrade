@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
-import { useUserActions, useUserState } from '../../../store/useUserStore';
+import { useIsLoggedIn, useUserActions } from '../../../store/useUserStore';
 import { classNames } from '../../Util/Util';
 import { Bars3Icon } from '@heroicons/react/24/solid';
 const MobileHeader = () => {
 	const navigate = useNavigate();
-	const isLoggedIn = useUserState();
+	const isLoggedIn = useIsLoggedIn();
 
 	const { logout } = useUserActions();
 	const mobMenuItems = isLoggedIn
@@ -26,7 +26,6 @@ const MobileHeader = () => {
 		: [
 				{ title: '대나무숲', onClick: () => navigate('/daenamus') },
 				{ title: '내 스토리', onClick: () => navigate('/login') },
-				{ title: '로그인', onClick: () => navigate('/login') },
 		  ];
 
 	return (
@@ -55,7 +54,7 @@ const MobileHeader = () => {
 										onClick={item.onClick}
 										className={classNames(
 											active ? 'bg-gray-100 text-blue-900' : 'text-gray-700',
-											'block px-4 py-2',
+											'cursor-pointer block px-4 py-2',
 										)}
 									>
 										{item.title}

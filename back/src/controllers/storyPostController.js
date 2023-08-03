@@ -2,6 +2,7 @@ import { storyPostModel } from '../db/models/storyPostModel.js';
 import { storyPostService } from '../services/storyPostService.js';
 import { imageService } from '../services/imageService.js';
 import axios from 'axios';
+import moment from 'moment';
 
 class storyPostController {
   static async createStoryPost(req, res, next) {
@@ -112,70 +113,6 @@ class storyPostController {
     }
   }
 
-  // static async updateStoryPost(req, res, next) {
-  //   try {
-  //     const storyId = req.params.storyId;
-  //     const { title, content, thumbnail, isPublic, mood, music } = req.body;
-  //     const file = req.file ?? null;
-  //     const userId = req.currentUserId;
-  //     const isSameUser = await storyPostService.isSameUser(userId, storyId);
-  //     if (!isSameUser) {
-  //       throw new Error('스토리 수정 권한이 없습니다.');
-  //     }
-
-  //     let thumbnailLocal;
-  //     let thumbnailLocalId;
-  //     let toUpdate;
-  //     if (file && !thumbnail) {
-  //       await storyPostService.deletePreviousUploadImage({ storyId }); // 이전 uploads 폴더 이미지 삭제
-  //       thumbnailLocal = await imageService.uploadImage({ file });
-  //       thumbnailLocalId = thumbnailLocal._id;
-  //       toUpdate = {
-  //         title,
-  //         content,
-  //         thumbnail: thumbnailLocalId,
-  //         isPublic,
-  //         mood,
-  //         music,
-  //       };
-  //     } else if (!file && thumbnail) {
-  //       await storyPostService.deletePreviousUploadImage({ storyId }); // 이전 uploads 폴더 이미지 삭제
-  //       toUpdate = {
-  //         title,
-  //         content,
-  //         thumbnail,
-  //         isPublic,
-  //         mood,
-  //         music,
-  //       };
-  //     } else if (!file && !thumbnail) {
-  //       toUpdate = {
-  //         title,
-  //         content,
-  //         thumbnail: null,
-  //         isPublic,
-  //         mood,
-  //         music,
-  //       };
-  //     }
-
-  //     // 업뎃
-  //     const updatedStory = await storyPostService.updateStory({
-  //       storyId,
-  //       toUpdate,
-  //     });
-
-  //     const result = await storyPostService.populateStoryPost(
-  //       updatedStory,
-  //       'userInfo thumbnail',
-  //     );
-
-  //     return res.status(200).json(result);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-
   static async deleteStoryPost(req, res, next) {
     try {
       const storyId = req.params.storyId;
@@ -187,7 +124,7 @@ class storyPostController {
       if (!isSameUser) {
         throw new Error('스토리 삭제 권한이 없습니다.');
       }
-      await storyPostService.deleteUploadImage({ storyId }); // uploads 폴더 이미지 삭제
+      await storyPostService.deleteUploadedImage({ storyId }); // uploads 폴더 이미지 삭제
       const result = await storyPostService.deleteStory({ storyId });
       return res.status(200).send(result);
     } catch (error) {
@@ -298,7 +235,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('스토리가 없습니다');
+          return res.status(200).json({ result: 'No Stories' });
         }
 
         result = {
@@ -315,12 +252,146 @@ class storyPostController {
     }
   }
 
-  static async readUserStories(req, res, next) {
+  static async readUserStory(req, res, next) {
     try {
-      const userId = req.params.userId;
-      const stories = await storyPostService.readStories({ userId });
+      const page = parseInt(req.query.page || 1); // default 페이지: 1
+      const limit = 8; // 한페이지에 들어갈 스토리 수
+      const userId = req.currentUserId;
 
-      return res.json(stories);
+      const { option, searchword } = req.query;
+      let searchQuery = {};
+      let result;
+
+      if (option === 'title_content') {
+        searchQuery = {
+          $or: [
+            { title: new RegExp(searchword, 'i') },
+            { content: new RegExp(searchword, 'i') },
+          ],
+        };
+        const { stories, totalPage, count } =
+          await storyPostService.readMySearchQueryPosts(
+            limit,
+            page,
+            userId,
+            searchQuery,
+          );
+        const populateResult = await storyPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+      } else {
+        const { stories, totalPage, count } =
+          await storyPostService.readMyPosts(limit, page, userId);
+        const populateResult = await storyPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          return res.status(200).json({ result: 'No Stories' });
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+      }
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async readMyCalender(req, res, next) {
+    try {
+      const userId = req.currentUserId;
+
+      const today = moment().utcOffset(9);
+      const searchYear = parseInt(req.query.year || today.year()); // default: 이번년도
+      const searchMonth = parseInt(req.query.month || today.month() + 1); // default: 이번달
+
+      // 월의 첫 날과 마지막 날 계산
+      const startOfMonth = moment({
+        year: searchYear,
+        month: searchMonth - 1,
+      })
+        .startOf('month')
+        .utcOffset(9);
+      const endOfMonth = moment(startOfMonth).endOf('month').utcOffset(9);
+
+      const posts = await storyPostModel.findMoodInPeriod(
+        userId,
+        startOfMonth,
+        endOfMonth,
+      );
+
+      // posts 배열 내의 각 포스트에 대해 createdAt 값을 한국 시간대로 변환하여 koreaCreatedAt 필드에 저장
+      const postsWithKoreaTime = posts.map((post) => {
+        const koreaCreatedAt = moment(post.createdAt).add(9, 'hours');
+        const result = {
+          // ...post.toObject(),
+          ...post,
+          koreaCreatedAt: koreaCreatedAt,
+        };
+        return result;
+      });
+
+      if (postsWithKoreaTime.length === 0) {
+        return res.status(200).json({ result: 'No Stories' });
+      }
+
+      return res
+        .status(200)
+        .json({ result: 'Success', posts: postsWithKoreaTime });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async readMyMoodStatistic(req, res, next) {
+    try {
+      const userId = req.currentUserId;
+      const myStories = await storyPostModel.findByUserId({ userId });
+
+      if (!myStories) {
+        return res.status(200).json({ result: 'No Stories' });
+      }
+
+      // 감정만 모두 추출
+      let allMoods = [];
+      myStories.forEach((myStory) => {
+        allMoods.push(myStory.mood);
+      });
+
+      const valueCount = allMoods.reduce((counts, value) => {
+        if (!counts[value]) {
+          counts[value] = 1;
+        } else {
+          counts[value]++;
+        }
+        return counts;
+      }, {});
+
+      let valuePercentage = {};
+      const totalCount = allMoods.length;
+      for (const value in valueCount) {
+        valuePercentage[value] = (valueCount[value] / totalCount) * 100;
+      }
+      return res.status(200).json({ result: 'Success', valuePercentage });
     } catch (error) {
       next(error);
     }
