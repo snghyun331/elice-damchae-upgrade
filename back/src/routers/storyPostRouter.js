@@ -2,13 +2,21 @@ import { Router } from 'express';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { storyPostController } from '../controllers/storyPostController.js';
 import { upload } from '../utills/multer.js';
+import { uploadS3 } from '../utills/multer.js';
 
 const storyPostRouter = Router();
+
+// storyPostRouter.post(
+//   '/test',
+//   uploadS3.single('thumbnail'),
+//   storyPostController.test,
+// );
 
 storyPostRouter.post(
   '/stories',
   loginRequired,
-  upload.single('thumbnail'),
+  uploadS3.single('thumbnail'),
+  // upload.single('thumbnail'),
   storyPostController.createStoryPost,
 );
 
