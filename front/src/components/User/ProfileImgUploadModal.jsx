@@ -20,6 +20,7 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (selectedFile) {
+			console.log('셋프로파일이미지');
 			setProfileImg(selectedFile);
 		} else {
 			console.log('No file selected');
@@ -32,8 +33,8 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 			const res = await putApi(`auth/update`, formData);
 			if (res.status === 200) {
 				toast.success('프로필 사진을 수정하였습니다.');
-				setProfileImg(selectedFile);
-				infoChange({ profileImg: selectedFile });
+				setProfileImg(URL.createObjectURL(selectedFile));
+				infoChange({ profileImg: URL.createObjectURL(selectedFile) });
 				closeModal();
 			} else {
 				toast.error('프로필 사진 수정에 실패했습니다.');

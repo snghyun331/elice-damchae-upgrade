@@ -15,25 +15,6 @@ const ProfileButton = () => {
 		{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
 	];
 
-	console.log(profileImg);
-
-	useEffect(() => {
-		if (profileImg && Object.keys(profileImg).length !== 0) {
-			if (typeof profileImg === 'string') {
-				setProfileImgSrc(profileImg);
-			} else if (profileImg instanceof File) {
-				const imageUrl = URL.createObjectURL(profileImg);
-				setProfileImgSrc(imageUrl);
-
-				return () => {
-					URL.revokeObjectURL(imageUrl);
-				};
-			}
-		} else {
-			setProfileImgSrc(defaultUser);
-		}
-	}, [profileImg]);
-
 	return (
 		<Menu
 			as="div"
@@ -43,18 +24,10 @@ const ProfileButton = () => {
 				<Menu.Button>
 					<div className="mt-2">
 						<img
-							className="w-10 rounded-full "
-							src={
-								profileImg && Object.keys(profileImg).length !== 0
-									? typeof profileImg === 'string'
-										? profileImg
-										: URL.createObjectURL(profileImg)
-									: defaultUser
-							}
+							className="w-10 h-10 rounded-full "
+							src={profileImg ? profileImg : defaultUser}
 							alt="Profile Image"
 						/>
-
-						{/* <UserCircleIcon className="w-10 text-white" aria-hidden="true" /> */}
 					</div>
 				</Menu.Button>
 			</div>
