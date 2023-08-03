@@ -6,17 +6,10 @@ import { uploadS3 } from '../utills/multer.js';
 
 const storyPostRouter = Router();
 
-// storyPostRouter.post(
-//   '/test',
-//   uploadS3.single('thumbnail'),
-//   storyPostController.test,
-// );
-
 storyPostRouter.post(
   '/stories',
   loginRequired,
   uploadS3.single('thumbnail'),
-  // upload.single('thumbnail'),
   storyPostController.createStoryPost,
 );
 

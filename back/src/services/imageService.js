@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { UPLOAD_PATH } from '../utills/path.js';
 import { imageModel } from '../db/models/imageModel.js';
+import { saveS3 } from '../utills/multer.js';
 
 class imageService {
   static async generateUniqueFileName(file) {
@@ -47,6 +48,28 @@ class imageService {
     const createdImage = await imageModel.create({ newImage });
 
     return createdImage;
+  }
+
+  static async uploadStableImageInS3(imageData) {
+    const uniqueSuffix = `${Date.now()}`;
+    const key = `test/stable-${uniqueSuffix}.jpg`;
+    const uploadParams = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: key,
+      Body: imageData,
+      ContentType: 'image/jpeg',
+      ACL: 'public-read', // 이미지를 public으로 설정
+    };
+
+    await saveS3(uploadParams);
+    const filePath = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${key}`;
+
+    const newImage = {
+      fileName: key,
+      path: filePath,
+    };
+    const createImage = await imageModel.create({ newImage });
+    return createImage;
   }
 }
 

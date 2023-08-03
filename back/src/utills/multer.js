@@ -5,7 +5,7 @@ import multerS3 from 'multer-s3';
 import { fileSize } from './constant.js';
 import { UPLOAD_PATH, S3_FOLDER_PATH } from './path.js';
 import { imageService } from '../services/imageService.js';
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 export const upload = multer({
   storage: multer.diskStorage({
@@ -40,7 +40,7 @@ export const upload = multer({
   limits: { fileSize: fileSize },
 });
 
-const s3 = new S3Client({
+export const s3 = new S3Client({
   credentials: {
     accessKeyId: process.env.S3_ACCESS_KEY_ID,
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
@@ -52,7 +52,7 @@ export const uploadS3 = multer({
   storage: multerS3({
     s3,
     bucket: process.env.S3_BUCKET_NAME,
-    // acl: 'public-read', // 이미지를 public으로 설정
+    acl: 'public-read', // 이미지를 public으로 설정
     async key(req, file, done) {
       try {
         const uniqueFileName = await imageService.generateUniqueFileName(file);
@@ -78,3 +78,8 @@ export const uploadS3 = multer({
   },
   limits: { fileSize: fileSize },
 });
+
+export async function saveS3(uploadParams) {
+  const uploadCommand = new PutObjectCommand(uploadParams);
+  await s3.send(uploadCommand);
+}

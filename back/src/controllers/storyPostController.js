@@ -19,7 +19,6 @@ class storyPostController {
       let storyPostInfo;
       if (file && !thumbnail) {
         thumbnailLocal = await imageService.uploadImageInS3({ file }); // 로컬은 uploadImage({file})
-        // console.log(thumbnailLocal);
         thumbnailLocalId = thumbnailLocal._id;
         storyPostInfo = await storyPostService.createStoryPost({
           userInfo,
@@ -398,18 +397,6 @@ class storyPostController {
       next(error);
     }
   }
-
-  // static async test(req, res, next) {
-  //   try {
-  //     const file = req.file ?? null;
-  //     const thumbnail = await imageService.uploadImageInS3({ file });
-  //     console.log(thumbnail);
-
-  //     return res.status(201).end();
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
 }
 
 export { storyPostController };
