@@ -16,14 +16,13 @@ export const textToColor = {
 
 //통계색용, 진한 버전
 export const textToDeepColor = {
-	불안: "#A593E0",
-	놀람: "#F6B352",
-	기쁨: "#8CD790",
-	슬픔: "#6AAFE6",
-	분노: "#FF7761",
-	중립: "#B8B8B8",
-  };
-
+	불안: '#A593E0',
+	놀람: '#F6B352',
+	기쁨: '#8CD790',
+	슬픔: '#6AAFE6',
+	분노: '#FF7761',
+	중립: '#B8B8B8',
+};
 
 export const textToIcon = {
 	insecure: '😨',
@@ -133,4 +132,16 @@ export const colorQueryText = ({ text, query }) => {
 			)}
 		</>
 	);
+};
+
+export const calendarDateToString = (date) => {
+	return new Date(date)
+		.toLocaleDateString('ko-KR', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+		})
+		.replaceAll('.', '-')
+		.slice(0, -1)
+		.replaceAll(' ', '');
 };

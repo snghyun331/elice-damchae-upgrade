@@ -1,40 +1,46 @@
-import { useState } from 'react';
 import Calendar from 'react-calendar';
 import PropTypes from 'prop-types';
-import { textToIcon } from '../Util/Util';
-
+import { textToIcon, calendarDateToString } from '../Util/Util';
+import { useNavigate } from 'react-router-dom';
 function MyCalendar({ posts }) {
-	const [value, setValue] = useState(new Date());
+	const navigate = useNavigate();
 	const simplePost = posts.map(({ koreaCreatedAt, mood, _id }) => ({
 		date: new Date(koreaCreatedAt).toISOString().split('T')[0],
 		mood: textToIcon[mood],
 		_id,
 	}));
 
-	const getMoodFromDate = (date) => {
-		const dateString = new Date(date)
-			.toLocaleDateString('ko-KR', {
-				year: 'numeric',
-				month: '2-digit',
-				day: '2-digit',
-			})
-			.replaceAll('.', '-')
-			.slice(0, -1)
-			.replaceAll(' ', '');
-		const foundMood = simplePost.find((item) => item.date === dateString);
-		return foundMood ? foundMood.mood : null;
+	const getDataFromDate = (date) => {
+		const dateString = calendarDateToString(date);
+		const data = simplePost.find((item) => item.date === dateString);
+		console.log(data);
+		return data;
 	};
 
-	const renderTileContent = ({ date, view }) => {
-		const mood = getMoodFromDate(date);
-		if (view === 'month') {
+	const renderTileContent = ({ date, view, activeStartDate }) => {
+		const currentMonthInView = activeStartDate.getMonth();
+		const dateMonth = date.getMonth();
+		const data = getDataFromDate(date);
+
+		if (view === 'month' && currentMonthInView === dateMonth) {
 			return (
 				<div className="tileContentWrapper">
-					<span className="text-4xl">{mood ? mood : '⚪'}</span>
+					<span className="text-3xl">{data ? data.mood : '⚪'}</span>
 				</div>
 			);
 		} else {
-			return null;
+			return (
+				<div className="tileContentWrapper">
+					<span className="text-4xl">{'　'}</span>
+				</div>
+			);
+		}
+	};
+
+	const handleDateClick = (date) => {
+		const data = getDataFromDate(date);
+		if (data) {
+			navigate(`/stories/${data._id}`);
 		}
 	};
 
@@ -42,8 +48,6 @@ function MyCalendar({ posts }) {
 		<div>
 			<Calendar
 				className="mt-5 p-1.5" // Add the custom CSS class to Calendar
-				onChange={(newValue) => setValue(newValue)}
-				value={value}
 				tileContent={renderTileContent}
 				formatDay={(locale, date) =>
 					date.toLocaleString('en', { day: 'numeric' })
@@ -51,6 +55,7 @@ function MyCalendar({ posts }) {
 				formatShortWeekday={(locale, date) =>
 					date.toLocaleString('en', { weekday: 'short' })
 				}
+				onClickDay={handleDateClick}
 			/>
 		</div>
 	);
