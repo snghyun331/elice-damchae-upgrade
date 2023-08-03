@@ -38,18 +38,13 @@ class forestModel {
     return forest;
   }
 
-  static async updatePost({ updatePost }) {
-    const { _id, userId, title, content, imageUrl } = updatePost;
-
-    const updateForestPost = await ForestPost.updateOne(
-      { userId, _id },
-      {
-        title,
-        content,
-        ...(imageUrl !== 'None' && { imageUrl }),
-      },
-    );
-    return updateForestPost;
+  static async findOneAndUpdate({ forestId, title, content }) {
+    const updatedPost = await ForestPost.updateOne({
+      _id: forestId,
+      title,
+      content,
+    });
+    return updatedPost;
   }
 
   // static async deletePost({ deletePost }) {
@@ -86,37 +81,44 @@ class forestModel {
       throw new Error(`Error reading posts by authors: ${error.message}`);
     }
   }
-  // static async findByForestMbti(mbti) {
-  //   try {
-  //     // 작성자 MBTI가 'ISTJ'인 사용자들을 찾습니다.
-  //     const usersWithMBTI = await UserModel.find({ mbti: mbti });
-  //     // 찾은 사용자들의 _id 목록을 추출합니다.
-  //     const userIds = usersWithMBTI.map((user) => user._id);
-  //     // 작성자가 ISTJ인 블로그 포스트들을 찾습니다.
-  //     const posts = await ForestPost.find({ author: { $in: userIds } });
-  //     return posts;
-  //   } catch (error) {
-  //     throw new Error(`Error finding
-  // blog posts by author's MBTI: ${error.message}`);
-  //   }
-  // }
 
-  // static async findByMbti(skip, limit, getMbti) {
-  //   console.log('findByMbti - getMbti:', getMbti);
+  static async findByForestMbti(mbtiList) {
+    try {
+      console.log('mbtilist확인용:', mbtiList);
+      // // 작성자 MBTI가 'ISTJ'인 사용자들을 찾습니다.
+      // const usersWithMBTI = await UserModel.find({ mbti: mbti });
+      // // 찾은 사용자들의 _id 목록을 추출합니다.
+      // const userIds = usersWithMBTI.map((user) => user._id);
+      // // 작성자가 ISTJ인 블로그 포스트들을 찾습니다.
+      // const posts = await ForestPost.find({ author: { $in: userIds } });
 
-  //   const forests = await ForestPost.find(getMbti)
-  //     .sort({ createdAt: -1 })
-  //     .skip(skip)
-  //     .limit(limit)
-  //     .exec();
+      const posts = await ForestPost.aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userInfo',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
+          $unwind: '$user',
+        },
+        {
+          $match: {
+            mbti: {
+              $in: mbtiList.map((mbti) => mbti.toString()),
+            },
+          },
+        },
+      ]);
 
-  //   const count = await ForestPost.countDocuments(forests);
-  //   return { forests, count };
-  // }
-
-  static async findForestsById({ userId }) {
-    const forests = await ForestPost.find({ userInfo: userId });
-    return forests;
+      return posts;
+    } catch (error) {
+      throw new Error(
+        `Error finding blog posts by author's MBTI: ${error.message}`,
+      );
+    }
   }
 }
 

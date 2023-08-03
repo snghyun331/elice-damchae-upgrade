@@ -14,12 +14,7 @@ import { forestLikeDislikeRouter } from './routers/forestLikeDislikeRouter.js';
 const app = express();
 app.use('/uploads', express.static('uploads'));
 
-app.use(
-  cors({
-    origin: process.env.FE_URL,
-    credentials: true,
-  }),
-);
+app.use(cors());
 
 app.use(morgan('dev'));
 // 콘솔창에서 log 확인
