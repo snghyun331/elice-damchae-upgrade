@@ -135,26 +135,26 @@ class ForestService {
   blog posts by author's MBTI: ${error.message}`);
     }
   }
-}
-//   static async findByUserMbti(limit, page, getMbti) {
-//     const skip = (page - 1) * limit;
-//     // console.log(getAlls, getAlls.content);
 
-//     const { forests, count } = await forestModel.findByMbti(
-//       skip,
-//       limit,
-//       getMbti,
-//     );
-//     // console.log('findByUserMbti 함수에서 조회한 결과:');
-//     // console.log('findByUserMbti - getMbti:', getMbti);
+  //   static async findByUserMbti(limit, page, getMbti) {
+  //     const skip = (page - 1) * limit;
+  //     // console.log(getAlls, getAlls.content);
 
-//     // console.log('forests:', forests);
-//     // console.log('count:', count);
-//     const totalPage = Math.ceil(count / limit);
+  //     const { forests, count } = await forestModel.findByMbti(
+  //       skip,
+  //       limit,
+  //       getMbti,
+  //     );
+  //     // console.log('findByUserMbti 함수에서 조회한 결과:');
+  //     // console.log('findByUserMbti - getMbti:', getMbti);
 
-//     return { forests, totalPage, count };
-//   }
-// }
+  //     // console.log('forests:', forests);
+  //     // console.log('count:', count);
+  //     const totalPage = Math.ceil(count / limit);
+
+  //     return { forests, totalPage, count };
+  //   }
+  // }
   // static async ForestMbti({ mbti }) {
   //   try {
   //     const usersWithMbti = await User.findByMbti({ mbti });
