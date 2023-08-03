@@ -1,7 +1,8 @@
 import fs from 'fs';
 import { UPLOAD_PATH } from '../utills/path.js';
 import { imageModel } from '../db/models/imageModel.js';
-import { saveS3 } from '../utills/multer.js';
+import { storyPostModel } from '../db/models/storyPostModel.js';
+import { saveS3, deleteS3 } from '../utills/multer.js';
 
 class imageService {
   static async generateUniqueFileName(file) {
@@ -70,6 +71,23 @@ class imageService {
     };
     const createImage = await imageModel.create({ newImage });
     return createImage;
+  }
+
+  static async deleteStoryImageInS3({ storyId }) {
+    const story = await storyPostModel.findOneByStoryId({ storyId });
+    const image = await imageModel.findOneByImageId({
+      imageId: story.thumbnail,
+    });
+    if (image) {
+      await imageModel.deleteImage({ imageId: story.thumbnail }); // DB 데이터 삭제
+      const fileName = image.fileName;
+      const deleteParams = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: fileName,
+      };
+      await deleteS3(deleteParams); // S3 이미지 삭제
+    }
+    return;
   }
 }
 

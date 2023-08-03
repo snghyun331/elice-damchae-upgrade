@@ -5,7 +5,11 @@ import multerS3 from 'multer-s3';
 import { fileSize } from './constant.js';
 import { UPLOAD_PATH, S3_FOLDER_PATH } from './path.js';
 import { imageService } from '../services/imageService.js';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from '@aws-sdk/client-s3';
 
 export const upload = multer({
   storage: multer.diskStorage({
@@ -84,4 +88,17 @@ export const uploadS3 = multer({
 export async function saveS3(uploadParams) {
   const uploadCommand = new PutObjectCommand(uploadParams);
   await s3.send(uploadCommand);
+}
+
+export async function deleteS3(deleteParams) {
+  try {
+    if (!deleteParams) {
+      console.log('No image In S3');
+    }
+    const deleteCommand = new DeleteObjectCommand(deleteParams);
+    await s3.send(deleteCommand);
+    console.log('Image deleted successfully');
+  } catch (error) {
+    console.error('Error deleting image');
+  }
 }
