@@ -32,10 +32,11 @@ const ProfilePicker = () => {
 	};
 
 	useEffect(() => {
-		if (mbti) {
-			setProfileImg(null); // Reset selected image when MBTI changes
+		if (mbti && typeof profileImg == 'string') {
+			setProfileImg(null);
 		}
 	}, [mbti]);
+	console.log(typeof profileImg, profileImg);
 
 	const handleProfileClick = (imageURL) => {
 		setProfileImg(imageURL);
@@ -67,9 +68,10 @@ const ProfilePicker = () => {
 				{profileData[mbti]?.map((image, index) => {
 					return (
 						<img
-							className={`w-1/5 rounded object-cover ${
+							className={`mx-0.5 rounded object-cover ${
 								profileImg === image ? 'border-4 border-blue-500' : ''
 							}`}
+							style={{ width: '19%' }}
 							key={`${mbti}-${index}`}
 							src={image}
 							alt={`Profile ${mbti}-${index + 1}`}

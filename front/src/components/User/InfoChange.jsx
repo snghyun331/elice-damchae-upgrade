@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState, useRef, useEffect } from 'react';
-import { mbtiList } from '../Util/Util';
+import { mbtiList, defaultUser } from '../Util/Util';
 import { getApi, putApi } from '../../services/api';
 import Select from 'react-select';
 import useUserStore, { useUserActions } from '../../store/useUserStore';
@@ -200,7 +200,7 @@ const InfoChange = () => {
 								<div className="flex justify-center">
 									<img
 										className="w-32 h-32 rounded-full border -mb-2"
-										src={preview}
+										src={preview ? preview : defaultUser}
 										alt="Rounded avatar"
 									/>
 								</div>

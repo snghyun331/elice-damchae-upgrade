@@ -145,3 +145,5 @@ export const calendarDateToString = (date) => {
 		.slice(0, -1)
 		.replaceAll(' ', '');
 };
+
+export const defaultUser = 'https://cdn-icons-png.flaticon.com/512/847/847969.png?w=996&t=st=1691066365~exp=1691066965~hmac=8dd84f9bda33d03b36a4fe88d41d137caafb78037d900338c6855d4982fb8c2e'
