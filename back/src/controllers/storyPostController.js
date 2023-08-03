@@ -1,5 +1,4 @@
 import { storyPostModel } from '../db/models/storyPostModel.js';
-import { storyPost } from '../db/schemas/storyPost.js';
 import { storyPostService } from '../services/storyPostService.js';
 import { imageService } from '../services/imageService.js';
 import axios from 'axios';
@@ -259,27 +258,58 @@ class storyPostController {
       const limit = 8; // 한페이지에 들어갈 스토리 수
       const userId = req.currentUserId;
 
-      const { stories, totalPage, count } = await storyPostService.readMyPosts(
-        limit,
-        page,
-        userId,
-      );
-      const populateResult = await storyPostService.populateStoryPost(
-        stories,
-        'userInfo thumbnail',
-      );
+      const { option, searchword } = req.query;
+      let searchQuery = {};
+      let result;
 
-      if (populateResult.length === 0) {
-        return res.status(200).json({ result: 'No Stories' });
+      if (option === 'title_content') {
+        searchQuery = {
+          $or: [
+            { title: new RegExp(searchword, 'i') },
+            { content: new RegExp(searchword, 'i') },
+          ],
+        };
+        const { stories, totalPage, count } =
+          await storyPostService.readMySearchQueryPosts(
+            limit,
+            page,
+            userId,
+            searchQuery,
+          );
+        const populateResult = await storyPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
+      } else {
+        const { stories, totalPage, count } =
+          await storyPostService.readMyPosts(limit, page, userId);
+        const populateResult = await storyPostService.populateStoryPost(
+          stories,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          return res.status(200).json({ result: 'No Stories' });
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          stories: populateResult,
+        };
       }
-
-      const result = {
-        currentPage: page,
-        totalPage: totalPage,
-        totalStoriesCount: count,
-        stories: populateResult,
-      };
-
       return res.status(200).json(result);
     } catch (error) {
       next(error);
