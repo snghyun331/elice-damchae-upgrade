@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { storyPostController } from '../controllers/storyPostController.js';
-import { upload } from '../utills/multer.js';
+// import { upload } from '../utills/multer.js';
 import { uploadS3 } from '../utills/multer.js';
 
 const storyPostRouter = Router();

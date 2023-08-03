@@ -53,6 +53,8 @@ export const uploadS3 = multer({
     s3,
     bucket: process.env.S3_BUCKET_NAME,
     acl: 'public-read', // 이미지를 public으로 설정
+    contentDisposition: 'inline', // 브라우저 상에서 이미지 바로 띄우기
+    contentType: multerS3.AUTO_CONTENT_TYPE,
     async key(req, file, done) {
       try {
         const uniqueFileName = await imageService.generateUniqueFileName(file);

@@ -40,7 +40,7 @@ class imageService {
     if (!file) {
       throw new Error('No image file uploaded.');
     }
-    // console.log(file);
+
     const fileName = file.key; // original/formData-1691049514760.jpg
     const filePath = file.location; // https://damchae.s3.ap-northeast-2.amazonaws.com/original/formData-1691049514760.jpg
 
