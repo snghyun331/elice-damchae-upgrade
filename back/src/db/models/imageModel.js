@@ -11,7 +11,7 @@ class imageModel {
     return findedImage;
   }
 
-  static async deleteImage(imageId) {
+  static async deleteImage({ imageId }) {
     await image.findByIdAndDelete({ _id: imageId });
     return;
   }
