@@ -111,14 +111,14 @@ const StoryEditor = () => {
 						addImageBlobHook: handleImageUpload,
 					}}
 				/>
-				<p>
+				<div className="justify-end">
 					{content?.length <= 16 && (
-						<span className="text-right text-red-400 text-sm mt-2">
-							10자 이상 입력해주세요.
-						</span>
+						<div className="self-end text-right text-red-400 text-sm mt-2">
+							<p>10자 이상 입력해주세요.</p>
+						</div>
 					)}
 					　
-				</p>
+				</div>
 			</div>
 			<div className="flex flex-col space-y-2">
 				<label className="block font-semibold text-gray-900 dark:text-white">

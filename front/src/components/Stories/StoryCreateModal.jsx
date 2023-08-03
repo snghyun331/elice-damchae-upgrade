@@ -50,6 +50,7 @@ const StoryCreateModal = ({ onClose }) => {
 				console.error(e);
 			}
 		}
+		//TODO:모달로 바꾸기
 	};
 
 	const isFormValid = useMemo(
@@ -134,6 +135,13 @@ const StoryCreateModal = ({ onClose }) => {
 						<div className="flex-row p-6 border-t border-gray-200 rounded-b dark:border-gray-600">
 							<div className="flex flex-col">
 								<div className="justify-end flex flex-row">
+									{!isFormValid && (
+										<div className="mr-3 items-center">
+											<p className="self-end text-red-500 text-sm mt-2">
+												빈 칸을 채워주세요.
+											</p>
+										</div>
+									)}
 									<button
 										disabled={!isFormValid}
 										onClick={postStory}
@@ -151,11 +159,6 @@ const StoryCreateModal = ({ onClose }) => {
 										닫기
 									</button>
 								</div>
-								{!isFormValid && (
-									<p className="self-end text-red-500 text-sm mt-2">
-										빈 칸을 채워주세요.
-									</p>
-								)}
 							</div>
 						</div>
 					</div>
