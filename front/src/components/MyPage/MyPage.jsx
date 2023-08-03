@@ -6,7 +6,7 @@ import MyDaenamus from './MyDaenamus';
 import MyLikedDaenamus from './MyLikedDaenamus';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import { getApi } from '../../services/api';
 
 const MyPage = () => {
@@ -53,12 +53,14 @@ const MyPage = () => {
 
 	return (
 		<div className="2xl:px-52">
-			<h3 className="text-3xl text-gray-700 font-semibold">나의 활동</h3>
-			<br />
-			<hr className="my-8" />
+			<h3 className="mt-16 text-3xl text-gray-700 font-semibold">나의 활동</h3>
 
+			<hr className="my-16" />
 			<div>
 				<h3 className="text-2xl text-gray-700 font-semibold">내가 쓴 스토리</h3>
+				<div className="text-base mt-4 mb-4 text-gray-700">
+					달력의 날짜를 클릭하면 그 날의 스토리를 볼 수 있어요.
+				</div>
 				<div className="text-base mt-4 mb-4 text-gray-700">
 					<ChevronRightIcon className="w-4 inline mb-1" />
 					<span className="inline">

@@ -13,7 +13,6 @@ function MyCalendar({ posts }) {
 	const getDataFromDate = (date) => {
 		const dateString = calendarDateToString(date);
 		const data = simplePost.find((item) => item.date === dateString);
-		console.log(data);
 		return data;
 	};
 
