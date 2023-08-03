@@ -92,6 +92,20 @@ class storyPostService {
     return { stories, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
   }
 
+  static async readMySearchQueryPosts(limit, page, userId, searchQuery) {
+    const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
+
+    const { stories, count } =
+      await storyPostModel.findMySearchQueryAndCountAll(
+        skip,
+        limit,
+        userId,
+        searchQuery,
+      );
+    const totalPage = Math.ceil(count / limit);
+    return { stories, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
+  }
+
   static async populateStoryPost(info, path) {
     const field = { path: path };
     const result = storyPostModel.populateStoryPost(info, field);
@@ -122,7 +136,17 @@ class storyPostService {
       }
     } else {
     }
-}
+  }
+
+  static async readStories(userId) {
+    const stories = await storyPostModel.findStoriesById(userId);
+    if (!stories) {
+      const errorState = 'error';
+      const errorMessage = '스토리 작성내역이 존재하지 않습니다.';
+      return { errorState, errorMessage };
+    }
+    return stories;
+  }
 }
 
 export { storyPostService };

@@ -32,7 +32,7 @@ const StoryCard = ({
 	return (
 		<>
 			<div
-				className={`border border-[0.1rem] border-solid rounded-2xl pt-5 px-5 pb-6 my-3 mx-2 relative h-full`}
+				className={`border border-[0.2rem] border-neutral-200 border-solid rounded-2xl pt-5 px-5 pb-6 my-3 mx-2 relative h-full`}
 			>
 				<Link to={`/stories/${_id}`}>
 					<div className="flex items-center justify-center">

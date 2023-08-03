@@ -26,7 +26,6 @@ const MobileHeader = () => {
 		: [
 				{ title: '대나무숲', onClick: () => navigate('/daenamus') },
 				{ title: '내 스토리', onClick: () => navigate('/login') },
-				{ title: '로그인', onClick: () => navigate('/login') },
 		  ];
 
 	return (
