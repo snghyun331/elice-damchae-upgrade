@@ -9,8 +9,8 @@ const MyMainMood = () => {
 
 	const fetchData = async () => {
 		try {
-			const response = await getApi('stories/my/calender');
-			console.log(response);
+			const response = await getApi('stories/my/calendar');
+			console.log(response.data);
 			setIsDataLoading(true);
 			setMoods(response.posts);
 		} catch (error) {
