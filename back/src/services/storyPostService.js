@@ -1,7 +1,5 @@
 import { storyPostModel } from '../db/models/storyPostModel.js';
-import { imageModel } from '../db/models/imageModel.js';
 import { storyCommentModel } from '../db/models/storyCommentModel.js';
-import fs from 'fs';
 
 class storyPostService {
   static async createStoryPost({
@@ -137,16 +135,6 @@ class storyPostService {
   //   } else {
   //   }
   // }
-
-  static async readStories(userId) {
-    const stories = await storyPostModel.findStoriesById(userId);
-    if (!stories) {
-      const errorState = 'error';
-      const errorMessage = '스토리 작성내역이 존재하지 않습니다.';
-      return { errorState, errorMessage };
-    }
-    return stories;
-  }
 }
 
 export { storyPostService };

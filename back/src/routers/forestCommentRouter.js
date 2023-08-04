@@ -10,4 +10,8 @@ forestCommentRouter.post(
   forestCommentController.createForestComment,
 );
 
+forestCommentRouter.get(
+  '/forest/:forestId/comments/statistics',
+  forestCommentController.readCommentStats,
+);
 export { forestCommentRouter };

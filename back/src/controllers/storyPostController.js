@@ -13,7 +13,7 @@ class storyPostController {
       const { title, content, thumbnail, isPublic, mood, music, views } =
         req.body;
       const file = req.file ?? null;
-      console.log(file);
+
       let thumbnailLocal;
       let thumbnailLocalId;
       let storyPostInfo;

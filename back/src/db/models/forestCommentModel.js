@@ -10,5 +10,10 @@ class forestCommentModel {
     const result = forestComment.populate(info, field);
     return result;
   }
+
+  static async findCommentsByForestId({ forestId }) {
+    const allComments = forestComment.find({ forestId: forestId });
+    return allComments;
+  }
 }
 export { forestCommentModel };

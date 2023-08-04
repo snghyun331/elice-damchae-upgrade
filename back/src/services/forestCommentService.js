@@ -7,13 +7,13 @@ class forestCommentService {
     }
 
     const newComment = { forestId, writerId, comment, mood };
-
-    forestModel.findAndIncreaseCommentCount({ forestId });
+    console.log(newComment);
+    // forestModel.findAndIncreaseCommentCount({ forestId });
 
     const createdNewComment = await forestCommentModel.createForestComment({
       newComment,
     });
-
+    console.log(createdNewComment);
     return createdNewComment;
   }
 
