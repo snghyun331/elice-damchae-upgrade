@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import { putApi } from '../../services/api';
 import toast from 'react-hot-toast';
 
+//프로파일 이미지 업로드 기능의 경우 백 저장 방식이 미확정인 바, 수정의 여지가 있는 점 참고 부탁 드립니다!
+//유저가 이미지를 업로드하거나 캐릭터 그림을 고르면 response에 해당 이미지의 S3 웹 주소가 담겨 오고, 해당 주소로 유저 스토어의 setProfileImg 및 유저 액션 스토어의 infoChange를 수행하게 될 것 같습니다.
+
 const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 	const [selectedFile, setSelectedFile] = useState(null);
 	const { setProfileImg } = useUserStore();
