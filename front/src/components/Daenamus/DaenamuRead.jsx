@@ -1,11 +1,6 @@
 import { textToIcon, textToColor, formatRelativeTime } from '../Util/Util';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
-import {
-	HandThumbDownIcon,
-	HandThumbUpIcon,
-} from '@heroicons/react/24/outline';
-
 import { BackButton } from '../Global/BackButton';
 import { useNavigate, useParams } from 'react-router-dom';
 import { delApi, getApi, putApi } from '../../services/api';
@@ -13,13 +8,13 @@ import { useEffect, useState } from 'react';
 import { useUserId } from '../../store/useUserStore';
 
 import ReactionChart from './Reaction';
+import DaenamuLikeSection from './DaenamuLikeSection';
 import DaenamuTextEditor from './DaenamuTextEditor';
 import useStoryStore from '../../store/useStoryStore';
 import DaenamuComment from './DaenamuComment';
 
 const DaenamuRead = () => {
-	const { title, content, mood, setTitle, setContent, setMood } =
-		useStoryStore();
+	const { title, content, setTitle, setContent, setMood } = useStoryStore();
 	const { forestId } = useParams();
 	const [forest, setForest] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
@@ -137,6 +132,7 @@ const DaenamuRead = () => {
 						</>
 					)}
 				</div>
+				(//TODO:제목 길어지면 박스무너짐..)
 				<div className="relative top-0 px-10">
 					{editMode ? (
 						<DaenamuTextEditor />
@@ -152,6 +148,7 @@ const DaenamuRead = () => {
 											{forest.title}
 										</h5>
 									</div>
+
 									<div className="w-full justify-between space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 dark:text-white">
 										<div className="flex flex-row space-x-2">
 											<img
@@ -193,10 +190,7 @@ const DaenamuRead = () => {
 					)}
 				</div>
 				<div className="flex flex-col">
-					<div className="m-5 flex flex-row justify-center space-x-2">
-						<HandThumbUpIcon className="w-10 h-10" />
-						<HandThumbDownIcon className="w-10 h-10" />
-					</div>
+					<DaenamuLikeSection forestId={forest._id} userId={id} />
 
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<ReactionChart />
