@@ -168,45 +168,54 @@ class ForestController {
   //     next(error);
   //   }
   // }
-
   static async updatePost(req, res, next) {
     try {
-      const { title, content, imageUrl } = req.body;
+      // console.log('Request Params:', req.params);
+      console.log('Request Body:', req.body);
+
       const forestId = req.params.id;
-
-      if (!title || !content) {
-        throw new Request('Title과 content는 필수 입력 사항입니다.');
-      }
-
       const userId = req.currentUserId;
 
-      let updatePost = {};
-      if (!imageUrl) {
-        updatePost = {
-          _id: forestId,
+      console.log('forestId:', forestId);
+      console.log('userId:', userId);
+
+      const postUser = await ForestService.readForestDetail({ forestId });
+
+      console.log('postUser:', postUser);
+
+      if (!postUser) {
+        throw new Error('해당 게시물이 존재하지 않습니다.');
+      }
+
+      if (!postUser || !userId) {
+        throw new Error('스토리 수정 권한이 없습니다.');
+      }
+
+      // Compare the postUser.userInfo with userId using toString() and strict equality
+      const { title, content } = req.body;
+      if (!postUser || !userId || postUser.userInfo.toString() !== userId) {
+        const post = await ForestService.updatePost({
+          forestId,
           title,
           content,
-          userId,
-          imageUrl: imageUrl ?? 'None',
-        };
+        });
+
+        const result = await ForestService.populateForestPost(post, 'userInfo');
+        return res.status(200).send(result);
       } else {
-        updatePost = { _id: forestId, title, content, userId, imageUrl };
+        throw new Error('스토리 수정 권한이 없습니다.');
       }
-
-      const updatedPost = await ForestService.updatePost(updatePost);
-
-      if (!updatedPost) {
-        throw new Error('존재하지 않는 글입니다.');
-      }
-
-      return res.status(201).json(updatePost);
     } catch (error) {
       next(error);
     }
   }
+
   static async deletePost(req, res, next) {
     try {
-      const forestId = req.params.forestId;
+      console.log('Request Params:', req.params); // 로그 추가
+      console.log('Request Body:', req.body); // 로그 추가
+
+      const forestId = req.params.id;
       const userId = req.currentUserId; // 로그인한 사용자의 ID
       const postUser = await ForestService.readForestDetail({ forestId });
 
@@ -218,7 +227,9 @@ class ForestController {
       // 로그인한 사용자와 게시글 작성자 비교
       if (postUser.userInfo.toString() === userId) {
         const post = await ForestService.deletePost({ forestId });
-        return res.status(200).send(post);
+
+        const result = await ForestService.populateForestPost(post, 'userInfo');
+        return res.status(200).send(result);
       } else {
         throw new Error('스토리 삭제 권한이 없습니다.');
       }
@@ -245,60 +256,20 @@ class ForestController {
     }
   }
 
-  static async readForestByMbti(req, res, next) {
+  static async getPostsByAuthorMBTI(req, res) {
+    // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP
+
+    const mbtiList = req.query.filter.split(',');
+    // const mbti = req.params.mbti; // 라우트에서 MBTI 파라미터를 가져옵니다.
+
     try {
-      // console.log(req.currentUserId);
+      console.log('mbtiList확인용 코드:', mbtiList); // 확인용 로그
+      const posts = await ForestService.findByForestMbti(mbtiList);
+      console.log('posts확인용 코드:', posts); // 확인용 로그
 
-      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
-      // const limit = 12; // 한 페이지에 들어갈 스토리 수
-      const userId = req.currentUserId;
-      const { option, searchword } = req.query;
-
-      let getMbti = {};
-      let result;
-
-      if (option === 'mbti') {
-        // 'option'이 'mbti'인 경우 'searchword'를 제목(title)에 대한 검색어로 사용하여 MBTI를 검색합니다.
-
-        // 데이터베이스에서 사용자의 MBTI 정보를 조회합니다.
-        const user = await User.readById(userId);
-        if (!user) {
-          throw new Error('사용자를 찾을 수 없습니다.');
-        }
-        const mbtiInfo = user.mbti;
-
-        // 사용자의 MBTI에 해당하는 대나무숲 글을 찾습니다.
-        getMbti = { mbti: new RegExp(searchword, 'i') };
-        const forests = await ForestService.findPostsByAuthorMBTI(
-          // userId,
-          // limit,
-          // page,
-          getMbti,
-        );
-        const populatedForests = await ForestService.populateForestPost(
-          forests,
-          'userInfo',
-        );
-
-        if (populatedForests.length === 0) {
-          throw new Error('해당 MBTI에 해당하는 대나무숲 글이 없습니다.');
-        }
-
-        result = {
-          currentPage: page,
-          // totalPage: forests.totalPage,
-          // totalForestsCount: forests.count,
-          forests: populatedForests,
-        };
-        console.log('forestPost', forests);
-      } else {
-        // 'option'이 'mbti'가 아닌 경우, 오류를 발생시킵니다.
-        throw new Error('잘못된 옵션입니다.');
-      }
-
-      return res.status(200).json(result);
+      res.json(posts);
     } catch (error) {
-      next(error);
+      res.status(500).json({ error: error.message });
     }
   }
 }

@@ -9,17 +9,13 @@ import forestRouter from './routers/forestPostRouter.js';
 import { imageRouter } from './routers/imageRouter.js';
 import { storyCommentRouter } from './routers/storyCommentRouter.js';
 import { forestLikeDislikeRouter } from './routers/forestLikeDislikeRouter.js';
+import { forestCommentRouter } from './routers/forestCommentRouter.js';
 // import { forestCommentRouter } from './routers/forestCommentRouter.js';
 
 const app = express();
 app.use('/uploads', express.static('uploads'));
 
-app.use(
-  cors({
-    origin: process.env.FE_URL,
-    credentials: true,
-  }),
-);
+app.use(cors());
 
 app.use(morgan('dev'));
 // 콘솔창에서 log 확인
@@ -39,6 +35,7 @@ app.use('/forest', forestRouter);
 app.use(imageRouter);
 app.use(storyCommentRouter);
 app.use(forestLikeDislikeRouter);
+app.use(forestCommentRouter);
 // app.use(forestCommentRouter);
 app.use(errorMiddleware);
 

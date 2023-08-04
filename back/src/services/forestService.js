@@ -1,5 +1,3 @@
-// // forestService.js
-
 // import { forestCommentModel } from '../db/models/forestCommentModel.js';
 import { forestModel } from '../db/models/forestModel.js';
 import User from '../db/models/userModel.js';
@@ -37,33 +35,39 @@ class ForestService {
     return { forests, totalPage, count };
   }
 
-  static async updatePost(updatePost) {
-    try {
-      if (!updatePost.title || !updatePost.content) {
-        const errorMessage = '제목과 내용은 필수 입력 사항입니다.';
-        throw new Error(errorMessage);
-      }
-
-      const forestId = updatePost._id;
-      console.log(typeof forestId);
-      const post = await forestModel.findAndCountAll({
-        _id: new Object(forestId),
-      });
-      if (!post) {
-        throw new Error('존재하지 않는 글입니다.');
-      }
-
-      if (post.userInfo.toString() !== updatePost.userId) {
-        throw new Error('해당 글을 수정할 권한이 없습니다.');
-      }
-      const updateForestPost = await forestModel.updatePost({ updatePost });
-
-      return updateForestPost;
-    } catch (error) {
-      console.log(error);
-      throw new Error('포스트 업데이트에 실패했습니다.');
+  static async updatePost({ forestId, title, content }) {
+    const updatedPost = await ForestPost.findOneAndUpdate(
+      { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
+      { $set: { title: title, content: content } }, // 업데이트할 필드와 값
+      { new: true }, // 업데이트 후 업데이트된 문서 반환
+    );
+    if (!updatedPost) {
+      throw new Error('수정할 게시글 정보가 없습니다.');
     }
+    return updatedPost;
   }
+
+  // static async updatePost({ forestId, title, content }) {
+  //   try {
+  //     console.log('Updating post with forestId:', forestId);
+
+  //     const updatedPost = await forestModel.findOneAndUpdate(
+  //       { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
+  //       { title, content }, // 업데이트할 필드와 값을 명시
+  //       { new: true }, // 옵션: 업데이트 후에 업데이트된 문서를 반환하도록 설정
+  //     );
+
+  //     console.log('Updated post:', updatedPost);
+
+  //     if (!updatedPost) {
+  //       throw new Error('수정할 게시글 정보가 없습니다.');
+  //     }
+
+  //     return updatedPost;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
   static async deletePost({ forestId }) {
     const deletedPost = await forestModel.findOneAndDelete({ forestId });
@@ -105,6 +109,7 @@ class ForestService {
     console.log(forest.userInfo);
     const forestInfo = {
       ...forest,
+
       // commentList: comment,
     };
     return forestInfo;
@@ -123,6 +128,7 @@ class ForestService {
     const forest = forestModel.populateForestPost(info, field);
     return forest;
   }
+
   static async findById(forestId) {
     try {
       return await forestModel.readOneById(forestId);
@@ -131,61 +137,11 @@ class ForestService {
     }
   }
 
-  static async findByForestMbti(mbti) {
+  static async findByForestMbti(mbtiList) {
     try {
-      // 작성자 MBTI가 'ISTJ'인 사용자들을 찾습니다.
-      const usersWithMBTI = await UserModel.find({ mbti: mbti });
-      // 찾은 사용자들의 _id 목록을 추출합니다.
-      const userIds = usersWithMBTI.map((user) => user._id);
-      // 작성자가 ISTJ인 블로그 포스트들을 찾습니다.
-      const posts = await forestModel.readPostsByAuthors({
-        author: { $in: userIds },
+      const posts = await forestModel.findByForestMbti({
+        'userInfo.mbti': { $in: mbtiList }, // 필드명 'userInfo.mbti'로 수정
       });
-      return posts;
-    } catch (error) {
-      throw new Error(`Error finding
-  blog posts by author's MBTI: ${error.message}`);
-    }
-  }
-
-  //   static async findByUserMbti(limit, page, getMbti) {
-  //     const skip = (page - 1) * limit;
-  //     // console.log(getAlls, getAlls.content);
-
-  //     const { forests, count } = await forestModel.findByMbti(
-  //       skip,
-  //       limit,
-  //       getMbti,
-  //     );
-  //     // console.log('findByUserMbti 함수에서 조회한 결과:');
-  //     // console.log('findByUserMbti - getMbti:', getMbti);
-
-  //     // console.log('forests:', forests);
-  //     // console.log('count:', count);
-  //     const totalPage = Math.ceil(count / limit);
-
-  //     return { forests, totalPage, count };
-  //   }
-  // }
-  static async findById(forestId) {
-    try {
-      return await forestModel.readOneById(forestId);
-    } catch (error) {
-      throw new Error('An error occurred while fetching the forest.');
-    }
-  }
-
-  static async findPostsByAuthorMBTI(mbti) {
-    try {
-      // 작성자 MBTI가 'ISTJ'인 사용자들을 찾습니다.
-      const usersWithMBTI = await UserModel.find({ mbti: mbti });
-
-      // 찾은 사용자들의 _id 목록을 추출합니다.
-      const userIds = usersWithMBTI.map((user) => user._id);
-
-      // 작성자가 ISTJ인 블로그 포스트들을 찾습니다.
-      const posts = await ForestPost.find({ author: { $in: userIds } });
-
       return posts;
     } catch (error) {
       throw new Error(
@@ -193,35 +149,6 @@ class ForestService {
       );
     }
   }
-
-  //   static async findByUserMbti(limit, page, getMbti) {
-  //     const skip = (page - 1) * limit;
-  //     // console.log(getAlls, getAlls.content);
-
-  //     const { forests, count } = await forestModel.findByMbti(
-  //       skip,
-  //       limit,
-  //       getMbti,
-  //     );
-  //     // console.log('findByUserMbti 함수에서 조회한 결과:');
-  //     // console.log('findByUserMbti - getMbti:', getMbti);
-
-  //     // console.log('forests:', forests);
-  //     // console.log('count:', count);
-  //     const totalPage = Math.ceil(count / limit);
-
-  //     return { forests, totalPage, count };
-  //   }
-  // }
-
-  static async readForests({ userId }) {
-    const forests = await forestModel.findForestsById({ userId });
-    if (!forests) {
-      const errorState = 'error';
-      const errorMessage = '게시글 작성내역이 존재하지 않습니다.';
-      return { errorState, errorMessage };
-    }
-    return forests;
-  }
 }
+
 export default ForestService;
