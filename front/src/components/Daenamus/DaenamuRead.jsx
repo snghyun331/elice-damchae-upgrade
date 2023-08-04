@@ -11,10 +11,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { delApi, getApi, putApi } from '../../services/api';
 import { useEffect, useState } from 'react';
 import { useUserId } from '../../store/useUserStore';
-import StoryComment from '../Stories/StoryComment';
+
 import ReactionChart from './Reaction';
 import DaenamuTextEditor from './DaenamuTextEditor';
 import useStoryStore from '../../store/useStoryStore';
+import DaenamuComment from './DaenamuComment';
 
 const DaenamuRead = () => {
 	const { title, content, mood, setTitle, setContent, setMood } =
@@ -174,8 +175,10 @@ const DaenamuRead = () => {
 									</div>
 								</div>
 							</div>
-							<div className="p-10">
-								<Viewer initialValue={isDataLoading ? forest.content : ''} />
+							<div>
+								<div className="relative p-10">
+									{isDataLoading && <Viewer initialValue={forest.content} />}
+								</div>
 							</div>
 						</div>
 					)}
@@ -190,9 +193,9 @@ const DaenamuRead = () => {
 					<ReactionChart />
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<div>
-						<StoryComment
-							storyId={'64c75002eb1683cb6922e36f'}
-							commentList={forest.commentList}
+						<DaenamuComment
+							forestId={forestId}
+							// commentList={forest.commentList}
 						/>
 					</div>
 				</div>

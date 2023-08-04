@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../Global/Pagination';
 
-const StoryComment = ({ storyId }) => {
+const DaenamuComment = ({ forestId }) => {
 	const [commentList, setCommentList] = useState('');
 	const [comment, setComment] = useState('');
 	const [isDataLoading, setIsDataLoading] = useState(false);
@@ -15,7 +15,7 @@ const StoryComment = ({ storyId }) => {
 
 	const fetchData = async (page = 1) => {
 		try {
-			const res = await getApi(`stories/${storyId}/comments?page=${page}`);
+			const res = await getApi(`forest/${forestId}/comments?page=${page}`);
 			console.log(res.data);
 			setCommentList(res.data.comments);
 			setCommentCount(res.data.totalCommentsCount);
@@ -38,7 +38,7 @@ const StoryComment = ({ storyId }) => {
 
 	const deleteComment = async (commentId) => {
 		try {
-			await delApi(`stories/comments/${commentId}`);
+			await delApi(`forest/comments/${commentId}`);
 			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
 		} catch (error) {
 			console.log(error);
@@ -47,7 +47,7 @@ const StoryComment = ({ storyId }) => {
 
 	const editComment = async (commentId, editedComment) => {
 		try {
-			await patchApi(`stories/comments/${commentId}`, {
+			await patchApi(`forest/comments/${commentId}`, {
 				comment: editedComment,
 			});
 			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
@@ -65,9 +65,10 @@ const StoryComment = ({ storyId }) => {
 	const handleSubmit = async () => {
 		console.log(comment);
 		try {
-			await postApi(`stories/${storyId}/comments`, {
+			const res = await postApi(`forest/${forestId}/comments`, {
 				comment,
 			});
+			console.log(res);
 			setComment('');
 			fetchData();
 		} catch (error) {
@@ -100,7 +101,7 @@ const StoryComment = ({ storyId }) => {
 				</button>
 			</div>
 
-			<div>
+			{/* <div>
 				{commentList.length === 0 ? (
 					<p>등록된 댓글이 없습니다.</p>
 				) : (
@@ -114,9 +115,9 @@ const StoryComment = ({ storyId }) => {
 						</div>
 					))
 				)}
-			</div>
+			</div> */}
 
-			<div className="flex justify-center mt-10">
+			{/* <div className="flex justify-center mt-10">
 				<Pagination
 					currentPage={currentPage}
 					totalPages={totalPage}
@@ -124,13 +125,13 @@ const StoryComment = ({ storyId }) => {
 					next={next}
 					go={go}
 				/>
-			</div>
+			</div> */}
 		</div>
 	);
 };
 
-export default StoryComment;
+export default DaenamuComment;
 
-StoryComment.propTypes = {
-	storyId: PropTypes.string.isRequired,
+DaenamuComment.propTypes = {
+	forestId: PropTypes.string.isRequired,
 };
