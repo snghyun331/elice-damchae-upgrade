@@ -15,12 +15,13 @@ const DaenamusWrite = lazy(() =>
 );
 const SearchResults = lazy(() => import('../components/Stories/SearchResults'));
 const DaenamuRead = lazy(() => import('../components/Daenamus/DaenamuRead'));
+const LoadingSpinner = lazy(() => import('../components/Global/Layout/LoadingSpinner'));
 
 const MainLayout = () => {
 	return (
 		<div className="main-container">
 			<ErrorBoundary FallbackComponent={<div>Error...</div>}>
-				<Suspense fallback={<div className="h-screen">Loading...</div>}>
+				<Suspense fallback={<LoadingSpinner />}>
 					<Outlet />
 				</Suspense>
 			</ErrorBoundary>

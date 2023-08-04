@@ -1,10 +1,25 @@
+import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
-import PropTypes from 'prop-types';
 import { textToIcon, calendarDateToString } from '../Util/Util';
 import { useNavigate } from 'react-router-dom';
-function MyCalendar({ posts }) {
+import { getApi } from '../../services/api';
+
+function MyCalendar() {
+	const [posts, setPosts] = useState([]);
 	const navigate = useNavigate();
-	const simplePost = posts.map(({ koreaCreatedAt, mood, _id }) => ({
+
+	const fetchData = async (year, month) => {
+		try {
+			const response = await getApi(
+				`stories/my/calendar?year=${year}&month=${month}`,
+			);
+			setPosts(response.data.posts);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const simplePost = (posts || []).map(({ koreaCreatedAt, mood, _id }) => ({
 		date: new Date(koreaCreatedAt).toISOString().split('T')[0],
 		mood: textToIcon[mood],
 		_id,
@@ -43,10 +58,26 @@ function MyCalendar({ posts }) {
 		}
 	};
 
+	const handleActiveStartDateChange = ({ activeStartDate }) => {
+		const year = activeStartDate.getFullYear();
+		const month = activeStartDate.getMonth() + 1;
+		fetchData(year, month); // Call the fetchData function when the active month changes
+	};
+
+	useEffect(() => {
+		// Get current year and month on first render
+		const currentDate = new Date();
+		const currentYear = currentDate.getFullYear();
+		const currentMonth = currentDate.getMonth() + 1;
+
+		// Fetch data for current year and month
+		fetchData(currentYear, currentMonth);
+	}, []);
+
 	return (
 		<div>
 			<Calendar
-				className="mt-5 p-1.5" // Add the custom CSS class to Calendar
+				className="mt-5 p-1.5"
 				tileContent={renderTileContent}
 				formatDay={(locale, date) =>
 					date.toLocaleString('en', { day: 'numeric' })
@@ -55,12 +86,10 @@ function MyCalendar({ posts }) {
 					date.toLocaleString('en', { weekday: 'short' })
 				}
 				onClickDay={handleDateClick}
+				onActiveStartDateChange={handleActiveStartDateChange}
 			/>
 		</div>
 	);
 }
-MyCalendar.propTypes = {
-	posts: PropTypes.array.isRequired,
-};
 
 export default MyCalendar;

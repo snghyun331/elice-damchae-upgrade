@@ -12,7 +12,6 @@ const getImages = (mbti) => {
 
 const ProfilePicker = () => {
 	const { mbti, profileImg, setProfileImg } = useUserStore();
-
 	const profileData = {
 		INFP: getImages('INFP'),
 		ENFJ: getImages('ENFJ'),
@@ -33,8 +32,8 @@ const ProfilePicker = () => {
 	};
 
 	useEffect(() => {
-		if (mbti) {
-			setProfileImg(null); // Reset selected image when MBTI changes
+		if (mbti && typeof profileImg == 'string') {
+			setProfileImg(null);
 		}
 	}, [mbti]);
 
@@ -49,7 +48,7 @@ const ProfilePicker = () => {
 					htmlFor="profile"
 					className="block mb-2 font-semibold text-gray-900 dark:text-white"
 				>
-					프로필 이미지 설정
+					프로필 이미지 선택
 				</label>
 				<div>선택된 MBTI가 없습니다.</div>
 			</div>
@@ -62,15 +61,16 @@ const ProfilePicker = () => {
 				htmlFor="profile"
 				className="block mb-2 font-semibold text-gray-900 dark:text-white"
 			>
-				프로필 이미지 설정
+				프로필 이미지 선택
 			</label>
 			<div className="flex flex-row">
 				{profileData[mbti]?.map((image, index) => {
 					return (
 						<img
-							className={`w-1/5 rounded object-cover ${
+							className={`mx-0.5 rounded object-cover ${
 								profileImg === image ? 'border-4 border-blue-500' : ''
 							}`}
+							style={{ width: '19%' }}
 							key={`${mbti}-${index}`}
 							src={image}
 							alt={`Profile ${mbti}-${index + 1}`}
@@ -80,7 +80,7 @@ const ProfilePicker = () => {
 				})}
 			</div>
 			<div>
-				{profileImg && ( // Only display if a selected image exists
+				{/* {profileImg && ( // Only display if a selected image exists
 					<div className="mt-5">
 						<img
 							className="border-4 border-neutral-300 w-36 h-36 rounded-full object-cover"
@@ -88,7 +88,7 @@ const ProfilePicker = () => {
 							alt={`Selected Profile`}
 						/>
 					</div>
-				)}
+				)} */}
 			</div>
 		</div>
 	);

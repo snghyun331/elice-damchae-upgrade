@@ -105,7 +105,7 @@ const RegisterForm = () => {
 	);
 
 	const user = { email, password, nickname, mbti, profileImg };
-
+		console.log(mbti);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {

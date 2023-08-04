@@ -1,21 +1,33 @@
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { Fragment } from 'react';
 import { classNames } from '../../Util/Util';
-
+import { useUserProfileImg } from '../../../store/useUserStore';
+import { defaultUser } from '../../Util/Util';
 const ProfileButton = () => {
 	const navigate = useNavigate();
+	const profileImg = useUserProfileImg();
+	const [profileImgSrc, setProfileImgSrc] = useState(defaultUser);
 	const profileItems = [
 		{ title: '마이 페이지', onClick: () => navigate('/mypage') },
 		{ title: '회원정보 수정', onClick: () => navigate('/infochange') },
 	];
+
 	return (
-		<Menu as="div" className="xs:hidden sm:hidden md:flex relative inline-block text-left">
+		<Menu
+			as="div"
+			className="xs:hidden sm:hidden md:flex relative inline-block text-left"
+		>
 			<div>
 				<Menu.Button>
 					<div className="mt-2">
-						<UserCircleIcon className="w-10 text-white" aria-hidden="true" />
+						<img
+							className="w-10 h-10 rounded-full "
+							src={profileImg ? profileImg : defaultUser}
+							alt="Profile Image"
+						/>
 					</div>
 				</Menu.Button>
 			</div>
