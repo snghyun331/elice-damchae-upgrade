@@ -23,7 +23,7 @@ const forestCommentSchema = new Schema(
   },
   {
     timestamps: true,
-    collection: 'storyComments',
+    collection: 'forestComments',
   },
 );
 

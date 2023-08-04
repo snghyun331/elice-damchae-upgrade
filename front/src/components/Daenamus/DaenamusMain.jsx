@@ -4,8 +4,10 @@ import DaenamuCardMap from './DaenamuCardMap';
 import { mbtiList } from '../Util/Util';
 import { useNavigate } from 'react-router-dom';
 import { useIsLoggedIn } from '../../store/useUserStore';
+import useStoryStore from '../../store/useStoryStore';
 
 const DaenamusMain = () => {
+	const { reset } = useStoryStore();
 	const isLoggedIn = useIsLoggedIn();
 	const [selectedMBTI, setSelectedMBTI] = useState([]);
 	const [selectedTab, setSelectedTab] = useState('전체글');
@@ -46,6 +48,7 @@ const DaenamusMain = () => {
 								isLoggedIn
 									? () => {
 											navigate('/daenamus/write');
+											reset();
 									  }
 									: () => navigate('/login')
 							}

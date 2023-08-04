@@ -11,7 +11,7 @@ const MyStories = () => {
 	const navigate = useNavigate();
 	const isLoggedIn = useIsLoggedIn();
 
-	const { setTitle, setMusic, reset } = useStoryStore();
+	const { reset } = useStoryStore();
 	const [storyModal, setStoryModal] = useState(false);
 
 	const onClose = () => {

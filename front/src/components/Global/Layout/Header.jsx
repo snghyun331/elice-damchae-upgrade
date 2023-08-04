@@ -27,7 +27,7 @@ const Header = () => {
 				>
 					<img
 						className="self-end w-46 h-16 object-cover"
-						src="images/logo1.png"
+						src="/images/logo1.png"
 					/>
 				</Link>
 
@@ -56,7 +56,7 @@ const Header = () => {
 								onClick={() => {
 									navigate('/daenamus');
 								}}
-								className="font-bold text-xl text-white block py-2 pl-3 pr-4 mr-5 text-gray-900 rounded md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+								className="font-bold text-lg text-white block py-2 pl-3 pr-4 mr-5 text-gray-900 rounded md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
 							>
 								대나무숲
 							</button>
@@ -64,7 +64,7 @@ const Header = () => {
 						<li>
 							<button
 								onClick={handleGuestClick}
-								className="font-bold text-xl text-white block py-2 pl-3 pr-4 ml-5 text-gray-900 rounded md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+								className="font-bold text-lg text-white block py-2 pl-3 pr-4 ml-5 text-gray-900 rounded md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
 							>
 								내 스토리
 							</button>
