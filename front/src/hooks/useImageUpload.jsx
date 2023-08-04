@@ -16,7 +16,7 @@ const useImageUpload = () => {
 
 			const response = await postApi('image/upload', formData);
 
-			const imageUrl = `http://localhost:3000/uploads/${response.data.fileName}`;
+			const imageUrl = `${response.data.path}`;
 			console.log(imageUrl);
 			//TODO:나중에 경로 제대로 설정
 

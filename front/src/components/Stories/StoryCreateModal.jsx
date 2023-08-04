@@ -44,7 +44,7 @@ const StoryCreateModal = ({ onClose }) => {
 				onClose();
 
 				setTimeout(() => {
-					window.location.href = '/';
+					window.location.href = '/stories';
 				}, 100);
 			} catch (e) {
 				console.error(e);
