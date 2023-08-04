@@ -27,7 +27,7 @@ const Header = () => {
 				>
 					<img
 						className="self-end w-46 h-16 object-cover"
-						src="images/logo1.png"
+						src="/images/logo1.png"
 					/>
 				</Link>
 

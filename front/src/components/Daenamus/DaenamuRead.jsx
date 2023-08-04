@@ -24,6 +24,7 @@ const DaenamuRead = () => {
 	const [forest, setForest] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
 	const [editMode, setEditMode] = useState(false);
+	const [viewerKey, setViewerKey] = useState(0);
 	const navigate = useNavigate();
 	const id = useUserId();
 
@@ -68,9 +69,11 @@ const DaenamuRead = () => {
 			const res = await putApi(`forest/${forestId}`, {
 				title,
 				content,
-				mood,
 			});
+			//TODO:mood추가해야함
 			console.log(res);
+			fetchData();
+
 			setEditMode(false);
 		} catch (error) {
 			console.log(error);
@@ -80,6 +83,10 @@ const DaenamuRead = () => {
 	useEffect(() => {
 		fetchData();
 	}, []);
+
+	useEffect(() => {
+		setViewerKey((prevKey) => prevKey + 1);
+	}, [forest.content]);
 
 	return (
 		<div className={`w-4/5 max-w-2xl mx-auto dark:bg-gray-800`}>
@@ -177,7 +184,9 @@ const DaenamuRead = () => {
 							</div>
 							<div>
 								<div className="relative p-10">
-									{isDataLoading && <Viewer initialValue={forest.content} />}
+									{isDataLoading && (
+										<Viewer key={viewerKey} initialValue={forest.content} />
+									)}
 								</div>
 							</div>
 						</div>

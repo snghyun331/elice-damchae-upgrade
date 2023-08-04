@@ -193,7 +193,7 @@ class ForestController {
 
       // Compare the postUser.userInfo with userId using toString() and strict equality
       const { title, content } = req.body;
-      if (!postUser || !userId || postUser.userInfo.toString() !== userId) {
+      if (postUser.userInfo.toString() === userId) {
         const post = await ForestService.updatePost({
           forestId,
           title,
@@ -219,7 +219,6 @@ class ForestController {
       const userId = req.currentUserId; // 로그인한 사용자의 ID
       const postUser = await ForestService.readForestDetail({ forestId });
 
-      // 로그인한 사용자와 게시글 작성자 비교
       if (!postUser || !userId) {
         throw new Error('스토리 삭제 권한이 없습니다.');
       }

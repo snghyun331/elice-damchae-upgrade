@@ -90,6 +90,11 @@ const ReactionChart = () => {
 		chart: {
 			height: 350,
 			type: 'treemap',
+			toolbar: {
+				tools: {
+					download: false,
+				},
+			},
 		},
 		title: {
 			text: 'MBTI 유형별 반응',
