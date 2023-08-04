@@ -30,11 +30,11 @@ const MyStories = () => {
 
 	return (
 		<>
-			<div
-				data-aos="fade-right"
-				className="font-bold mb-8 md:p-10 block p-6 bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-			>
-				<div className="p-10">
+			<div className="p-10 container mx-auto px-4">
+				<div
+					data-aos="fade-right"
+					className="font-bold md:p-10 block p-6 bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+				>
 					<div className="flex justify-between items-center mb-4 text-3xl font-semibold text-zinc-700">
 						<div>내 스토리</div>
 						<button
@@ -42,13 +42,11 @@ const MyStories = () => {
 								isLoggedIn
 									? () => {
 											setStoryModal(true);
-											setMusic('');
-											setTitle('');
 									  }
 									: () => navigate('/login')
 							}
 							type="button"
-							className="rounded-xl w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+							className="rounded-xl w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
 						>
 							스토리 쓰기
 						</button>
@@ -56,11 +54,12 @@ const MyStories = () => {
 					<div className="mb-20 text-sm font-medium text-zinc-600">
 						내가 쓴 스토리를 확인할 수 있어요.
 					</div>
-				</div>
-				<div>{renderModal()}</div>
-				<div style={{ overflow: storyModal ? 'hidden' : 'auto' }}>
-					<Search />
-					<StoryCardMap endpoint={`stories/my`} />
+
+					<div>{renderModal()}</div>
+					<div style={{ overflow: storyModal ? 'hidden' : 'auto' }}>
+						<Search />
+						<StoryCardMap endpoint={`stories/my`} />
+					</div>
 				</div>
 			</div>
 		</>

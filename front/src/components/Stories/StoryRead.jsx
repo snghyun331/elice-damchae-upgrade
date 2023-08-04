@@ -74,8 +74,8 @@ const StoryRead = () => {
 							className="w-full h-full object-cover"
 							src={
 								story.thumbnail
-									? `http://localhost:3000/uploads/${story.thumbnail.fileName}`
-									: 'https://climate.onep.go.th/wp-content/uploads/2020/01/default-image.jpg'
+									? `${story.thumbnail.path}`
+									: 'images/default-image.jpg'
 							}
 							alt=""
 						/>

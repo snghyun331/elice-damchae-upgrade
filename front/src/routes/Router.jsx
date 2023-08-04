@@ -20,7 +20,7 @@ const MainLayout = () => {
 	return (
 		<div className="main-container">
 			<ErrorBoundary FallbackComponent={<div>Error...</div>}>
-				<Suspense fallback={<div>Loading...</div>}>
+				<Suspense fallback={<div className="h-screen">Loading...</div>}>
 					<Outlet />
 				</Suspense>
 			</ErrorBoundary>

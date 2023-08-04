@@ -25,9 +25,7 @@ const StoryCard = ({
 }) => {
 	const moodIcon = textToIcon[mood.toLowerCase()] || '❓'; // fallback to question mark for unknown text
 
-	const imageSrc = thumbnail
-		? `http://localhost:3000/uploads/${thumbnail.fileName}`
-		: '';
+	const imageSrc = thumbnail ? `${thumbnail.path}` : '';
 
 	return (
 		<>
@@ -42,8 +40,7 @@ const StoryCard = ({
 								src={imageSrc}
 								alt="스토리 이미지"
 								onError={(e) => {
-									e.target.src =
-										'https://climate.onep.go.th/wp-content/uploads/2020/01/default-image.jpg';
+									e.target.src = 'images/default-image.jpg';
 								}}
 							/>
 						</figure>
