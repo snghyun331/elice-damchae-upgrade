@@ -1,10 +1,8 @@
-import { forestComment } from '../schemas/forestcomment.js';
+import { forestComment } from '../schemas/forestComment.js';
 
 class forestCommentModel {
   static async createForestComment({ newComment }) {
-    const createdNewComment = await forestComment.create({
-      newComment,
-    });
+    const createdNewComment = await forestComment.create(newComment);
     return createdNewComment;
   }
 
