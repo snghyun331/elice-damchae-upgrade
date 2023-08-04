@@ -1,11 +1,6 @@
 import { textToIcon, textToColor, formatRelativeTime } from '../Util/Util';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
-import {
-	HandThumbDownIcon,
-	HandThumbUpIcon,
-} from '@heroicons/react/24/outline';
-
 import { BackButton } from '../Global/BackButton';
 import { useNavigate, useParams } from 'react-router-dom';
 import { delApi, getApi } from '../../services/api';
@@ -13,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useUserId } from '../../store/useUserStore';
 import StoryComment from '../Stories/StoryComment';
 import ReactionChart from './Reaction';
+import DaenamuLikeSection from './DaenamuLikeSection';
 
 const DaenamuRead = () => {
 	const { forestId } = useParams();
@@ -111,10 +107,7 @@ const DaenamuRead = () => {
 						{isDataLoading && <Viewer initialValue={forest.content} />}
 					</div>
 
-					<div className="m-5 flex flex-row justify-center space-x-2">
-						<HandThumbUpIcon className="w-10 h-10" />
-						<HandThumbDownIcon className="w-10 h-10" />
-					</div>
+					<DaenamuLikeSection forestId={forest._id} userId={id} />
 
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<ReactionChart />

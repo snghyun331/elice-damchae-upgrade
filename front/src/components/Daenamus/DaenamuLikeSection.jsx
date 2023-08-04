@@ -60,7 +60,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 					} else {
 						setDislikes(dislikes - 1);
 					}
-					toast.success('싫어요 를 취소하고 좋아요 를 누릅니다.');
+					toast('싫어요를 취소하고 좋아요를 누릅니다.');
 				}
 				const response = await postApi(`forest/${forestId}/upLike`, {});
 				if (response.error) {
@@ -94,7 +94,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 					} else {
 						setLikes(likes - 1);
 					}
-					toast.success('좋아요 를 취소하고 싫어요 를 누릅니다.');
+					toast('좋아요를 취소하고 싫어요를 누릅니다.');
 				}
 				const response = await postApi(`forest/${forestId}/upDislike`, {});
 				if (response.error) {
@@ -118,7 +118,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 
 	return (
 		<>
-			<div className="text-gray-700 m-5 mb-12 flex flex-row justify-center space-x-2 border rounded-full border- p-5 mx-52">
+			<div className="text-gray-700 m-5 mb-12 flex flex-row justify-center space-x-2 p-5 mx-52">
 				<div className="flex items-center">
 					<span className="mr-3 font-bold">{likes}</span>
 					<HandThumbUpIcon
