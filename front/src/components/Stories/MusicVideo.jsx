@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
+import { textToIcon } from '../Util/Util';
 
-const MusicVideo = ({ music, phrase }) => {
+const MusicVideo = ({ music, phrase, mood }) => {
 	const [videoWidth, setVideoWidth] = useState('560');
 
 	const updateVideoWidth = () => {
@@ -14,14 +15,14 @@ const MusicVideo = ({ music, phrase }) => {
 		}
 	};
 
-	// Create a debounced version of the updateVideoWidth function
-	const handleResize = debounce(updateVideoWidth, 200); // Adjust the debounce wait time as needed (e.g., 200ms)
+	const handleResize = debounce(updateVideoWidth, 200);
 
 	useEffect(() => {
-		// Add the event listener on component mount
+		updateVideoWidth();
+		handleResize();
+
 		window.addEventListener('resize', handleResize);
 
-		// Clean up the event listener on component unmount
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
@@ -43,6 +44,7 @@ const MusicVideo = ({ music, phrase }) => {
 		<div className="space-y-3 p-6 border-gray-200 dark:border-gray-600">
 			{/* YouTube 영상을 여기에 표시하는 코드 추가 */}
 			<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+				{textToIcon[mood]}
 				{phrase}
 			</h3>
 			<div className="justify-center">

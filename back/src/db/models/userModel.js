@@ -1,11 +1,22 @@
 import UserModel from '../schemas/user.js';
-import { StoryPost } from '../schemas/storyPost.js';
-import ForestPost from '../schemas/forestPost.js';
+import AuthModel from '../schemas/authString.js';
 
 class User {
   static async create({ newUser }) {
     const createdNewUser = await UserModel.create(newUser);
     return createdNewUser;
+  }
+
+  // 이메일 확인용 랜덤 문자열 저장
+  static async createAuthString({ string }) {
+    const createdString = await AuthModel.create({ authString: string });
+    return createdString;
+  }
+
+  // 유저가 입력한 문자열을 db에서 검색
+  static async findAuthString({ string }) {
+    const insertedString = await AuthModel.findOne({ authString: string });
+    return insertedString;
   }
 
   static async findByEmail({ email }) {
@@ -59,16 +70,6 @@ class User {
   static async findDeletedUsers() {
     const users = await User.find({ isOut: true });
     return users;
-  }
-
-  static async findStoriesById({ userId }) {
-    const stories = await StoryPost.find({ userInfo: userId });
-    return stories;
-  }
-
-  static async findForestsById({ userId }) {
-    const forests = await ForestPost.find({ userInfo: userId });
-    return forests;
   }
 }
 

@@ -1,11 +1,13 @@
 import useRegisterStore from '../../hooks/useRegisterStore';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { mbtiList } from '../Util/Util';
 
-import { getApi } from '../../services/api';
+import { getApi, postApi } from '../../services/api';
 import { useUserActions } from '../../store/useUserStore';
+import ProfilePicker from './ProfilePicker';
+import toast from 'react-hot-toast';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
@@ -19,6 +21,7 @@ const RegisterForm = () => {
 		code,
 		errMsg,
 		nicknameCheck,
+		profileImg,
 
 		setEmail,
 		setPassword,
@@ -38,6 +41,7 @@ const RegisterForm = () => {
 		switch (name) {
 			case 'email':
 				setEmail(value);
+				setIsCodeConfirmed(false);
 				break;
 			case 'password':
 				setPassword(value);
@@ -78,6 +82,7 @@ const RegisterForm = () => {
 		() => password === confirmPassword,
 		[password, confirmPassword],
 	);
+	const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
 
 	const isFormValid = useMemo(
 		() =>
@@ -86,7 +91,8 @@ const RegisterForm = () => {
 			isPasswordSame &&
 			isNicknameValid &&
 			nicknameCheck &&
-			Boolean(mbti),
+			Boolean(mbti) &&
+			isCodeConfirmed,
 		[
 			isEmailValid,
 			isPasswordValid,
@@ -94,14 +100,16 @@ const RegisterForm = () => {
 			isNicknameValid,
 			nicknameCheck,
 			mbti,
+			code,
 		],
 	);
 
-	const user = { email, password, nickname, mbti };
-	console.log(user);
+	const user = { email, password, nickname, mbti, profileImg };
+		console.log(mbti);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
+			console.log(user);
 			await register(user);
 			navigate('/login');
 		} catch (error) {
@@ -109,14 +117,28 @@ const RegisterForm = () => {
 		}
 	};
 
-	const handleEmailCheck = () => {
-		// Logic for email verification
-		// You can implement your own email verification functionality here
+	const handleEmailSend = async () => {
+		try {
+			const response = await postApi('auth/sendEmailCode', { email: email });
+			console.log(response);
+			toast.success('이메일로 인증코드가 발송 되었습니다.');
+		} catch (error) {
+			console.log(error.response);
+		}
 	};
 
-	const handleCodeCheck = () => {
-		// Logic for verification code verification
-		// You can implement your own verification code verification functionality here
+	const handleCodeCheck = async () => {
+		try {
+			const response = await postApi('auth/checkEmailCode', { string: code });
+			console.log(response);
+			toast.success('이메일 인증이 완료되었습니다.');
+			if (response.status === 200) {
+				setIsCodeConfirmed(true);
+			}
+		} catch (error) {
+			toast.error(error.response.data.errorMessage);
+			console.log(error.response);
+		}
 	};
 
 	const handleNicknameCheck = async () => {
@@ -125,11 +147,11 @@ const RegisterForm = () => {
 			console.log(response.data);
 
 			if (response.data.nicknameState == 'usableNickname') {
-				alert(response.data.usableNickname);
+				toast.success(response.data.usableNickname);
 				setNicknameCheck(true);
 			}
 			if (response.data.nicknameState == 'unusableNickname') {
-				alert(response.data.unusableNickname);
+				toast.error(response.data.unusableNickname);
 				setNicknameCheck(false);
 			}
 		} catch (error) {
@@ -141,11 +163,12 @@ const RegisterForm = () => {
 		<>
 			<section className="bg-gray-50 dark:bg-gray-900">
 				<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-					<div className="w-full bg-white rounded-sm shadow dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+					<div className="overflow-y-auto w-full bg-white rounded-sm shadow dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 						<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
 							<h1 className="text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
 								회원가입
 							</h1>
+							<ProfilePicker />
 							<form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
 								<div className="flex flex-col">
 									<label
@@ -167,16 +190,16 @@ const RegisterForm = () => {
 										/>
 										<button
 											type="button"
-											onClick={handleEmailCheck}
-											disabled={!email || !isEmailValid}
+											onClick={handleEmailSend}
+											disabled={!email || !isEmailValid || isCodeConfirmed}
 											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
 											style={{ height: '45px' }}
 										>
-											이메일 인증
+											인증코드 발송
 										</button>
 									</div>
 									<p
-										className={`text-xs ${
+										className={`mb-3 text-xs ${
 											!isEmailValid && email
 												? 'text-red-500'
 												: 'text-transparent'
@@ -187,29 +210,44 @@ const RegisterForm = () => {
 											: '　'}
 									</p>
 								</div>
+								<div className="flex flex-col">
+									<div className="flex flex-row space-x-2 justify-end">
+										<input
+											value={code}
+											onChange={handleChangeInput}
+											type="text"
+											name="code"
+											id="verification-code"
+											placeholder="인증번호 입력"
+											className="-mt-5 h-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+											required=""
+										/>
 
-								<div className="flex flex-row space-x-2 justify-end">
-									<input
-										value={code}
-										type="text"
-										name="Code"
-										id="verification-code"
-										placeholder="인증번호 입력"
-										className="-mt-5 h-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										required=""
-									/>
-
-									<button
-										type="button"
-										onClick={handleCodeCheck}
-										disabled={!code}
-										className="-mt-5 flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
-										style={{ height: '45px' }}
-									>
-										확인
-									</button>
+										<button
+											type="button"
+											onClick={handleCodeCheck}
+											disabled={!code || isCodeConfirmed}
+											className="-mt-5 flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+											style={{ height: '45px' }}
+										>
+											확인
+										</button>
+									</div>
+									<div>
+										<span
+											className={`mb-3 text-xs ${
+												isCodeConfirmed ? 'text-green-500' : ''
+											}`}
+										>
+											{isCodeConfirmed ? '이메일 인증이 완료되었습니다.' : ''}
+										</span>{' '}
+										<span className="text-xs text-red-500">
+											{isEmailValid && !isCodeConfirmed
+												? '이메일 인증을 진행해주세요.'
+												: ''}
+										</span>
+									</div>
 								</div>
-
 								<div>
 									<label
 										htmlFor="password"

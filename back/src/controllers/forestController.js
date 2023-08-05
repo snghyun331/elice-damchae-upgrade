@@ -1,170 +1,274 @@
 // forestController.js
+// import { forestModel } from '../db/models/forestModel.js';
+import { forestModel } from '../db/models/forestModel.js';
+import User from '../db/models/userModel.js';
 import ForestService from '../services/forestService.js';
-import { statusCode } from '../utills/statusCode.js';
-import BadRequest from '../middlewares/error/badRequest.js';
+import axios from 'axios';
 
 class ForestController {
+  // 대나무숲 글 등록 전 감정분석 수행하기
+  static async getPredict(req, res, next) {
+    try {
+      const { content } = req.body;
+      const pureContent = content.replace(/<[^>]+>/g, ' '); // content에 html태그가 섞여오기 때문에 태그 제거하기
+      // flask에서 'text': pureContent 형태로 request로 들어감
+      const obj = await axios.post('http://127.0.0.1:5000/predict', {
+        text: pureContent,
+      });
+      // console.log(obj.data)  ->  (예) { mood : 'pleasure' }
+      return res.status(201).json(obj.data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // 대나무숲 글 등록
   static async createPost(req, res, next) {
     try {
-      // 로그인 상태 확인
-      // console.log(req.currentUserId);
-      if (!req.currentUserId) {
-        return res
-          .status(400)
-          .json({ message: '글을 등록하려면 로그인이 필요합니다.' });
-      }
-
-      const { title, content, imageUrl } = req.body;
-
-      // 필수 데이터인 title과 content가 존재하는지 확인
-      if (!title || !content) {
-        throw new BadRequest('Title과 content는 필수 입력 사항입니다.');
-      }
-
-      // 로그인한 사용자의 정보인 userId를 가져옴
-      const userId = req.currentUserId;
-
-      // 글 등록을 위해 필요한 데이터 객체 생성
-      const newForestPost = await ForestService.createPost({
+      const userId = req.currentUserId; // 로그인한 유저의 ID를 userId에 저장
+      const userInfo = userId;
+      // request body에는 제목, 내용, 감정분석 후 나온 감정데이터가 들어갑니다.
+      const { title, content, mood } = req.body;
+      const newPost = await ForestService.createPost({
+        userInfo,
         title,
         content,
-        imageUrl,
-        userId,
+        mood,
       });
 
-      // ForestService.addStoryPost() 메서드 호출 시 newForestPost를 전달
-      // const createdForestPost = await ForestService.create(newForestPost);
+      const result = await ForestService.populateForestPost(
+        newPost,
+        'userInfo',
+      ); // userId 필드를 기준으로 populate (userId에 자동으로 'User'스키마에 담긴 정보가 참조됨)
 
-      return res
-        .status(200)
-        .json({ message: '글을 등록했습니다.', userId: newForestPost });
+      return res.status(201).json(result);
     } catch (error) {
-      next(error); // handleError 함수를 호출하여 에러를 적절히 처리
-      // console.log(error);
-      console.log(error);
-      return res.status(500).json({
-        message: '포스트 생성에 실패했습니다.',
-        errorCode: 'INTERNAL_SERVER_ERROR',
-      });
+      next(error);
     }
   }
 
-  static async getAllPosts(req, res, next) {
+  static async findByForest(req, res, next) {
     try {
-      const forestServiceInstance = new ForestService();
+      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
+      const limit = 12; // 한페이지에 들어갈 스토리 수
 
-      let getAlls = [];
-      if (req.query.option == 'title') {
-        getAlls = [{ title: new RegExp(req.query.content) }];
-      } else if (req.query.option == 'content') {
-        getAlls = [{ content: new RegExp(req.query.content) }];
-      } else if (req.query.option == 'title+content') {
-        getAlls = [
-          { title: new RegExp(req.query.content) },
-          { content: new RegExp(req.query.content) },
-        ];
+      const { option, searchword } = req.query;
+      let getAlls = {};
+      let result;
+
+      if (option === 'title') {
+        getAlls = { title: new RegExp(searchword, 'i') };
+        const { forests, totalPage, count } = await ForestService.findByForest(
+          limit,
+          page,
+          getAlls,
+        );
+        const populateResult = await ForestService.populateForestPost(
+          forests,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalForestsCount: count,
+          forests: populateResult,
+        };
+        console.log('populateResult!!!', populateResult);
+      } else if (option === 'content') {
+        getAlls = { content: new RegExp(searchword, 'i') };
+        const { forests, totalPage, count } = await ForestService.findByForest(
+          limit,
+          page,
+          getAlls,
+        );
+        const populateResult = await ForestService.populateForestPost(
+          forests,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalforestsCount: count,
+          forests: populateResult,
+        };
+      } else if (option === 'title_content') {
+        getAlls = {
+          $or: [
+            { title: new RegExp(searchword, 'i') },
+            { content: new RegExp(searchword, 'i') },
+          ],
+        };
+        const { forests, totalPage, count } = await ForestService.findByForest(
+          limit,
+          page,
+          getAlls,
+        );
+        const populateResult = await ForestService.populateForestPost(
+          forests,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('검색 결과가 없습니다.');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalStoriesCount: count,
+          forests: populateResult,
+        };
       } else {
-        throw new Error('검색 옵션이 없습니다.');
+        const { forests, totalPage, count } = await ForestService.findByForest(
+          limit,
+          page,
+        );
+        const populateResult = await ForestService.populateForestPost(
+          forests,
+          'userInfo thumbnail',
+        );
+
+        if (populateResult.length === 0) {
+          throw new Error('스토리가 없습니다');
+        }
+
+        result = {
+          currentPage: page,
+          totalPage: totalPage,
+          totalForestsCount: count,
+          forests: populateResult,
+        };
       }
 
-      const posts = await forestServiceInstance.findAll({ getAlls });
-
-      statusCode.setResponseCode200(res);
-      res.send(posts);
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
     }
   }
 
-  static async findByPost(req, res, next) {
-    try {
-      const _id = req.currentUserId;
-      const forestServiceInstance = new ForestService();
-      const post = await forestServiceInstance.findByPost({ _id });
-      if (!post) {
-        console.log(post);
-        throw new Error('존재하지 않는 글입니다');
-      }
-      statusCode.setResponseCode200(res);
-      res.send(post);
-    } catch (error) {
-      next(error);
-    }
-  }
-
+  // static async findById(req, res, next) {
+  //   try {
+  //     const forestId = req.currentUserId;
+  //     const post = await ForestService.findById({ forestId });
+  //     if (!post) {
+  //       throw new Error('존재하지 않는 글입니다');
+  //     }
+  //     return res.status(201).json(post);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
   static async updatePost(req, res, next) {
     try {
-      // 로그인 상태 확인
-      if (!req.currentUserId) {
-        return res
-          .status(400)
-          .json({ message: '글을 수정하려면 로그인이 필요합니다.' });
-      }
-      // console.log(req.body);
-      const { title, content, imageUrl } = req.body;
-      const postId = req.params.id;
+      // console.log('Request Params:', req.params);
+      // console.log('Request Body:', req.body);
 
-      if (!title || !content) {
-        throw new BadRequest('Title과 content는 필수 입력 사항입니다.');
-      }
-
+      const forestId = req.params.id;
       const userId = req.currentUserId;
 
-      const forestServiceInstance = new ForestService();
-      let updatePost = {};
-      if (!imageUrl) {
-        const imageUrl = 'None';
-        updatePost = { _id: postId, title, content, userId, imageUrl };
+      // console.log('forestId:', forestId);
+      // console.log('userId:', userId);
+
+      const postUser = await ForestService.readForestDetail({ forestId });
+
+      // console.log('postUser:', postUser);
+
+      if (!postUser) {
+        throw new Error('해당 게시물이 존재하지 않습니다.');
+      }
+
+      if (!postUser || !userId) {
+        throw new Error('스토리 수정 권한이 없습니다.');
+      }
+
+      // Compare the postUser.userInfo with userId using toString() and strict equality
+      const { title, content } = req.body;
+      if (postUser.userInfo.toString() === userId) {
+        const post = await ForestService.updatePost({
+          forestId,
+          title,
+          content,
+        });
+
+        const result = await ForestService.populateForestPost(post, 'userInfo');
+        return res.status(200).send(result);
       } else {
-        updatePost = { _id: postId, title, content, userId, imageUrl };
+        throw new Error('스토리 수정 권한이 없습니다.');
       }
-      const updatedPost = await forestServiceInstance.updatePost(updatePost);
-
-      if (!updatedPost) {
-        throw new Error('존재하지 않는 글입니다.');
-      }
-
-      statusCode.setResponseCode200(res);
-      res.send(updatedPost);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
 
   static async deletePost(req, res, next) {
     try {
-      // 로그인 상태 확인
-      if (!req.currentUserId) {
-        return res
-          .status(400)
-          .json({ message: '글을 삭제하려면 로그인이 필요합니다.' });
+      console.log('Request Params:', req.params); // 로그 추가
+      console.log('Request Body:', req.body); // 로그 추가
+
+      const forestId = req.params.id;
+      const userId = req.currentUserId; // 로그인한 사용자의 ID
+      const postUser = await ForestService.readForestDetail({ forestId });
+
+      if (!postUser || !userId) {
+        throw new Error('스토리 삭제 권한이 없습니다.');
       }
 
-      const { title, content, imageUrl } = req.body;
-      const postId = req.params.id;
+      // 로그인한 사용자와 게시글 작성자 비교
+      if (postUser.userInfo.toString() === userId) {
+        const post = await ForestService.deletePost({ forestId });
 
-      const userId = req.currentUserId;
-
-      const forestServiceInstance = new ForestService();
-      let deletePost = {};
-      if (!imageUrl) {
-        const imageUrl = 'None';
-        deletePost = { _id: postId, title, content, userId, imageUrl };
+        const result = await ForestService.populateForestPost(post, 'userInfo');
+        return res.status(200).send(result);
       } else {
-        deletePost = { _id: postId, title, content, userId, imageUrl };
+        throw new Error('스토리 삭제 권한이 없습니다.');
       }
-      const deletedPost = await forestServiceInstance.deletePost(deletePost);
-
-      if (!deletedPost) {
-        throw new Error('존재하지 않는 글입니다.');
-      }
-
-      statusCode.setResponseCode200(res);
-      res.send({ message: '글을 삭제했습니다.' });
     } catch (error) {
-      console.log(error);
       next(error);
+    }
+  }
+
+  static async readForestDetail(req, res, next) {
+    try {
+      const forestId = req.params.forestId;
+      const forestInfo = await ForestService.readForestDetail({ forestId });
+      if (!forestInfo) {
+        throw new Error('스토리를 찾을 수 없습니다');
+      }
+
+      const result = await ForestService.populateForestPost(
+        forestInfo,
+        'userInfo',
+      );
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getPostsByAuthorMBTI(req, res) {
+    // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP
+
+    const mbtiList = req.query.filter.split(',');
+    // const mbti = req.params.mbti; // 라우트에서 MBTI 파라미터를 가져옵니다.
+
+    try {
+      console.log('mbtiList확인용 코드:', mbtiList); // 확인용 로그
+      const posts = await ForestService.findByForestMbti(mbtiList);
+      console.log('posts확인용 코드:', posts); // 확인용 로그
+      const result = await ForestService.populateForestPost(posts, 'userInfo');
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 }

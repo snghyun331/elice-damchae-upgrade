@@ -65,12 +65,11 @@ const LoginForm = () => {
 					<div className="flex items-center w-full max-w-md px-6 lg:mx-20 lg:w-2/5">
 						<div className="flex-1">
 							<div className="text-center cursor-pointer">
-								<h2
+								<img
 									onClick={() => navigate('/')}
-									className="text-5xl font-bold text-center text-gray-700 dark:text-white"
-								>
-									DAMCHAE
-								</h2>
+									src="images/loginlogo.png"
+									alt="Login"
+								/>
 							</div>
 
 							<div className="mt-8">
@@ -87,6 +86,7 @@ const LoginForm = () => {
 											name="email"
 											id="email"
 											placeholder="elice@gmail.com"
+											autoComplete="false"
 											value={email}
 											onChange={handleChangeInput}
 											onFocus={() => {
@@ -126,6 +126,7 @@ const LoginForm = () => {
 											name="password"
 											id="password"
 											placeholder="********"
+											autoComplete="false"
 											value={password}
 											onChange={handleChangeInput}
 											onFocus={() => {
@@ -149,15 +150,11 @@ const LoginForm = () => {
 										<button
 											type="submit"
 											disabled={!isFormValid}
-											className="w-full text-lg px-4 py-2 pt-3 mb-4 tracking-wide text-white transition-colors duration-200 transform bg-[#85B7CC] rounded-sm disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] focus:outline-none focus:bg-[#85B7CC] focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+											className="rounded-xl w-full text-lg px-4 py-2 pt-3 mb-4 tracking-wide text-white transition-colors duration-200 transform bg-[#85B7CC] rounded-sm disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] focus:outline-none focus:bg-[#85B7CC] focus:ring focus:ring-blue-300 focus:ring-opacity-50"
 										>
 											로그인
 										</button>
-										{errMsg && (
-											<p className="text-red-500 text-xs">{errMsg}</p>
-										)}
-										{/* <GoogleLoginButton /> */}
-
+										{errMsg && <p className="text-red-500 text-xs">{errMsg}</p>}
 										<GoogleButton />
 									</div>
 								</form>

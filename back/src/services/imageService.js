@@ -1,8 +1,8 @@
-import sharp from 'sharp';
-import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
-import { ImageModel } from '../db/models/imageModel.js';
+import { UPLOAD_PATH } from '../utills/path.js';
+import { imageModel } from '../db/models/imageModel.js';
+import { storyPostModel } from '../db/models/storyPostModel.js';
+import { saveS3, deleteS3 } from '../utills/multer.js';
 
 class imageService {
   static async generateUniqueFileName(file) {
@@ -16,48 +16,78 @@ class imageService {
     if (!file) {
       throw new Error('No image file uploaded.');
     }
-    const allowedTypes = [
-      'image/jpeg',
-      'image/png',
-      'image/bmp',
-      'image/gif',
-      'image/jpg',
-    ];
-    if (!allowedTypes.includes(file.mimetype)) {
-      throw new Error('Invalid file type');
-    }
+    const fileName = file.filename;
+    const filePath = `${UPLOAD_PATH}/${fileName}`;
 
-    const __filename = fileURLToPath(import.meta.url); // 현재 모듈의 URL을 가져오기
-    const __dirname = path.dirname(__filename); // 디렉토리 경로를 추출
-
-    const fileName = await imageService.generateUniqueFileName(file);
-
-    const uploadsPath = path.resolve(__dirname, '..', '..', 'uploads');
-    const ImagePath = path.join(uploadsPath, fileName);
-
-    const ImageBuffer = await sharp(file.path).toBuffer();
-    await sharp(ImageBuffer).toFile(ImagePath);
-
-    // 이상한 숫자파일 삭제
-    fs.unlinkSync(file.path);
-
-    const newImage = { fileName: fileName, path: ImagePath };
-    const createImage = await ImageModel.create({ newImage });
+    const newImage = { fileName: fileName, path: filePath };
+    const createImage = await imageModel.create({ newImage });
     return createImage;
   }
 
   static async uploadStableImage(imageData) {
     const uniqueSuffix = `${Date.now()}`;
     const fileName = `stable-${uniqueSuffix}.png`;
-    const filePath = `uploads/${fileName}`;
+    const filePath = `${UPLOAD_PATH}/${fileName}`;
     fs.writeFileSync(filePath, imageData);
-    const fullFilePath = path.resolve(filePath);
     const newImage = {
       fileName: fileName,
-      path: fullFilePath,
+      path: filePath,
     };
-    const createImage = await ImageModel.create({ newImage });
+    const createImage = await imageModel.create({ newImage });
     return createImage;
+  }
+
+  static async uploadImageInS3({ file }) {
+    if (!file) {
+      throw new Error('No image file uploaded.');
+    }
+
+    const fileName = file.key; // original/formData-1691049514760.jpg
+    const filePath = file.location; // https://damchae.s3.ap-northeast-2.amazonaws.com/original/formData-1691049514760.jpg
+
+    const newImage = { fileName: fileName, path: filePath };
+    const createdImage = await imageModel.create({ newImage });
+
+    return createdImage;
+  }
+
+  static async uploadStableImageInS3(imageData) {
+    const uniqueSuffix = `${Date.now()}`;
+    const key = `test/stable-${uniqueSuffix}.jpg`;
+    const uploadParams = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: key,
+      Body: imageData,
+      ContentType: 'image/jpeg',
+      ACL: 'public-read', // 이미지를 public으로 설정
+    };
+
+    await saveS3(uploadParams);
+    const filePath = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${key}`;
+
+    const newImage = {
+      fileName: key,
+      path: filePath,
+    };
+    const createImage = await imageModel.create({ newImage });
+    return createImage;
+  }
+
+  static async deleteStoryImageInS3({ storyId }) {
+    const story = await storyPostModel.findOneByStoryId({ storyId });
+    const image = await imageModel.findOneByImageId({
+      imageId: story.thumbnail,
+    });
+    if (image) {
+      await imageModel.deleteImage({ imageId: story.thumbnail }); // DB 데이터 삭제
+      const fileName = image.fileName;
+      const deleteParams = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: fileName,
+      };
+      await deleteS3(deleteParams); // S3 이미지 삭제
+    }
+    return;
   }
 }
 

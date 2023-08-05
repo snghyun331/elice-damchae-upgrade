@@ -1,12 +1,18 @@
 import User from '../db/models/userModel.js';
 import bcrypt from 'bcrypt';
-// import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
-
 import { OAuth2Client } from 'google-auth-library';
+import { generateRandomString } from '../utills/emailAuth.js';
 
 class userService {
-  static async createUser({ email, password, mbti, nickname, isGoogleLogin }) {
+  static async createUser({
+    profileImg,
+    email,
+    password,
+    mbti,
+    nickname,
+    isGoogleLogin,
+  }) {
     // 이메일 중복 확인
     const user = await User.findByEmail({ email });
     if (user) {
@@ -15,8 +21,6 @@ class userService {
       return { errorMessage };
     }
 
-    // 이메일 인증
-
     let hashedPassword;
     // 비밀번호 해쉬화 (비밀번호가 제공된 경우에만 수행)
     if (password) {
@@ -24,6 +28,7 @@ class userService {
     }
 
     const newUser = {
+      profileImg,
       email,
       password: isGoogleLogin ? password : hashedPassword,
       mbti,
@@ -34,6 +39,23 @@ class userService {
     // db에 저장
     const createdNewUser = await User.create({ newUser });
     return createdNewUser;
+  }
+
+  // 이메일 인증코드 생성
+  static async createAuthString() {
+    const string = generateRandomString(10);
+    const createdString = await User.createAuthString({ string });
+    return createdString.authString;
+  }
+
+  // 이메일 인증코드 확인
+  static async readAuthString({ string }) {
+    const searchString = await User.findAuthString({ string });
+    if (searchString === null) {
+      return null;
+    }
+    const resultString = searchString.authString;
+    return resultString;
   }
 
   static async readUser({ email, password }) {
@@ -113,6 +135,12 @@ class userService {
       user = await User.update({ userId, fieldToUpdate, newValue });
     }
 
+    if (toUpdate.profileImg) {
+      const fieldToUpdate = 'profileImg';
+      const newValue = toUpdate.profileImg;
+      user = await User.update({ userId, fieldToUpdate, newValue });
+    }
+
     return user;
   }
 
@@ -126,6 +154,11 @@ class userService {
       return { errorMessage };
     }
 
+    return user;
+  }
+
+  static async readUserEmail({ email }) {
+    const user = await User.findByEmail({ email });
     return user;
   }
 
@@ -159,25 +192,6 @@ class userService {
     return isOut;
   }
 
-  static async readStories(userId) {
-    const stories = await User.findStoriesById(userId);
-    if (!stories) {
-      const errorState = 'error';
-      const errorMessage = '스토리 작성내역이 존재하지 않습니다.';
-      return { errorState, errorMessage };
-    }
-    return stories;
-  }
-
-  static async readForests({ userId }) {
-    const forests = await User.findForestsById({ userId });
-    if (!forests) {
-      const errorState = 'error';
-      const errorMessage = '게시글 작성내역이 존재하지 않습니다.';
-      return { errorState, errorMessage };
-    }
-    return forests;
-  }
   //구글 로그인용
   static async readGoogleUser({ email, idToken }) {
     const user = await User.findByEmail({ email });

@@ -7,11 +7,13 @@ const useRegisterStore = () => {
 		nickname,
 		mbti,
 		isLoggedIn,
+		profileImg,
 
 		setEmail,
 		setNickname,
 		setMbti,
 		setIsLoggedIn,
+		setProfileImg,
 	} = useUserStore();
 
 	const [password, setPassword] = useState('');
@@ -32,6 +34,7 @@ const useRegisterStore = () => {
 		checkMsg,
 		nicknameCheck,
 		errMsg,
+		profileImg,
 
 		setEmail,
 		setPassword,
@@ -43,6 +46,7 @@ const useRegisterStore = () => {
 		setCheckMsg,
 		setNicknameCheck,
 		setErrMsg,
+		setProfileImg,
 	};
 };
 

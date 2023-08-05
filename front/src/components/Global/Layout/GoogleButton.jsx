@@ -1,63 +1,72 @@
-import GoogleLogin from 'react-google-login';
+import { useEffect } from 'react';
 import { useUserActions } from '../../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
-const clientIdData = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const GoogleButton = () => {
-	const { googleRegister, googleLogin } = useUserActions();
+	const { googleLogin } = useUserActions();
 	const navigate = useNavigate();
 
-	const onSuccess = async (res) => {
-		console.log(res);
-		const email = res.wt.cu;
-		const idToken = res.tokenId; //사용하지 않을 가상 비밀번호 생성
-		const nickname = res.wt.Ad;
-		const mbti = '미설정';
+	useEffect(() => {
+		window.google.accounts.id.initialize({
+			client_id: clientId,
+			callback: handleOnSignIn,
+			auto_prompt: false,
+		});
 
-		const user = { email, idToken, nickname, mbti, isGoogleLogin: true };
+		window.google.accounts.id.renderButton(
+			document.getElementById('google-signin-button'),
+			{
+				type: 'standard',
+				size: 'large',
+				theme: 'outline',
+				text: 'sign_in_with',
+				shape: 'rectangular',
+				logo_alignment: 'left',
+			},
+		);
 
+		return () => {
+			window.google.accounts.id.cancel();
+		};
+	}, []);
+
+	const decode = (token) => {
 		try {
-			// TODO : googleRegister 요청 한번만 보내고, 백에서 회원가입과 로그인 동시에 수행하도록 수정
-			// TODO : GoogleLogin 라이브러리 사용하지 않도록 수정
-			await googleRegister(user);
-			await googleLogin(user);
-			navigate('/');
+			const base64Url = token.split('.')[1];
+			const base64 = base64Url.replace('-', '+').replace('_', '/');
+			return JSON.parse(window.atob(base64));
 		} catch (error) {
-			console.log(error.response?.data?.errorMessage);
+			console.error('Failed to decode JWT token:', error);
+			return null;
 		}
 	};
 
-	const onFailure = (res) => {
-		console.log(res);
+	const handleOnSignIn = async (response) => {
+		const responsePayload = decode(response.credential);
+
+		if (response) {
+			const email = responsePayload.email;
+			const idToken = response.credential;
+			const nickname = responsePayload.given_name;
+			const mbti = '미설정';
+
+			const user = { email, idToken, nickname, mbti, isGoogleLogin: true };
+
+			try {
+				await googleLogin(user);
+				navigate('/');
+			} catch (error) {
+				toast.error('구글 로그인에 실패했습니다.')
+				console.log(error.response?.data?.errorMessage);
+			}
+		}
 	};
 
 	return (
-		<div>
-			<GoogleLogin
-				clientId={clientIdData}
-				onSuccess={onSuccess}
-				onFailure={onFailure}
-				buttonText="Google 계정으로 로그인 · 회원가입"
-				className="w-full flex justify-center items-center"
-			/>
-
-			<div
-				id="g_id_onload"
-				data-client_id={clientIdData}
-				data-login_uri="http://localhost:5173"
-				data-auto_prompt="false"
-			></div>
-			<div
-				className="g_id_signin"
-				data-type="standard"
-				data-size="large"
-				data-theme="outline"
-				data-text="sign_in_with"
-				data-shape="rectangular"
-				data-logo_alignment="left"
-			></div>
-		</div>
+			<div id="google-signin-button"></div>
 	);
 };
 

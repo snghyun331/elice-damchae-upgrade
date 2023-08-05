@@ -1,19 +1,31 @@
 import { useState } from 'react';
 import Search from '../Global/Search';
-import DaenamusCard from '../Global/DaenamusCard';
+import DaenamuCardMap from './DaenamuCardMap';
 import { mbtiList } from '../Util/Util';
 import { useNavigate } from 'react-router-dom';
+import { useIsLoggedIn } from '../../store/useUserStore';
+import useStoryStore from '../../store/useStoryStore';
 
 const DaenamusMain = () => {
+	const { reset } = useStoryStore();
+	const isLoggedIn = useIsLoggedIn();
 	const [selectedMBTI, setSelectedMBTI] = useState([]);
 	const [selectedTab, setSelectedTab] = useState('전체글');
 	const navigate = useNavigate();
 
+	const select = (value) => {
+		setSelectedMBTI([...selectedMBTI, value]);
+	};
+
+	const deselect = (value) => {
+		setSelectedMBTI(selectedMBTI.filter((item) => item !== value));
+	};
+
 	const toggleMBTI = (value) => {
 		if (selectedMBTI.includes(value)) {
-			setSelectedMBTI(selectedMBTI.filter((item) => item !== value));
+			deselect(value);
 		} else {
-			setSelectedMBTI([...selectedMBTI, value]);
+			select(value);
 		}
 	};
 
@@ -24,22 +36,24 @@ const DaenamusMain = () => {
 
 	return (
 		<>
-			<header>{/* Header 컴포넌트 */}</header>
-
-			<div className="container mx-auto px-4">
-				<div className="mt-8 mb-4">
-					<Search />
-				</div>
-
-				<div className="font-bold md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+			<div className="p-10 container mx-auto px-4">
+				<div
+					data-aos="fade-right"
+					className="font-bold md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+				>
 					<div className="flex justify-between items-center mb-4 text-3xl font-semibold text-zinc-700">
 						<div>대나무숲</div>
 						<button
-							onClick={() => {
-								navigate('/daenamus/write');
-							}}
+							onClick={
+								isLoggedIn
+									? () => {
+											navigate('/daenamus/write');
+											reset();
+									  }
+									: () => navigate('/login')
+							}
 							type="button"
-							className="w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+							className="rounded-xl w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
 						>
 							글쓰기
 						</button>
@@ -48,6 +62,9 @@ const DaenamusMain = () => {
 						다양한 주제의 토론에 참가하고 나와 같은 유형이나 나와 다른 유형이
 						어떻게 반응하는지 알아보아요.
 					</div>
+				</div>
+				<div className="mt-8 mb-4">
+					<Search />
 				</div>
 
 				<div className="mb-8 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
@@ -90,15 +107,7 @@ const DaenamusMain = () => {
 					);
 				})}
 
-				<div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-					{Array.from({ length: 12 }).map((_, index) => (
-						<div key={index}>
-							<DaenamusCard />
-						</div>
-					))}
-				</div>
-
-				<div className="mt-8 flex justify-center">{/* 페이지네이션 */}</div>
+				<DaenamuCardMap />
 			</div>
 		</>
 	);

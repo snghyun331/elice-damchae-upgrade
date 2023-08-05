@@ -1,49 +1,95 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
-import PropTypes from 'prop-types';
+import { textToIcon, calendarDateToString } from '../Util/Util';
+import { useNavigate } from 'react-router-dom';
+import { getApi } from '../../services/api';
 
-function MyCalendar({ dateMoodData }) {
-	const [value, setValue] = useState(new Date());
+function MyCalendar() {
+	const [posts, setPosts] = useState([]);
+	const navigate = useNavigate();
 
-	const getMoodFromDate = (date) => {
-		const dateString = date.toISOString().split('T')[0];
-		const foundMood = dateMoodData.find((item) => item.date === dateString);
-		return foundMood ? foundMood.mood : null;
+	const fetchData = async (year, month) => {
+		try {
+			const response = await getApi(
+				`stories/my/calendar?year=${year}&month=${month}`,
+			);
+			setPosts(response.data.posts);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
-	const renderTileContent = ({ date, view }) => {
-		const mood = getMoodFromDate(date);
-		if (view === 'month') {
+	const simplePost = (posts || []).map(({ koreaCreatedAt, mood, _id }) => ({
+		date: new Date(koreaCreatedAt).toISOString().split('T')[0],
+		mood: textToIcon[mood],
+		_id,
+	}));
+
+	const getDataFromDate = (date) => {
+		const dateString = calendarDateToString(date);
+		const data = simplePost.find((item) => item.date === dateString);
+		return data;
+	};
+
+	const renderTileContent = ({ date, view, activeStartDate }) => {
+		const currentMonthInView = activeStartDate.getMonth();
+		const dateMonth = date.getMonth();
+		const data = getDataFromDate(date);
+
+		if (view === 'month' && currentMonthInView === dateMonth) {
 			return (
 				<div className="tileContentWrapper">
-					<span className="text-4xl">{mood ? mood : '⚪'}</span>
+					<span className="text-3xl">{data ? data.mood : '⚪'}</span>
 				</div>
 			);
 		} else {
-			return null;
+			return (
+				<div className="tileContentWrapper">
+					<span className="text-4xl">{'　'}</span>
+				</div>
+			);
 		}
 	};
+
+	const handleDateClick = (date) => {
+		const data = getDataFromDate(date);
+		if (data) {
+			navigate(`/stories/${data._id}`);
+		}
+	};
+
+	const handleActiveStartDateChange = ({ activeStartDate }) => {
+		const year = activeStartDate.getFullYear();
+		const month = activeStartDate.getMonth() + 1;
+		fetchData(year, month); // Call the fetchData function when the active month changes
+	};
+
+	useEffect(() => {
+		// Get current year and month on first render
+		const currentDate = new Date();
+		const currentYear = currentDate.getFullYear();
+		const currentMonth = currentDate.getMonth() + 1;
+
+		// Fetch data for current year and month
+		fetchData(currentYear, currentMonth);
+	}, []);
 
 	return (
 		<div>
 			<Calendar
-				className="mt-5" // Add the custom CSS class to Calendar
-				onChange={(newValue) => setValue(newValue)}
-				value={value}
+				className="mt-5 p-1.5"
 				tileContent={renderTileContent}
 				formatDay={(locale, date) =>
 					date.toLocaleString('en', { day: 'numeric' })
 				}
-				formatShortWeekday={(
-					locale,
-					date, // Add this prop for customizing weekday names
-				) => date.toLocaleString('en', { weekday: 'short' })}
+				formatShortWeekday={(locale, date) =>
+					date.toLocaleString('en', { weekday: 'short' })
+				}
+				onClickDay={handleDateClick}
+				onActiveStartDateChange={handleActiveStartDateChange}
 			/>
 		</div>
 	);
 }
-MyCalendar.propTypes = {
-	dateMoodData: PropTypes.array.isRequired,
-};
 
 export default MyCalendar;

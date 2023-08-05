@@ -2,23 +2,16 @@ import moment from 'moment';
 import StoryEditor from './StoryEditor';
 import MusicVideo from './MusicVideo';
 
-import useStoryStore from '../../hooks/useStoryStore';
-import { useEffect, useRef, useMemo } from 'react';
+import useStoryStore from '../../store/useStoryStore';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { postApi } from '../../services/api';
+import './StoryCreateModal.css';
 
 const StoryCreateModal = ({ onClose }) => {
-	const {
-		title,
-		content,
-		thumbnail,
-		mood,
-		music,
-		phrase,
+	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
 
-		isPublic,
-		setIsPublic,
-	} = useStoryStore();
+	const [isPublic, setIsPublic] = useState(false);
 
 	const dimmedRef = useRef(null);
 
@@ -37,24 +30,27 @@ const StoryCreateModal = ({ onClose }) => {
 	const postStory = async (e) => {
 		e.preventDefault();
 
-		try {
-			const post = { title, content, thumbnail, isPublic, mood, music };
-			console.log(post);
-			const formData = new FormData();
-			for (const key in post) {
-				formData.append(key, post[key]);
+		if (confirm('스토리는 수정이 불가합니다. 등록하시겠습니까?')) {
+			try {
+				const post = { title, content, thumbnail, isPublic, mood, music };
+				console.log(post);
+				const formData = new FormData();
+				for (const key in post) {
+					formData.append(key, post[key]);
+				}
+
+				const response = await postApi('stories', formData);
+				console.log(response.data);
+				onClose();
+
+				setTimeout(() => {
+					window.location.href = '/stories';
+				}, 100);
+			} catch (e) {
+				console.error(e);
 			}
-
-			const response = await postApi('stories', formData);
-			console.log(response.data);
-			onClose();
-
-			setTimeout(() => {
-				window.location.href = '/stories';
-			}, 100);
-		} catch (e) {
-			console.error(e);
 		}
+		//TODO:모달로 바꾸기
 	};
 
 	const isFormValid = useMemo(
@@ -78,11 +74,11 @@ const StoryCreateModal = ({ onClose }) => {
 					data-modal-backdrop="static"
 					tabIndex="-1"
 					aria-hidden="true"
-					className="relative w-full max-w-2xl p-4 overflow-x-hidden overflow-y-auto"
+					className="relative w-full max-w-2xl p-4 overflow-x-hidden overflow-y-auto max-h-screen modal-content"
 				>
 					<div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
 						<div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-							<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+							<h3 className="text-xl font-semibold text-gray-900 dark:text-white my-2">
 								{currentDate}의 스토리 작성하기
 							</h3>
 							<button
@@ -131,14 +127,21 @@ const StoryCreateModal = ({ onClose }) => {
 						</div>
 
 						{music && (
-							<div className="p-6 border-t border-gray-200 dark:border-gray-600">
+							<div className="px-3 border-t border-gray-200 dark:border-gray-600">
 								<MusicVideo music={music} phrase={phrase} mood={mood} />
 							</div>
 						)}
 
-						<div className="flex-row p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+						<div className="flex-row p-6 border-t border-gray-200 rounded-b dark:border-gray-600">
 							<div className="flex flex-col">
 								<div className="justify-end flex flex-row">
+									{!isFormValid && (
+										<div className="mr-3 items-center">
+											<p className="self-end text-red-500 text-sm mt-2">
+												빈 칸을 채워주세요.
+											</p>
+										</div>
+									)}
 									<button
 										disabled={!isFormValid}
 										onClick={postStory}
@@ -156,13 +159,7 @@ const StoryCreateModal = ({ onClose }) => {
 										닫기
 									</button>
 								</div>
-								{!isFormValid && (
-									<p className="self-end text-red-500 text-xs">
-										빈 칸을 채워주세요.
-									</p>
-								)}
 							</div>
-							<div></div>
 						</div>
 					</div>
 				</div>
