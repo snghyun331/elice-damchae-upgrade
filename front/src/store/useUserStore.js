@@ -77,7 +77,6 @@ const useUserStore = create((set) => {
 					isGoogleLogin: true,
 				};
 
-				// Save the user data in local storage
 				localStorage.setItem('userData', JSON.stringify(userData));
 
 				set(userData);

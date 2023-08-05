@@ -51,7 +51,6 @@ const DaenamuRead = () => {
 	};
 
 	const handleCancelEdit = () => {
-		// Reset the edited comment and disable edit mode when canceling the edit
 		setTitle(forest.title);
 		setContent(forest.content);
 		setMood;
@@ -60,7 +59,6 @@ const DaenamuRead = () => {
 
 	const handleSaveEdit = async () => {
 		try {
-			// Call the onEdit function with the edited comment and the commentData._id
 			const res = await putApi(`forest/${forestId}`, {
 				title,
 				content,
@@ -97,7 +95,6 @@ const DaenamuRead = () => {
 					{isDataLoading && forest.userInfo._id == id && (
 						<>
 							{editMode ? (
-								// Show Save and Cancel buttons in edit mode
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleCancelEdit}
@@ -113,7 +110,6 @@ const DaenamuRead = () => {
 									</button>
 								</div>
 							) : (
-								// Show Edit button in view mode
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleEdit}
@@ -132,9 +128,9 @@ const DaenamuRead = () => {
 						</>
 					)}
 				</div>
-				(//TODO:제목 길어지면 박스무너짐..)
 				<div className="relative top-0 px-10">
 					{editMode ? (
+						//TODO:제목 길어지면 박스무너짐
 						<DaenamuTextEditor />
 					) : (
 						<div className="view-mode">

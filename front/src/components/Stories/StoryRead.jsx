@@ -13,7 +13,7 @@ const StoryRead = () => {
 	const { storyId } = useParams();
 	const [story, setStory] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
-	const [isPublicStory, setIsPublicStory] = useState(true); // New state for public/private check // New state for public/private check
+	const [isPublicStory, setIsPublicStory] = useState(true);
 
 	const navigate = useNavigate();
 

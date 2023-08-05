@@ -39,7 +39,7 @@ const StoryComment = ({ storyId }) => {
 	const deleteComment = async (commentId) => {
 		try {
 			await delApi(`stories/comments/${commentId}`);
-			fetchComment(); // Assuming you have a function fetchComment to fetch updated commentList
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -50,7 +50,7 @@ const StoryComment = ({ storyId }) => {
 			await patchApi(`stories/comments/${commentId}`, {
 				comment: editedComment,
 			});
-			fetchComment(); // Assuming you have a function fetchComment to fetch updated commentList
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
