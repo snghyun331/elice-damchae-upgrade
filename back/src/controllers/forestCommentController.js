@@ -8,7 +8,6 @@ class forestCommentController {
       const forestId = req.params.forestId;
       const writerId = req.currentUserId;
       const { comment } = req.body;
-
       if (!comment) {
         throw new Error('댓글을 입력해주세요');
       }
@@ -25,7 +24,7 @@ class forestCommentController {
         comment,
         mood,
       });
-
+      console.log('newComment:', newComment);
       const result = await forestCommentService.populateForestComment(
         newComment,
         'forestId writerId',
