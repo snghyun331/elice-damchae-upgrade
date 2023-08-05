@@ -16,22 +16,22 @@ const ReactionChart = ({ forestId }) => {
 	};
 
 	const mbtiTypes = [
-		'istj',
-		'isfj',
-		'infj',
-		'intj',
-		'istp',
-		'isfp',
-		'infp',
-		'intp',
-		'estp',
-		'esfp',
-		'enfp',
-		'entp',
-		'estj',
-		'esfj',
-		'enfj',
-		'entj',
+		'ISTJ',
+		'ISFJ',
+		'INFJ',
+		'INTJ',
+		'ISTP',
+		'ISFP',
+		'INFP',
+		'INTP',
+		'ESTP',
+		'ESFP',
+		'ENFP',
+		'ENTP',
+		'ESTJ',
+		'ESFJ',
+		'ENFJ',
+		'ENTJ',
 	];
 
 	useEffect(() => {

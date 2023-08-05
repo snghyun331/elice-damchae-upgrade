@@ -101,7 +101,7 @@ const StoryComment = ({ storyId }) => {
 			</div>
 
 			<div>
-				{commentList.length === 0 ? (
+				{commentCount === 0 ? (
 					<p>등록된 댓글이 없습니다.</p>
 				) : (
 					commentList.map((commentData) => (
