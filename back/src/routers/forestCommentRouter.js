@@ -10,4 +10,15 @@ forestCommentRouter.post(
   forestCommentController.createForestComment,
 );
 
+forestCommentRouter.put(
+  '/forest/comments/:commentId',
+  loginRequired,
+  forestCommentController.updateForestComment,
+);
+
+forestCommentRouter.get(
+  '/forest/:forestId/comments',
+  forestCommentController.readForestComment,
+);
+
 export { forestCommentRouter };

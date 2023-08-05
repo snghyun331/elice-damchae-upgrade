@@ -7,6 +7,9 @@ class forestCommentController {
       const forestId = req.params.forestId;
       const writerId = req.currentUserId;
       const { comment } = req.body;
+      console.log('forestId:', forestId);
+      console.log('writerId', writerId);
+      console.log(comment);
       if (!comment) {
         throw new Error('댓글을 입력해주세요');
       }
@@ -23,12 +26,62 @@ class forestCommentController {
         comment,
         mood,
       });
-
+      console.log('newComment:', newComment);
       const result = await forestCommentService.populateForestComment(
         newComment,
         'forestId writerId',
       );
       return res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async updateForestComment(req, res, next) {
+    try {
+      const commentId = req.params.commentId;
+      const userId = req.currentUserId;
+      const updatedComment = req.body.updatedComment; // 수정된 댓글 내용
+
+      console.log('코맨트', commentId);
+      console.log('유저ID', userId);
+      console.log('Updated Comment:', updatedComment);
+
+      const updatedData = await forestCommentService.updateForestComment({
+        commentId,
+        userId,
+        updatedComment,
+      });
+
+      const result = await forestCommentService.populateForestComment(
+        updatedData,
+        'forestId writerId',
+      );
+
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  // 댓글 개별 조회 컨트롤러
+  static async readForestComment(req, res, next) {
+    try {
+      const forestId = req.params.forestId;
+      const page = parseInt(req.query.page || 1);
+      const limit = 6;
+      const { comments, totalPage, count } =
+        await forestCommentService.readForestComment(limit, page, forestId);
+      const populageResult = await forestCommentService.populateForestComment(
+        comments,
+        'writerId',
+      );
+      const result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalCommentsCount: count,
+        comments: populageResult,
+      };
+
+      return res.status(200).send({ result });
     } catch (error) {
       next(error);
     }
