@@ -14,6 +14,15 @@ export const textToColor = {
 	neutral: '#E0E0E0',
 };
 
+export const textEngToDeepColor = {
+	pleasure: '#8CD790',
+	insecure: '#A593E0',
+	sad: '#6AAFE6',
+	neutral: '#B8B8B8',
+	surprise: '#F6B352',
+	anger: '#FF7761',
+};
+
 //통계색용, 진한 버전
 export const textToDeepColor = {
 	불안: '#A593E0',

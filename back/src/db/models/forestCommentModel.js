@@ -45,23 +45,24 @@ class forestCommentModel {
   }
   // 개별 댓글 조회 리포지토리 메서드
   static async readAllForestComment(skip, limit, forestId) {
-    const comments = await forestComment
-      .find({ forestId: forestId })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .exec();
+    try {
+      const comments = await forestComment
+        .find({ forestId: forestId })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .exec();
 
-    const count = await forestComment.countDocuments({ forestId: forestId });
-    console.log('count: ', count);
-    if (!count) {
-      throw new Error('요청한 댓글을 찾을 수 없습니다.');
+      const count = await forestComment.countDocuments({ forestId: forestId });
+      console.log('count: ', count);
+      if (!count) {
+        throw new Error('요청한 댓글을 찾을 수 없습니다.');
+      }
+
+      return { comments, count };
+    } catch (error) {
+      throw new Error(error);
     }
-
-    return { comments, count };
-  }
-  catch(error) {
-    throw new Error(error);
   }
 
   static async populateForestComment(info, field) {

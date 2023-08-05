@@ -193,7 +193,7 @@ const DaenamuRead = () => {
 					<DaenamuLikeSection forestId={forest._id} userId={id} />
 
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
-					<ReactionChart />
+					<ReactionChart forestId={forestId} />
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<div>
 						<DaenamuComment

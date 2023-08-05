@@ -1,15 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
+import { getApi } from '../../services/api';
+import { textEngToDeepColor, textToKorean } from '../Util/Util';
 
-const ReactionChart = () => {
-	const textToColor = {
-		분노: '#E57373',
-		불안: '#FFEE99',
-		기쁨: '#FF99CC',
-		슬픔: '#99CCFF',
-		놀람: '#FFCC66',
-		중립: '#E0E0E0',
+const ReactionChart = ({ forestId }) => {
+	const [reaction, setReaction] = useState('');
+	const fetchData = async () => {
+		try {
+			const res = await getApi(`forest/${forestId}/comments/statistics`);
+			console.log(res.data);
+			setReaction(res.data);
+		} catch (error) {
+			console.log(error);
+		}
 	};
+
 	const mbtiTypes = [
 		'ISTJ',
 		'ISFJ',
@@ -29,59 +34,18 @@ const ReactionChart = () => {
 		'ENTJ',
 	];
 
-	const getRandomNumber = (min, max) =>
-		Math.floor(Math.random() * (max - min + 1)) + min;
+	useEffect(() => {
+		fetchData();
+	}, []);
 
-	const [series, setSeries] = useState([
-		{
-			name: '분노',
-			data: mbtiTypes.map((mbtiType) => ({
-				x: mbtiType,
-				y: getRandomNumber(1, 50),
-				fillColor: textToColor['분노'],
-			})),
-		},
-		{
-			name: '불안',
-			data: mbtiTypes.map((mbtiType) => ({
-				x: mbtiType,
-				y: getRandomNumber(1, 50),
-				fillColor: textToColor['불안'],
-			})),
-		},
-		{
-			name: '기쁨',
-			data: mbtiTypes.map((mbtiType) => ({
-				x: mbtiType,
-				y: getRandomNumber(1, 50),
-				fillColor: textToColor['기쁨'],
-			})),
-		},
-		{
-			name: '슬픔',
-			data: mbtiTypes.map((mbtiType) => ({
-				x: mbtiType,
-				y: getRandomNumber(1, 50),
-				fillColor: textToColor['슬픔'],
-			})),
-		},
-		{
-			name: '놀람',
-			data: mbtiTypes.map((mbtiType) => ({
-				x: mbtiType,
-				y: getRandomNumber(1, 50),
-				fillColor: textToColor['놀람'],
-			})),
-		},
-		{
-			name: '중립',
-			data: mbtiTypes.map((mbtiType) => ({
-				x: mbtiType,
-				y: getRandomNumber(1, 50),
-				fillColor: textToColor['중립'],
-			})),
-		},
-	]);
+	const initialSeries = Object.keys(reaction).map((emotion) => ({
+		name: textToKorean[emotion],
+		data: mbtiTypes.map((mbtiType) => ({
+			x: mbtiType,
+			y: reaction[emotion][mbtiType] || 0, // 해당 MBTI 유형에 데이터가 없으면 기본값 0으로 처리합니다.
+			fillColor: textEngToDeepColor[emotion], // 적절한 색상을 가져와야 합니다.
+		})),
+	}));
 
 	const options = {
 		legend: {
@@ -100,7 +64,7 @@ const ReactionChart = () => {
 			text: 'MBTI 유형별 반응',
 			align: 'center',
 		},
-		colors: Object.values(textToColor),
+		colors: Object.values(textEngToDeepColor),
 	};
 
 	return (
@@ -108,7 +72,7 @@ const ReactionChart = () => {
 			<div>
 				<ReactApexChart
 					options={options}
-					series={series}
+					series={initialSeries}
 					type="treemap"
 					height={350}
 				/>
