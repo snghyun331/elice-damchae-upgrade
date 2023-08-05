@@ -2,6 +2,7 @@ import { forestCommentModel } from '../db/models/forestCommentModel.js';
 
 import { forestModel } from '../db/models/forestModel.js';
 import User from '../db/models/userModel.js';
+import { forestComment } from '../db/schemas/forestComment.js';
 class forestCommentService {
   static async createForestComment({ forestId, writerId, comment, mood }) {
     if (!comment) {
@@ -50,7 +51,18 @@ class forestCommentService {
       throw new Error(error);
     }
   }
-
+  static async deleteForestComment(commentId) {
+    try {
+      const deletedComment = await forestCommentModel.deleteComment(commentId);
+      return {
+        statusCode: 200,
+        message: '댓글 삭제에 성공하셨습니다.',
+        deletedComment,
+      };
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
   // 개별 댓글 조회 서비스
   static async readForestComment(limit, page, forestId) {
     const skip = (page - 1) * limit;

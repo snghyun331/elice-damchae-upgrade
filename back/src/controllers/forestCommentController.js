@@ -112,6 +112,18 @@ class forestCommentController {
       next(error);
     }
   }
+
+  static async deleteForestComment(req, res, next) {
+    try {
+      const commentId = req.params.commentId;
+      const { deletedComment } = await forestCommentService.deleteForestComment(
+        commentId,
+      );
+      return res.status(200).send({ result: deletedComment });
+    } catch (error) {
+      next(error);
+    }
+  }
   // 댓글 개별 조회 컨트롤러
   static async readForestComment(req, res, next) {
     try {
