@@ -16,7 +16,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 	const [didUserDisliked, setDidUserDisliked] = useState(false);
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchLike = async () => {
 			const likesResponse = await getApi(`forest/${forestId}/getLikes`);
 			const dislikesResponse = await getApi(`forest/${forestId}/getDislikes`);
 			setLikes(likesResponse.data.likes.length);
@@ -35,7 +35,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 		};
 
 		if (forestId) {
-			fetchData();
+			fetchLike();
 		}
 	}, [forestId]);
 

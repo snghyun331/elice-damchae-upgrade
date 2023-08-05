@@ -13,7 +13,7 @@ const DaenamuComment = ({ forestId }) => {
 	const [totalPage, setTotalPage] = useState(0);
 	const [commentCount, setCommentCount] = useState(0);
 
-	const fetchData = async (page = 1) => {
+	const fetchComment = async (page = 1) => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments?page=${page}`);
 			console.log(res.data);
@@ -27,19 +27,19 @@ const DaenamuComment = ({ forestId }) => {
 	};
 
 	useEffect(() => {
-		fetchData(currentPage);
+		fetchComment(currentPage);
 	}, []);
 
 	const { currentPage, prev, next, go } = usePagination(
 		isDataLoading ? commentList : [],
 		totalPage,
-		{ onChange: ({ targetPage }) => fetchData(targetPage) },
+		{ onChange: ({ targetPage }) => fetchComment(targetPage) },
 	);
 
 	const deleteComment = async (commentId) => {
 		try {
 			await delApi(`forest/comments/${commentId}`);
-			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -50,7 +50,7 @@ const DaenamuComment = ({ forestId }) => {
 			await patchApi(`forest/comments/${commentId}`, {
 				comment: editedComment,
 			});
-			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -58,7 +58,7 @@ const DaenamuComment = ({ forestId }) => {
 
 	useEffect(() => {
 		if (isDataLoading) {
-			fetchData(currentPage);
+			fetchComment(currentPage);
 		}
 	}, [currentPage]);
 
@@ -70,7 +70,7 @@ const DaenamuComment = ({ forestId }) => {
 			});
 			console.log(res);
 			setComment('');
-			fetchData();
+			fetchComment();
 		} catch (error) {
 			console.log(error.response.data.errorMessage);
 		}
@@ -87,7 +87,7 @@ const DaenamuComment = ({ forestId }) => {
 						setComment(e.target.value);
 					}}
 					id="comment"
-					maxLength={200} // Add this line
+					maxLength={200}
 					value={comment}
 					placeholder="댓글을 입력하세요."
 				/>

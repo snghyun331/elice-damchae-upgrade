@@ -5,7 +5,7 @@ import { textEngToDeepColor, textToKorean } from '../Util/Util';
 
 const ReactionChart = ({ forestId }) => {
 	const [reaction, setReaction] = useState('');
-	const fetchData = async () => {
+	const fetchReaction = async () => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments/statistics`);
 			console.log(res.data);
@@ -35,7 +35,7 @@ const ReactionChart = ({ forestId }) => {
 	];
 
 	useEffect(() => {
-		fetchData();
+		fetchReaction();
 	}, []);
 
 	const initialSeries = Object.keys(reaction).map((emotion) => ({

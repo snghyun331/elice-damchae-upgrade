@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
-import { useIsLoggedIn, useUserActions } from '../../../store/useUserStore';
+import { useIsLoggedIn, useUserActions } from '@/store/useUserStore';
 import { classNames } from '../../Util/Util';
 import { Bars3Icon } from '@heroicons/react/24/solid';
 const MobileHeader = () => {

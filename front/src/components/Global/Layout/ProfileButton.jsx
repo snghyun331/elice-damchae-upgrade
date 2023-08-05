@@ -4,7 +4,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { Fragment } from 'react';
 import { classNames } from '../../Util/Util';
-import { useUserProfileImg } from '../../../store/useUserStore';
+import { useUserProfileImg } from '@/store/useUserStore';
 import { defaultUser } from '../../Util/Util';
 const ProfileButton = () => {
 	const navigate = useNavigate();

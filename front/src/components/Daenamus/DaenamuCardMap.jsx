@@ -9,7 +9,7 @@ const DaenamuCardMap = () => {
 	const [isDataLoading, setIsDataLoading] = useState(false);
 	const [totalPage, setTotalPage] = useState(0);
 
-	const fetchData = async (page = 1) => {
+	const fetchForests = async (page = 1) => {
 		try {
 			const response = await getApi(`forest?page=${page}`);
 			console.log(response);
@@ -21,20 +21,15 @@ const DaenamuCardMap = () => {
 			console.error('Failed to fetch data:', error);
 		}
 	};
-	useEffect(() => {
-		fetchData(currentPage);
-	}, []);
 
 	const { currentPage, prev, next, go } = usePagination(
 		isDataLoading ? forests : [],
 		totalPage,
-		{ onChange: ({ targetPage }) => fetchData(targetPage) },
+		{ onChange: ({ targetPage }) => fetchForests(targetPage) },
 	);
 
 	useEffect(() => {
-		if (isDataLoading) {
-			fetchData(currentPage);
-		}
+		fetchForests(currentPage);
 	}, [currentPage]);
 
 	return (

@@ -6,17 +6,17 @@ import debounce from 'lodash.debounce';
 const HomeMusicVideo = ({ music }) => {
 	const [videoWidth, setVideoWidth] = useState('1000');
 
-	const updateVideoWidth = () => {
-		if (window.innerWidth >= 1500) {
-			setVideoWidth('1500');
-		} else {
-			setVideoWidth(window.innerWidth * 0.7);
-		}
-	};
-
-	const handleResize = debounce(updateVideoWidth, 200);
-
 	useEffect(() => {
+		const updateVideoWidth = () => {
+			if (window.innerWidth >= 1500) {
+				setVideoWidth('1500');
+			} else {
+				setVideoWidth(window.innerWidth * 0.7);
+			}
+		};
+
+		const handleResize = debounce(updateVideoWidth, 200);
+
 		updateVideoWidth();
 		handleResize();
 
@@ -25,7 +25,7 @@ const HomeMusicVideo = ({ music }) => {
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [handleResize]);
+	}, []);
 
 	const opts = {
 		width: videoWidth,

@@ -23,7 +23,7 @@ const DaenamuRead = () => {
 	const navigate = useNavigate();
 	const id = useUserId();
 
-	const fetchData = async () => {
+	const fetchForest = async () => {
 		try {
 			const res = await getApi(`forest/${forestId}`);
 			console.log(res);
@@ -67,7 +67,7 @@ const DaenamuRead = () => {
 			});
 			//TODO:mood추가해야함
 			console.log(res);
-			fetchData();
+			fetchForest();
 
 			setEditMode(false);
 		} catch (error) {
@@ -76,7 +76,7 @@ const DaenamuRead = () => {
 	};
 
 	useEffect(() => {
-		fetchData();
+		fetchForest();
 	}, []);
 
 	useEffect(() => {

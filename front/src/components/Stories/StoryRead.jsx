@@ -18,7 +18,7 @@ const StoryRead = () => {
 	const navigate = useNavigate();
 
 	const id = useUserId();
-	const fetchData = async () => {
+	const fetchStory = async () => {
 		try {
 			const res = await getApi(`stories/${storyId}`);
 			console.log(res);
@@ -43,7 +43,7 @@ const StoryRead = () => {
 	};
 
 	useEffect(() => {
-		fetchData();
+		fetchStory();
 	}, []);
 
 	return (
