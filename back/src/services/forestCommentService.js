@@ -1,7 +1,5 @@
 import { forestCommentModel } from '../db/models/forestCommentModel.js';
-
-import { forestModel } from '../db/models/forestModel.js';
-import User from '../db/models/userModel.js';
+import axios from 'axios';
 class forestCommentService {
   static async createForestComment({ forestId, writerId, comment, mood }) {
     if (!comment) {
@@ -9,48 +7,87 @@ class forestCommentService {
     }
 
     const newComment = { forestId, writerId, comment, mood };
-    console.log(newComment);
+
     // forestModel.findAndIncreaseCommentCount({ forestId });
 
     const createdNewComment = await forestCommentModel.createForestComment({
       newComment,
     });
-    console.log(createdNewComment);
     return createdNewComment;
   }
 
   static async updateForestComment({ commentId, userId, updatedComment }) {
     try {
-      // 추가 로깅: commentId 확인
-      console.log('Received commentId:', commentId);
+      const sentimentServerUrl = process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL;
 
-      const updateComment = await forestCommentModel.readOneByCommentId(
-        commentId,
-      );
+      // Request to the sentiment analysis server
+      const sentimentResponse = await axios.post(sentimentServerUrl, {
+        text: updatedComment,
+      });
 
-      // 추가 로깅: 조회 결과 확인
-      console.log('Fetched comment for update:', updateComment);
+      const newMood = sentimentResponse.data.mood;
 
-      if (!updateComment) {
+      // Check if the comment exists and if the user has the permission
+      const comment = await forestCommentModel.readOneByCommentId(commentId);
+
+      if (!comment) {
         throw new Error('수정할 댓글을 찾을 수 없습니다.');
       }
 
+      if (comment.writerId.toString() !== userId) {
+        throw new Error('작성자만 댓글을 수정할 수 있습니다.');
+      }
+
+      // Update the comment content and mood
       const updatedCommentData = await forestCommentModel.updateForestComment(
         commentId,
-        userId,
         updatedComment,
+        newMood,
       );
 
+      return updatedCommentData;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  // static async updateForestComment({ commentId, userId, updatedComment }) {
+  //   try {
+  //     const updateComment = await forestCommentModel.readOneByCommentId(
+  //       commentId,
+  //     );
+
+  //     if (!updateComment) {
+  //       throw new Error('수정할 댓글을 찾을 수 없습니다.');
+  //     }
+
+  //     const updatedCommentData = await forestCommentModel.updateForestComment(
+  //       commentId,
+  //       userId,
+  //       updatedComment,
+  //     );
+
+  //     return {
+  //       statusCode: 200,
+  //       message: '댓글을 수정하였습니다.',
+  //       updatedComment: updatedCommentData,
+  //     };
+  //   } catch (error) {
+  //     throw new Error(error);
+  //   }
+  // }
+
+  static async deleteForestComment(commentId) {
+    try {
+      const deletedComment = await forestCommentModel.deleteComment(commentId);
       return {
         statusCode: 200,
-        message: '댓글을 수정하였습니다.',
-        updatedComment: updatedCommentData,
+        message: '댓글 삭제에 성공하셨습니다.',
+        deletedComment,
       };
     } catch (error) {
       throw new Error(error);
     }
   }
-
   // 개별 댓글 조회 서비스
   static async readForestComment(limit, page, forestId) {
     const skip = (page - 1) * limit;
