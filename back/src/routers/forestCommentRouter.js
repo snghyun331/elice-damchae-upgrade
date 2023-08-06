@@ -15,11 +15,15 @@ forestCommentRouter.get(
   forestCommentController.readCommentStats,
 );
 forestCommentRouter.put(
-  '/forest/comments/:commentId',
+  '/forest/:forestId/comments/:commentId',
   loginRequired,
   forestCommentController.updateForestComment,
 );
-
+forestCommentRouter.delete(
+  '/forest/:forestId/comments/:commentId',
+  loginRequired,
+  forestCommentController.deleteForestComment,
+);
 forestCommentRouter.get(
   '/forest/:forestId/comments',
   forestCommentController.readForestComment,
