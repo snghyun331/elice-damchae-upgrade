@@ -90,11 +90,7 @@ class forestCommentController {
     try {
       const commentId = req.params.commentId;
       const userId = req.currentUserId;
-      const updatedComment = req.body.updatedComment; // 수정된 댓글 내용
-
-      console.log('코맨트', commentId);
-      console.log('유저ID', userId);
-      console.log('Updated Comment:', updatedComment);
+      const { updatedComment } = req.body; // 수정된 댓글 내용
 
       const updatedData = await forestCommentService.updateForestComment({
         commentId,

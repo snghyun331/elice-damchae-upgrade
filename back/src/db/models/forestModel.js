@@ -1,10 +1,24 @@
 // // forestModel.js
 import ForestPost from '../schemas/forestPost.js';
-import UserModel from '../schemas/user.js';
+
 class forestModel {
   static async create({ newForestPost }) {
     const createdForest = await ForestPost.create(newForestPost);
     return createdForest;
+  }
+
+  static async findOneAndUpdate({ forestId, title, content }) {
+    const updatedPost = await ForestPost.updateOne({
+      _id: forestId,
+      title,
+      content,
+    });
+    return updatedPost;
+  }
+
+  static async findOneAndDelete({ forestId }) {
+    const deletedPost = await ForestPost.deleteOne({ _id: forestId });
+    return deletedPost;
   }
 
   static async findByForest(skip, limit, getAlls) {
@@ -17,9 +31,9 @@ class forestModel {
     return { forests, count };
   }
 
-  static async findOneAndDelete({ forestId }) {
-    const deletedPost = await ForestPost.deleteOne({ _id: forestId });
-    return deletedPost;
+  static async findByUserId({ userId }) {
+    const user = await ForestPost.find({ userInfo: userId });
+    return user;
   }
 
   static async readOneById({ forestId }) {
@@ -27,35 +41,12 @@ class forestModel {
     return forest;
   }
 
-  // static async findById({ userId }) {
-  //   const forest = await ForestPost.find({ userInfo: userId });
-  //   return forest;
-  // }
   // 조회수 1증가
   static async findAndIncreaseView({ forestId }) {
     await ForestPost.updateOne({ _id: forestId }, { $inc: { views: 1 } });
     const forest = await ForestPost.findOne({ _id: forestId }).lean();
     return forest;
   }
-
-  static async findOneAndUpdate({ forestId, title, content }) {
-    const updatedPost = await ForestPost.updateOne({
-      _id: forestId,
-      title,
-      content,
-    });
-    return updatedPost;
-  }
-
-  // static async deletePost({ deletePost }) {
-  //   const { _id, userId, title, content, imageUrl } = deletePost;
-
-  //   const forestDeletePost = await ForestPost.deleteOne(
-  //     { userId, _id },
-  //     { title, content, ...(imageUrl !== 'None' && { imageUrl }) },
-  //   );
-  //   return forestDeletePost;
-  // }
 
   static async findAndCountAll(skip, limit) {
     const forest = await ForestPost.find({})

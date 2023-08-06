@@ -170,18 +170,10 @@ class ForestController {
   // }
   static async updatePost(req, res, next) {
     try {
-      // console.log('Request Params:', req.params);
-      // console.log('Request Body:', req.body);
-
       const forestId = req.params.id;
       const userId = req.currentUserId;
 
-      // console.log('forestId:', forestId);
-      // console.log('userId:', userId);
-
       const postUser = await ForestService.readForestDetail({ forestId });
-
-      // console.log('postUser:', postUser);
 
       if (!postUser) {
         throw new Error('해당 게시물이 존재하지 않습니다.');
@@ -191,7 +183,6 @@ class ForestController {
         throw new Error('스토리 수정 권한이 없습니다.');
       }
 
-      // Compare the postUser.userInfo with userId using toString() and strict equality
       const { title, content } = req.body;
       if (postUser.userInfo.toString() === userId) {
         const post = await ForestService.updatePost({

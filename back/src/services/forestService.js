@@ -110,7 +110,7 @@ class ForestService {
     const forestInfo = {
       ...forest,
 
-      // commentList: comment,
+      // commentList: allcomment,
     };
     return forestInfo;
   }
