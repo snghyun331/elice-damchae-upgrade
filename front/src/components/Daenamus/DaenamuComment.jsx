@@ -36,18 +36,18 @@ const DaenamuComment = ({ forestId }) => {
 		{ onChange: ({ targetPage }) => fetchComment(targetPage) },
 	);
 
-	// const deleteComment = async (commentId) => {
-	// 	try {
-	// 		await delApi(`forest/comments/${commentId}`);
-	// 		fetchComment();
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	}
-	// };
+	const deleteComment = async (commentId) => {
+		try {
+			await delApi(`forest/${forestId}/comments/${commentId}`);
+			fetchComment();
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	const editComment = async (commentId, editedComment) => {
 		try {
-			await putApi(`forest/comments/${commentId}`, {
+			await putApi(`forest/${forestId}/comments/${commentId}`, {
 				comment: editedComment,
 			});
 			fetchComment();
@@ -109,7 +109,7 @@ const DaenamuComment = ({ forestId }) => {
 						<div key={commentData._id}>
 							<CommentBox
 								commentData={commentData}
-								// onDelete={deleteComment}
+								onDelete={deleteComment}
 								onEdit={editComment}
 							/>
 						</div>
