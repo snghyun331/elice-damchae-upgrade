@@ -171,17 +171,17 @@ class ForestController {
   static async updatePost(req, res, next) {
     try {
       // console.log('Request Params:', req.params);
-      console.log('Request Body:', req.body);
+      // console.log('Request Body:', req.body);
 
       const forestId = req.params.id;
       const userId = req.currentUserId;
 
-      console.log('forestId:', forestId);
-      console.log('userId:', userId);
+      // console.log('forestId:', forestId);
+      // console.log('userId:', userId);
 
       const postUser = await ForestService.readForestDetail({ forestId });
 
-      console.log('postUser:', postUser);
+      // console.log('postUser:', postUser);
 
       if (!postUser) {
         throw new Error('해당 게시물이 존재하지 않습니다.');
@@ -265,8 +265,8 @@ class ForestController {
       console.log('mbtiList확인용 코드:', mbtiList); // 확인용 로그
       const posts = await ForestService.findByForestMbti(mbtiList);
       console.log('posts확인용 코드:', posts); // 확인용 로그
-
-      res.json(posts);
+      const result = await ForestService.populateForestPost(posts, 'userInfo');
+      res.json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
