@@ -141,7 +141,7 @@ const StoryRead = () => {
 						</div>
 						<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
 						<div>
-							<StoryComment storyId={storyId} commentList={story.commentList} />
+							<StoryComment storyId={storyId} />
 						</div>
 					</div>
 				</div>

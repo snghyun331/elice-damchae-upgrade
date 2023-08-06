@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { postApi, getApi, delApi, patchApi } from '../../services/api';
+import { postApi, getApi, delApi, putApi } from '../../services/api';
 import CommentBox from '../Global/CommentBox';
 import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
@@ -16,10 +16,10 @@ const DaenamuComment = ({ forestId }) => {
 	const fetchComment = async (page = 1) => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments?page=${page}`);
-			console.log(res.data);
-			setCommentList(res.data.comments);
-			setCommentCount(res.data.totalCommentsCount);
-			setTotalPage(res.data.totalPage);
+			console.log(res.data.result);
+			setCommentList(res.data.result.comments);
+			// setCommentCount(res.data.totalCommentsCount);
+			setTotalPage(res.data.result.totalPage);
 			setIsDataLoading(true);
 		} catch (error) {
 			console.log(error);
@@ -36,18 +36,18 @@ const DaenamuComment = ({ forestId }) => {
 		{ onChange: ({ targetPage }) => fetchComment(targetPage) },
 	);
 
-	const deleteComment = async (commentId) => {
-		try {
-			await delApi(`forest/comments/${commentId}`);
-			fetchComment();
-		} catch (error) {
-			console.log(error);
-		}
-	};
+	// const deleteComment = async (commentId) => {
+	// 	try {
+	// 		await delApi(`forest/comments/${commentId}`);
+	// 		fetchComment();
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+	// };
 
 	const editComment = async (commentId, editedComment) => {
 		try {
-			await patchApi(`forest/comments/${commentId}`, {
+			await putApi(`forest/comments/${commentId}`, {
 				comment: editedComment,
 			});
 			fetchComment();
@@ -101,7 +101,7 @@ const DaenamuComment = ({ forestId }) => {
 				</button>
 			</div>
 
-			{/* <div>
+			<div>
 				{commentList.length === 0 ? (
 					<p>등록된 댓글이 없습니다.</p>
 				) : (
@@ -109,15 +109,15 @@ const DaenamuComment = ({ forestId }) => {
 						<div key={commentData._id}>
 							<CommentBox
 								commentData={commentData}
-								onDelete={deleteComment}
+								// onDelete={deleteComment}
 								onEdit={editComment}
 							/>
 						</div>
 					))
 				)}
-			</div> */}
+			</div>
 
-			{/* <div className="flex justify-center mt-10">
+			<div className="flex justify-center mt-10">
 				<Pagination
 					currentPage={currentPage}
 					totalPages={totalPage}
@@ -125,7 +125,7 @@ const DaenamuComment = ({ forestId }) => {
 					next={next}
 					go={go}
 				/>
-			</div> */}
+			</div>
 		</div>
 	);
 };

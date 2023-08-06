@@ -80,7 +80,7 @@ class forestCommentController {
         surprise: surpriseMbtiCounts,
         anger: angerMbtiCounts,
       };
-      return res.status(200).send({ result });
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
@@ -90,7 +90,7 @@ class forestCommentController {
     try {
       const commentId = req.params.commentId;
       const userId = req.currentUserId;
-      const updatedComment = req.body.updatedComment; // 수정된 댓글 내용
+      const updatedComment = req.body.comment; // 수정된 댓글 내용
 
       console.log('코맨트', commentId);
       console.log('유저ID', userId);

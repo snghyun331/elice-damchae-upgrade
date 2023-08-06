@@ -97,7 +97,9 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 				<input
 					type="text"
 					value={editedComment}
-					onChange={(e) => setEditedComment(e.target.value)}
+					onChange={(e) => {
+						setEditedComment(e.target.value);
+					}}
 					className="w-full h-10 p-2 mt-2 text-base text-gray-900 placeholder-gray-500 border rounded-lg appearance-none focus:outline-none focus:ring focus:ring-blue-200 dark:focus:ring-gray-700"
 				/>
 			) : (

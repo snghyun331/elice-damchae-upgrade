@@ -187,9 +187,9 @@ const DaenamuRead = () => {
 				</div>
 				<div className="flex flex-col">
 					<DaenamuLikeSection forestId={forest._id} userId={id} />
-
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<ReactionChart forestId={forestId} />
+					//TODO:댓글 데이터 바뀌면 바로 ReactionChart에 반영
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<div>
 						<DaenamuComment
