@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { postApi, getApi, delApi, patchApi } from '../../services/api';
+import { postApi, getApi, delApi, putApi } from '../../services/api';
 import CommentBox from '../Global/CommentBox';
 import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
@@ -13,13 +13,13 @@ const DaenamuComment = ({ forestId }) => {
 	const [totalPage, setTotalPage] = useState(0);
 	const [commentCount, setCommentCount] = useState(0);
 
-	const fetchData = async (page = 1) => {
+	const fetchComment = async (page = 1) => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments?page=${page}`);
-			console.log(res.data);
-			setCommentList(res.data.comments);
-			setCommentCount(res.data.totalCommentsCount);
-			setTotalPage(res.data.totalPage);
+			console.log(res.data.result);
+			setCommentList(res.data.result.comments);
+			// setCommentCount(res.data.totalCommentsCount);
+			setTotalPage(res.data.result.totalPage);
 			setIsDataLoading(true);
 		} catch (error) {
 			console.log(error);
@@ -27,19 +27,19 @@ const DaenamuComment = ({ forestId }) => {
 	};
 
 	useEffect(() => {
-		fetchData(currentPage);
+		fetchComment(currentPage);
 	}, []);
 
 	const { currentPage, prev, next, go } = usePagination(
 		isDataLoading ? commentList : [],
 		totalPage,
-		{ onChange: ({ targetPage }) => fetchData(targetPage) },
+		{ onChange: ({ targetPage }) => fetchComment(targetPage) },
 	);
 
 	const deleteComment = async (commentId) => {
 		try {
-			await delApi(`forest/comments/${commentId}`);
-			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
+			await delApi(`forest/${forestId}/comments/${commentId}`);
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -47,10 +47,10 @@ const DaenamuComment = ({ forestId }) => {
 
 	const editComment = async (commentId, editedComment) => {
 		try {
-			await patchApi(`forest/comments/${commentId}`, {
+			await putApi(`forest/${forestId}/comments/${commentId}`, {
 				comment: editedComment,
 			});
-			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -58,7 +58,7 @@ const DaenamuComment = ({ forestId }) => {
 
 	useEffect(() => {
 		if (isDataLoading) {
-			fetchData(currentPage);
+			fetchComment(currentPage);
 		}
 	}, [currentPage]);
 
@@ -70,7 +70,7 @@ const DaenamuComment = ({ forestId }) => {
 			});
 			console.log(res);
 			setComment('');
-			fetchData();
+			fetchComment();
 		} catch (error) {
 			console.log(error.response.data.errorMessage);
 		}
@@ -87,7 +87,7 @@ const DaenamuComment = ({ forestId }) => {
 						setComment(e.target.value);
 					}}
 					id="comment"
-					maxLength={200} // Add this line
+					maxLength={200}
 					value={comment}
 					placeholder="댓글을 입력하세요."
 				/>
@@ -101,7 +101,7 @@ const DaenamuComment = ({ forestId }) => {
 				</button>
 			</div>
 
-			{/* <div>
+			<div>
 				{commentList.length === 0 ? (
 					<p>등록된 댓글이 없습니다.</p>
 				) : (
@@ -115,9 +115,9 @@ const DaenamuComment = ({ forestId }) => {
 						</div>
 					))
 				)}
-			</div> */}
+			</div>
 
-			{/* <div className="flex justify-center mt-10">
+			<div className="flex justify-center mt-10">
 				<Pagination
 					currentPage={currentPage}
 					totalPages={totalPage}
@@ -125,7 +125,7 @@ const DaenamuComment = ({ forestId }) => {
 					next={next}
 					go={go}
 				/>
-			</div> */}
+			</div>
 		</div>
 	);
 };

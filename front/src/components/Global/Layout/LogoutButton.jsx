@@ -1,4 +1,4 @@
-import { useUserActions } from '../../../store/useUserStore';
+import { useUserActions } from '@/store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
 

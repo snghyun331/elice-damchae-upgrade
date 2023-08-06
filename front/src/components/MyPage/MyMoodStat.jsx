@@ -15,7 +15,7 @@ const MyMoodStat = () => {
 	const [moods, setMoods] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
 
-	const fetchData = async () => {
+	const fetchMoodStat = async () => {
 		try {
 			const response = await getApi('stories/my/moodStat');
 			setIsDataLoading(true);
@@ -26,7 +26,7 @@ const MyMoodStat = () => {
 	};
 
 	useEffect(() => {
-		fetchData();
+		fetchMoodStat();
 	}, []);
 
 	useEffect(() => {

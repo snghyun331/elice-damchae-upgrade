@@ -1,35 +1,35 @@
 import { useEffect } from 'react';
 import useUserStore from '../../store/useUserStore';
 
-const getImages = (mbti) => {
-	const images = [];
-	for (let i = 1; i <= 5; i++) {
-		const imageURL = `images/characters/${mbti.toLowerCase()}/${mbti.toLowerCase()}${i}.jpg`;
-		images.push(imageURL);
-	}
-	return images;
+const getImages = (mbti) =>
+	Array(5)
+		.fill()
+		.map(
+			(_, i) =>
+				`images/characters/${mbti.toLowerCase()}/${mbti.toLowerCase()}${i}.jpg`,
+		);
+
+const profileData = {
+	INFP: getImages('INFP'),
+	ENFJ: getImages('ENFJ'),
+	INTJ: getImages('INTJ'),
+	ENTJ: getImages('ENTJ'),
+	INTP: getImages('INTP'),
+	ENTP: getImages('ENTP'),
+	ISFP: getImages('ISFP'),
+	ESFP: getImages('ESFP'),
+	ISTP: getImages('ISTP'),
+	ESTP: getImages('ESTP'),
+	ISFJ: getImages('ISFJ'),
+	ESFJ: getImages('ESFJ'),
+	ISTJ: getImages('ISTJ'),
+	ESTJ: getImages('ESTJ'),
+	INFJ: getImages('INFJ'),
+	ENFP: getImages('ENFP'),
 };
 
 const ProfilePicker = () => {
 	const { mbti, profileImg, setProfileImg } = useUserStore();
-	const profileData = {
-		INFP: getImages('INFP'),
-		ENFJ: getImages('ENFJ'),
-		INTJ: getImages('INTJ'),
-		ENTJ: getImages('ENTJ'),
-		INTP: getImages('INTP'),
-		ENTP: getImages('ENTP'),
-		ISFP: getImages('ISFP'),
-		ESFP: getImages('ESFP'),
-		ISTP: getImages('ISTP'),
-		ESTP: getImages('ESTP'),
-		ISFJ: getImages('ISFJ'),
-		ESFJ: getImages('ESFJ'),
-		ISTJ: getImages('ISTJ'),
-		ESTJ: getImages('ESTJ'),
-		INFJ: getImages('INFJ'),
-		ENFP: getImages('ENFP'),
-	};
 
 	useEffect(() => {
 		if (mbti && typeof profileImg == 'string') {

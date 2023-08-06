@@ -13,12 +13,12 @@ const StoryRead = () => {
 	const { storyId } = useParams();
 	const [story, setStory] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
-	const [isPublicStory, setIsPublicStory] = useState(true); // New state for public/private check // New state for public/private check
+	const [isPublicStory, setIsPublicStory] = useState(true);
 
 	const navigate = useNavigate();
 
 	const id = useUserId();
-	const fetchData = async () => {
+	const fetchStory = async () => {
 		try {
 			const res = await getApi(`stories/${storyId}`);
 			console.log(res);
@@ -43,7 +43,7 @@ const StoryRead = () => {
 	};
 
 	useEffect(() => {
-		fetchData();
+		fetchStory();
 	}, []);
 
 	return (
@@ -141,7 +141,7 @@ const StoryRead = () => {
 						</div>
 						<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
 						<div>
-							<StoryComment storyId={storyId} commentList={story.commentList} />
+							<StoryComment storyId={storyId} />
 						</div>
 					</div>
 				</div>

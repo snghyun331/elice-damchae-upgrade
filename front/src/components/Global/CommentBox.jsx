@@ -10,7 +10,6 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 
 	const handleEdit = async () => {
 		try {
-			// Toggle the edit mode when the "수정" button is clicked
 			setEditMode((prevEditMode) => !prevEditMode);
 		} catch (error) {
 			console.log(error);
@@ -27,9 +26,8 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 
 	const handleSaveEdit = async () => {
 		try {
-			// Call the onEdit function with the edited comment and the commentData._id
 			await onEdit(commentData._id, editedComment);
-			// Disable edit mode after the comment is successfully edited
+
 			setEditMode(false);
 		} catch (error) {
 			console.log(error);
@@ -37,7 +35,6 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 	};
 
 	const handleCancelEdit = () => {
-		// Reset the edited comment and disable edit mode when canceling the edit
 		setEditedComment(commentData.comment);
 		setEditMode(false);
 	};
@@ -100,7 +97,9 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 				<input
 					type="text"
 					value={editedComment}
-					onChange={(e) => setEditedComment(e.target.value)}
+					onChange={(e) => {
+						setEditedComment(e.target.value);
+					}}
 					className="w-full h-10 p-2 mt-2 text-base text-gray-900 placeholder-gray-500 border rounded-lg appearance-none focus:outline-none focus:ring focus:ring-blue-200 dark:focus:ring-gray-700"
 				/>
 			) : (
@@ -120,11 +119,9 @@ CommentBox.propTypes = {
 			_id: PropTypes.string.isRequired,
 			nickname: PropTypes.string.isRequired,
 			mbti: PropTypes.string.isRequired,
-			// Add other properties of writerId if necessary
 		}).isRequired,
 		comment: PropTypes.string.isRequired,
 		updatedAt: PropTypes.string.isRequired,
-		// Add other properties of commentData if necessary
 	}).isRequired,
 	onDelete: PropTypes.func.isRequired,
 	onEdit: PropTypes.func.isRequired,

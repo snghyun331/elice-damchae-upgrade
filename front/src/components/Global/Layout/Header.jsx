@@ -4,7 +4,7 @@ import MobileHeader from './MobileHeader';
 import ProfileButton from './ProfileButton';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
-import { useIsLoggedIn } from '../../../store/useUserStore';
+import { useIsLoggedIn } from '@/store/useUserStore';
 
 const Header = () => {
 	const navigate = useNavigate();

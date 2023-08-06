@@ -16,11 +16,9 @@ const StoryCreateModal = ({ onClose }) => {
 	const dimmedRef = useRef(null);
 
 	useEffect(() => {
-		// Prevent scrolling of the background content when the modal is open
 		document.body.style.overflow = 'hidden';
 
 		return () => {
-			// Re-enable scrolling when the modal is closed
 			document.body.style.overflow = 'auto';
 		};
 	}, []);
