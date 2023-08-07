@@ -17,7 +17,7 @@ const RadioOption = ({
 		if (value === 'local-thumbnail') {
 			setThumbnail(localThumbnail);
 		} else if (value === 'stable-thumbnail') {
-			setThumbnail(stableThumbnail);
+			setThumbnail(stableThumbnail._id);
 		}
 	};
 
