@@ -15,14 +15,16 @@ router.put('/:id', loginRequired, ForestController.updatePost);
 // 글 삭제
 router.delete('/:id', loginRequired, ForestController.deletePost);
 
-// 게시글 단일 조회
+router.get('/mbti', ForestController.getPostsByAuthorMBTI);
+
+// 게시글 조회
 router.get('/', ForestController.findByForest);
+
+// router.get('/mbti', ForestController.getPostsByAuthorMBTI);
 
 router.get('/:forestId', ForestController.readForestDetail);
 
 // 사용자의 MBTI에 해당하는 게시글 조회
 // router.get('/mbti', loginRequired, ForestController.readForestByMbti);
-
-router.get('/mbti', ForestController.getPostsByAuthorMBTI);
 
 export default router;

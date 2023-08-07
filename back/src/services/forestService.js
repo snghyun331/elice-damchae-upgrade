@@ -1,9 +1,5 @@
-// import { forestCommentModel } from '../db/models/forestCommentModel.js';
 import { forestModel } from '../db/models/forestModel.js';
-// import User from '../db/models/userModel.js';
 import ForestPost from '../db/schemas/forestPost.js';
-// import UserModel from '../db/schemas/user.js';
-import axios from 'axios';
 
 class ForestService {
   static async createPost({ userInfo, title, content, mood }) {
@@ -117,11 +113,16 @@ class ForestService {
     }
   }
 
-  static async findByForestMbti(mbtiList) {
+  static async findByForestMbti({ mbtiList, limit, page }) {
     try {
+      const skip = (page - 1) * limit;
       const posts = await forestModel.findByForestMbti({
-        'userInfo.mbti': { $in: mbtiList }, // 필드명 'userInfo.mbti'로 수정
-      });
+        mbtiList,
+        limit,
+        skip,
+      }); // 이 부분 수정
+
+      // 나머지 로직 유지
       return posts;
     } catch (error) {
       throw new Error(

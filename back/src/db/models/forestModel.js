@@ -8,11 +8,10 @@ class forestModel {
   }
 
   static async findOneAndUpdate({ forestId, title, content }) {
-    const updatedPost = await ForestPost.updateOne({
-      _id: forestId,
-      title,
-      content,
-    });
+    const updatedPost = await ForestPost.updateOne(
+      { _id: forestId }, // 업데이트할 문서의 조건
+      { title, content }, // 업데이트할 필드 및 값);
+    );
     return updatedPost;
   }
 
@@ -22,22 +21,18 @@ class forestModel {
   }
 
   static async findByForest(skip, limit, getAlls) {
-    const forests = await ForestPost.find(getAlls)
+    const forestUpdate = { ...getAlls };
+    const forests = await ForestPost.find(forestUpdate)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .exec();
-    const count = await ForestPost.countDocuments(forests);
+    const count = await ForestPost.countDocuments(forestUpdate);
     return { forests, count };
   }
 
-  static async findByUserId({ userId }) {
-    const user = await ForestPost.find({ userInfo: userId });
-    return user;
-  }
-
   static async readOneById({ forestId }) {
-    const forest = await ForestPost.findOne({ forestId });
+    const forest = await ForestPost.findOne({ _id: forestId });
     return forest;
   }
 
@@ -71,9 +66,16 @@ class forestModel {
     );
   }
 
-  static async findByForestMbti(mbtiList) {
+  static async findAndDecreaseCommentCount({ forestId }) {
+    await ForestPost.updateOne(
+      { _id: forestId, commentCount: { $gt: 0 } },
+      { $inc: { commentCount: -1 } },
+    );
+  }
+
+  static async findByForestMbti({ mbtiList, skip, limit }) {
     try {
-      console.log('mbtilist확인용:', mbtiList);
+      console.log('모델 mbtilist :', mbtiList);
       // // 작성자 MBTI가 'ISTJ'인 사용자들을 찾습니다.
       // const usersWithMBTI = await UserModel.find({ mbti: mbti });
       // // 찾은 사용자들의 _id 목록을 추출합니다.
@@ -95,12 +97,20 @@ class forestModel {
         },
         {
           $match: {
-            mbti: {
-              $in: mbtiList.map((mbti) => mbti.toString()),
+            'user.mbti': {
+              $in: mbtiList,
             },
           },
         },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
       ]);
+
+      console.log('Posts다다닫 :', posts);
 
       return posts;
     } catch (error) {
