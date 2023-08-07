@@ -47,8 +47,8 @@ const DaenamuComment = ({ forestId }) => {
 
 	const editComment = async (commentId, editedComment) => {
 		try {
-			await putApi(`forest/${forestId}/comments/${commentId}`, {
-				comment: editedComment,
+			await putApi(`forest/comments/${commentId}`, {
+				updatedComment: editedComment,
 			});
 			fetchComment();
 		} catch (error) {
