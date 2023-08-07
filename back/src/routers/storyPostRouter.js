@@ -14,6 +14,12 @@ storyPostRouter.post(
 );
 
 storyPostRouter.post(
+  '/stories/isAlreadyWrote',
+  loginRequired,
+  storyPostController.checkAlreadyWrite,
+);
+
+storyPostRouter.post(
   '/stories/recommend',
   loginRequired,
   storyPostController.getPredict,
