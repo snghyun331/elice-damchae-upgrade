@@ -10,11 +10,12 @@ import { useUserId } from '../../store/useUserStore';
 import ReactionChart from './Reaction';
 import DaenamuLikeSection from './DaenamuLikeSection';
 import DaenamuTextEditor from './DaenamuTextEditor';
-import useStoryStore from '../../store/useStoryStore';
+import useForestStore from '../../store/useForestStore';
 import DaenamuComment from './DaenamuComment';
 
 const DaenamuRead = () => {
-	const { title, content, setTitle, setContent, setMood } = useStoryStore();
+	const { title, content, setTitle, setContent, setMood, commentList } =
+		useForestStore();
 	const { forestId } = useParams();
 	const [forest, setForest] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
@@ -188,8 +189,14 @@ const DaenamuRead = () => {
 				<div className="flex flex-col">
 					<DaenamuLikeSection forestId={forest._id} userId={id} />
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
-					<ReactionChart forestId={forestId} />
-					//TODO:댓글 데이터 바뀌면 바로 ReactionChart에 반영
+					{commentList && commentList.length > 0 ? (
+						<div>
+							<ReactionChart key={commentList.length} forestId={forestId} />
+						</div>
+					) : (
+						<div></div>
+					)}
+
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<div>
 						<DaenamuComment
