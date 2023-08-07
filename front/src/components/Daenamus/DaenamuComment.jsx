@@ -19,7 +19,7 @@ const DaenamuComment = ({ forestId }) => {
 			const res = await getApi(`forest/${forestId}/comments?page=${page}`);
 			console.log(res.data.comments);
 			setCommentList(res.data.comments);
-			// setCommentCount(res.data.totalCommentsCount);
+			setCommentCount(res.data.totalCommentsCount);
 			setTotalPage(res.data.totalPage);
 			setIsDataLoading(true);
 		} catch (error) {
