@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getApi } from '../../services/api';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import Search from '../Global/Search';
 import SearchResultBox from './SearchResultBox';
 import Pagination from '../Global/Pagination';
@@ -8,6 +8,11 @@ import usePagination from '../../hooks/usePagination';
 
 const SearchResults = () => {
 	const searchQuery = useParams();
+	let searchCategory = useLocation().pathname.split('/')[1];
+	if (searchCategory === 'daenamus') {
+		searchCategory = 'forest';
+	}
+	console.log(searchCategory);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [results, setResults] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
@@ -16,12 +21,13 @@ const SearchResults = () => {
 	const fetchData = async (searchWord, page = 1) => {
 		try {
 			const response = await getApi(
-				`stories?option=title_content&searchword=${
+				`${searchCategory}?option=title_content&searchword=${
 					searchWord || searchQuery.searchQuery
 				}&page=${page}`,
 			);
 			setResults(response.data);
 			setTotalPage(response.data.totalPage);
+			console.log(results);
 			setErrorMessage('');
 			setIsDataLoading(true);
 		} catch (err) {
@@ -47,30 +53,31 @@ const SearchResults = () => {
 		fetchData(newSearchQuery, 1);
 	};
 
+	const displayResult = () => {
+		const resultsArray =
+			searchCategory === 'stories' ? results.stories : results.forests;
+
+		if (resultsArray && resultsArray.length > 0) {
+			return resultsArray.map((result) => (
+				<SearchResultBox key={result._id} data={result} />
+			));
+		}
+		return null;
+	};
+
 	return (
 		<div className="text-gray-500 dark:text-gray-400">
-			<Search onSearch={handleSearch} />
+			<Search endpoint={searchCategory === 'forest' ? 'daenamus' : 'stories'} onSearch={handleSearch} />
 			<h1 className="mt-10 mb-12 text-2xl">
 				<span className="text-blue-600 font-semibold">
 					{searchQuery.searchQuery}
 				</span>{' '}
-				에 대한 스토리 검색 결과{' '}
+				에 대한 검색 결과{' '}
 				<span className="text-lg">
-					({results.totalStoriesCount ? results.totalStoriesCount : '0'}건)
+					{results.totalCount ? results.totalCount : '0'}건
 				</span>
 			</h1>
-			{results.stories && results.stories.length > 0 ? (
-				results.stories.map((result) => (
-					<SearchResultBox key={result._id} data={result} />
-				))
-			) : (
-				<div
-					className="p-4 mb-4 text-md text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 font-medium"
-					role="alert"
-				>
-					스토리 검색 결과가 없습니다.
-				</div>
-			)}
+			{displayResult()}
 			<div className="flex justify-center mt-10">
 				{errorMessage === '' && (
 					<Pagination

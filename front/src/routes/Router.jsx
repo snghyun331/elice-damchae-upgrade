@@ -51,10 +51,9 @@ const Router = () => {
 
 				<Route path="daenamus" element={<Outlet />}>
 					<Route index element={<DaenamusMain />} />
-
 					<Route path="write" element={<DaenamusWrite />} />
-
 					<Route path=":forestId" element={<DaenamuRead />} />
+					<Route path="search/:searchQuery" element={<SearchResults />} />
 				</Route>
 			</Route>
 		</Routes>
