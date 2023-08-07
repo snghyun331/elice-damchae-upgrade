@@ -123,6 +123,22 @@ class storyPostModel {
     const stories = await storyPost.find({ userInfo: userId });
     return stories;
   }
+
+  static async isAlreadyWriteOnce(
+    userId,
+    seoulTimeStartOfDay,
+    seoulTimeEndOfDay,
+  ) {
+    const existingPost = await storyPost.find({
+      userInfo: userId,
+      createdAt: {
+        $gte: seoulTimeStartOfDay.toDate(),
+        $lte: seoulTimeEndOfDay.toDate(),
+      },
+    });
+
+    return existingPost;
+  }
 }
 
 export { storyPostModel };

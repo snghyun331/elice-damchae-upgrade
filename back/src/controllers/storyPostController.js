@@ -398,6 +398,31 @@ class storyPostController {
       next(error);
     }
   }
+
+  static async checkAlreadyWrite(req, res, next) {
+    try {
+      const { userId } = req.body;
+      const seoulTime = moment().utcOffset(9);
+      const seoulTimeStartOfDay = seoulTime.startOf('day').utcOffset(9);
+      const seoulTimeEndOfDay = moment(seoulTimeStartOfDay)
+        .endOf('day')
+        .utcOffset(9);
+
+      const existingPost = await storyPostModel.isAlreadyWriteOnce(
+        userId,
+        seoulTimeStartOfDay,
+        seoulTimeEndOfDay,
+      );
+
+      if (existingPost.length === 0) {
+        return res.status(201).json({ result: true });
+      } else {
+        return res.status(201).json({ result: false });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export { storyPostController };
