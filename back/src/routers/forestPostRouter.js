@@ -20,6 +20,8 @@ router.get('/mbti', ForestController.getPostsByAuthorMBTI);
 // 게시글 조회
 router.get('/', ForestController.findByForest);
 
+router.get('/mbti', ForestController.getPostsByAuthorMBTI);
+
 // router.get('/mbti', ForestController.getPostsByAuthorMBTI);
 
 router.get('/:forestId', ForestController.readForestDetail);

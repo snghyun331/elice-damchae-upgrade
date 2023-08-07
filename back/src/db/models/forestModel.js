@@ -21,13 +21,13 @@ class forestModel {
   }
 
   static async findByForest(skip, limit, getAlls) {
-    const forestUpdate = { ...getAlls };
-    const forests = await ForestPost.find(forestUpdate)
+    const readForest = { ...getAlls };
+    const forests = await ForestPost.find(readForest)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .exec();
-    const count = await ForestPost.countDocuments(forestUpdate);
+    const count = await ForestPost.countDocuments(readForest);
     return { forests, count };
   }
 
@@ -75,13 +75,10 @@ class forestModel {
 
   static async findByForestMbti({ mbtiList, skip, limit }) {
     try {
-      console.log('모델 mbtilist :', mbtiList);
-      // // 작성자 MBTI가 'ISTJ'인 사용자들을 찾습니다.
-      // const usersWithMBTI = await UserModel.find({ mbti: mbti });
-      // // 찾은 사용자들의 _id 목록을 추출합니다.
-      // const userIds = usersWithMBTI.map((user) => user._id);
-      // // 작성자가 ISTJ인 블로그 포스트들을 찾습니다.
-      // const posts = await ForestPost.find({ author: { $in: userIds } });
+      // const readMbti = { ...mbtiList };
+      console.log('Finding posts with MBTI:', mbtiList);
+      console.log('Skip:', skip);
+      console.log('Limit:', limit);
 
       const posts = await ForestPost.aggregate([
         {
@@ -110,9 +107,12 @@ class forestModel {
         },
       ]);
 
-      console.log('Posts다다닫 :', posts);
-
-      return posts;
+      const count = await ForestPost.countDocuments({
+        'user.mbti': { $in: mbtiList },
+      });
+      console.log('Found Posts:', posts);
+      console.log('Total Count:', count);
+      return { posts, count };
     } catch (error) {
       throw new Error(
         `Error finding blog posts by author's MBTI: ${error.message}`,

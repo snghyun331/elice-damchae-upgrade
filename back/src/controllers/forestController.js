@@ -248,20 +248,35 @@ class ForestController {
       const mbtiList = req.query.filter.split(',');
 
       const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
-      const limit = 1; // 한페이지에 들어갈 스토리 수
-      const posts = await ForestService.findByForestMbti({
+      const limit = 12; // 한페이지에 들어갈 스토리 수
+      let result;
+      const { posts, totalPage, count } = await ForestService.findByForestMbti({
         mbtiList,
         page,
         limit,
       });
+      console.log('MBTI List:', mbtiList);
+      console.log('Page:', page);
+      console.log('Limit:', limit);
+      console.log('Total Posts Count:', count);
+      console.log('Total Page:', totalPage);
+      console.log('Fetched Posts:', posts);
       if (!mbtiList) {
         throw new Error('스토리를 찾을 수 없습니다.');
       }
 
-      const result = await forestCommentService.populateForestComment(
+      const populateResult = await forestCommentService.populateForestComment(
         posts,
         'userInfo',
       );
+
+      result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
+        forests: populateResult,
+      };
+
       return res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
