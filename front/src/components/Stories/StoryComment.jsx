@@ -4,6 +4,7 @@ import CommentBox from '../Global/CommentBox';
 import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../Global/Pagination';
+import toast from 'react-hot-toast'
 
 const StoryComment = ({ storyId }) => {
 	const [commentList, setCommentList] = useState('');
@@ -72,6 +73,7 @@ const StoryComment = ({ storyId }) => {
 			fetchComment();
 		} catch (error) {
 			console.log(error.response.data.errorMessage);
+			toast.error(error.response.data)
 		}
 	};
 	return (
