@@ -1,6 +1,6 @@
 import { forestModel } from '../db/models/forestModel.js';
 import ForestPost from '../db/schemas/forestPost.js';
-
+import { forestCommentModel } from '../db/models/forestCommentModel.js';
 class ForestService {
   static async createPost({ userInfo, title, content, mood }) {
     if (!title || !content) {
@@ -78,15 +78,15 @@ class ForestService {
 
   static async readForestDetail({ forestId }) {
     const forest = await forestModel.findAndIncreaseView({ forestId });
-    // const comment = await forestCommentModel.findAllByForestId({ forestId });
+    const allComment = await forestCommentModel.findAllByForestId({ forestId });
     if (!forest) {
       throw new Error('해당 게시물이 존재하지 않습니다.');
     }
-    console.log(forest.userInfo);
+
     const forestInfo = {
       ...forest,
 
-      // commentList: allcomment,
+      commentList: allComment,
     };
     return forestInfo;
   }
@@ -116,14 +116,19 @@ class ForestService {
   static async findByForestMbti({ mbtiList, limit, page }) {
     try {
       const skip = (page - 1) * limit;
-      const posts = await forestModel.findByForestMbti({
+      const { posts, count } = await forestModel.findByForestMbti({
         mbtiList,
         limit,
         skip,
       }); // 이 부분 수정
+      console.log('MBTI List:', mbtiList);
+      console.log('Limit:', limit);
+      console.log('Skip:', skip);
+      console.log('Count:', count);
 
+      const totalPage = Math.ceil(count / limit);
       // 나머지 로직 유지
-      return posts;
+      return { posts, totalPage, count };
     } catch (error) {
       throw new Error(
         `Error finding blog posts by author's MBTI: ${error.message}`,
