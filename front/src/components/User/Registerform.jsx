@@ -131,10 +131,10 @@ const RegisterForm = () => {
 		try {
 			const response = await postApi('auth/checkEmailCode', { string: code });
 			console.log(response);
-			toast.success('이메일 인증이 완료되었습니다.');
 			if (response.status === 200) {
 				setIsCodeConfirmed(true);
 			}
+			toast.success('이메일 인증이 완료되었습니다.');
 		} catch (error) {
 			toast.error(error.response.data.errorMessage);
 			console.log(error.response);
