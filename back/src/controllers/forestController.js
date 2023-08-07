@@ -1,9 +1,6 @@
-// forestController.js
-// import { forestModel } from '../db/models/forestModel.js';
-import { forestModel } from '../db/models/forestModel.js';
-import User from '../db/models/userModel.js';
 import ForestService from '../services/forestService.js';
 import axios from 'axios';
+import { forestCommentService } from '../services/forestCommentService.js';
 
 class ForestController {
   // 대나무숲 글 등록 전 감정분석 수행하기
@@ -98,7 +95,7 @@ class ForestController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalforestsCount: count,
+          totalForestsCount: count,
           forests: populateResult,
         };
       } else if (option === 'title_content') {
@@ -251,15 +248,25 @@ class ForestController {
   static async getPostsByAuthorMBTI(req, res) {
     // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP
 
-    const mbtiList = req.query.filter.split(',');
-    // const mbti = req.params.mbti; // 라우트에서 MBTI 파라미터를 가져옵니다.
-
     try {
-      console.log('mbtiList확인용 코드:', mbtiList); // 확인용 로그
-      const posts = await ForestService.findByForestMbti(mbtiList);
-      console.log('posts확인용 코드:', posts); // 확인용 로그
-      const result = await ForestService.populateForestPost(posts, 'userInfo');
-      res.json(result);
+      const mbtiList = req.query.filter.split(',');
+
+      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
+      const limit = 1; // 한페이지에 들어갈 스토리 수
+      const posts = await ForestService.findByForestMbti({
+        mbtiList,
+        page,
+        limit,
+      });
+      if (!mbtiList) {
+        throw new Error('스토리를 찾을 수 없습니다.');
+      }
+
+      const result = await forestCommentService.populateForestComment(
+        posts,
+        'userInfo',
+      );
+      return res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
