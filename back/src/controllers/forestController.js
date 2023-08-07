@@ -240,6 +240,31 @@ class ForestController {
       next(error);
     }
   }
+  static async getUserPosts(req, res, next) {
+    try {
+      const userId = req.currentUserId; // 로그인한 사용자의 ID
+
+      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
+      const limit = 12; // 한페이지에 들어갈 스토리 수
+
+      const { forests, totalPage, count } = await ForestService.findByUserPosts(
+        userId,
+        limit,
+        page,
+      );
+
+      const result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
+        forests: forests,
+      };
+
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   static async getPostsByAuthorMBTI(req, res) {
     // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP

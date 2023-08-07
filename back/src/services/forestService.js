@@ -32,7 +32,23 @@ class ForestService {
 
     return { forests, totalPage, count };
   }
+  static async findByUserPosts(loginUserId, limit, page) {
+    try {
+      const skip = (page - 1) * limit;
 
+      // 유저가 작성한 게시물만 조회하는 로직 추가
+      const { forests, count } = await forestModel.findByUser(
+        loginUserId,
+        skip,
+        limit,
+      );
+
+      const totalPage = Math.ceil(count / limit);
+      return { forests, totalPage, count };
+    } catch (error) {
+      throw new Error('Error while fetching user posts: ' + error.message);
+    }
+  }
   static async updatePost({ forestId, title, content, mood }) {
     const updatedPost = await ForestPost.findOneAndUpdate(
       { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용

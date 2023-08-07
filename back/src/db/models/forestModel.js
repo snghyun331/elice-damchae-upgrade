@@ -54,6 +54,17 @@ class forestModel {
     return { forest, count };
   }
 
+  static async findByUser(userId, skip, limit) {
+    const readUser = { userInfo: userId };
+    const forests = await ForestPost.find(readUser)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    const count = await ForestPost.countDocuments(readUser);
+    return { forests, count };
+  }
+
   static async populateForestPost(info, field) {
     const forest = ForestPost.populate(info, field);
     return forest;
@@ -107,9 +118,7 @@ class forestModel {
         },
       ]);
 
-      const count = await ForestPost.countDocuments({
-        'user.mbti': { $in: mbtiList },
-      });
+      const count = await ForestPost.countDocuments(mbtiList);
       console.log('Found Posts:', posts);
       console.log('Total Count:', count);
       return { posts, count };
