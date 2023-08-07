@@ -1,8 +1,6 @@
-// import { forestCommentModel } from '../db/models/forestCommentModel.js';
 import { forestModel } from '../db/models/forestModel.js';
-import User from '../db/models/userModel.js';
 import ForestPost from '../db/schemas/forestPost.js';
-import UserModel from '../db/schemas/user.js';
+
 class ForestService {
   static async createPost({ userInfo, title, content, mood }) {
     if (!title || !content) {
@@ -137,11 +135,11 @@ class ForestService {
     }
   }
 
-  static async findByForestMbti(mbtiList) {
+  static async findByForestMbti({ mbtiList }) {
     try {
-      const posts = await forestModel.findByForestMbti({
-        'userInfo.mbti': { $in: mbtiList }, // 필드명 'userInfo.mbti'로 수정
-      });
+      const posts = await forestModel.findByForestMbti({ mbtiList }); // 이 부분 수정
+
+      // 나머지 로직 유지
       return posts;
     } catch (error) {
       throw new Error(

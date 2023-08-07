@@ -1,9 +1,7 @@
-// forestController.js
-// import { forestModel } from '../db/models/forestModel.js';
-import { forestModel } from '../db/models/forestModel.js';
-import User from '../db/models/userModel.js';
 import ForestService from '../services/forestService.js';
 import axios from 'axios';
+import { forestModel } from '../db/models/forestModel.js';
+import { forestCommentService } from '../services/forestCommentService.js';
 
 class ForestController {
   // 대나무숲 글 등록 전 감정분석 수행하기
@@ -98,7 +96,7 @@ class ForestController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalforestsCount: count,
+          totalForestsCount: count,
           forests: populateResult,
         };
       } else if (option === 'title_content') {
@@ -125,7 +123,7 @@ class ForestController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalForestsCount: count,
           forests: populateResult,
         };
       } else {
@@ -248,16 +246,19 @@ class ForestController {
 
   static async getPostsByAuthorMBTI(req, res) {
     // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP
-
     const mbtiList = req.query.filter.split(',');
-    // const mbti = req.params.mbti; // 라우트에서 MBTI 파라미터를 가져옵니다.
-
+    console.log('mbtiList :', mbtiList);
     try {
-      console.log('mbtiList확인용 코드:', mbtiList); // 확인용 로그
-      const posts = await ForestService.findByForestMbti(mbtiList);
-      console.log('posts확인용 코드:', posts); // 확인용 로그
-      const result = await ForestService.populateForestPost(posts, 'userInfo');
-      res.json(result);
+      const posts = await ForestService.findByForestMbti({ mbtiList });
+      if (!mbtiList) {
+        throw new Error('스토리를 찾을 수 없습니다.');
+      }
+
+      const result = await forestCommentService.populateForestComment(
+        posts,
+        'userInfo',
+      );
+      return res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
