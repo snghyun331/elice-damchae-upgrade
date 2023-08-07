@@ -16,10 +16,10 @@ const DaenamuComment = ({ forestId }) => {
 	const fetchComment = async (page = 1) => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments?page=${page}`);
-			console.log(res.data.result);
-			setCommentList(res.data.result.comments);
+			console.log(res.data);
+			setCommentList(res.data.comments);
 			// setCommentCount(res.data.totalCommentsCount);
-			setTotalPage(res.data.result.totalPage);
+			setTotalPage(res.data.totalPage);
 			setIsDataLoading(true);
 		} catch (error) {
 			console.log(error);
@@ -47,8 +47,8 @@ const DaenamuComment = ({ forestId }) => {
 
 	const editComment = async (commentId, editedComment) => {
 		try {
-			await putApi(`forest/${forestId}/comments/${commentId}`, {
-				comment: editedComment,
+			await putApi(`forest/comments/${commentId}`, {
+				updatedComment: editedComment,
 			});
 			fetchComment();
 		} catch (error) {

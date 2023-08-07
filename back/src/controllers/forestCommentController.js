@@ -139,7 +139,7 @@ class forestCommentController {
         comments: populageResult,
       };
 
-      return res.status(200).send({ result });
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
