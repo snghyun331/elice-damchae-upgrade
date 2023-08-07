@@ -95,13 +95,14 @@ class ForestService {
   static async readForestDetail({ forestId }) {
     const forest = await forestModel.findAndIncreaseView({ forestId });
     const allComment = await forestCommentModel.findAllByForestId({ forestId });
+    const commentCount = allComment.length;
     if (!forest) {
       throw new Error('해당 게시물이 존재하지 않습니다.');
     }
 
     const forestInfo = {
       ...forest,
-
+      commentCount: commentCount,
       commentList: allComment,
     };
     return forestInfo;

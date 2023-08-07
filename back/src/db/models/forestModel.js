@@ -1,6 +1,6 @@
 // // forestModel.js
 import ForestPost from '../schemas/forestPost.js';
-
+import { forestComment } from '../schemas/forestComment.js';
 class forestModel {
   static async create({ newForestPost }) {
     const createdForest = await ForestPost.create(newForestPost);
@@ -27,6 +27,14 @@ class forestModel {
       .skip(skip)
       .limit(limit)
       .exec();
+
+    // 댓글 갯수 조회 및 추가
+    for (const forest of forests) {
+      const commentCount = await forestComment.countDocuments({
+        forestId: forest._id,
+      });
+      forest.commentCount = commentCount;
+    }
     const count = await ForestPost.countDocuments(readForest);
     return { forests, count };
   }
