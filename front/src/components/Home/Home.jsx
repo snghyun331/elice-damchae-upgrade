@@ -101,7 +101,7 @@ const Home = () => {
 				<div className="mx-4 sm:mx-10 md:mx-20 lg:mx-40" data-aos="fade-right">
 					<div className="mt-10 text-3xl font-semibold">우리들의 스토리</div>
 					<div className="mt-20 items-center">
-						<Search />
+						<Search endpoint='stories' />
 					</div>
 					<StoryCardMap endpoint="stories" />
 				</div>

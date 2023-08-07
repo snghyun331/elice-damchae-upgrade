@@ -177,7 +177,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
         // 내용만 검색
@@ -197,7 +197,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
         // 제목 + 내용 검색
@@ -222,7 +222,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
         // 모든 스토리 검색
@@ -243,7 +243,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
       }
@@ -290,7 +290,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
       } else {
@@ -308,7 +308,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
       }

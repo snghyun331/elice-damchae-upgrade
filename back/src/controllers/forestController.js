@@ -113,6 +113,7 @@ class ForestController {
           page,
           getAlls,
         );
+
         const populateResult = await ForestService.populateForestPost(
           forests,
           'userInfo thumbnail',
@@ -125,7 +126,7 @@ class ForestController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           forests: populateResult,
         };
       } else {
