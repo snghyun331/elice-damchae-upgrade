@@ -79,6 +79,15 @@ class forestCommentModel {
     }
   }
 
+  static async findAllByForestId({ forestId }) {
+    const forestComments = await forestComment.find({ forestId: forestId });
+    const populatedComments = await forestComment.populate(forestComments, {
+      path: 'writerId',
+    });
+
+    return populatedComments;
+  }
+
   static async populateForestComment(info, field) {
     const result = forestComment.populate(info, field);
     return result;
