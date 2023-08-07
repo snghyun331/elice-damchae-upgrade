@@ -7,8 +7,9 @@ import { useEffect, useRef, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { postApi } from '../../services/api';
 import './StoryCreateModal.css';
+import { toast } from 'react-hot-toast';
 
-const StoryCreateModal = ({ storyLog, onClose }) => {
+const StoryCreateModal = ({ onClose }) => {
 	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
 
 	const [isPublic, setIsPublic] = useState(false);
@@ -28,27 +29,54 @@ const StoryCreateModal = ({ storyLog, onClose }) => {
 	const postStory = async (e) => {
 		e.preventDefault();
 
-		if (confirm('스토리는 수정이 불가합니다. 등록하시겠습니까?')) {
-			try {
-				const post = { title, content, thumbnail, isPublic, mood, music };
-				console.log(post);
-				const formData = new FormData();
-				for (const key in post) {
-					formData.append(key, post[key]);
-				}
-
-				const response = await postApi('stories', formData);
-				console.log(response.data);
-				onClose();
-
-				setTimeout(() => {
-					window.location.href = '/stories';
-				}, 100);
-			} catch (e) {
-				console.error(e);
+		try {
+			const post = { title, content, thumbnail, isPublic, mood, music };
+			console.log(post);
+			const formData = new FormData();
+			for (const key in post) {
+				formData.append(key, post[key]);
 			}
+
+			const response = await postApi('stories', formData);
+			console.log(response.data);
+			onClose();
+
+			setTimeout(() => {
+				window.location.href = '/stories';
+			}, 100);
+		} catch (e) {
+			console.error(e);
 		}
+
 		//TODO:모달로 바꾸기
+	};
+	const handleConfirm = () => {
+		toast((t) => (
+			<div className="rounded p-4">
+				<div>
+					📒스토리는 수정이 불가합니다.
+					<br />
+					등록하시겠습니까?
+				</div>
+				<div className="flex justify-end">
+					<button
+						onClick={postStory}
+						className="text-white px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600"
+					>
+						예
+					</button>
+					<button
+						onClick={() => {
+							toast.dismiss(t.id);
+							// 필요한 후속 동작 수행
+						}}
+						className="text-white px-2 py-1 rounded bg-red-500 hover:bg-red-600"
+					>
+						아니오
+					</button>
+				</div>
+			</div>
+		));
 	};
 
 	const isFormValid = useMemo(
@@ -76,11 +104,6 @@ const StoryCreateModal = ({ storyLog, onClose }) => {
 				>
 					<div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
 						<div className="flex flex-col items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-							{storyLog && (
-								<p className="text-red-400">
-									스토리는 하루에 하나만 작성할 수 있습니다.
-								</p>
-							)}
 							<h3 className="text-xl font-semibold text-gray-900 dark:text-white my-2">
 								{currentDate}의 스토리 작성하기
 							</h3>
@@ -147,8 +170,8 @@ const StoryCreateModal = ({ storyLog, onClose }) => {
 										</div>
 									)}
 									<button
-										disabled={!isFormValid || storyLog}
-										onClick={postStory}
+										disabled={!isFormValid}
+										onClick={handleConfirm}
 										type="button"
 										className="bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 									>
