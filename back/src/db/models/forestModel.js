@@ -116,6 +116,26 @@ class forestModel {
         {
           $limit: limit,
         },
+        {
+          $group: {
+            _id: null,
+            commentCount: {
+              $sum: 1,
+            },
+            posts: {
+              $push: '$$ROOT',
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            commentCount: 1,
+            posts: {
+              $slice: ['$posts', skip, limit],
+            },
+          },
+        },
       ]);
 
       const count = await ForestPost.countDocuments(mbtiList);
