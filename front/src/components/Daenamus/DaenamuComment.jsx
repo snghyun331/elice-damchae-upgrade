@@ -4,9 +4,10 @@ import CommentBox from '../Global/CommentBox';
 import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../Global/Pagination';
+import useForestStore from '../../store/useForestStore';
 
 const DaenamuComment = ({ forestId }) => {
-	const [commentList, setCommentList] = useState('');
+	const { commentList, setCommentList } = useForestStore();
 	const [comment, setComment] = useState('');
 	const [isDataLoading, setIsDataLoading] = useState(false);
 
@@ -16,9 +17,9 @@ const DaenamuComment = ({ forestId }) => {
 	const fetchComment = async (page = 1) => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments?page=${page}`);
-			console.log(res.data);
+			console.log(res.data.comments);
 			setCommentList(res.data.comments);
-			// setCommentCount(res.data.totalCommentsCount);
+			setCommentCount(res.data.totalCommentsCount);
 			setTotalPage(res.data.totalPage);
 			setIsDataLoading(true);
 		} catch (error) {
@@ -102,9 +103,7 @@ const DaenamuComment = ({ forestId }) => {
 			</div>
 
 			<div>
-				{commentList.length === 0 ? (
-					<p>등록된 댓글이 없습니다.</p>
-				) : (
+				{commentList && commentList.length > 0 ? (
 					commentList.map((commentData) => (
 						<div key={commentData._id}>
 							<CommentBox
@@ -114,6 +113,8 @@ const DaenamuComment = ({ forestId }) => {
 							/>
 						</div>
 					))
+				) : (
+					<p>등록된 댓글이 없습니다.</p>
 				)}
 			</div>
 

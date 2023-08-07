@@ -10,11 +10,12 @@ import { useUserId } from '../../store/useUserStore';
 import ReactionChart from './Reaction';
 import DaenamuLikeSection from './DaenamuLikeSection';
 import DaenamuTextEditor from './DaenamuTextEditor';
-import useStoryStore from '../../store/useStoryStore';
+import useForestStore from '../../store/useForestStore';
 import DaenamuComment from './DaenamuComment';
 
 const DaenamuRead = () => {
-	const { title, content, setTitle, setContent, setMood } = useStoryStore();
+	const { title, content, mood, setTitle, setContent, setMood, commentList } =
+		useForestStore();
 	const { forestId } = useParams();
 	const [forest, setForest] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
@@ -53,7 +54,7 @@ const DaenamuRead = () => {
 	const handleCancelEdit = () => {
 		setTitle(forest.title);
 		setContent(forest.content);
-		setMood;
+		setMood('');
 		setEditMode(false);
 	};
 
@@ -62,6 +63,7 @@ const DaenamuRead = () => {
 			const res = await putApi(`forest/${forestId}`, {
 				title,
 				content,
+				// mood,
 			});
 			//TODO:mood추가해야함
 			console.log(res);
@@ -113,13 +115,13 @@ const DaenamuRead = () => {
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleEdit}
-										className="justify-end underline underline-offset-2 text-red-400"
+										className="justify-end underline underline-offset-2 text-black"
 									>
 										수정
 									</button>
 									<button
 										onClick={handleDelete}
-										className="justify-end ml-2 underline underline-offset-2 text-red-400"
+										className="justify-end ml-2 underline underline-offset-2 text-black"
 									>
 										삭제
 									</button>
@@ -188,8 +190,14 @@ const DaenamuRead = () => {
 				<div className="flex flex-col">
 					<DaenamuLikeSection forestId={forest._id} userId={id} />
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
-					<ReactionChart forestId={forestId} />
-					//TODO:댓글 데이터 바뀌면 바로 ReactionChart에 반영
+					{commentList && commentList.length > 0 ? (
+						<div>
+							<ReactionChart key={commentList.length} forestId={forestId} />
+						</div>
+					) : (
+						<div></div>
+					)}
+
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<div>
 						<DaenamuComment
