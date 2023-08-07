@@ -127,7 +127,7 @@ class forestModel {
         {
           $group: {
             _id: null,
-            commentCount: {
+            mbtiCount: {
               $sum: 1,
             },
             posts: {
@@ -138,7 +138,7 @@ class forestModel {
         {
           $project: {
             _id: 0,
-            commentCount: 1,
+            mbtiCount: 1,
             posts: {
               $slice: ['$posts', skip, limit],
             },
