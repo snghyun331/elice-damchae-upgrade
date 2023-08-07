@@ -15,7 +15,7 @@ forestCommentRouter.get(
   forestCommentController.readCommentStats,
 );
 forestCommentRouter.put(
-  '/forest/:forestId/comments/:commentId',
+  '/forest/comments/:commentId',
   loginRequired,
   forestCommentController.updateForestComment,
 );

@@ -1,8 +1,10 @@
 // import { forestCommentModel } from '../db/models/forestCommentModel.js';
 import { forestModel } from '../db/models/forestModel.js';
-import User from '../db/models/userModel.js';
+// import User from '../db/models/userModel.js';
 import ForestPost from '../db/schemas/forestPost.js';
-import UserModel from '../db/schemas/user.js';
+// import UserModel from '../db/schemas/user.js';
+import axios from 'axios';
+
 class ForestService {
   static async createPost({ userInfo, title, content, mood }) {
     if (!title || !content) {
@@ -36,9 +38,18 @@ class ForestService {
   }
 
   static async updatePost({ forestId, title, content }) {
+    const sentimentServerUrl = process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL;
+
+    // Request to the sentiment analysis server
+    const sentimentResponse = await axios.post(sentimentServerUrl, {
+      text: content,
+    });
+
+    const newMood = sentimentResponse.data.mood;
+
     const updatedPost = await ForestPost.findOneAndUpdate(
       { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
-      { $set: { title: title, content: content } }, // 업데이트할 필드와 값
+      { $set: { title: title, content: content, mood: newMood } }, // 업데이트할 필드와 값
       { new: true }, // 업데이트 후 업데이트된 문서 반환
     );
     if (!updatedPost) {
