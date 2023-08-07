@@ -1,6 +1,5 @@
 import ForestService from '../services/forestService.js';
 import axios from 'axios';
-import { forestModel } from '../db/models/forestModel.js';
 import { forestCommentService } from '../services/forestCommentService.js';
 
 class ForestController {
@@ -246,10 +245,17 @@ class ForestController {
 
   static async getPostsByAuthorMBTI(req, res) {
     // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP
-    const mbtiList = req.query.filter.split(',');
-    console.log('mbtiList :', mbtiList);
+
     try {
-      const posts = await ForestService.findByForestMbti({ mbtiList });
+      const mbtiList = req.query.filter.split(',');
+
+      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
+      const limit = 1; // 한페이지에 들어갈 스토리 수
+      const posts = await ForestService.findByForestMbti({
+        mbtiList,
+        page,
+        limit,
+      });
       if (!mbtiList) {
         throw new Error('스토리를 찾을 수 없습니다.');
       }

@@ -1,6 +1,7 @@
 import { forestCommentService } from '../services/forestCommentService.js';
 import { forestCommentModel } from '../db/models/forestCommentModel.js';
 import axios from 'axios';
+import ForestService from '../services/forestService.js';
 
 class forestCommentController {
   static async createForestComment(req, res, next) {
@@ -8,9 +9,7 @@ class forestCommentController {
       const forestId = req.params.forestId;
       const writerId = req.currentUserId;
       const { comment } = req.body;
-      console.log('forestId:', forestId);
-      console.log('writerId', writerId);
-      console.log(comment);
+
       if (!comment) {
         throw new Error('댓글을 입력해주세요');
       }

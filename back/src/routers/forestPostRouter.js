@@ -16,6 +16,7 @@ router.put('/:id', loginRequired, ForestController.updatePost);
 router.delete('/:id', loginRequired, ForestController.deletePost);
 
 router.get('/mbti', ForestController.getPostsByAuthorMBTI);
+
 // 게시글 조회
 router.get('/', ForestController.findByForest);
 

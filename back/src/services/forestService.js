@@ -135,9 +135,14 @@ class ForestService {
     }
   }
 
-  static async findByForestMbti({ mbtiList }) {
+  static async findByForestMbti({ mbtiList, limit, page }) {
     try {
-      const posts = await forestModel.findByForestMbti({ mbtiList }); // 이 부분 수정
+      const skip = (page - 1) * limit;
+      const posts = await forestModel.findByForestMbti({
+        mbtiList,
+        limit,
+        skip,
+      }); // 이 부분 수정
 
       // 나머지 로직 유지
       return posts;

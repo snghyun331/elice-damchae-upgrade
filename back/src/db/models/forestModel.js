@@ -21,12 +21,13 @@ class forestModel {
   }
 
   static async findByForest(skip, limit, getAlls) {
-    const forests = await ForestPost.find(getAlls)
+    const forestUpdate = { ...getAlls };
+    const forests = await ForestPost.find(forestUpdate)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .exec();
-    const count = await ForestPost.countDocuments(forests);
+    const count = await ForestPost.countDocuments(forestUpdate);
     return { forests, count };
   }
 
@@ -72,7 +73,7 @@ class forestModel {
     );
   }
 
-  static async findByForestMbti({ mbtiList }) {
+  static async findByForestMbti({ mbtiList, skip, limit }) {
     try {
       console.log('모델 mbtilist :', mbtiList);
       // // 작성자 MBTI가 'ISTJ'인 사용자들을 찾습니다.
@@ -100,6 +101,12 @@ class forestModel {
               $in: mbtiList,
             },
           },
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
         },
       ]);
 

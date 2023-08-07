@@ -1,4 +1,5 @@
 import { forestCommentModel } from '../db/models/forestCommentModel.js';
+import { forestModel } from '../db/models/forestModel.js';
 import axios from 'axios';
 class forestCommentService {
   static async createForestComment({ forestId, writerId, comment, mood }) {
@@ -8,7 +9,7 @@ class forestCommentService {
 
     const newComment = { forestId, writerId, comment, mood };
 
-    // forestModel.findAndIncreaseCommentCount({ forestId });
+    forestModel.findAndIncreaseCommentCount({ forestId });
 
     const createdNewComment = await forestCommentModel.createForestComment({
       newComment,
