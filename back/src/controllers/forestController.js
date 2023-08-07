@@ -136,10 +136,6 @@ class ForestController {
           'userInfo thumbnail',
         );
 
-        if (populateResult.length === 0) {
-          throw new Error('스토리가 없습니다');
-        }
-
         result = {
           currentPage: page,
           totalPage: totalPage,

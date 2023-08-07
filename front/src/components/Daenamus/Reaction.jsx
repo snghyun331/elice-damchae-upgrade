@@ -3,7 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { getApi } from '../../services/api';
 import { textEngToDeepColor, textToKorean } from '../Util/Util';
 
-const ReactionChart = ({ forestId }) => {
+const ReactionChart = ({ commentList, forestId }) => {
 	const [reaction, setReaction] = useState('');
 	const fetchReaction = async () => {
 		try {
@@ -14,6 +14,10 @@ const ReactionChart = ({ forestId }) => {
 			console.log(error);
 		}
 	};
+
+	useEffect(() => {
+		fetchReaction();
+	}, [commentList]);
 
 	const mbtiTypes = [
 		'ISTJ',

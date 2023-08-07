@@ -416,9 +416,9 @@ class storyPostController {
       );
 
       if (existingPost.length === 0) {
-        return res.status(201).json({ result: true });
-      } else {
         return res.status(201).json({ result: false });
+      } else {
+        return res.status(201).json({ result: true });
       }
     } catch (error) {
       next(error);
