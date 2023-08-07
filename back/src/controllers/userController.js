@@ -183,11 +183,11 @@ class userAuthController {
       smtpTransport.sendMail(mailOptions, (error) => {
         if (error) {
           res.status(500).json({
-            message: `${email}로 보내는 인증메일 전송에 실패하였습니다.`,
+            errorMessage: `${email}로 보내는 인증메일 전송에 실패하였습니다.`,
           });
         } else {
           res.status(200).json({
-            message: `${email} 로 인증메일 전송에 성공했습니다.`,
+            errorMessage: `${email} 로 인증메일 전송에 성공했습니다.`,
           });
         }
       });
@@ -209,7 +209,7 @@ class userAuthController {
       } else if (isVerified === string) {
         return res
           .status(200)
-          .json({ message: '이메일 인증에 성공하였습니다.' });
+          .json({ errorMessage: '이메일 인증에 성공하였습니다.' });
       }
     } catch (error) {
       next(error);
@@ -265,7 +265,7 @@ class userAuthController {
       if (!user) {
         return res.status(404).json({ error: '존재하지 않는 유저입니다.' });
       }
-      return res.status(200).json({ message: '회원 탈퇴 완료' });
+      return res.status(200).json({ errorMessage: '회원 탈퇴 완료' });
     } catch (error) {
       next(error);
     }

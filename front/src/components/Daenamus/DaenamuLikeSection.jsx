@@ -6,7 +6,6 @@ import {
 import { postApi, delApi, getApi } from '../../services/api';
 import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
-
 const LIKE_TYPES = {
 	LIKED: 'liked',
 	DISLIKED: 'disliked',
@@ -70,7 +69,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 				? delApi(unUrl)
 				: postApi(upUrl, {}));
 			if (response.error) {
-				toast.error(response.error);
+				toast.error(response.error.message);
 			} else {
 				updateFunc(updateCount);
 			}
@@ -95,7 +94,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 					: '싫어요를 선택했습니다.';
 			toast(likeToast);
 		} catch (err) {
-			toast.error(err.message);
+			toast.error(err.response.data);
 		}
 	};
 
@@ -128,8 +127,8 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 };
 
 DaenamuLikeSection.propTypes = {
-	forestId: PropTypes.string.isRequired,
-	userId: PropTypes.string.isRequired,
+	forestId: PropTypes.string,
+	userId: PropTypes.string,
 };
 
 export default DaenamuLikeSection;
