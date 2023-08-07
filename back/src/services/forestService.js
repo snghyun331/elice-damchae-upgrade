@@ -37,19 +37,10 @@ class ForestService {
     return { forests, totalPage, count };
   }
 
-  static async updatePost({ forestId, title, content }) {
-    const sentimentServerUrl = process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL;
-
-    // Request to the sentiment analysis server
-    const sentimentResponse = await axios.post(sentimentServerUrl, {
-      text: content,
-    });
-
-    const newMood = sentimentResponse.data.mood;
-
+  static async updatePost({ forestId, title, content, mood }) {
     const updatedPost = await ForestPost.findOneAndUpdate(
       { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
-      { $set: { title: title, content: content, mood: newMood } }, // 업데이트할 필드와 값
+      { $set: { title: title, content: content, mood: mood } }, // 업데이트할 필드와 값
       { new: true }, // 업데이트 후 업데이트된 문서 반환
     );
     if (!updatedPost) {
@@ -57,28 +48,6 @@ class ForestService {
     }
     return updatedPost;
   }
-
-  // static async updatePost({ forestId, title, content }) {
-  //   try {
-  //     console.log('Updating post with forestId:', forestId);
-
-  //     const updatedPost = await forestModel.findOneAndUpdate(
-  //       { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
-  //       { title, content }, // 업데이트할 필드와 값을 명시
-  //       { new: true }, // 옵션: 업데이트 후에 업데이트된 문서를 반환하도록 설정
-  //     );
-
-  //     console.log('Updated post:', updatedPost);
-
-  //     if (!updatedPost) {
-  //       throw new Error('수정할 게시글 정보가 없습니다.');
-  //     }
-
-  //     return updatedPost;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
 
   static async deletePost({ forestId }) {
     const deletedPost = await forestModel.findOneAndDelete({ forestId });

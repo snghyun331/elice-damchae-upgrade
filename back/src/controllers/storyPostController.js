@@ -401,7 +401,8 @@ class storyPostController {
 
   static async checkAlreadyWrite(req, res, next) {
     try {
-      const { userId } = req.body;
+      // const { userId } = req.body;
+      const userId = req.currentUserId;
       const seoulTime = moment().utcOffset(9);
       const seoulTimeStartOfDay = seoulTime.startOf('day').utcOffset(9);
       const seoulTimeEndOfDay = moment(seoulTimeStartOfDay)
