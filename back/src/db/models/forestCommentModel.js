@@ -72,9 +72,6 @@ class forestCommentModel {
         .exec();
 
       const count = await forestComment.countDocuments({ forestId: forestId });
-      if (!count) {
-        throw new Error('요청한 댓글을 찾을 수 없습니다.');
-      }
 
       return { comments, count };
     } catch (error) {
