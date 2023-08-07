@@ -6,6 +6,7 @@ import useStoryStore from '../../store/useStoryStore';
 import { useIsLoggedIn } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
+import { postApi } from '../../services/api';
 
 const MyStories = () => {
 	const navigate = useNavigate();
@@ -13,6 +14,7 @@ const MyStories = () => {
 
 	const { reset } = useStoryStore();
 	const [storyModal, setStoryModal] = useState(false);
+	const [storyLog, setStoryLog] = useState(false);
 
 	const onClose = () => {
 		setStoryModal(false);
@@ -23,9 +25,15 @@ const MyStories = () => {
 		if (!storyModal) return null;
 
 		return createPortal(
-			<StoryCreateModal onClose={onClose} />,
+			<StoryCreateModal storyLog={storyLog} onClose={onClose} />,
 			document.getElementById('modal-root'), // Add a div with id="modal-root" in your index.html file
 		);
+	};
+
+	const handleCheckLog = async () => {
+		const res = await postApi('stories/isAlreadyWrote');
+		console.log(res.data.result);
+		setStoryLog(res.data.result);
 	};
 
 	return (
@@ -42,6 +50,7 @@ const MyStories = () => {
 								isLoggedIn
 									? () => {
 											setStoryModal(true);
+											handleCheckLog();
 									  }
 									: () => navigate('/login')
 							}

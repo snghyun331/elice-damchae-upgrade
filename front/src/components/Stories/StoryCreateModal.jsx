@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { postApi } from '../../services/api';
 import './StoryCreateModal.css';
 
-const StoryCreateModal = ({ onClose }) => {
+const StoryCreateModal = ({ storyLog, onClose }) => {
 	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
 
 	const [isPublic, setIsPublic] = useState(false);
@@ -75,10 +75,16 @@ const StoryCreateModal = ({ onClose }) => {
 					className="relative w-full max-w-2xl p-4 overflow-x-hidden overflow-y-auto max-h-screen modal-content"
 				>
 					<div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-						<div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+						<div className="flex flex-col items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+							{storyLog && (
+								<p className="text-red-400">
+									스토리는 하루에 하나만 작성할 수 있습니다.
+								</p>
+							)}
 							<h3 className="text-xl font-semibold text-gray-900 dark:text-white my-2">
 								{currentDate}의 스토리 작성하기
 							</h3>
+
 							<button
 								type="button"
 								onClick={onClose}
@@ -141,7 +147,7 @@ const StoryCreateModal = ({ onClose }) => {
 										</div>
 									)}
 									<button
-										disabled={!isFormValid}
+										disabled={!isFormValid || storyLog}
 										onClick={postStory}
 										type="button"
 										className="bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
