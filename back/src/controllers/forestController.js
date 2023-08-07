@@ -184,12 +184,13 @@ class ForestController {
         throw new Error('스토리 수정 권한이 없습니다.');
       }
 
-      const { title, content } = req.body;
+      const { title, content, mood } = req.body;
       if (postUser.userInfo.toString() === userId) {
         const post = await ForestService.updatePost({
           forestId,
           title,
           content,
+          mood,
         });
 
         const result = await ForestService.populateForestPost(post, 'userInfo');
