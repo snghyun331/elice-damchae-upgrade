@@ -151,19 +151,44 @@ const InfoChange = () => {
 		],
 	);
 
+	const handleConfirm = () => {
+		toast((t) => (
+			<div className="rounded p-4">
+				<div>정말로 탈퇴하시겠습니까?</div>
+				<div className="mt-3 flex justify-end">
+					<button
+						onClick={() => {
+							handleOut();
+							toast.dismiss(t.id);
+						}}
+						className="text-white px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600"
+					>
+						예
+					</button>
+					<button
+						onClick={() => {
+							toast.dismiss(t.id);
+							// 필요한 후속 동작 수행
+						}}
+						className="text-white px-2 py-1 rounded bg-red-500 hover:bg-red-600"
+					>
+						아니오
+					</button>
+				</div>
+			</div>
+		));
+	};
+
 	const handleOut = async () => {
-		const confirmResign = window.confirm('정말로 회원 탈퇴를 하시겠습니까?');
-		if (confirmResign) {
-			try {
-				const response = await putApi(`auth/out`, { userId: id });
-				if (response.status === 200) {
-					toast.success('정상적으로 회원탈퇴가 완료되었습니다.');
-					logout();
-					navigate('/');
-				}
-			} catch (error) {
-				console.error('회원탈퇴 오류:', error);
+		try {
+			const response = await putApi(`auth/out`, { userId: id });
+			if (response.status === 200) {
+				toast.success('정상적으로 회원탈퇴가 완료되었습니다.');
+				logout();
+				navigate('/');
 			}
+		} catch (error) {
+			console.error('회원탈퇴 오류:', error);
 		}
 	};
 
@@ -382,7 +407,7 @@ const InfoChange = () => {
 									</button>
 									<hr className="my-8" />
 									<button
-										onClick={handleOut}
+										onClick={handleConfirm}
 										className="text-sm text-red-600 underline ml-auto"
 									>
 										회원 탈퇴
