@@ -9,7 +9,10 @@ import {
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-const SearchResultBox = ({ data }) => {
+const SearchResultBox = ({ data, searchCategory }) => {
+	if (searchCategory === 'forest') {
+		searchCategory = 'daenamus';
+	}
 	const params = useParams();
 	const { commentCount, content, createdAt, mood, title, userInfo, _id } = data;
 
@@ -18,7 +21,7 @@ const SearchResultBox = ({ data }) => {
 			<div className="text-gray-500 dark:text-gray-400">
 				<p className="mb-3 text-lg md:text-xl hover:underline">
 					{' '}
-					<Link to={`/stories/${_id}`}>
+					<Link to={`/${searchCategory}/${_id}`}>
 						{colorQueryText({
 							text: truncateString(removeTag(title), 30),
 							query: params.searchQuery,
@@ -34,8 +37,8 @@ const SearchResultBox = ({ data }) => {
 						query: params.searchQuery,
 					})}
 				</p>
-				<span>{userInfo ? userInfo.nickname : '알 수 없는 사용자'}</span> | {' '}
-				<span>{formatRelativeTime(createdAt)}</span> | {' '}
+				<span>{userInfo ? userInfo.nickname : '알 수 없는 사용자'}</span> |{' '}
+				<span>{formatRelativeTime(createdAt)}</span> |{' '}
 				<span>{mood ? textToKorean[mood] : ''}</span>
 				<hr className="my-5" />
 			</div>
@@ -55,5 +58,6 @@ SearchResultBox.propTypes = {
 		}),
 		_id: PropTypes.string,
 	}),
+	searchCategory: PropTypes.string
 };
 export default SearchResultBox;

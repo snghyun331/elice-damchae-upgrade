@@ -69,7 +69,6 @@ const MyStories = () => {
 
 					<div>{renderModal()}</div>
 					<div style={{ overflow: storyModal ? 'hidden' : 'auto' }}>
-						<Search />
 						<StoryCardMap endpoint={`stories/my`} />
 					</div>
 				</div>

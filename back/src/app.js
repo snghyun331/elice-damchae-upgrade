@@ -3,7 +3,6 @@ import morgan from 'morgan';
 import express from 'express';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import { userAuthRouter } from './routers/userAuthRouter.js';
-import { userServiceRouter } from './routers/userServiceRouter.js';
 import { storyPostRouter } from './routers/storyPostRouter.js';
 import forestRouter from './routers/forestPostRouter.js';
 import { imageRouter } from './routers/imageRouter.js';
@@ -29,7 +28,6 @@ app.get('/', (req, res) => {
 });
 
 app.use(userAuthRouter);
-app.use(userServiceRouter);
 app.use(storyPostRouter);
 app.use('/forest', forestRouter);
 app.use(imageRouter);
