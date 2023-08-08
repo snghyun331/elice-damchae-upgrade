@@ -177,7 +177,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
         // 내용만 검색
@@ -197,7 +197,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
         // 제목 + 내용 검색
@@ -222,7 +222,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
         // 모든 스토리 검색
@@ -243,7 +243,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
       }
@@ -290,7 +290,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
       } else {
@@ -308,7 +308,7 @@ class storyPostController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
       }
@@ -394,6 +394,32 @@ class storyPostController {
         valuePercentage[value] = (valueCount[value] / totalCount) * 100;
       }
       return res.status(200).json({ result: 'Success', valuePercentage });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async checkAlreadyWrite(req, res, next) {
+    try {
+      // const { userId } = req.body;
+      const userId = req.currentUserId;
+      const seoulTime = moment().utcOffset(9);
+      const seoulTimeStartOfDay = seoulTime.startOf('day').utcOffset(9);
+      const seoulTimeEndOfDay = moment(seoulTimeStartOfDay)
+        .endOf('day')
+        .utcOffset(9);
+
+      const existingPost = await storyPostModel.isAlreadyWriteOnce(
+        userId,
+        seoulTimeStartOfDay,
+        seoulTimeEndOfDay,
+      );
+
+      if (existingPost.length === 0) {
+        return res.status(201).json({ result: false });
+      } else {
+        return res.status(201).json({ result: true });
+      }
     } catch (error) {
       next(error);
     }

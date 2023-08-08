@@ -4,6 +4,7 @@ import CommentBox from '../Global/CommentBox';
 import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../Global/Pagination';
+import toast from 'react-hot-toast'
 
 const StoryComment = ({ storyId }) => {
 	const [commentList, setCommentList] = useState('');
@@ -13,7 +14,7 @@ const StoryComment = ({ storyId }) => {
 	const [totalPage, setTotalPage] = useState(0);
 	const [commentCount, setCommentCount] = useState(0);
 
-	const fetchData = async (page = 1) => {
+	const fetchComment = async (page = 1) => {
 		try {
 			const res = await getApi(`stories/${storyId}/comments?page=${page}`);
 			console.log(res.data);
@@ -27,19 +28,19 @@ const StoryComment = ({ storyId }) => {
 	};
 
 	useEffect(() => {
-		fetchData(currentPage);
+		fetchComment(currentPage);
 	}, []);
 
 	const { currentPage, prev, next, go } = usePagination(
 		isDataLoading ? commentList : [],
 		totalPage,
-		{ onChange: ({ targetPage }) => fetchData(targetPage) },
+		{ onChange: ({ targetPage }) => fetchComment(targetPage) },
 	);
 
 	const deleteComment = async (commentId) => {
 		try {
 			await delApi(`stories/comments/${commentId}`);
-			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -50,7 +51,7 @@ const StoryComment = ({ storyId }) => {
 			await patchApi(`stories/comments/${commentId}`, {
 				comment: editedComment,
 			});
-			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -58,7 +59,7 @@ const StoryComment = ({ storyId }) => {
 
 	useEffect(() => {
 		if (isDataLoading) {
-			fetchData(currentPage);
+			fetchComment(currentPage);
 		}
 	}, [currentPage]);
 
@@ -69,9 +70,10 @@ const StoryComment = ({ storyId }) => {
 				comment,
 			});
 			setComment('');
-			fetchData();
+			fetchComment();
 		} catch (error) {
 			console.log(error.response.data.errorMessage);
+			toast.error(error.response.data)
 		}
 	};
 	return (

@@ -8,9 +8,7 @@ class forestCommentController {
       const forestId = req.params.forestId;
       const writerId = req.currentUserId;
       const { comment } = req.body;
-      console.log('forestId:', forestId);
-      console.log('writerId', writerId);
-      console.log(comment);
+
       if (!comment) {
         throw new Error('댓글을 입력해주세요');
       }
@@ -80,7 +78,7 @@ class forestCommentController {
         surprise: surpriseMbtiCounts,
         anger: angerMbtiCounts,
       };
-      return res.status(200).send({ result });
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
@@ -90,11 +88,7 @@ class forestCommentController {
     try {
       const commentId = req.params.commentId;
       const userId = req.currentUserId;
-      const updatedComment = req.body.updatedComment; // 수정된 댓글 내용
-
-      console.log('코맨트', commentId);
-      console.log('유저ID', userId);
-      console.log('Updated Comment:', updatedComment);
+      const { updatedComment } = req.body; // 수정된 댓글 내용
 
       const updatedData = await forestCommentService.updateForestComment({
         commentId,
@@ -108,6 +102,18 @@ class forestCommentController {
       );
 
       return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deleteForestComment(req, res, next) {
+    try {
+      const commentId = req.params.commentId;
+      const { deletedComment } = await forestCommentService.deleteForestComment(
+        commentId,
+      );
+      return res.status(200).send({ result: deletedComment });
     } catch (error) {
       next(error);
     }
@@ -131,7 +137,7 @@ class forestCommentController {
         comments: populageResult,
       };
 
-      return res.status(200).send({ result });
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }

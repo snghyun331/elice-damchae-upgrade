@@ -19,7 +19,11 @@ forestCommentRouter.put(
   loginRequired,
   forestCommentController.updateForestComment,
 );
-
+forestCommentRouter.delete(
+  '/forest/:forestId/comments/:commentId',
+  loginRequired,
+  forestCommentController.deleteForestComment,
+);
 forestCommentRouter.get(
   '/forest/:forestId/comments',
   forestCommentController.readForestComment,

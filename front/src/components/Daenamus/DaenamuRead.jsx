@@ -10,11 +10,12 @@ import { useUserId } from '../../store/useUserStore';
 import ReactionChart from './Reaction';
 import DaenamuLikeSection from './DaenamuLikeSection';
 import DaenamuTextEditor from './DaenamuTextEditor';
-import useStoryStore from '../../store/useStoryStore';
+import useForestStore from '../../store/useForestStore';
 import DaenamuComment from './DaenamuComment';
 
 const DaenamuRead = () => {
-	const { title, content, setTitle, setContent, setMood } = useStoryStore();
+	const { title, content, mood, setTitle, setContent, setMood, commentList } =
+		useForestStore();
 	const { forestId } = useParams();
 	const [forest, setForest] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
@@ -23,7 +24,7 @@ const DaenamuRead = () => {
 	const navigate = useNavigate();
 	const id = useUserId();
 
-	const fetchData = async () => {
+	const fetchForest = async () => {
 		try {
 			const res = await getApi(`forest/${forestId}`);
 			console.log(res);
@@ -51,23 +52,22 @@ const DaenamuRead = () => {
 	};
 
 	const handleCancelEdit = () => {
-		// Reset the edited comment and disable edit mode when canceling the edit
 		setTitle(forest.title);
 		setContent(forest.content);
-		setMood;
+		setMood('');
 		setEditMode(false);
 	};
 
 	const handleSaveEdit = async () => {
 		try {
-			// Call the onEdit function with the edited comment and the commentData._id
 			const res = await putApi(`forest/${forestId}`, {
 				title,
 				content,
+				// mood,
 			});
 			//TODO:mood추가해야함
 			console.log(res);
-			fetchData();
+			fetchForest();
 
 			setEditMode(false);
 		} catch (error) {
@@ -76,7 +76,7 @@ const DaenamuRead = () => {
 	};
 
 	useEffect(() => {
-		fetchData();
+		fetchForest();
 	}, []);
 
 	useEffect(() => {
@@ -97,7 +97,6 @@ const DaenamuRead = () => {
 					{isDataLoading && forest.userInfo._id == id && (
 						<>
 							{editMode ? (
-								// Show Save and Cancel buttons in edit mode
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleCancelEdit}
@@ -113,17 +112,16 @@ const DaenamuRead = () => {
 									</button>
 								</div>
 							) : (
-								// Show Edit button in view mode
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleEdit}
-										className="justify-end underline underline-offset-2 text-red-400"
+										className="justify-end underline underline-offset-2 text-black"
 									>
 										수정
 									</button>
 									<button
 										onClick={handleDelete}
-										className="justify-end ml-2 underline underline-offset-2 text-red-400"
+										className="justify-end ml-2 underline underline-offset-2 text-black"
 									>
 										삭제
 									</button>
@@ -132,9 +130,9 @@ const DaenamuRead = () => {
 						</>
 					)}
 				</div>
-				(//TODO:제목 길어지면 박스무너짐..)
 				<div className="relative top-0 px-10">
 					{editMode ? (
+						//TODO:제목 길어지면 박스무너짐
 						<DaenamuTextEditor />
 					) : (
 						<div className="view-mode">
@@ -191,15 +189,18 @@ const DaenamuRead = () => {
 				</div>
 				<div className="flex flex-col">
 					<DaenamuLikeSection forestId={forest._id} userId={id} />
+					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
+					{commentList && commentList.length > 0 ? (
+						<div>
+							<ReactionChart commentList={commentList} forestId={forestId} />
+						</div>
+					) : (
+						<div></div>
+					)}
 
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
-					<ReactionChart forestId={forestId} />
-					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<div>
-						<DaenamuComment
-							forestId={forestId}
-							// commentList={forest.commentList}
-						/>
+						<DaenamuComment forestId={forestId} />
 					</div>
 				</div>
 			</div>

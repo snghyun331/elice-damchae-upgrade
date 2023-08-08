@@ -3,9 +3,9 @@ import ReactApexChart from 'react-apexcharts';
 import { getApi } from '../../services/api';
 import { textEngToDeepColor, textToKorean } from '../Util/Util';
 
-const ReactionChart = ({ forestId }) => {
+const ReactionChart = ({ commentList, forestId }) => {
 	const [reaction, setReaction] = useState('');
-	const fetchData = async () => {
+	const fetchReaction = async () => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments/statistics`);
 			console.log(res.data);
@@ -14,6 +14,10 @@ const ReactionChart = ({ forestId }) => {
 			console.log(error);
 		}
 	};
+
+	useEffect(() => {
+		fetchReaction();
+	}, [commentList]);
 
 	const mbtiTypes = [
 		'ISTJ',
@@ -35,7 +39,7 @@ const ReactionChart = ({ forestId }) => {
 	];
 
 	useEffect(() => {
-		fetchData();
+		fetchReaction();
 	}, []);
 
 	const initialSeries = Object.keys(reaction).map((emotion) => ({

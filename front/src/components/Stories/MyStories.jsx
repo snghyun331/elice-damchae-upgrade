@@ -6,6 +6,8 @@ import useStoryStore from '../../store/useStoryStore';
 import { useIsLoggedIn } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
+import { postApi } from '../../services/api';
+import toast from 'react-hot-toast';
 
 const MyStories = () => {
 	const navigate = useNavigate();
@@ -28,6 +30,15 @@ const MyStories = () => {
 		);
 	};
 
+	const handleCheckLog = async () => {
+		const res = await postApi('stories/isAlreadyWrote');
+
+		if (res.data.result) {
+			toast.error('스토리는 하루에 한번만 작성이 가능합니다.');
+			setStoryModal(false);
+		}
+	};
+
 	return (
 		<>
 			<div className="p-10 container mx-auto px-4">
@@ -42,6 +53,7 @@ const MyStories = () => {
 								isLoggedIn
 									? () => {
 											setStoryModal(true);
+											handleCheckLog();
 									  }
 									: () => navigate('/login')
 							}
@@ -57,7 +69,6 @@ const MyStories = () => {
 
 					<div>{renderModal()}</div>
 					<div style={{ overflow: storyModal ? 'hidden' : 'auto' }}>
-						<Search />
 						<StoryCardMap endpoint={`stories/my`} />
 					</div>
 				</div>

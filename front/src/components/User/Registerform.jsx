@@ -83,6 +83,7 @@ const RegisterForm = () => {
 		[password, confirmPassword],
 	);
 	const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
+	const [emailButtonDisabled, setEmailButtonDisabled] = useState(false);
 
 	const isFormValid = useMemo(
 		() =>
@@ -105,7 +106,7 @@ const RegisterForm = () => {
 	);
 
 	const user = { email, password, nickname, mbti, profileImg };
-		console.log(mbti);
+	console.log(mbti);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
@@ -119,11 +120,15 @@ const RegisterForm = () => {
 
 	const handleEmailSend = async () => {
 		try {
+			setEmailButtonDisabled(true);
 			const response = await postApi('auth/sendEmailCode', { email: email });
-			console.log(response);
-			toast.success('이메일로 인증코드가 발송 되었습니다.');
+			if (response.status === 200) {
+				toast.success('이메일로 인증코드가 발송 되었습니다.');
+			}
+			setEmailButtonDisabled(false);
 		} catch (error) {
-			console.log(error.response);
+			setEmailButtonDisabled(false);
+			toast.error(error.response.data.errorMessage);
 		}
 	};
 
@@ -131,13 +136,12 @@ const RegisterForm = () => {
 		try {
 			const response = await postApi('auth/checkEmailCode', { string: code });
 			console.log(response);
-			toast.success('이메일 인증이 완료되었습니다.');
 			if (response.status === 200) {
 				setIsCodeConfirmed(true);
+				toast.success('이메일 인증이 완료되었습니다.');
 			}
 		} catch (error) {
 			toast.error(error.response.data.errorMessage);
-			console.log(error.response);
 		}
 	};
 
@@ -191,7 +195,12 @@ const RegisterForm = () => {
 										<button
 											type="button"
 											onClick={handleEmailSend}
-											disabled={!email || !isEmailValid || isCodeConfirmed}
+											disabled={
+												!email ||
+												!isEmailValid ||
+												isCodeConfirmed ||
+												emailButtonDisabled
+											}
 											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
 											style={{ height: '45px' }}
 										>

@@ -212,7 +212,7 @@ class userAuthController {
       } else if (isVerified === string) {
         return res
           .status(200)
-          .json({ message: '이메일 인증에 성공하였습니다.' });
+          .json({ errorMessage: '이메일 인증에 성공하였습니다.' });
       }
     } catch (error) {
       next(error);
@@ -281,7 +281,7 @@ class userAuthController {
       if (!user) {
         return res.status(404).json({ error: '존재하지 않는 유저입니다.' });
       }
-      return res.status(200).json({ message: '회원 탈퇴 완료' });
+      return res.status(200).json({ errorMessage: '회원 탈퇴 완료' });
     } catch (error) {
       next(error);
     }

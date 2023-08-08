@@ -4,10 +4,10 @@ import DaenamuCardMap from './DaenamuCardMap';
 import { mbtiList } from '../Util/Util';
 import { useNavigate } from 'react-router-dom';
 import { useIsLoggedIn } from '../../store/useUserStore';
-import useStoryStore from '../../store/useStoryStore';
+import useForestStore from '../../store/useForestStore';
 
 const DaenamusMain = () => {
-	const { reset } = useStoryStore();
+	const { reset } = useForestStore();
 	const isLoggedIn = useIsLoggedIn();
 	const [selectedMBTI, setSelectedMBTI] = useState([]);
 	const [selectedTab, setSelectedTab] = useState('전체글');
@@ -64,7 +64,7 @@ const DaenamusMain = () => {
 					</div>
 				</div>
 				<div className="mt-8 mb-4">
-					<Search />
+					<Search endpoint='daenamus'/>
 				</div>
 
 				<div className="mb-8 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">

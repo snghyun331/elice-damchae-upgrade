@@ -155,8 +155,7 @@ export const calendarDateToString = (date) => {
 		.replaceAll(' ', '');
 };
 
-export const defaultUser =
-	'https://cdn-icons-png.flaticon.com/512/847/847969.png?w=996&t=st=1691066365~exp=1691066965~hmac=8dd84f9bda33d03b36a4fe88d41d137caafb78037d900338c6855d4982fb8c2e';
+export const defaultUser = '/images/default-user.png';
 
 export const passwordRegex =
 	/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;

@@ -8,17 +8,18 @@ import { useUserId } from '../../store/useUserStore';
 import StoryComment from './StoryComment';
 import { BackButton } from '../Global/BackButton';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
+import { toast } from 'react-hot-toast';
 
 const StoryRead = () => {
 	const { storyId } = useParams();
 	const [story, setStory] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
-	const [isPublicStory, setIsPublicStory] = useState(true); // New state for public/private check // New state for public/private check
+	const [isPublicStory, setIsPublicStory] = useState(true);
 
 	const navigate = useNavigate();
 
 	const id = useUserId();
-	const fetchData = async () => {
+	const fetchStory = async () => {
 		try {
 			const res = await getApi(`stories/${storyId}`);
 			console.log(res);
@@ -31,19 +32,45 @@ const StoryRead = () => {
 		}
 	};
 
+	const handleConfirm = () => {
+		toast((t) => (
+			<div className="rounded p-4">
+				<div>정말로 삭제하시겠습니까?</div>
+				<div className="mt-3 flex justify-end">
+					<button
+						onClick={() => {
+							handleDelete();
+							toast.dismiss(t.id);
+						}}
+						className="text-white px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600"
+					>
+						예
+					</button>
+					<button
+						onClick={() => {
+							toast.dismiss(t.id);
+							// 필요한 후속 동작 수행
+						}}
+						className="text-white px-2 py-1 rounded bg-red-500 hover:bg-red-600"
+					>
+						아니오
+					</button>
+				</div>
+			</div>
+		));
+	};
+
 	const handleDelete = async () => {
-		if (confirm('정말로 삭제하시겠습니까?')) {
-			try {
-				await delApi(`stories/${storyId}`);
-				navigate(-1);
-			} catch (error) {
-				console.log(error);
-			}
+		try {
+			await delApi(`stories/${storyId}`);
+			navigate(-1);
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
 	useEffect(() => {
-		fetchData();
+		fetchStory();
 	}, []);
 
 	return (
@@ -102,7 +129,7 @@ const StoryRead = () => {
 								{isDataLoading && story.userInfo._id == id && (
 									<>
 										<button
-											onClick={handleDelete}
+											onClick={handleConfirm}
 											className="ml-2 text-white underline underline-offset-2 text-red-400"
 										>
 											삭제
@@ -141,7 +168,7 @@ const StoryRead = () => {
 						</div>
 						<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
 						<div>
-							<StoryComment storyId={storyId} commentList={story.commentList} />
+							<StoryComment storyId={storyId} />
 						</div>
 					</div>
 				</div>
