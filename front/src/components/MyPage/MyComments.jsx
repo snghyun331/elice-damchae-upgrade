@@ -42,7 +42,7 @@ const MyComments = () => {
 	return (
 		<div>
 			<h3 className="text-2xl text-gray-700 font-semibold">내가 쓴 댓글</h3>
-			<div>
+			<div className="mt-1">
 				총 <span className="text-blue-600 font-semibold">{commentCount}</span>{' '}
 				건
 			</div>

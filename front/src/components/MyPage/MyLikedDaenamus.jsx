@@ -31,14 +31,16 @@ const MyLikedDaenamus = () => {
 				<h3 className="text-2xl text-gray-700 font-semibold">
 					내가 좋아한 대나무숲
 				</h3>
+				<div className="mt-1">
+					총{' '}
+					<span className="text-blue-600 font-semibold">{forests.length}</span>{' '}
+					건
+				</div>
 				<div className="text-base mt-4 mb-4 text-gray-700">
 					<ChevronRightIcon className="w-4 inline mb-1" />
 					<span className="inline">
 						{' '}
-						<Link
-							to='MyLikedDaenamusAll'
-							state={{forests: forests}}
-						>
+						<Link to="MyLikedDaenamusAll" state={{ forests: forests }}>
 							전체보기
 						</Link>
 					</span>

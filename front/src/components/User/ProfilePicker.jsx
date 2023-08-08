@@ -6,7 +6,7 @@ const getImages = (mbti) =>
 		.fill()
 		.map(
 			(_, i) =>
-				`images/characters/${mbti.toLowerCase()}/${mbti.toLowerCase()}${
+				`https://damchae.s3.ap-northeast-2.amazonaws.com/characters/${mbti.toLowerCase()}${
 					i + 1
 				}.jpg`,
 		);
@@ -32,7 +32,6 @@ const profileData = {
 
 const ProfilePicker = () => {
 	const { mbti, profileImg, setProfileImg } = useUserStore();
-
 	useEffect(() => {
 		if (mbti && typeof profileImg == 'string') {
 			setProfileImg(null);
@@ -75,7 +74,7 @@ const ProfilePicker = () => {
 							style={{ width: '19%' }}
 							key={`${mbti}-${index}`}
 							src={image}
-							alt={`Profile ${mbti}-${index + 1}`}
+							alt={`Profile ${mbti}${index + 1}`}
 							onClick={() => handleProfileClick(image)} // Pass the image URL to the handler
 						/>
 					);
