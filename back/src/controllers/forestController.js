@@ -9,9 +9,12 @@ class ForestController {
       const { content } = req.body;
       const pureContent = content.replace(/<[^>]+>/g, ' '); // content에 html태그가 섞여오기 때문에 태그 제거하기
       // flask에서 'text': pureContent 형태로 request로 들어감
-      const obj = await axios.post('http://127.0.0.1:5000/predict', {
-        text: pureContent,
-      });
+      const obj = await axios.post(
+        process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL,
+        {
+          text: pureContent,
+        },
+      );
       // console.log(obj.data)  ->  (예) { mood : 'pleasure' }
       return res.status(201).json(obj.data);
     } catch (error) {
@@ -62,7 +65,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'user',
         );
 
         if (populateResult.length === 0) {
@@ -85,7 +88,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'user',
         );
 
         if (populateResult.length === 0) {
@@ -113,7 +116,7 @@ class ForestController {
 
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'user',
         );
 
         if (populateResult.length === 0) {
@@ -133,7 +136,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'user',
         );
 
         result = {
@@ -231,10 +234,7 @@ class ForestController {
         throw new Error('스토리를 찾을 수 없습니다');
       }
 
-      const result = await ForestService.populateForestPost(
-        forestInfo,
-        'userInfo',
-      );
+      const result = await ForestService.populateForestPost(forestInfo, 'user');
       return res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -270,7 +270,33 @@ class ForestController {
     // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP
 
     try {
-      const mbtiList = req.query.filter.split(',');
+      let mbtiList = [];
+
+      if (req.query.filter == '') {
+        mbtiList = [
+          'ISTJ',
+          'ISFJ',
+          'INFJ',
+          'INTJ',
+          'ISTP',
+          'ISFP',
+          'INFP',
+          'INTP',
+          'ESTP',
+          'ESFP',
+          'ENFP',
+          'ENTP',
+          'ESTJ',
+          'ESFJ',
+          'ENFJ',
+          'ENTJ',
+        ];
+      } else {
+        mbtiList = req.query.filter.split(',');
+      }
+      console.log('mbtiList,,,,', mbtiList);
+
+      console.log('mbti query :', mbtiList);
 
       const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
       const limit = 12; // 한페이지에 들어갈 스토리 수
