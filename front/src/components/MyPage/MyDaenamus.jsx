@@ -11,6 +11,7 @@ const MyDaenamus = () => {
 		try {
 			const res = await getApi('forest/my');
 			setForests(res.data.forests);
+			console.log('내가작성한', forests)
 		} catch (err) {
 			console.log(err);
 		}

@@ -6,6 +6,7 @@ import { formatCreatedAt } from '../Util/Util';
 import { Link } from 'react-router-dom';
 
 const MyComments = () => {
+	console.log('마이코멘트실행');
 	const [comments, setComments] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
 	const [totalPage, setTotalPage] = useState(0);
@@ -14,6 +15,7 @@ const MyComments = () => {
 	const fetchComments = async (page = 1) => {
 		try {
 			const res = await getApi(`my/allComments?page=${page}`);
+			console.log('마이코멘트', res.data);
 			setComments(res.data.myComments);
 			setCommentCount(res.data.totalCommentsCount);
 			setTotalPage(res.data.totalPage);
@@ -64,19 +66,25 @@ const MyComments = () => {
 							</span>
 							<div className="mt-2" />
 							<span className="font-bold text-gray-900">본문</span>{' '}
-							<a className="underline underline-offset-2 text-blue-900">
+							<div className="underline underline-offset-2 text-blue-900 inline">
 								<Link
 									to={
 										comment.forestId
-											? `/daenamus/${comment.forestId._id}`
-											: `/stories/${comment.storyId._id}`
+											? `/daenamus/${
+													comment.forestId ? comment.forestId._id : ''
+											  }`
+											: `/stories/${comment.storyId ? comment.storyId._id : ''}`
 									}
 								>
 									{comment.forestId
-										? comment.forestId.title
-										: comment.storyId.title}
+										? comment.forestId
+											? comment.forestId.title
+											: '삭제된 글입니다.'
+										: comment.storyId
+										? comment.storyId.title
+										: '삭제된 글입니다.'}
 								</Link>
-							</a>
+							</div>
 						</li>
 					))}
 				</ul>

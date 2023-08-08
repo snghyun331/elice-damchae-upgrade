@@ -4,14 +4,16 @@ import PropTypes from 'prop-types';
 import { getApi } from '../../services/api';
 import { useState, useEffect } from 'react';
 
-const MyLikedDaenamus = ({ myDaenamu }) => {
+const MyLikedDaenamus = () => {
 	const [forests, setForests] = useState([]);
+	const [isDataLoading, setIsDataLoading] = useState(false);
 
 	const fetchDaenamus = async () => {
 		try {
-			const res = await getApi('forest/my');
-			setForests(res.data.forests);
-			console.log("내가좋아한", forests);
+			const res = await getApi('my/likeForestPosts');
+			console.log(res.data);
+			setForests(res.data);
+			setIsDataLoading(true);
 		} catch (err) {
 			console.log(err);
 		}
@@ -31,12 +33,12 @@ const MyLikedDaenamus = ({ myDaenamu }) => {
 					<ChevronRightIcon className="w-4 inline mb-1" />
 					<span className="inline"> 전체보기</span>
 					<div className="my-8 flex flex-wrap justify-center md:justify-center">
-						{myDaenamu.map((data) => (
+						{forests.slice(0, 3).map(({ postId }) => (
 							<div
-								key={data.title}
+								key={postId._id}
 								className={`w-full md:w-1/3 mb-4 px-1 md:px-2 mx-auto`}
 							>
-								{/* <MyDaenamuCard data={data} /> */}
+								<MyDaenamuCard forest={postId} />
 							</div>
 						))}
 					</div>
@@ -44,10 +46,6 @@ const MyLikedDaenamus = ({ myDaenamu }) => {
 			</div>
 		</>
 	);
-};
-
-MyLikedDaenamus.propTypes = {
-	myDaenamu: PropTypes.array.isRequired,
 };
 
 export default MyLikedDaenamus;

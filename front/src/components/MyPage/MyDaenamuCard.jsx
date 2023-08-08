@@ -35,8 +35,4 @@ const MyDaenamuCard = ({
 	);
 };
 
-MyDaenamuCard.propTypes = {
-	data: PropTypes.object.isRequired,
-};
-
 export default MyDaenamuCard;

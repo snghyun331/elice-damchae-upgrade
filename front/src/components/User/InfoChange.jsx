@@ -253,7 +253,6 @@ const InfoChange = () => {
 									</label>
 									<div className="flex space-x-2">
 										<div>{email}</div>
-										<div />
 									</div>
 								</div>
 
