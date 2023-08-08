@@ -68,8 +68,13 @@ class User {
 
   // 탈퇴한 회원조회
   static async findDeletedUsers() {
-    const users = await User.find({ isOut: true });
+    const users = await UserModel.find({ isOut: true });
     return users;
+  }
+
+  static async populateUserImg(user, field) {
+    const result = UserModel.populate(user, field);
+    return result;
   }
 }
 

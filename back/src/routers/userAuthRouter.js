@@ -2,13 +2,13 @@ import { Router } from 'express';
 import { userAuthController } from '../controllers/userController.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { outUserValidation } from '../middlewares/outUserValidation.js';
-import { upload } from '../utills/multer.js';
+import { uploadS3 } from '../utills/multer.js';
 
 const userAuthRouter = Router();
 
 userAuthRouter.post(
   '/auth/register',
-  upload.single('profileImg'),
+  uploadS3.single('profileImg'),
   userAuthController.registerUser,
 );
 
@@ -29,7 +29,7 @@ userAuthRouter.post(
 userAuthRouter.put(
   '/auth/update',
   loginRequired,
-  upload.single('profileImg'),
+  uploadS3.single('profileImg'),
   userAuthController.updateUser,
 );
 
