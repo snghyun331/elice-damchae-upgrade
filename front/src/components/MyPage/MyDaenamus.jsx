@@ -11,7 +11,7 @@ const MyDaenamus = () => {
 		try {
 			const res = await getApi('forest/my');
 			setForests(res.data.forests);
-			console.log('내가작성한', forests)
+			console.log('내가작성한', forests);
 		} catch (err) {
 			console.log(err);
 		}
@@ -30,8 +30,9 @@ const MyDaenamus = () => {
 				<div className="text-base mt-4 mb-4 text-gray-700">
 					<ChevronRightIcon className="w-4 inline mb-1" />
 					<span className="inline">
-						<Link
-							to={{ pathname: 'MyDaenamusAll', state: { forests: forests } }}
+					<Link
+							to='MyDaenamusAll'
+							state={{forests: forests}}
 						>
 							전체보기
 						</Link>

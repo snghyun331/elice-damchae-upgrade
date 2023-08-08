@@ -71,7 +71,7 @@ const MyPage = () => {
 			<MyDaenamus />
 
 			<hr className="my-8" />
-			{/* <MyLikedDaenamus /> */}
+			<MyLikedDaenamus />
 
 			<hr className="my-8" />
 			<MyComments />

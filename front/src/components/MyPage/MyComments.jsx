@@ -6,7 +6,6 @@ import { formatCreatedAt } from '../Util/Util';
 import { Link } from 'react-router-dom';
 
 const MyComments = () => {
-	console.log('마이코멘트실행');
 	const [comments, setComments] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
 	const [totalPage, setTotalPage] = useState(0);
@@ -15,7 +14,6 @@ const MyComments = () => {
 	const fetchComments = async (page = 1) => {
 		try {
 			const res = await getApi(`my/allComments?page=${page}`);
-			console.log('마이코멘트', res.data);
 			setComments(res.data.myComments);
 			setCommentCount(res.data.totalCommentsCount);
 			setTotalPage(res.data.totalPage);

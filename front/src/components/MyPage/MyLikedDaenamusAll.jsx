@@ -4,16 +4,17 @@ import { formatDate } from '../Util/Util';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { Link, useLocation } from 'react-router-dom';
 
-const MyDaenamusAll = () => {
-	const location = useLocation()
-	console.log(location);
+const MyLikedDaenamusAll = () => {
+	const location = useLocation();
 	const [forests, setForests] = useState([]);
-
 	useEffect(() => {
 		const fetchDaenamus = async () => {
 			try {
-				const res = await getApi('forest/my');
-				setForests(res.data.forests);
+				const res = await getApi('my/likeForestPosts');
+				const postIdForests = res.data
+					.filter((forest) => forest.postId !== null)
+					.map((forest) => forest.postId);
+				setForests(postIdForests);
 			} catch (err) {
 				console.log(err);
 			}
@@ -28,7 +29,9 @@ const MyDaenamusAll = () => {
 
 	return (
 		<div className="max-w-4xl mx-auto">
-			<h3 className="text-2xl text-gray-700 font-semibold my-12">내가 작성한 대나무숲 전체보기</h3>
+			<h3 className="text-2xl text-gray-700 font-semibold my-12">
+				내가 좋아한 대나무숲 전체보기
+			</h3>
 			<ul className="text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
 				{forests.map((forest) => (
 					<li
@@ -64,4 +67,4 @@ const MyDaenamusAll = () => {
 	);
 };
 
-export default MyDaenamusAll;
+export default MyLikedDaenamusAll;
