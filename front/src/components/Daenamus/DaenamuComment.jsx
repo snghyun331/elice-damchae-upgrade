@@ -4,6 +4,7 @@ import CommentBox from '../Global/CommentBox';
 import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../Global/Pagination';
+import toast from 'react-hot-toast'
 import useForestStore from '../../store/useForestStore';
 
 const DaenamuComment = ({ forestId }) => {
@@ -73,7 +74,7 @@ const DaenamuComment = ({ forestId }) => {
 			setComment('');
 			fetchComment();
 		} catch (error) {
-			console.log(error.response.data.errorMessage);
+			toast.error(error.response.data);
 		}
 	};
 	return (

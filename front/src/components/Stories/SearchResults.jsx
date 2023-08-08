@@ -59,7 +59,7 @@ const SearchResults = () => {
 
 		if (resultsArray && resultsArray.length > 0) {
 			return resultsArray.map((result) => (
-				<SearchResultBox key={result._id} data={result} />
+				<SearchResultBox key={result._id} data={result} searchCategory={searchCategory} />
 			));
 		}
 		return null;
@@ -72,7 +72,7 @@ const SearchResults = () => {
 				<span className="text-blue-600 font-semibold">
 					{searchQuery.searchQuery}
 				</span>{' '}
-				에 대한 검색 결과{' '}
+				에 대한 {searchCategory === 'forest' ? <>대나무숲</> : <>스토리</>} 검색 결과{' '}
 				<span className="text-lg">
 					{results.totalCount ? results.totalCount : '0'}건
 				</span>
