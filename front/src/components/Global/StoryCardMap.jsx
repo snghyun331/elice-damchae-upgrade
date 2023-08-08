@@ -36,7 +36,7 @@ const StoryCardMap = ({ endpoint }) => {
 					<>
 						{stories && stories.length > 0 ? ( // Check if stories is not empty
 							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 gap-4 text-base font-medium">
-								{stories.map((story) => (
+								{stories?.map((story) => (
 									<div key={story._id}>
 										<StoryCard data={story} />
 									</div>

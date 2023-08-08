@@ -6,7 +6,9 @@ const getImages = (mbti) =>
 		.fill()
 		.map(
 			(_, i) =>
-				`images/characters/${mbti.toLowerCase()}/${mbti.toLowerCase()}${i}.jpg`,
+				`images/characters/${mbti.toLowerCase()}/${mbti.toLowerCase()}${
+					i + 1
+				}.jpg`,
 		);
 
 const profileData = {

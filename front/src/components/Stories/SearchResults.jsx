@@ -59,7 +59,7 @@ const SearchResults = () => {
 
 		if (resultsArray && resultsArray.length > 0) {
 			return resultsArray.map((result) => (
-				<SearchResultBox key={result._id} data={result} />
+				<SearchResultBox key={result._id} data={result} searchCategory={searchCategory} />
 			));
 		}
 		return null;

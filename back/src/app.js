@@ -10,7 +10,7 @@ import { imageRouter } from './routers/imageRouter.js';
 import { storyCommentRouter } from './routers/storyCommentRouter.js';
 import { forestLikeDislikeRouter } from './routers/forestLikeDislikeRouter.js';
 import { forestCommentRouter } from './routers/forestCommentRouter.js';
-// import { forestCommentRouter } from './routers/forestCommentRouter.js';
+import { myPageRouter } from './routers/myPageRouter.js';
 
 const app = express();
 app.use('/uploads', express.static('uploads'));
@@ -36,7 +36,7 @@ app.use(imageRouter);
 app.use(storyCommentRouter);
 app.use(forestLikeDislikeRouter);
 app.use(forestCommentRouter);
-// app.use(forestCommentRouter);
+app.use(myPageRouter);
 app.use(errorMiddleware);
 
 export { app };

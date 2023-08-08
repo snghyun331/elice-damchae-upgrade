@@ -72,14 +72,20 @@ class forestCommentModel {
         .exec();
 
       const count = await forestComment.countDocuments({ forestId: forestId });
-      if (!count) {
-        throw new Error('요청한 댓글을 찾을 수 없습니다.');
-      }
 
       return { comments, count };
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  static async findAllByForestId({ forestId }) {
+    const forestComments = await forestComment.find({ forestId: forestId });
+    const populatedComments = await forestComment.populate(forestComments, {
+      path: 'writerId',
+    });
+
+    return populatedComments;
   }
 
   static async populateForestComment(info, field) {

@@ -4,14 +4,12 @@ import BannerCarousel from './BannerCarousel';
 import Search from '../Global/Search';
 import StoryCardMap from '../Global/StoryCardMap';
 import useUserStore, { useIsLoggedIn } from '../../store/useUserStore';
-
 import ModalPortal from '../Stories/ModalPortal';
 import useStoryStore from '../../store/useStoryStore';
-
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
-import HomeMusicVideo from './HomeMusicVideo';
+import { postApi } from '../../services/api';
+import toast from 'react-hot-toast';
 
 const Home = () => {
 	useEffect(() => {
@@ -67,6 +65,7 @@ const Home = () => {
 						isLoggedIn
 							? () => {
 									setStoryModal(true);
+									handleCheckLog();
 							  }
 							: () => navigate('/login')
 					}
@@ -78,6 +77,15 @@ const Home = () => {
 			</div>
 		</>
 	);
+
+	const handleCheckLog = async () => {
+		const res = await postApi('stories/isAlreadyWrote');
+
+		if (res.data.result) {
+			toast.error('스토리는 하루에 한번만 작성이 가능합니다.');
+			setStoryModal(false);
+		}
+	};
 
 	return (
 		<div>
@@ -101,7 +109,7 @@ const Home = () => {
 				<div className="mx-4 sm:mx-10 md:mx-20 lg:mx-40" data-aos="fade-right">
 					<div className="mt-10 text-3xl font-semibold">우리들의 스토리</div>
 					<div className="mt-20 items-center">
-						<Search endpoint='stories' />
+						<Search endpoint="stories" />
 					</div>
 					<StoryCardMap endpoint="stories" />
 				</div>
