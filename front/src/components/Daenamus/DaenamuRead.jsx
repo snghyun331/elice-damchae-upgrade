@@ -192,7 +192,7 @@ const DaenamuRead = () => {
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					{commentList && commentList.length > 0 ? (
 						<div>
-							<ReactionChart key={commentList.length} forestId={forestId} />
+							<ReactionChart commentList={commentList} forestId={forestId} />
 						</div>
 					) : (
 						<div></div>
@@ -200,10 +200,7 @@ const DaenamuRead = () => {
 
 					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
 					<div>
-						<DaenamuComment
-							forestId={forestId}
-							// commentList={forest.commentList}
-						/>
+						<DaenamuComment forestId={forestId} />
 					</div>
 				</div>
 			</div>

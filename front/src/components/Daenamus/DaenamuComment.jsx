@@ -103,18 +103,19 @@ const DaenamuComment = ({ forestId }) => {
 			</div>
 
 			<div>
-				{commentList && commentList.length > 0 ? (
+				{commentCount === 0 ? (
+					<p>등록된 댓글이 없습니다.</p>
+				) : (
 					commentList.map((commentData) => (
 						<div key={commentData._id}>
 							<CommentBox
+								fetchComment={fetchComment}
 								commentData={commentData}
 								onDelete={deleteComment}
 								onEdit={editComment}
 							/>
 						</div>
 					))
-				) : (
-					<p>등록된 댓글이 없습니다.</p>
 				)}
 			</div>
 
