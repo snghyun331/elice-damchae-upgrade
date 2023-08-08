@@ -9,6 +9,7 @@ const useUserStore = create((set) => {
 		nickname: '',
 		mbti: '',
 		profileImg: '',
+		mbtiImg: '',
 		isGoogleLogin: false,
 		isLoggedIn: Boolean(localStorage.getItem('accessToken')),
 	};
@@ -36,6 +37,7 @@ const useUserStore = create((set) => {
 		setNickname: (nickname) => set({ nickname }),
 		setMbti: (mbti) => set({ mbti }),
 		setProfileImg: (profileImg) => set({ profileImg }),
+		setMbtiImg: (mbtiImg) => set({ mbtiImg }),
 		setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 
 		actions: {

@@ -42,7 +42,7 @@ const MyComments = () => {
 	return (
 		<div>
 			<h3 className="text-2xl text-gray-700 font-semibold">내가 쓴 댓글</h3>
-			<div>
+			<div className="mt-1">
 				총 <span className="text-blue-600 font-semibold">{commentCount}</span>{' '}
 				건
 			</div>
@@ -64,19 +64,25 @@ const MyComments = () => {
 							</span>
 							<div className="mt-2" />
 							<span className="font-bold text-gray-900">본문</span>{' '}
-							<a className="underline underline-offset-2 text-blue-900">
+							<div className="underline underline-offset-2 text-blue-900 inline">
 								<Link
 									to={
 										comment.forestId
-											? `/daenamus/${comment.forestId._id}`
-											: `/stories/${comment.storyId._id}`
+											? `/daenamus/${
+													comment.forestId ? comment.forestId._id : ''
+											  }`
+											: `/stories/${comment.storyId ? comment.storyId._id : ''}`
 									}
 								>
 									{comment.forestId
-										? comment.forestId.title
-										: comment.storyId.title}
+										? comment.forestId
+											? comment.forestId.title
+											: '삭제된 글입니다.'
+										: comment.storyId
+										? comment.storyId.title
+										: '삭제된 글입니다.'}
 								</Link>
-							</a>
+							</div>
 						</li>
 					))}
 				</ul>

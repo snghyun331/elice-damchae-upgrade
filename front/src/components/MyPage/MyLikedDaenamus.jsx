@@ -3,15 +3,19 @@ import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import PropTypes from 'prop-types';
 import { getApi } from '../../services/api';
 import { useState, useEffect } from 'react';
-
-const MyLikedDaenamus = ({ myDaenamu }) => {
+import { Link } from 'react-router-dom';
+const MyLikedDaenamus = () => {
 	const [forests, setForests] = useState([]);
+	const [isDataLoading, setIsDataLoading] = useState(false);
 
 	const fetchDaenamus = async () => {
 		try {
-			const res = await getApi('forest/my');
-			setForests(res.data.forests);
-			console.log("내가좋아한", forests);
+			const res = await getApi('my/likeForestPosts');
+			const postIdForests = res.data
+				.filter((forest) => forest.postId !== null)
+				.map((forest) => forest.postId);
+			setForests(postIdForests);
+			setIsDataLoading(true);
 		} catch (err) {
 			console.log(err);
 		}
@@ -27,27 +31,35 @@ const MyLikedDaenamus = ({ myDaenamu }) => {
 				<h3 className="text-2xl text-gray-700 font-semibold">
 					내가 좋아한 대나무숲
 				</h3>
+				<div className="mt-1">
+					총{' '}
+					<span className="text-blue-600 font-semibold">{forests.length}</span>{' '}
+					건
+				</div>
 				<div className="text-base mt-4 mb-4 text-gray-700">
 					<ChevronRightIcon className="w-4 inline mb-1" />
-					<span className="inline"> 전체보기</span>
+					<span className="inline">
+						{' '}
+						<Link to="MyLikedDaenamusAll" state={{ forests: forests }}>
+							전체보기
+						</Link>
+					</span>
 					<div className="my-8 flex flex-wrap justify-center md:justify-center">
-						{myDaenamu.map((data) => (
-							<div
-								key={data.title}
-								className={`w-full md:w-1/3 mb-4 px-1 md:px-2 mx-auto`}
-							>
-								{/* <MyDaenamuCard data={data} /> */}
-							</div>
-						))}
+						{forests.slice(0, 3).map((forest) => {
+							return (
+								<div
+									key={forest._id}
+									className={`w-full md:w-1/3 mb-4 px-1 md:px-2 mx-auto`}
+								>
+									<MyDaenamuCard forest={forest} />
+								</div>
+							);
+						})}
 					</div>
 				</div>
 			</div>
 		</>
 	);
-};
-
-MyLikedDaenamus.propTypes = {
-	myDaenamu: PropTypes.array.isRequired,
 };
 
 export default MyLikedDaenamus;
