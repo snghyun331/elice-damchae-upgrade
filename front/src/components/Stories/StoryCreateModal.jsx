@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { postApi } from '../../services/api';
 import './StoryCreateModal.css';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const StoryCreateModal = ({ onClose }) => {
 	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
@@ -15,6 +16,8 @@ const StoryCreateModal = ({ onClose }) => {
 	const [isPublic, setIsPublic] = useState(false);
 
 	const dimmedRef = useRef(null);
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		document.body.style.overflow = 'hidden';
@@ -40,10 +43,7 @@ const StoryCreateModal = ({ onClose }) => {
 			const response = await postApi('stories', formData);
 			console.log(response.data);
 			onClose();
-
-			setTimeout(() => {
-				window.location.href = '/stories';
-			}, 100);
+			navigate('/stories');
 		} catch (e) {
 			console.error(e);
 		}
