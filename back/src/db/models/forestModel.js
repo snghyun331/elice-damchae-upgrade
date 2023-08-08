@@ -102,24 +102,29 @@ class forestModel {
       console.log('Skip:', skip);
       console.log('Limit:', limit);
 
+      let matchQuery = {};
+      if (mbtiList && mbtiList.length > 0 && mbtiList[0] !== '') {
+        matchQuery = {
+          'userInfo.mbti': {
+            $in: mbtiList,
+          },
+        };
+      }
+
       const posts = await ForestPost.aggregate([
         {
           $lookup: {
             from: 'users',
             localField: 'userInfo',
             foreignField: '_id',
-            as: 'user',
+            as: 'userInfo',
           },
         },
         {
-          $unwind: '$user',
+          $unwind: '$userInfo',
         },
         {
-          $match: {
-            'user.mbti': {
-              $in: mbtiList,
-            },
-          },
+          $match: matchQuery,
         },
         {
           $skip: skip,
@@ -128,6 +133,11 @@ class forestModel {
           $limit: limit,
         },
       ]);
+
+      let countQuery = matchQuery;
+      if (!mbtiList || mbtiList.length === 0 || mbtiList[0] === '') {
+        countQuery = {};
+      }
 
       const countResults = await ForestPost.aggregate([
         {
@@ -142,11 +152,7 @@ class forestModel {
           $unwind: '$userInfo',
         },
         {
-          $match: {
-            'userInfo.mbti': {
-              $in: mbtiList,
-            },
-          },
+          $match: countQuery,
         },
         {
           $group: {
