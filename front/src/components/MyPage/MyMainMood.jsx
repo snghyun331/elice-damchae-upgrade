@@ -9,7 +9,7 @@ const MyMainMood = ({ posts }) => {
 	useEffect(() => {
 		const moodFrequency = {};
 
-		posts.forEach((post) => {
+		posts?.forEach((post) => {
 			if (post.mood in moodFrequency) {
 				moodFrequency[post.mood] += 1;
 			} else {

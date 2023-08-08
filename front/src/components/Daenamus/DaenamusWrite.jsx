@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
-import useStoryStore from '../../store/useStoryStore';
+import useForestStore from '../../store/useForestStore';
 import DaenamuTextEditor from './DaenamuTextEditor';
 import { postApi } from '../../services/api';
 
 const DaenamusWrite = () => {
-	const { title, content, mood } = useStoryStore();
+	const { title, content, mood } = useForestStore();
 
 	const isFormValid = useMemo(
 		() => title && content && mood,

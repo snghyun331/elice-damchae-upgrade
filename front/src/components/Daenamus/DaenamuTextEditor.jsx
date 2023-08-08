@@ -2,7 +2,7 @@ import { useRef, useMemo } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import { postApi } from '../../services/api';
 import useImageUpload from '../../hooks/useImageUpload';
-import useStoryStore from '../../store/useStoryStore';
+import useForestStore from '../../store/useForestStore';
 import { textToIcon, textToKorean } from '../Util/Util';
 
 const DaenamuTextEditor = () => {
@@ -15,7 +15,7 @@ const DaenamuTextEditor = () => {
 		setMood,
 
 		setContent,
-	} = useStoryStore();
+	} = useForestStore();
 
 	const handleSubmit = async () => {
 		try {

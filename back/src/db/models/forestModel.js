@@ -1,6 +1,6 @@
 // // forestModel.js
 import ForestPost from '../schemas/forestPost.js';
-
+import { forestComment } from '../schemas/forestComment.js';
 class forestModel {
   static async create({ newForestPost }) {
     const createdForest = await ForestPost.create(newForestPost);
@@ -8,11 +8,10 @@ class forestModel {
   }
 
   static async findOneAndUpdate({ forestId, title, content }) {
-    const updatedPost = await ForestPost.updateOne({
-      _id: forestId,
-      title,
-      content,
-    });
+    const updatedPost = await ForestPost.updateOne(
+      { _id: forestId }, // 업데이트할 문서의 조건
+      { title, content }, // 업데이트할 필드 및 값);
+    );
     return updatedPost;
   }
 
@@ -22,22 +21,26 @@ class forestModel {
   }
 
   static async findByForest(skip, limit, getAlls) {
-    const forests = await ForestPost.find(getAlls)
+    const readForest = { ...getAlls };
+    const forests = await ForestPost.find(readForest)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .exec();
-    const count = await ForestPost.countDocuments(forests);
+
+    // 댓글 갯수 조회 및 추가
+    for (const forest of forests) {
+      const commentCount = await forestComment.countDocuments({
+        forestId: forest._id,
+      });
+      forest.commentCount = commentCount;
+    }
+    const count = await ForestPost.countDocuments(readForest);
     return { forests, count };
   }
 
-  static async findByUserId({ userId }) {
-    const user = await ForestPost.find({ userInfo: userId });
-    return user;
-  }
-
   static async readOneById({ forestId }) {
-    const forest = await ForestPost.findOne({ forestId });
+    const forest = await ForestPost.findOne({ _id: forestId });
     return forest;
   }
 
@@ -59,6 +62,17 @@ class forestModel {
     return { forest, count };
   }
 
+  static async findByUser(userId, skip, limit) {
+    const readUser = { userInfo: userId };
+    const forests = await ForestPost.find(readUser)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    const count = await ForestPost.countDocuments(readUser);
+    return { forests, count };
+  }
+
   static async populateForestPost(info, field) {
     const forest = ForestPost.populate(info, field);
     return forest;
@@ -71,15 +85,19 @@ class forestModel {
     );
   }
 
-  static async findByForestMbti(mbtiList) {
+  static async findAndDecreaseCommentCount({ forestId }) {
+    await ForestPost.updateOne(
+      { _id: forestId, commentCount: { $gt: 0 } },
+      { $inc: { commentCount: -1 } },
+    );
+  }
+
+  static async findByForestMbti({ mbtiList, skip, limit }) {
     try {
-      console.log('mbtilist확인용:', mbtiList);
-      // // 작성자 MBTI가 'ISTJ'인 사용자들을 찾습니다.
-      // const usersWithMBTI = await UserModel.find({ mbti: mbti });
-      // // 찾은 사용자들의 _id 목록을 추출합니다.
-      // const userIds = usersWithMBTI.map((user) => user._id);
-      // // 작성자가 ISTJ인 블로그 포스트들을 찾습니다.
-      // const posts = await ForestPost.find({ author: { $in: userIds } });
+      // const readMbti = { ...mbtiList };
+      console.log('Finding posts with MBTI:', mbtiList);
+      console.log('Skip:', skip);
+      console.log('Limit:', limit);
 
       const posts = await ForestPost.aggregate([
         {
@@ -95,14 +113,43 @@ class forestModel {
         },
         {
           $match: {
-            mbti: {
-              $in: mbtiList.map((mbti) => mbti.toString()),
+            'user.mbti': {
+              $in: mbtiList,
+            },
+          },
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+        {
+          $group: {
+            _id: null,
+            mbtiCount: {
+              $sum: 1,
+            },
+            posts: {
+              $push: '$$ROOT',
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            mbtiCount: 1,
+            posts: {
+              $slice: ['$posts', skip, limit],
             },
           },
         },
       ]);
 
-      return posts;
+      const count = await ForestPost.countDocuments(mbtiList);
+      console.log('Found Posts:', posts);
+      console.log('Total Count:', count);
+      return { posts, count };
     } catch (error) {
       throw new Error(
         `Error finding blog posts by author's MBTI: ${error.message}`,
