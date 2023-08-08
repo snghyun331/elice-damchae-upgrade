@@ -100,7 +100,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 
 	return (
 		<>
-			<div className="text-gray-700 m-5 mb-12 flex flex-row justify-center space-x-2 p-5 mx-52">
+			<div className="text-gray-700 m-5 mb-12 flex flex-row justify-center space-x-2 p-5 md:mx-52">
 				<div className="flex items-center">
 					<span className="mr-3 font-bold">{likes}</span>
 					<HandThumbUpIcon
