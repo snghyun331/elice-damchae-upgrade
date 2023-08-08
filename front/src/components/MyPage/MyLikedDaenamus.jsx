@@ -16,7 +16,7 @@ const MyLikedDaenamus = ({ myDaenamu }) => {
               key={data.title}
               className={`w-full md:w-1/3 mb-4 px-1 md:px-2 mx-auto`}
             >
-              <MyDaenamuCard data={data} />
+              {/* <MyDaenamuCard data={data} /> */}
             </div>
           ))}
         </div>
