@@ -270,33 +270,7 @@ class ForestController {
     // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP
 
     try {
-      // let mbtiList = [];
-
-      // if (req.query.filter == '') {
-      // mbtiList = [
-      // 'ISTJ',
-      // 'ISFJ',
-      // 'INFJ',
-      // 'INTJ',
-      // 'ISTP',
-      // 'ISFP',
-      // 'INFP',
-      // 'INTP',
-      // 'ESTP',
-      // 'ESFP',
-      // 'ENFP',
-      // 'ENTP',
-      // 'ESTJ',
-      // 'ESFJ',
-      // 'ENFJ',
-      // 'ENTJ',
-      // ];
-      // } else {
       const mbtiList = req.query.filter.split(',');
-      // }
-      console.log('mbtiList,,,,', mbtiList);
-
-      console.log('mbti query :', mbtiList);
 
       const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
       const limit = 12; // 한페이지에 들어갈 스토리 수
@@ -306,26 +280,16 @@ class ForestController {
         page,
         limit,
       });
-      console.log('MBTI List:', mbtiList);
-      console.log('Page:', page);
-      console.log('Limit:', limit);
-      console.log('Total Posts Count:', count);
-      console.log('Total Page:', totalPage);
-      console.log('Fetched Posts:', posts);
+
       if (!mbtiList) {
         throw new Error('스토리를 찾을 수 없습니다.');
       }
-
-      const populateResult = await forestCommentService.populateForestComment(
-        posts,
-        'userInfo',
-      );
 
       result = {
         currentPage: page,
         totalPage: totalPage,
         totalForestsCount: count,
-        forests: populateResult,
+        forests: posts,
       };
 
       return res.status(200).json(result);
