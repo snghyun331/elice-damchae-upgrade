@@ -4,7 +4,11 @@ const UserSchema = new Schema(
   {
     profileImg: {
       type: Schema.Types.ObjectId,
-      ref: 'Img',
+      ref: 'Image',
+      required: false,
+    },
+    mbtiImg: {
+      type: String,
       required: false,
     },
     email: {
