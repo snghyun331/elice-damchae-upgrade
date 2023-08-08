@@ -3,7 +3,10 @@ import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import {
 	EyeIcon,
 	ChatBubbleLeftEllipsisIcon,
+	HandThumbDownIcon,
+	HandThumbUpIcon,
 } from '@heroicons/react/24/outline';
+
 import {
 	textToIcon,
 	truncateString,
@@ -12,7 +15,17 @@ import {
 } from '../Util/Util';
 
 const DaenamuCard = ({
-	data: { content, updatedAt, mood, title, _id, views, commentCount },
+	data: {
+		content,
+		updatedAt,
+		mood,
+		title,
+		_id,
+		views,
+		commentCount,
+		likeCount,
+		dislikeCount,
+	},
 }) => {
 	return (
 		<div className="rounded-xl h-full">
@@ -41,6 +54,10 @@ const DaenamuCard = ({
 					<div className="justify-end flex flex-row space-x-2">
 						<EyeIcon className="w-4 mt-1" />
 						<p>{views}</p>
+						<HandThumbUpIcon className="w-4 mt-1" />
+						<p>{likeCount}</p>
+						<HandThumbDownIcon className="w-4 mt-1" />
+						<p>{dislikeCount}</p>
 						<ChatBubbleLeftEllipsisIcon className="w-4 mt-1" />
 						<p>{commentCount}</p>
 					</div>
