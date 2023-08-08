@@ -44,8 +44,13 @@ class storyPostModel {
 
   // 조회수 1증가
   static async findAndIncreaseView({ storyId }) {
-    await storyPost.updateOne({ _id: storyId }, { $inc: { views: 1 } });
-    const story = await storyPost.findOne({ _id: storyId }).lean();
+    const story = await storyPost
+      .findOneAndUpdate(
+        { _id: storyId },
+        { $inc: { views: 1 } },
+        { returnOriginal: false },
+      )
+      .lean();
     return story;
   }
 
@@ -90,19 +95,24 @@ class storyPostModel {
     return { stories, count };
   }
 
-  static async findMyAndCountAll(skip, limit, userId) {
-    const stories = await storyPost
-      .find({ userInfo: userId })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .exec();
+  // static async findMyAndCountAll(skip, limit, userId) {
+  //   const stories = await storyPost
+  //     .find({ userInfo: userId })
+  //     .sort({ createdAt: -1 })
+  //     .skip(skip)
+  //     .limit(limit)
+  //     .exec();
 
-    const count = await storyPost.countDocuments({ userInfo: userId });
-    return { stories, count };
-  }
+  //   const count = await storyPost.countDocuments({ userInfo: userId });
+  //   return { stories, count };
+  // }
 
-  static async findMySearchQueryAndCountAll(skip, limit, userId, searchQuery) {
+  static async findMySearchQueryAndCountAll(
+    skip,
+    limit,
+    userId,
+    searchQuery = {},
+  ) {
     const updatedSearchQuery = { ...searchQuery, userInfo: userId };
     const stories = await storyPost
       .find(updatedSearchQuery)

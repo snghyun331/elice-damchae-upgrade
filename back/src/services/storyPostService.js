@@ -81,11 +81,8 @@ class storyPostService {
   static async readMyPosts(limit, page, userId) {
     const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
 
-    const { stories, count } = await storyPostModel.findMyAndCountAll(
-      skip,
-      limit,
-      userId,
-    );
+    const { stories, count } =
+      await storyPostModel.findMySearchQueryAndCountAll(skip, limit, userId);
     const totalPage = Math.ceil(count / limit);
     return { stories, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
   }

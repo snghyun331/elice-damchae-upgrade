@@ -11,6 +11,8 @@ router.post('/senti-predict', loginRequired, ForestController.getPredict);
 
 router.get('/popularity', ForestController.getForestsByPopularity);
 
+router.get('/popularity/mbti', ForestController.getForestMBTIByPopularity);
+
 // 글 수정
 router.put('/:id', loginRequired, ForestController.updatePost);
 
