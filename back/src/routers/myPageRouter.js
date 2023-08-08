@@ -10,4 +10,10 @@ myPageRouter.get(
   myPageController.readMyStoryAndForestComments,
 );
 
+myPageRouter.get(
+  '/my/likeForestPosts',
+  loginRequired,
+  myPageController.readLikeForestPosts,
+);
+
 export { myPageRouter };

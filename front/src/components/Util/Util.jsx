@@ -77,7 +77,7 @@ export const mbtiList = [
 	{ value: 'ESFJ', label: 'ESFJ' },
 	{ value: 'ENFJ', label: 'ENFJ' },
 	{ value: 'ENTJ', label: 'ENTJ' },
-	{ value: '미설정', label: '미설정' },
+	{ value: '', label: '미설정' },
 ];
 
 export const truncateString = (string, length) => {
@@ -90,7 +90,7 @@ export const removeTag = (string) => {
 
 export const formatDate = (string) => {
 	const date = moment(string);
-	const formattedDate = date.format('YYYY년 MM월 DD일');
+	const formattedDate = date.format('YYYY년 M월 D일');
 	return formattedDate;
 };
 

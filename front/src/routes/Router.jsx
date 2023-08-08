@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes, Outlet } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary'; // Import the ErrorBoundary component from the library
+import MyDaenamusAll from '../components/MyPage/MyDaenamusAll';
 
 const Home = lazy(() => import('../components/Home/Home'));
 const MyPage = lazy(() => import('../components/MyPage/MyPage'));
@@ -15,7 +16,9 @@ const DaenamusWrite = lazy(() =>
 );
 const SearchResults = lazy(() => import('../components/Stories/SearchResults'));
 const DaenamuRead = lazy(() => import('../components/Daenamus/DaenamuRead'));
-const LoadingSpinner = lazy(() => import('../components/Global/Layout/LoadingSpinner'));
+const LoadingSpinner = lazy(() =>
+	import('../components/Global/Layout/LoadingSpinner'),
+);
 
 const MainLayout = () => {
 	return (
@@ -39,7 +42,10 @@ const Router = () => {
 
 				<Route path="register" element={<RegisterForm />} />
 
-				<Route path="mypage" element={<MyPage />} />
+				<Route path="mypage" element={<Outlet />}>
+					<Route index element={<MyPage />} />
+					<Route path="MyDaenamusAll" element={<MyDaenamusAll />} />
+				</Route>
 
 				<Route path="infochange" element={<InfoChange />} />
 
