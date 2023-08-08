@@ -5,7 +5,7 @@ class myPageController {
     try {
       const userId = req.currentUserId;
       const page = parseInt(req.query.page || 1);
-      const limit = 3;
+      const limit = 6;
       const { comments, totalPage, count } =
         await myPageService.readMyAllComments(limit, page, userId);
       const result = {
