@@ -90,7 +90,7 @@ export const removeTag = (string) => {
 
 export const formatDate = (string) => {
 	const date = moment(string);
-	const formattedDate = date.format('YYYY년 MM월 DD일');
+	const formattedDate = date.format('YYYY년 M월 D일');
 	return formattedDate;
 };
 

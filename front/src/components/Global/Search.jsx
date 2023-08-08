@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 const Search = ({ endpoint, onSearch }) => {
 	const navigate = useNavigate();
 	const [searchQuery, setSearchQuery] = useState('');
-	console.log(`/${endpoint}/search/${searchQuery}`)
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		navigate(`/${endpoint}/search/${searchQuery}`);

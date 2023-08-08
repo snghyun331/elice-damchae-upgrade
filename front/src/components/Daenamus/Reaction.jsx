@@ -45,15 +45,19 @@ const ReactionChart = ({ commentList, forestId }) => {
 	const initialSeries = Object.keys(reaction).map((emotion) => ({
 		name: textToKorean[emotion],
 		data: mbtiTypes.map((mbtiType) => ({
-			x: mbtiType,
+			x: reaction[emotion][mbtiType] ? mbtiType : '',
 			y: reaction[emotion][mbtiType] || 0, // 해당 MBTI 유형에 데이터가 없으면 기본값 0으로 처리합니다.
 			fillColor: textEngToDeepColor[emotion], // 적절한 색상을 가져와야 합니다.
 		})),
 	}));
-
 	const options = {
 		legend: {
 			show: true,
+			itemMargin: {
+				vertical: 15,
+			},
+			fontFamily: 'Noto Sans KR',
+			fontSize: '14px'
 		},
 		chart: {
 			height: 350,
@@ -67,8 +71,16 @@ const ReactionChart = ({ commentList, forestId }) => {
 		title: {
 			text: 'MBTI 유형별 반응',
 			align: 'center',
+			style: {
+				fontFamily: 'Noto Sans KR',
+			},
 		},
 		colors: Object.values(textEngToDeepColor),
+		dataLabels: {
+			style: {
+				fontFamily: 'Noto Sans KR',
+			},
+		}
 	};
 
 	return (
