@@ -56,6 +56,8 @@ const ReactionChart = ({ commentList, forestId }) => {
 			itemMargin: {
 				vertical: 15,
 			},
+			fontFamily: 'Noto Sans KR',
+			fontSize: '14px'
 		},
 		chart: {
 			height: 350,
@@ -69,8 +71,16 @@ const ReactionChart = ({ commentList, forestId }) => {
 		title: {
 			text: 'MBTI 유형별 반응',
 			align: 'center',
+			style: {
+				fontFamily: 'Noto Sans KR',
+			},
 		},
 		colors: Object.values(textEngToDeepColor),
+		dataLabels: {
+			style: {
+				fontFamily: 'Noto Sans KR',
+			},
+		}
 	};
 
 	return (
