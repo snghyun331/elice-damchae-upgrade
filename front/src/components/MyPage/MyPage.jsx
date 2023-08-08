@@ -89,8 +89,7 @@ const MyPage = () => {
 
 			<hr className="my-8" />
 
-			{/* 내가 쓴 대숲 데이터, 내가 좋아한 대숲 데이터는 3개만 가져오거나 3개로 slice 해서 아래에 넣을 것. */}
-			<MyDaenamus myDaenamu={myDaenamu} />
+			<MyDaenamus />
 
 			<hr className="my-8" />
 			<MyLikedDaenamus myDaenamu={myDaenamu} />

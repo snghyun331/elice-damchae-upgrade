@@ -124,7 +124,8 @@ class userService {
     const token = jwt.sign({ userId: user.id }, secretKey);
 
     // 반환할 loginUser 객체를 위한 변수 설정
-    const { id, mbti, nickname, isOut } = user;
+    const { id, mbti, nickname, isGoogleLogin, mbtiImg, profileImg, isOut } =
+      user;
 
     const loginUser = {
       token,
@@ -132,6 +133,9 @@ class userService {
       email,
       mbti,
       nickname,
+      isGoogleLogin,
+      mbtiImg,
+      profileImg,
       isOut,
       errorMessage: null,
     };
@@ -171,15 +175,25 @@ class userService {
       user = await User.update({ userId, fieldToUpdate, newValue });
     }
 
-    if (toUpdate.profileImg) {
+    if (toUpdate.profileImg && toUpdate.mbtiImg == null) {
       const fieldToUpdate = 'profileImg';
       const newValue = toUpdate.profileImg;
+      user = await User.update({
+        userId,
+        fieldToUpdate: 'mbtiImg',
+        newValue: null,
+      });
       user = await User.update({ userId, fieldToUpdate, newValue });
     }
 
-    if (toUpdate.mbtiImg) {
+    if (toUpdate.mbtiImg && toUpdate.profileImg == null) {
       const fieldToUpdate = 'mbtiImg';
       const newValue = toUpdate.mbtiImg;
+      user = await User.update({
+        userId,
+        fieldToUpdate: 'profileImg',
+        newValue: null,
+      });
       user = await User.update({ userId, fieldToUpdate, newValue });
     }
 
