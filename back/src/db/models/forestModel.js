@@ -46,9 +46,13 @@ class forestModel {
 
   // 조회수 1증가
   static async findAndIncreaseView({ forestId }) {
-    await ForestPost.updateOne({ _id: forestId }, { $inc: { views: 1 } });
-    const forest = await ForestPost.findOne({ _id: forestId }).lean();
-    return forest;
+    const updatedForest = await ForestPost.findOneAndUpdate(
+      { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
+      { $inc: { views: 1 } }, // 업데이트할 필드와 값
+      { new: true }, // 업데이트 후 업데이트된 문서 반환
+    ).lean();
+
+    return updatedForest;
   }
 
   static async findAndCountAll(skip, limit) {
@@ -94,7 +98,6 @@ class forestModel {
 
   static async findByForestMbti({ mbtiList, skip, limit }) {
     try {
-      // const readMbti = { ...mbtiList };
       console.log('Finding posts with MBTI:', mbtiList);
       console.log('Skip:', skip);
       console.log('Limit:', limit);
@@ -124,31 +127,37 @@ class forestModel {
         {
           $limit: limit,
         },
+      ]);
+
+      const countResults = await ForestPost.aggregate([
         {
-          $group: {
-            _id: null,
-            mbtiCount: {
-              $sum: 1,
-            },
-            posts: {
-              $push: '$$ROOT',
+          $lookup: {
+            from: 'users',
+            localField: 'userInfo',
+            foreignField: '_id',
+            as: 'userInfo',
+          },
+        },
+        {
+          $unwind: '$userInfo',
+        },
+        {
+          $match: {
+            'userInfo.mbti': {
+              $in: mbtiList,
             },
           },
         },
         {
-          $project: {
-            _id: 0,
-            mbtiCount: 1,
-            posts: {
-              $slice: ['$posts', skip, limit],
-            },
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
           },
         },
       ]);
 
-      const count = await ForestPost.countDocuments(mbtiList);
-      console.log('Found Posts:', posts);
-      console.log('Total Count:', count);
+      const count = countResults.length > 0 ? countResults[0].count : 0;
+
       return { posts, count };
     } catch (error) {
       throw new Error(
