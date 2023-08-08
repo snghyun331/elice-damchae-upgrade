@@ -142,7 +142,7 @@ const DaenamuRead = () => {
 										<div className="text-2xl">
 											{isDataLoading && textToIcon[forest.mood]}
 										</div>
-										<h5 className="p-5 leading-loose text-2xl font-bold">
+										<h5 className="py-5 leading-loose text-2xl font-bold">
 											{forest.title}
 										</h5>
 									</div>
