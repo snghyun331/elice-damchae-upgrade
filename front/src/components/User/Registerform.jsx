@@ -21,7 +21,7 @@ const RegisterForm = () => {
 		code,
 		errMsg,
 		nicknameCheck,
-		profileImg,
+		mbtiImg,
 
 		setEmail,
 		setPassword,
@@ -105,8 +105,8 @@ const RegisterForm = () => {
 		],
 	);
 
-	const user = { email, password, nickname, mbti, profileImg };
-	console.log(mbti);
+	const user = { email, password, nickname, mbti, mbtiImg };
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
@@ -201,7 +201,7 @@ const RegisterForm = () => {
 												isCodeConfirmed ||
 												emailButtonDisabled
 											}
-											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-xs"
 											style={{ height: '45px' }}
 										>
 											인증코드 발송
