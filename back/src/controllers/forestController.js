@@ -65,7 +65,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'user',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -88,7 +88,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'user',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -116,7 +116,7 @@ class ForestController {
 
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'user',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -136,7 +136,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'user',
+          'userInfo',
         );
 
         result = {
