@@ -45,7 +45,7 @@ const DaenamusWrite = () => {
 							작성 완료
 						</button>
 						{!isFormValid && (
-							<p className="self-end text-red-500 text-xs">
+							<p className="self-end text-red-400 text-sm">
 								빈 칸을 채워주세요.
 							</p>
 						)}
