@@ -232,7 +232,13 @@ class userAuthController {
       const file = req.file ?? null;
 
       if (!file) {
-        const toUpdate = { password, nickname, mbti, mbtiImg };
+        const toUpdate = {
+          profileImg: null,
+          password,
+          nickname,
+          mbti,
+          mbtiImg,
+        };
         const updatedUser = await userService.updateUser({ userId, toUpdate });
 
         return res.status(200).json(updatedUser);

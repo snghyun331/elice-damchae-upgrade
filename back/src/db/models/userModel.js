@@ -47,7 +47,7 @@ class User {
   static async update({ userId, fieldToUpdate, newValue }) {
     const filter = { _id: userId };
     const update = { [fieldToUpdate]: newValue };
-    const option = { returnOriginal: false };
+    const option = { new: true };
 
     const updatedUser = await UserModel.findOneAndUpdate(
       filter,
