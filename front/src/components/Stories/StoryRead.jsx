@@ -102,7 +102,7 @@ const StoryRead = () => {
 							src={
 								story.thumbnail
 									? `${story.thumbnail.path}`
-									: 'images/default-image.jpg'
+									: '/images/default-image.jpg'
 							}
 							alt=""
 						/>

@@ -46,7 +46,7 @@ const DaenamuCardMap = () => {
 								))}
 							</div>
 						) : (
-							<div>등록된 게시글이 없습니다.</div> // Display this message when stories is empty
+							<div className="h-44">등록된 게시글이 없습니다.</div> // Display this message when stories is empty
 						)}
 					</>
 				) : (

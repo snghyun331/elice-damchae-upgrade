@@ -130,19 +130,19 @@ const DaenamuRead = () => {
 						</>
 					)}
 				</div>
-				<div className="relative top-0 px-10">
+				<div className="relative top-0 px-5 md:px-10">
 					{editMode ? (
 						//TODO:제목 길어지면 박스무너짐
 						<DaenamuTextEditor />
 					) : (
 						<div className="view-mode">
-							<div className="relative h-40 overflow-hidden rounded-t-lg">
-								<div className="absolute w-full p-4">
+							<div className="relative h-40 rounded-t-lg">
+								<div className="flex flex-col absolute h-full w-full p-4">
 									<div className="flex flex-row items-center">
 										<div className="text-2xl">
 											{isDataLoading && textToIcon[forest.mood]}
 										</div>
-										<h5 className="p-5 leading-loose text-2xl font-bold">
+										<h5 className="py-5 leading-loose text-lg md:text-2xl font-bold">
 											{forest.title}
 										</h5>
 									</div>
