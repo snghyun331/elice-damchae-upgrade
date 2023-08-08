@@ -1,4 +1,5 @@
 import ForestPost from '../schemas/forestPost.js';
+import { forestLike } from '../schemas/forestLike.js';
 
 class forestLikeDislikeModel {
   static async updateClickCounts(postId, likeIncrement, dislikeIncrement) {
@@ -7,6 +8,16 @@ class forestLikeDislikeModel {
       { $inc: { likeCount: likeIncrement, dislikeCount: dislikeIncrement } },
     );
     return;
+  }
+
+  static async findLikeForestsByUserId({ userId }) {
+    const allLikeForests = await forestLike.find({ userId: userId });
+    return allLikeForests;
+  }
+
+  static async populateForestLike(info, field) {
+    const result = forestLike.populate(info, field);
+    return result;
   }
 }
 
