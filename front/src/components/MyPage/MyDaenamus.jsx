@@ -3,7 +3,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import PropTypes from 'prop-types';
 import { getApi } from '../../services/api';
 import { useState, useEffect } from 'react';
-
+import { Link } from 'react-router-dom';
 const MyDaenamus = () => {
 	const [forests, setForests] = useState([]);
 	const fetchDaenamus = async () => {
@@ -28,7 +28,13 @@ const MyDaenamus = () => {
 				</h3>
 				<div className="text-base mt-4 mb-4 text-gray-700">
 					<ChevronRightIcon className="w-4 inline mb-1" />
-					<span className="inline"> 전체보기</span>
+					<span className="inline">
+						<Link
+							to={{ pathname: 'MyDaenamusAll', state: { forests: forests } }}
+						>
+							전체보기
+						</Link>
+					</span>
 					<div className="my-8 flex flex-wrap justify-center md:justify-center">
 						{forests.slice(0, 3).map((forest) => (
 							<div

@@ -3,7 +3,9 @@ import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { textToColor } from '../Util/Util';
 import { removeTag, truncateString } from '../Util/Util';
 import { Link } from 'react-router-dom';
-const MyDaenamuCard = ({ forest: { mood, title, content, _id } }) => {
+const MyDaenamuCard = ({
+	forest: { mood, title, content, _id, commentCount },
+}) => {
 	const moodColor = textToColor[mood];
 	return (
 		<div
@@ -14,6 +16,11 @@ const MyDaenamuCard = ({ forest: { mood, title, content, _id } }) => {
 				<div className="flex flex-col h-full">
 					<h5 className="mb-2 text-md font-bold tracking-tight text-gray-900 dark:text-white">
 						{truncateString(title, 25)}
+						{commentCount ? (
+							<span className="text-blue-600 text-sm">({commentCount})</span>
+						) : (
+							''
+						)}
 					</h5>
 					<p className="text-sm font-normal text-gray-700 dark:text-gray-400 flex-grow">
 						{truncateString(removeTag(content), 40)}
