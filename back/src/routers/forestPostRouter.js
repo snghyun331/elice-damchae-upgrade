@@ -9,6 +9,8 @@ router.post('/', loginRequired, ForestController.createPost);
 // 글 감정분석
 router.post('/senti-predict', loginRequired, ForestController.getPredict);
 
+router.get('/popularity', ForestController.getForestsByPopularity);
+
 // 글 수정
 router.put('/:id', loginRequired, ForestController.updatePost);
 

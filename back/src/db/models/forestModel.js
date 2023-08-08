@@ -156,6 +156,17 @@ class forestModel {
       );
     }
   }
+
+  static async findPopularAndCountAll(skip, limit) {
+    const forest = await ForestPost.find({})
+      .sort({ likeCount: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+
+    const count = await ForestPost.countDocuments();
+    return { forest, count };
+  }
 }
 
 export { forestModel };
