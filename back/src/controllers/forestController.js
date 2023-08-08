@@ -270,30 +270,30 @@ class ForestController {
     // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP
 
     try {
-      let mbtiList = [];
+      // let mbtiList = [];
 
-      if (req.query.filter == '') {
-        mbtiList = [
-          'ISTJ',
-          'ISFJ',
-          'INFJ',
-          'INTJ',
-          'ISTP',
-          'ISFP',
-          'INFP',
-          'INTP',
-          'ESTP',
-          'ESFP',
-          'ENFP',
-          'ENTP',
-          'ESTJ',
-          'ESFJ',
-          'ENFJ',
-          'ENTJ',
-        ];
-      } else {
-        mbtiList = req.query.filter.split(',');
-      }
+      // if (req.query.filter == '') {
+      // mbtiList = [
+      // 'ISTJ',
+      // 'ISFJ',
+      // 'INFJ',
+      // 'INTJ',
+      // 'ISTP',
+      // 'ISFP',
+      // 'INFP',
+      // 'INTP',
+      // 'ESTP',
+      // 'ESFP',
+      // 'ENFP',
+      // 'ENTP',
+      // 'ESTJ',
+      // 'ESFJ',
+      // 'ENFJ',
+      // 'ENTJ',
+      // ];
+      // } else {
+      const mbtiList = req.query.filter.split(',');
+      // }
       console.log('mbtiList,,,,', mbtiList);
 
       console.log('mbti query :', mbtiList);
@@ -331,36 +331,6 @@ class ForestController {
       return res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
-    }
-  }
-
-  static async getForestsByPopularity(req, res, next) {
-    try {
-      const page = parseInt(req.query.page || 1);
-      const limit = 12;
-
-      const { forest, totalPage, count } = await ForestService.readPopularPosts(
-        limit,
-        page,
-      );
-      const populateResult = await ForestService.populateForestPost(
-        forest,
-        'userInfo',
-      );
-
-      if (populateResult.length === 0) {
-        return res.status(200).json({ result: 'No Posts' });
-      }
-
-      const result = {
-        currentPage: page,
-        totalPage: totalPage,
-        totalForestsCount: count,
-        forests: populateResult,
-      };
-      return res.status(200).json(result);
-    } catch (error) {
-      next(error);
     }
   }
 }
