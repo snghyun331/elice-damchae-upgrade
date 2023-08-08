@@ -54,7 +54,7 @@ class ForestService {
   static async updatePost({ forestId, title, content, mood }) {
     const updatedPost = await ForestPost.findOneAndUpdate(
       { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
-      { $set: { title: title, content: content, mood: mood } }, // 업데이트할 필드와 값
+      { title: title, content: content, mood: mood }, // 업데이트할 필드와 값
       { new: true }, // 업데이트 후 업데이트된 문서 반환
     );
     if (!updatedPost) {
@@ -74,11 +74,7 @@ class ForestService {
   static async isSameUser(loginUserId, forestId) {
     const forests = await forestModel.readOneById({ forestId });
     const forestUserId = forests.userInfo;
-    if (loginUserId == forestUserId) {
-      return true;
-    } else {
-      return false;
-    }
+    return loginUserId == forestUserId;
   }
 
   static async readOneById({ forestId }) {
