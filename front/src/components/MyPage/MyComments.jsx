@@ -42,7 +42,10 @@ const MyComments = () => {
 	return (
 		<div>
 			<h3 className="text-2xl text-gray-700 font-semibold">내가 쓴 댓글</h3>
-		<div>총 {commentCount} 건</div>
+			<div>
+				총 <span className="text-blue-600 font-semibold">{commentCount}</span>{' '}
+				건
+			</div>
 			<div className="text-base mt-4 mb-4 text-gray-700">
 				스토리와 대나무숲에 단 댓글 모두를 확인할 수 있어요.
 			</div>

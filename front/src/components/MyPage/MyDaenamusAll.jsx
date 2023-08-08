@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { getApi } from '../../services/api';
 import { formatDate } from '../Util/Util';
 import { EyeIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const MyDaenamusAll = (props) => {
+	const location = useLocation().pathname.split('/')[2]
 	const [forests, setForests] = useState([]);
 
 	useEffect(() => {
@@ -24,11 +25,9 @@ const MyDaenamusAll = (props) => {
 		}
 	}, [props.forests]);
 
-	console.log(forests);
-
 	return (
 		<div className="max-w-4xl mx-auto">
-			<h3 className="text-2xl text-gray-700 font-semibold my-12">전체보기</h3>
+			<h3 className="text-2xl text-gray-700 font-semibold my-12">내가 작성한 대나무숲 전체보기</h3>
 			<ul className="text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
 				{forests.map((forest) => (
 					<li

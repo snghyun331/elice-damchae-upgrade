@@ -17,7 +17,7 @@ const MyDaenamuCard = ({
 					<h5 className="mb-2 text-md font-bold tracking-tight text-gray-900 dark:text-white">
 						{truncateString(title, 25)}
 						{commentCount ? (
-							<span className="text-blue-600 text-sm">({commentCount})</span>
+							<span className="text-blue-600 text-sm"> ({commentCount})</span>
 						) : (
 							''
 						)}
