@@ -54,7 +54,7 @@ class ForestService {
   static async updatePost({ forestId, title, content, mood }) {
     const updatedPost = await ForestPost.findOneAndUpdate(
       { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
-      { $set: { title: title, content: content, mood: mood } }, // 업데이트할 필드와 값
+      { title: title, content: content, mood: mood }, // 업데이트할 필드와 값
       { new: true }, // 업데이트 후 업데이트된 문서 반환
     );
     if (!updatedPost) {
@@ -74,11 +74,7 @@ class ForestService {
   static async isSameUser(loginUserId, forestId) {
     const forests = await forestModel.readOneById({ forestId });
     const forestUserId = forests.userInfo;
-    if (loginUserId == forestUserId) {
-      return true;
-    } else {
-      return false;
-    }
+    return loginUserId == forestUserId;
   }
 
   static async readOneById({ forestId }) {
@@ -153,6 +149,17 @@ class ForestService {
         `Error finding blog posts by author's MBTI: ${error.message}`,
       );
     }
+  }
+
+  static async readPopularPosts(limit, page) {
+    const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
+
+    const { forest, count } = await forestModel.findPopularAndCountAll(
+      skip,
+      limit,
+    );
+    const totalPage = Math.ceil(count / limit);
+    return { forest, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
   }
 }
 
