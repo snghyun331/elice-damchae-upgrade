@@ -6,7 +6,7 @@ const getImages = (mbti) =>
 		.fill()
 		.map(
 			(_, i) =>
-				`images/characters/${mbti.toLowerCase()}/${mbti.toLowerCase()}${
+				`https://damchae.s3.ap-northeast-2.amazonaws.com/characters/${mbti.toLowerCase()}${
 					i + 1
 				}.jpg`,
 		);
@@ -31,16 +31,15 @@ const profileData = {
 };
 
 const ProfilePicker = () => {
-	const { mbti, profileImg, setProfileImg } = useUserStore();
-
+	const { mbti, mbtiImg, setProfileImg, setMbtiImg } = useUserStore();
 	useEffect(() => {
 		if (mbti && typeof profileImg == 'string') {
-			setProfileImg(null);
+			setMbtiImg(null);
 		}
 	}, [mbti]);
 
 	const handleProfileClick = (imageURL) => {
-		setProfileImg(imageURL);
+		setMbtiImg(imageURL);
 	};
 
 	if (!mbti) {
@@ -70,27 +69,18 @@ const ProfilePicker = () => {
 					return (
 						<img
 							className={`mx-0.5 rounded object-cover ${
-								profileImg === image ? 'border-4 border-blue-500' : ''
+								mbtiImg === image ? 'border-4 border-blue-500' : ''
 							}`}
 							style={{ width: '19%' }}
 							key={`${mbti}-${index}`}
 							src={image}
-							alt={`Profile ${mbti}-${index + 1}`}
+							alt={`Profile ${mbti}${index + 1}`}
 							onClick={() => handleProfileClick(image)} // Pass the image URL to the handler
 						/>
 					);
 				})}
 			</div>
 			<div>
-				{/* {profileImg && ( // Only display if a selected image exists
-					<div className="mt-5">
-						<img
-							className="border-4 border-neutral-300 w-36 h-36 rounded-full object-cover"
-							src={profileImg}
-							alt={`Selected Profile`}
-						/>
-					</div>
-				)} */}
 			</div>
 		</div>
 	);

@@ -23,11 +23,9 @@ const DaenamuRead = () => {
 	const [viewerKey, setViewerKey] = useState(0);
 	const navigate = useNavigate();
 	const id = useUserId();
-
 	const fetchForest = async () => {
 		try {
 			const res = await getApi(`forest/${forestId}`);
-			console.log(res);
 			setForest(res.data);
 			setIsDataLoading(true);
 		} catch (error) {
@@ -66,7 +64,6 @@ const DaenamuRead = () => {
 				mood,
 			});
 			//TODO:mood추가해야함
-			console.log(res);
 			fetchForest();
 
 			setEditMode(false);
@@ -94,7 +91,7 @@ const DaenamuRead = () => {
 			>
 				{' '}
 				<div className="justify-end">
-					{isDataLoading && forest.userInfo._id == id && (
+					{isDataLoading && forest.userInfo == id && (
 						<>
 							{editMode ? (
 								<div className="mr-4 mt-4 flex flex-row justify-end">
