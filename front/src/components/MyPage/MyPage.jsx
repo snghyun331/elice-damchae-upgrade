@@ -71,7 +71,7 @@ const MyPage = () => {
 
 			<div className="flex justify-center flex-wrap">
 				<div className="flex flex-col md:flex-row">
-					<div className="md:w-1/2 lg:w-1/2 px-3">
+					<div className="md:w-1/2 lg:w-1/2 px-3 ">
 						<MyCalendar posts={posts} dateMoodData={dummyData} />
 					</div>
 					<div className="md:w-1/2 lg:w-1/2 px-3">
@@ -79,7 +79,7 @@ const MyPage = () => {
 							<div className="pt-5">
 								<MyMainMood posts={posts} />
 							</div>
-							<div className="pt-7">
+							<div className="pt-4">
 								<MyMoodStat />
 							</div>
 						</div>
@@ -89,7 +89,6 @@ const MyPage = () => {
 
 			<hr className="my-8" />
 
-			{/* 내가 쓴 대숲 데이터, 내가 좋아한 대숲 데이터는 3개만 가져오거나 3개로 slice 해서 아래에 넣을 것. */}
 			<MyDaenamus />
 
 			<hr className="my-8" />

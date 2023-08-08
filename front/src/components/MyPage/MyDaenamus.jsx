@@ -6,11 +6,11 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 const MyDaenamus = () => {
 	const [forests, setForests] = useState([]);
+
 	const fetchDaenamus = async () => {
 		try {
 			const res = await getApi('forest/my');
 			setForests(res.data.forests);
-			console.log(forests);
 		} catch (err) {
 			console.log(err);
 		}

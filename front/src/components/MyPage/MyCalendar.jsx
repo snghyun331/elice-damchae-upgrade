@@ -77,7 +77,7 @@ function MyCalendar() {
 	return (
 		<div>
 			<Calendar
-				className="mt-5 p-1.5"
+				className="mt-5 px-5 md:px-1.5"
 				tileContent={renderTileContent}
 				formatDay={(locale, date) =>
 					date.toLocaleString('en', { day: 'numeric' })
