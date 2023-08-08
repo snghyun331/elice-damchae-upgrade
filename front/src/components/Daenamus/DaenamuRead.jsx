@@ -63,7 +63,7 @@ const DaenamuRead = () => {
 			const res = await putApi(`forest/${forestId}`, {
 				title,
 				content,
-				// mood,
+				mood,
 			});
 			//TODO:mood추가해야함
 			console.log(res);

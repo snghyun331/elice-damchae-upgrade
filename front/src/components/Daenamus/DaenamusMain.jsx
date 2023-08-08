@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Search from '../Global/Search';
 import DaenamuCardMap from './DaenamuCardMap';
 import { mbtiList } from '../Util/Util';
 import { useNavigate } from 'react-router-dom';
 import { useIsLoggedIn } from '../../store/useUserStore';
 import useForestStore from '../../store/useForestStore';
+import { getApi } from '../../services/api';
 
 const DaenamusMain = () => {
 	const { reset } = useForestStore();
@@ -12,6 +13,20 @@ const DaenamusMain = () => {
 	const [selectedMBTI, setSelectedMBTI] = useState([]);
 	const [selectedTab, setSelectedTab] = useState('전체글');
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		const mbtiFilter = selectedMBTI.join(',');
+		console.log(mbtiFilter);
+		const fetchFilteredForests = async (page = 1) => {
+			try {
+				const res = await getApi(`forest/mbti?filter=${mbtiFilter}`);
+				console.log(res);
+			} catch (error) {
+				console.error('Failed to fetch data:', error);
+			}
+		};
+		fetchFilteredForests();
+	}, [selectedMBTI]);
 
 	const select = (value) => {
 		setSelectedMBTI([...selectedMBTI, value]);
@@ -64,7 +79,7 @@ const DaenamusMain = () => {
 					</div>
 				</div>
 				<div className="mt-8 mb-4">
-					<Search endpoint='daenamus'/>
+					<Search endpoint="daenamus" />
 				</div>
 
 				<div className="mb-8 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
@@ -85,27 +100,28 @@ const DaenamusMain = () => {
 						))}
 					</ul>
 				</div>
+				<div>
+					<div className="text-sm text-gray-500 my-2">작성자 유형별로 조회</div>
+					{mbtiList.map((item, index) => {
+						const isSelected = selectedMBTI.includes(item.value);
 
-				<div className="text-sm text-gray-500 my-2">작성자 유형별로 조회</div>
-				{mbtiList.map((item, index) => {
-					const isSelected = selectedMBTI.includes(item.value);
-
-					return (
-						<span
-							key={index}
-							onClick={() => toggleMBTI(item.value)}
-							className={`leading-9 cursor-pointer border bg-white text-xs font-medium mr-2 pl-2 pr-1.5 py-0.5 rounded-full ${
-								isSelected
-									? 'border-blue-600 text-blue-600'
-									: 'border-gray-400 text-gray-400'
-							} dark:bg-white ${
-								isSelected ? 'dark:text-blue-300' : 'dark:text-gray-400'
-							}`}
-						>
-							{item.label} {isSelected && <span>×</span>}
-						</span>
-					);
-				})}
+						return (
+							<span
+								key={index}
+								onClick={() => toggleMBTI(item.value)}
+								className={`leading-9 cursor-pointer border bg-white text-xs font-medium mr-2 pl-2 pr-1.5 py-0.5 rounded-full ${
+									isSelected
+										? 'border-blue-600 text-blue-600'
+										: 'border-gray-400 text-gray-400'
+								} dark:bg-white ${
+									isSelected ? 'dark:text-blue-300' : 'dark:text-gray-400'
+								}`}
+							>
+								{item.label} {isSelected && <span>×</span>}
+							</span>
+						);
+					})}
+				</div>
 
 				<DaenamuCardMap />
 			</div>
