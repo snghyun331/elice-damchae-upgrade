@@ -154,6 +154,17 @@ class ForestService {
       );
     }
   }
+
+  static async readPopularPosts(limit, page) {
+    const skip = (page - 1) * limit; // 해당 페이지에서 스킵할 스토리 수
+
+    const { forest, count } = await forestModel.findPopularAndCountAll(
+      skip,
+      limit,
+    );
+    const totalPage = Math.ceil(count / limit);
+    return { forest, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
+  }
 }
 
 export default ForestService;

@@ -307,6 +307,36 @@ class ForestController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  static async getForestsByPopularity(req, res, next) {
+    try {
+      const page = parseInt(req.query.page || 1);
+      const limit = 12;
+
+      const { forest, totalPage, count } = await ForestService.readPopularPosts(
+        limit,
+        page,
+      );
+      const populateResult = await ForestService.populateForestPost(
+        forest,
+        'userInfo',
+      );
+
+      if (populateResult.length === 0) {
+        return res.status(200).json({ result: 'No Posts' });
+      }
+
+      const result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
+        forests: populateResult,
+      };
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default ForestController;
