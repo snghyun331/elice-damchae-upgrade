@@ -3,6 +3,7 @@ import useUserStore, { useUserActions } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 // import GoogleLoginButton from '../Global/Layout/GoogleLoginButton';
 import GoogleButton from '../Global/Layout/GoogleButton';
+import toast from 'react-hot-toast';
 const LoginForm = () => {
 	const navigate = useNavigate();
 	const { email, setEmail } = useUserStore();
@@ -28,7 +29,10 @@ const LoginForm = () => {
 			await login(user);
 			navigate('/');
 		} catch (error) {
-			setErrMsg(error.response?.data?.message); // Set the error message in the local state on login failure
+			setErrMsg(error.response?.data?.message);
+			if (error.response.data.error) {
+				toast.error(error.response?.data?.error);
+			}
 		}
 	};
 
@@ -150,11 +154,11 @@ const LoginForm = () => {
 										<button
 											type="submit"
 											disabled={!isFormValid}
-											className="rounded-xl w-full text-lg px-4 py-2 pt-3 mb-4 tracking-wide text-white transition-colors duration-200 transform bg-[#85B7CC] rounded-sm disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] focus:outline-none focus:bg-[#85B7CC] focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+											className="rounded-xl w-full text-lg px-4 py-2 mb-4 tracking-wide text-white transition-colors duration-200 transform bg-[#4687a2] rounded-sm disabled:bg-[#BBDCE8] hover:bg-[#3B82A0] focus:outline-none focus:bg-[#85B7CC] focus:ring focus:ring-blue-300 focus:ring-opacity-50"
 										>
 											로그인
 										</button>
-										{errMsg && <p className="text-red-500 text-xs">{errMsg}</p>}
+										{errMsg && <p className="text-red-500 text-xs mb-3">{errMsg}</p>}
 										<GoogleButton />
 									</div>
 								</form>

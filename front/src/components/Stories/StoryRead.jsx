@@ -25,7 +25,6 @@ const StoryRead = () => {
 			console.log(res);
 			setStory(res.data);
 			setIsDataLoading(true);
-
 			setIsPublicStory(res.data.userInfo._id === id || res.data.isPublic);
 		} catch (error) {
 			console.log(error);
@@ -106,37 +105,37 @@ const StoryRead = () => {
 							}
 							alt=""
 						/>
-						<div className="absolute inset-0 bg-black opacity-60">
-							<div className="ms-4 mt-4 absolute top-1 left-1 p-4 z-10 max-w-md">
-								<p className="text-white mb-1">
-									{isDataLoading && formatDate(story.createdAt)}
-								</p>
-								<h5 className="leading-loose text-white text-2xl font-bold">
-									{story.title}
-								</h5>
-							</div>
-							<div className="text-sm text-end absolute top-1 right-1 mt-4 me-4">
-								<p className="text-white mb-1">
-									{isDataLoading && story.isPublic && <>조회 {story.views}</>}
-									{isDataLoading && !story.isPublic && (
-										<LockClosedIcon
-											data-tooltip-id="tooltip"
-											data-tooltip-content="나만 볼 수 있는 스토리입니다."
-											className="w-4 inline mb-0.5"
-										/>
-									)}
-								</p>
-								{isDataLoading && story.userInfo._id == id && (
-									<>
-										<button
-											onClick={handleConfirm}
-											className="ml-2 text-white underline underline-offset-2 text-red-400"
-										>
-											삭제
-										</button>
-									</>
+						<div className="absolute inset-0 bg-black opacity-50"></div>
+
+						<div className="ms-4 mt-4 absolute top-1 left-1 p-4 z-10 max-w-md">
+							<p className="text-white mb-1">
+								{isDataLoading && formatDate(story.createdAt)}
+							</p>
+							<h5 className="leading-loose text-white text-2xl font-bold">
+								{story.title}
+							</h5>
+						</div>
+						<div className="text-sm text-end absolute top-1 right-1 mt-4 me-4">
+							<p className="text-white mb-1">
+								{isDataLoading && story.isPublic && <>조회 {story.views}</>}
+								{isDataLoading && !story.isPublic && (
+									<LockClosedIcon
+										data-tooltip-id="tooltip"
+										data-tooltip-content="나만 볼 수 있는 스토리입니다."
+										className="w-4 inline mb-0.5"
+									/>
 								)}
-							</div>
+							</p>
+							{isDataLoading && story.userInfo._id == id && (
+								<>
+									<button
+										onClick={handleConfirm}
+										className="ml-2 text-white underline underline-offset-2 text-red-400"
+									>
+										삭제
+									</button>
+								</>
+							)}
 						</div>
 					</div>
 
@@ -147,7 +146,7 @@ const StoryRead = () => {
 							</div>
 						</div>
 
-						<div className="relative -top-20 p-10">
+						<div className="relative -top-20 p-10 my-8">
 							{isDataLoading && <Viewer initialValue={story.content} />}
 						</div>
 
@@ -155,7 +154,13 @@ const StoryRead = () => {
 							<div className="w-12 h-12 mx-auto -mt-24 rounded-full overflow-hidden">
 								<img
 									className="w-full h-full object-cover"
-									src={isDataLoading && story.userInfo.mbtiImg}
+									src={
+										isDataLoading && story.userInfo.profileImg
+											? story.userInfo.profileImg
+											: isDataLoading && story.userInfo.mbtiImg
+											? story.userInfo.mbtiImg
+											: '/images/default-image.jpg'
+									}
 									alt="작성자 프로필 이미지"
 								/>
 							</div>

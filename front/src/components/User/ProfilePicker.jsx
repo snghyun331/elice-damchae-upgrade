@@ -29,10 +29,8 @@ const profileData = {
 	INFJ: getImages('INFJ'),
 	ENFP: getImages('ENFP'),
 };
-
 const ProfilePicker = () => {
-	const { mbti, tempMbtiImg, setTempMbtiImg } =
-		useUserStore();
+	const { mbti, tempMbtiImg, setTempMbtiImg } = useUserStore();
 	useEffect(() => {
 		if (mbti && typeof profileImg == 'string') {
 			setTempMbtiImg(null);
@@ -42,7 +40,7 @@ const ProfilePicker = () => {
 	const handleProfileClick = (imageURL) => {
 		setTempMbtiImg(imageURL);
 	};
-	if (!mbti) {
+	if (!mbti || mbti === '미설정') {
 		return (
 			<div>
 				<label
@@ -51,13 +49,12 @@ const ProfilePicker = () => {
 				>
 					프로필 이미지 선택
 				</label>
-				<div>선택된 MBTI가 없습니다.</div>
+				<div className="text-center text-sm border rounded-md bg-gray-100 py-7">
+					먼저 MBTI를 선택해주세요.
+				</div>
 			</div>
 		);
 	}
-
-	
-
 	return (
 		<div>
 			<label
