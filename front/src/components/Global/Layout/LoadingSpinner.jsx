@@ -3,7 +3,7 @@ const LoadingSpinner = () => {
 		<div
 			className="inset-0 flex items-center justify-center" // Add these classes
 			role="status"
-            style={{height: '83vh'}}
+            style={{minHeight: '83vh'}}
 		>
 			{' '}
 			<svg

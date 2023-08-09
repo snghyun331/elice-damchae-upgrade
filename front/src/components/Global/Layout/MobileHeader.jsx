@@ -4,6 +4,8 @@ import { Menu, Transition } from '@headlessui/react';
 import { useIsLoggedIn, useUserActions } from '@/store/useUserStore';
 import { classNames } from '../../Util/Util';
 import { Bars3Icon } from '@heroicons/react/24/solid';
+import { toast } from 'react-hot-toast';
+
 const MobileHeader = () => {
 	const navigate = useNavigate();
 	const isLoggedIn = useIsLoggedIn();
@@ -19,6 +21,7 @@ const MobileHeader = () => {
 					title: '로그아웃',
 					onClick: () => {
 						logout();
+						toast.success('로그아웃 하였습니다.');
 						navigate('/');
 					},
 				},

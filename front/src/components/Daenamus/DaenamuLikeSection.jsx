@@ -51,30 +51,35 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 	const toggleLike = async (type) => {
 		try {
 			let upUrl, unUrl;
-			let updateFunc, updateCount;
+			let updateFunc, updateCount, oppositeTypeCount;
 
 			if (type === LIKE_TYPES.LIKED) {
 				upUrl = `forest/${forestId}/upLike`;
 				unUrl = `forest/${forestId}/unLike`;
 				updateFunc = setLikes;
-				updateCount = likes + 1;
+				updateCount = likeType === type ? likes - 1 : likes + 1;
+				oppositeTypeCount = setDislikes;
 			} else {
 				upUrl = `forest/${forestId}/upDislike`;
 				unUrl = `forest/${forestId}/unDislike`;
 				updateFunc = setDislikes;
-				updateCount = dislikes + 1;
+				updateCount = likeType === type ? dislikes - 1 : dislikes + 1;
+				oppositeTypeCount = setLikes;
 			}
 
 			const response = await (likeType === type
 				? delApi(unUrl)
 				: postApi(upUrl, {}));
+			console.log(response);
 			if (response.error) {
 				toast.error(response.error.message);
 			} else {
 				updateFunc(updateCount);
 			}
 
-			if (likeType !== type) {
+			if (likeType === LIKE_TYPES.NONE) {
+				oppositeTypeCount(type === LIKE_TYPES.LIKED ? dislikes : likes);
+			} else if (likeType !== type) {
 				const target = type === LIKE_TYPES.LIKED ? dislikes : likes;
 				if (target > 0) {
 					type === LIKE_TYPES.LIKED
