@@ -46,7 +46,7 @@ const MyStories = () => {
 					data-aos="fade-right"
 					className="font-bold md:p-10 block p-6 bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
 				>
-					<div className="flex justify-between items-center mb-4 text-3xl font-semibold text-zinc-700">
+					<div className="flex justify-between items-center mb-4 text-2xl md:text-3xl font-semibold text-zinc-700">
 						<div>내 스토리</div>
 						<button
 							onClick={

@@ -45,8 +45,6 @@ const StoryCreateModal = ({ onClose }) => {
 		} catch (e) {
 			console.error(e);
 		}
-
-		//TODO:모달로 바꾸기
 	};
 	const handleConfirm = () => {
 		toast((t) => (

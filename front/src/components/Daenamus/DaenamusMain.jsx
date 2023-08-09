@@ -78,7 +78,7 @@ const DaenamusMain = () => {
 					data-aos="fade-right"
 					className="font-bold md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
 				>
-					<div className="flex justify-between items-center mb-4 text-3xl font-semibold text-zinc-700">
+					<div className="flex justify-between items-center mb-4 text-2xl md:text-3xl font-semibold text-zinc-700">
 						<div>대나무숲</div>
 						<button
 							onClick={

@@ -66,8 +66,6 @@ const StoryEditor = () => {
 		}
 	};
 
-	//TODO: 로딩중 걸기
-
 	const editorRef = useRef();
 	const fileRef = useRef();
 

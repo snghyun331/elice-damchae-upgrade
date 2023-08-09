@@ -18,7 +18,6 @@ const useImageUpload = () => {
 
 			const imageUrl = `${response.data.path}`;
 			console.log(imageUrl);
-			//TODO:나중에 경로 제대로 설정
 
 			callback(imageUrl, '사진 대체 텍스트 입력');
 		} catch (error) {
