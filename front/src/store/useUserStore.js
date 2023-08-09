@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
-import { toast } from 'react-hot-toast';
 
 const useUserStore = create((set) => {
 	const initialUserData = {
@@ -101,7 +100,7 @@ const useUserStore = create((set) => {
 					isGoogleLogin: false,
 					isLoggedIn: false,
 				});
-				toast.success('로그아웃 하였습니다.');
+
 			},
 
 			infoChange: (updatedUserData) => {
