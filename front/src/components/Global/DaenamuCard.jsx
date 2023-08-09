@@ -34,12 +34,12 @@ const DaenamuCard = ({
 				<div className="h-full flex flex-col max-w-sm p-6 bg-white border-[0.2rem] border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
 					<span className="-ml-3 text-6xl">{textToIcon[mood]}</span>
 
-					<h5 className="mt-5 mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
-						{truncateString(title, 32)}
+					<h5 className="mt-5 mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+						{truncateString(title, 25)}
 					</h5>
 
-					<p className="mb-3 h-full font-normal text-gray-500 dark:text-gray-400">
-						{truncateString(removeTag(content), 20)}
+					<p className="mb-3 h-full font-normal text-gray-500 dark:text-gray-400 text-sm">
+						{truncateString(removeTag(content), 63)}
 					</p>
 					<div className="text-sm text-gray-500">
 						{/* {userInfo ? userInfo.nickname : '알 수 없는 유저'} */}
