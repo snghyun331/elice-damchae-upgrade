@@ -38,7 +38,7 @@ const DaenamuCard = ({
 						{truncateString(title, 32)}
 					</h5>
 
-					<p className="mb-3 font-normal text-gray-500 dark:text-gray-400">
+					<p className="mb-3 h-full font-normal text-gray-500 dark:text-gray-400">
 						{truncateString(removeTag(content), 20)}
 					</p>
 					<div className="text-sm text-gray-500">
@@ -47,23 +47,21 @@ const DaenamuCard = ({
 							{formatRelativeTime(updatedAt)}
 						</span>
 					</div>
-					<div className="w-full flex flex-row justify-between self-end">
-						<div className="flex w-16 items-center text-xs font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-auto self-end pt-4">
+
+					<div className="w-full flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+						<div className="flex items-center">
 							<ChevronRightIcon className="w-4 mt-1" />
 							<span className="ml-1">더보기</span>
 						</div>
-
-						<div className="flex self-end">
-							<div className=" flex flex-row space-x-2">
-								<EyeIcon className="w-4 mt-1" />
-								<p>{views}</p>
-								<HandThumbUpIcon className="w-4 mt-1" />
-								<p>{likeCount}</p>
-								<HandThumbDownIcon className="w-4 mt-1" />
-								<p>{dislikeCount}</p>
-								<ChatBubbleLeftEllipsisIcon className="w-4 mt-1" />
-								<p>{commentCount}</p>
-							</div>
+						<div className=" flex flex-row space-x-2">
+							<EyeIcon className="w-4 mt-1" />
+							<p>{views}</p>
+							<HandThumbUpIcon className="w-4 mt-1" />
+							<p>{likeCount}</p>
+							<HandThumbDownIcon className="w-4 mt-1" />
+							<p>{dislikeCount}</p>
+							<ChatBubbleLeftEllipsisIcon className="w-4 mt-1" />
+							<p>{commentCount}</p>
 						</div>
 					</div>
 				</div>

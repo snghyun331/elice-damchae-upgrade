@@ -2,34 +2,25 @@ import { useState, useEffect } from 'react';
 import usePagination from '../../hooks/usePagination';
 import DaenamuCard from '../Global/DaenamuCard';
 import Pagination from '../Global/Pagination';
-import { getApi } from '../../services/api';
 
-const DaenamuCardMap = () => {
-	const [forests, setForests] = useState([]);
-	const [isDataLoading, setIsDataLoading] = useState(false);
-	const [totalPage, setTotalPage] = useState(0);
+import useForestStore from '../../store/useForestStore';
 
-	const fetchForests = async (page = 1) => {
-		try {
-			const response = await getApi(`forest?page=${page}`);
-			console.log(response);
-
-			setForests(response.data.forests);
-			setTotalPage(response.data.totalPage);
-			setIsDataLoading(true);
-		} catch (error) {
-			console.error('Failed to fetch data:', error);
-		}
-	};
+const DaenamuCardMap = ({ fetchData, isDataLoading }) => {
+	const { forests, totalPage } = useForestStore();
 
 	const { currentPage, prev, next, go } = usePagination(
 		isDataLoading ? forests : [],
 		totalPage,
-		{ onChange: ({ targetPage }) => fetchForests(targetPage) },
+		{ onChange: ({ targetPage }) => fetchData(targetPage) },
 	);
 
 	useEffect(() => {
-		fetchForests(currentPage);
+		fetchData();
+		console.log(forests, totalPage);
+	}, []);
+
+	useEffect(() => {
+		fetchData(currentPage);
 	}, [currentPage]);
 
 	return (

@@ -8,25 +8,49 @@ import useForestStore from '../../store/useForestStore';
 import { getApi } from '../../services/api';
 
 const DaenamusMain = () => {
-	const { reset } = useForestStore();
+	const {
+		reset,
+		forests,
+		setForests,
+		fetchFilteredForests,
+		fetchForests,
+		fetchPopularFilteredForests,
+		fetchPopularForests,
+	} = useForestStore();
+
 	const isLoggedIn = useIsLoggedIn();
 	const [selectedMBTI, setSelectedMBTI] = useState([]);
+	const [mbtiFilter, setMbtiFilter] = useState([]);
 	const [selectedTab, setSelectedTab] = useState('전체글');
+
+	const [isDataLoading, setIsDataLoading] = useState(false);
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		const mbtiFilter = selectedMBTI.join(',');
-		console.log(mbtiFilter);
-		const fetchFilteredForests = async (page = 1) => {
-			try {
-				const res = await getApi(`forest/mbti?filter=${mbtiFilter}`);
-				console.log(res);
-			} catch (error) {
-				console.error('Failed to fetch data:', error);
+	const fetchData = (page = 1) => {
+		if (selectedTab === '전체글') {
+			if (mbtiFilter.length > 0) {
+				fetchFilteredForests(mbtiFilter, page);
+			} else {
+				fetchForests(page);
 			}
-		};
-		fetchFilteredForests();
-	}, [selectedMBTI]);
+		} else if (selectedTab === '인기글') {
+			if (mbtiFilter.length > 0) {
+				fetchPopularFilteredForests(mbtiFilter, page);
+			} else {
+				fetchPopularForests(page);
+			}
+		}
+	};
+
+	useEffect(() => {
+		fetchData();
+		setIsDataLoading(true);
+	}, []);
+
+	useEffect(() => {
+		setMbtiFilter(selectedMBTI.join(','));
+		fetchData();
+	}, [selectedMBTI, selectedTab]);
 
 	const select = (value) => {
 		setSelectedMBTI([...selectedMBTI, value]);
@@ -123,7 +147,7 @@ const DaenamusMain = () => {
 					})}
 				</div>
 
-				<DaenamuCardMap />
+				<DaenamuCardMap fetchData={fetchData} isDataLoading={isDataLoading} />
 			</div>
 		</>
 	);
