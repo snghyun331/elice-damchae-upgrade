@@ -20,14 +20,16 @@ const DaenamusMain = () => {
 
 	const isLoggedIn = useIsLoggedIn();
 	const [selectedMBTI, setSelectedMBTI] = useState([]);
-	const [mbtiFilter, setMbtiFilter] = useState([]);
+
 	const [selectedTab, setSelectedTab] = useState('전체글');
 
 	const [isDataLoading, setIsDataLoading] = useState(false);
 	const navigate = useNavigate();
 
 	const fetchData = (page = 1) => {
+		const mbtiFilter = selectedMBTI.join(',');
 		if (selectedTab === '전체글') {
+			console.log(mbtiFilter);
 			if (selectedMBTI.length > 0) {
 				fetchFilteredForests(mbtiFilter, page);
 			} else {
@@ -48,7 +50,6 @@ const DaenamusMain = () => {
 	}, []);
 
 	useEffect(() => {
-		setMbtiFilter(selectedMBTI.join(','));
 		fetchData();
 	}, [selectedMBTI, selectedTab]);
 

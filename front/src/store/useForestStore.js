@@ -30,6 +30,7 @@ const useForestStore = create((set) => ({
 			set({ forests: res.data.forests });
 			set({ totalPage: res.data.totalPage });
 			console.log('필터');
+			console.log(res.data);
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
 		}
