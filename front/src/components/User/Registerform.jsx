@@ -21,7 +21,7 @@ const RegisterForm = () => {
 		code,
 		errMsg,
 		nicknameCheck,
-		mbtiImg,
+		tempMbtiImg,
 
 		setEmail,
 		setPassword,
@@ -105,7 +105,7 @@ const RegisterForm = () => {
 		],
 	);
 
-	const user = { email, password, nickname, mbti, mbtiImg };
+	const user = { email, password, nickname, mbti, mbtiImg: tempMbtiImg };
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();

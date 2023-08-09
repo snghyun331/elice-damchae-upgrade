@@ -10,6 +10,7 @@ const useUserStore = create((set) => {
 		mbti: '',
 		profileImg: '',
 		mbtiImg: '',
+		tempMbtiImg: '',
 		isGoogleLogin: false,
 		isLoggedIn: Boolean(localStorage.getItem('accessToken')),
 	};
@@ -38,6 +39,7 @@ const useUserStore = create((set) => {
 		setMbti: (mbti) => set({ mbti }),
 		setProfileImg: (profileImg) => set({ profileImg }),
 		setMbtiImg: (mbtiImg) => set({ mbtiImg }),
+		setTempMbtiImg: (tempMbtiImg) => set ({tempMbtiImg}),
 		setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 
 		actions: {
@@ -45,18 +47,20 @@ const useUserStore = create((set) => {
 				const response = await postApi('auth/login', user);
 				const jwtToken = response.data.token;
 				localStorage.setItem('accessToken', jwtToken);
-
 				const userData = {
 					isLoggedIn: true,
 					id: response.data.id,
 					email: response.data.email,
 					nickname: response.data.nickname,
 					mbti: response.data.mbti,
+					profileImg: response.data.profileImg,
+					mbtiImg: response.data.mbtiImg,
 				};
 
 				localStorage.setItem('userData', JSON.stringify(userData));
 
 				set(userData);
+				console.log('전역설정된 데이터', userData)
 			},
 
 			register: async (user) => {
@@ -76,6 +80,8 @@ const useUserStore = create((set) => {
 					email: response.data.email,
 					nickname: response.data.nickname,
 					mbti: response.data.mbti,
+					profileImg: response.data.profileImg,
+					mbtiImg: response.data.mbtiImg,
 					isGoogleLogin: true,
 				};
 
@@ -110,6 +116,6 @@ export const useUserActions = () => useUserStore((state) => state.actions);
 export const useIsLoggedIn = () => useUserStore((state) => state.isLoggedIn);
 export const useUserId = () => useUserStore((state) => state.id);
 export const useUserProfileImg = () =>
-	useUserStore((state) => state.profileImg);
+	useUserStore((state) => state.profileImg ? state.profileImg : state.mbtiImg);
 
 export default useUserStore;

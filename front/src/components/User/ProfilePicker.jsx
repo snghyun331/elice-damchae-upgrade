@@ -31,17 +31,18 @@ const profileData = {
 };
 
 const ProfilePicker = () => {
-	const { mbti, mbtiImg, setProfileImg, setMbtiImg } = useUserStore();
+	const { mbti, tempMbtiImg, setTempMbtiImg } =
+		useUserStore();
 	useEffect(() => {
 		if (mbti && typeof profileImg == 'string') {
-			setMbtiImg(null);
+			setTempMbtiImg(null);
 		}
 	}, [mbti]);
 
 	const handleProfileClick = (imageURL) => {
-		setMbtiImg(imageURL);
+		setTempMbtiImg(imageURL);
 	};
-
+	console.log(tempMbtiImg);
 	if (!mbti) {
 		return (
 			<div>
@@ -69,7 +70,7 @@ const ProfilePicker = () => {
 					return (
 						<img
 							className={`mx-0.5 rounded object-cover ${
-								mbtiImg === image ? 'border-4 border-blue-500' : ''
+								tempMbtiImg === image ? 'border-4 border-blue-500' : ''
 							}`}
 							style={{ width: '19%' }}
 							key={`${mbti}-${index}`}
@@ -80,8 +81,7 @@ const ProfilePicker = () => {
 					);
 				})}
 			</div>
-			<div>
-			</div>
+			<div></div>
 		</div>
 	);
 };
