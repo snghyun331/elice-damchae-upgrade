@@ -65,7 +65,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'user',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -88,7 +88,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'user',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -116,7 +116,7 @@ class ForestController {
 
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'user',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -136,7 +136,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'user',
+          'userInfo',
         );
 
         result = {
@@ -270,33 +270,7 @@ class ForestController {
     // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP
 
     try {
-      // let mbtiList = [];
-
-      // if (req.query.filter == '') {
-      // mbtiList = [
-      // 'ISTJ',
-      // 'ISFJ',
-      // 'INFJ',
-      // 'INTJ',
-      // 'ISTP',
-      // 'ISFP',
-      // 'INFP',
-      // 'INTP',
-      // 'ESTP',
-      // 'ESFP',
-      // 'ENFP',
-      // 'ENTP',
-      // 'ESTJ',
-      // 'ESFJ',
-      // 'ENFJ',
-      // 'ENTJ',
-      // ];
-      // } else {
       const mbtiList = req.query.filter.split(',');
-      // }
-      console.log('mbtiList,,,,', mbtiList);
-
-      console.log('mbti query :', mbtiList);
 
       const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
       const limit = 12; // 한페이지에 들어갈 스토리 수
@@ -306,26 +280,77 @@ class ForestController {
         page,
         limit,
       });
-      console.log('MBTI List:', mbtiList);
-      console.log('Page:', page);
-      console.log('Limit:', limit);
-      console.log('Total Posts Count:', count);
-      console.log('Total Page:', totalPage);
-      console.log('Fetched Posts:', posts);
+
       if (!mbtiList) {
         throw new Error('스토리를 찾을 수 없습니다.');
       }
-
-      const populateResult = await forestCommentService.populateForestComment(
-        posts,
-        'userInfo',
-      );
 
       result = {
         currentPage: page,
         totalPage: totalPage,
         totalForestsCount: count,
+        forests: posts,
+      };
+
+      return res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async getForestsByPopularity(req, res, next) {
+    try {
+      const page = parseInt(req.query.page || 1);
+      const limit = 12;
+
+      const { forest, totalPage, count } = await ForestService.readPopularPosts(
+        limit,
+        page,
+      );
+      const populateResult = await ForestService.populateForestPost(
+        forest,
+        'userInfo',
+      );
+
+      if (populateResult.length === 0) {
+        return res.status(200).json({ result: 'No Posts' });
+      }
+
+      const result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
         forests: populateResult,
+      };
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getForestMBTIByPopularity(req, res, next) {
+    try {
+      const mbtiList = req.query.filter.split(',');
+
+      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
+      const limit = 12; // 한페이지에 들어갈 스토리 수
+      let result;
+      const { posts, totalPage, count } =
+        await ForestService.findByForestMbtiPopular({
+          mbtiList,
+          page,
+          limit,
+        });
+
+      if (!mbtiList) {
+        throw new Error('스토리를 찾을 수 없습니다.');
+      }
+
+      result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
+        forests: posts,
       };
 
       return res.status(200).json(result);

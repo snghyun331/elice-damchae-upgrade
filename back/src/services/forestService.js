@@ -161,6 +161,25 @@ class ForestService {
     const totalPage = Math.ceil(count / limit);
     return { forest, totalPage, count }; // 해당 페이지에 해당하는 스토리들, 총 페이지 수, 스토리 총 수
   }
+
+  static async findByForestMbtiPopular({ mbtiList, limit, page }) {
+    try {
+      const skip = (page - 1) * limit;
+      const { posts, count } = await forestModel.findByForestMbtiPopular({
+        mbtiList,
+        limit,
+        skip,
+      }); // 이 부분 수정
+
+      const totalPage = Math.ceil(count / limit);
+      // 나머지 로직 유지
+      return { posts, totalPage, count };
+    } catch (error) {
+      throw new Error(
+        `Error finding blog posts by author's MBTI: ${error.message}`,
+      );
+    }
+  }
 }
 
 export default ForestService;

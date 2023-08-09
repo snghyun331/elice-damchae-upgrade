@@ -182,6 +182,81 @@ class forestModel {
     const count = await ForestPost.countDocuments();
     return { forest, count };
   }
+
+  static async findByForestMbtiPopular({ mbtiList, skip, limit }) {
+    try {
+      let matchQuery = {};
+      if (mbtiList && mbtiList.length > 0 && mbtiList[0] !== '') {
+        matchQuery = {
+          'userInfo.mbti': {
+            $in: mbtiList,
+          },
+        };
+      }
+
+      const posts = await ForestPost.aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userInfo',
+            foreignField: '_id',
+            as: 'userInfo',
+          },
+        },
+        {
+          $unwind: '$userInfo',
+        },
+        {
+          $match: matchQuery,
+        },
+        {
+          $sort: { likeCount: -1 },
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
+
+      let countQuery = matchQuery;
+      if (!mbtiList || mbtiList.length === 0 || mbtiList[0] === '') {
+        countQuery = {};
+      }
+
+      const countResults = await ForestPost.aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userInfo',
+            foreignField: '_id',
+            as: 'userInfo',
+          },
+        },
+        {
+          $unwind: '$userInfo',
+        },
+        {
+          $match: countQuery,
+        },
+        {
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
+      const count = countResults.length > 0 ? countResults[0].count : 0;
+
+      return { posts, count };
+    } catch (error) {
+      throw new Error(
+        `Error finding blog posts by author's MBTI: ${error.message}`,
+      );
+    }
+  }
 }
 
 export { forestModel };
