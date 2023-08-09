@@ -1,7 +1,7 @@
 import { textToIcon, textToColor, formatRelativeTime } from '../Util/Util';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
-import { BackButton } from '../Global/BackButton';
+import BackButton from '../Global/BackButton';
 import { useNavigate, useParams } from 'react-router-dom';
 import { delApi, getApi, putApi } from '../../services/api';
 import { useEffect, useState } from 'react';

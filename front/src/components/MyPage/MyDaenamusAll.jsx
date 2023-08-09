@@ -3,9 +3,10 @@ import { getApi } from '../../services/api';
 import { formatDate } from '../Util/Util';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { Link, useLocation } from 'react-router-dom';
+import BackButton from '../Global/BackButton';
 
 const MyDaenamusAll = () => {
-	const location = useLocation()
+	const location = useLocation();
 	console.log(location);
 	const [forests, setForests] = useState([]);
 
@@ -27,8 +28,11 @@ const MyDaenamusAll = () => {
 	}, [location.state]);
 
 	return (
-		<div className="max-w-4xl mx-auto">
-			<h3 className="text-2xl text-gray-700 font-semibold my-12">내가 작성한 대나무숲 전체보기</h3>
+		<div className="max-w-4xl mx-auto pt-8">
+			<BackButton />
+			<h3 className="text-2xl text-gray-700 font-semibold mt-4 mb-12">
+				내가 작성한 모든 대나무숲
+			</h3>
 			<ul className="text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
 				{forests.map((forest) => (
 					<li
