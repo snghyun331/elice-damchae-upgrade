@@ -60,7 +60,7 @@ class User {
   static async delete({ userId }) {
     const user = await UserModel.findByIdAndUpdate(
       { _id: userId },
-      { isOut: true },
+      { isOut: true, nickname: '알 수 없음' },
       { new: true },
     );
     return user;
@@ -72,8 +72,8 @@ class User {
     return users;
   }
 
-  static async populateUserImg(user, options) {
-    const result = UserModel.populate(user, options);
+  static async populateUserImg(user, field) {
+    const result = UserModel.populate(user, field);
     return result;
   }
 }

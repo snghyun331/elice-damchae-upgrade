@@ -35,7 +35,7 @@ userAuthRouter.put(
 
 userAuthRouter.get('/auth/checkNickname', userAuthController.checkNickname);
 
-userAuthRouter.put('/auth/out', userAuthController.deleteUser);
+userAuthRouter.put('/auth/out', loginRequired, userAuthController.deleteUser);
 
 userAuthRouter.post('/auth/sendEmailCode', userAuthController.sendAuthCode);
 

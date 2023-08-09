@@ -23,15 +23,17 @@ class userAuthController {
         nickname,
         mbti,
         mbtiImg,
-        // isGoogleLogin: isGoogleLoginRaw,
+        isGoogleLogin: isGoogleLoginRaw,
       } = await req.body;
       const file = req.file ?? null;
-      // const isGoogleLogin = isGoogleLoginRaw.toLowerCase() === 'true';
+      const isGoogleLogin = isGoogleLoginRaw.toLowerCase() === 'true';
+
       const existingUser = await userService.readUserNickname({ nickname });
 
       if (existingUser.nicknameState == 'unusableNickname') {
         return res.status(400).json(existingUser.unusableNickname);
       }
+
       if (!file) {
         const newUser = await userService.createUser({
           profileImg: null,
@@ -40,12 +42,12 @@ class userAuthController {
           nickname,
           mbti,
           mbtiImg,
-          // isGoogleLogin,
+          isGoogleLogin,
         });
         return res.status(201).json(newUser);
       } else {
         const profile = await imageService.uploadImageInS3({ file });
-        const profileId = profile._id; 
+        const profileId = profile._id;
 
         // 위 데이터를 유저 db에 추가하기
         const newUser = await userService.createUser({
@@ -55,7 +57,7 @@ class userAuthController {
           nickname,
           mbti,
           mbtiImg: null,
-          // isGoogleLogin,
+          isGoogleLogin,
         });
 
         const options = {
@@ -306,14 +308,14 @@ class userAuthController {
 
   static async deleteUser(req, res, next) {
     try {
-      const userId = req.body.userId;
+      const userId = req.currentUserId;
       // 사용자를 비활성화 처리하기 위해 `isOut` 필드를 `true`로 설정
       const user = await userService.deleteUser({ userId });
 
       if (!user) {
         return res.status(404).json({ error: '존재하지 않는 유저입니다.' });
       }
-      return res.status(200).json({ errorMessage: '회원 탈퇴 완료' });
+      return res.status(200).json({ message: '회원 탈퇴 완료' });
     } catch (error) {
       next(error);
     }
