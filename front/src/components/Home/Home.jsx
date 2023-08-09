@@ -98,10 +98,7 @@ const Home = () => {
 	return (
 		<div>
 			<div className="z-50">
-				<div className="space-y-5">
-					{/* <div className="px-3 border-t border-gray-200 dark:border-gray-600">
-						<HomeMusicVideo music={'FAMKcwTBh7Q'} />
-					</div> */}
+				<div className="space-y-5 lg:pt-12">
 					<BannerCarousel />
 
 					<div

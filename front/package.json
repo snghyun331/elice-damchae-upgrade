@@ -37,6 +37,7 @@
 		"react-select": "^5.7.4",
 		"react-tooltip": "^5.19.0",
 		"react-youtube": "^10.1.0",
+		"swiper": "^10.1.0",
 		"zustand": "^4.3.9"
 	},
 	"devDependencies": {
