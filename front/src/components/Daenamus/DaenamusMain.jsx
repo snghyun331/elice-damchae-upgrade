@@ -96,8 +96,8 @@ const DaenamusMain = () => {
 						</button>
 					</div>
 					<div className="text-sm font-medium text-zinc-600">
-						다양한 주제의 토론에 참가하고 나와 같은 유형이나 나와 다른 유형이
-						어떻게 반응하는지 알아보아요.
+						다양한 주제의 토론에 참가하고 다양한 유형의 사람들이 어떻게
+						반응하는지 알아보아요.
 					</div>
 				</div>
 				<div className="mt-8 mb-4">
