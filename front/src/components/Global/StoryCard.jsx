@@ -40,7 +40,7 @@ const StoryCard = ({
 								src={imageSrc}
 								alt="스토리 이미지"
 								onError={(e) => {
-									e.target.src = 'images/default-image.jpg';
+									e.target.src = '/images/default-image.jpg';
 								}}
 							/>
 						</figure>

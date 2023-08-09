@@ -43,6 +43,16 @@ const Home = () => {
 		reset();
 	};
 
+	const handleCheckLog = async () => {
+		const res = await postApi('stories/isAlreadyWrote');
+		console.log('haha', res);
+
+		if (res.data.result) {
+			return true;
+		}
+		return false;
+	};
+
 	const messageDiv = (
 		<>
 			<span className="text-2xl">
@@ -63,9 +73,14 @@ const Home = () => {
 				<button
 					onClick={
 						isLoggedIn
-							? () => {
-									setStoryModal(true);
-									handleCheckLog();
+							? async () => {
+									const isWritten = await handleCheckLog();
+									console.log('isWritten', isWritten);
+									if (!isWritten) {
+										setStoryModal(true);
+									} else {
+										toast.error('스토리는 하루에 한번만 작성이 가능합니다.');
+									}
 							  }
 							: () => navigate('/login')
 					}
@@ -77,15 +92,6 @@ const Home = () => {
 			</div>
 		</>
 	);
-
-	const handleCheckLog = async () => {
-		const res = await postApi('stories/isAlreadyWrote');
-
-		if (res.data.result) {
-			toast.error('스토리는 하루에 한번만 작성이 가능합니다.');
-			setStoryModal(false);
-		}
-	};
 
 	return (
 		<div>
