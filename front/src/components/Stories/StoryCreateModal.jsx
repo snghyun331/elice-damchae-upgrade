@@ -38,10 +38,10 @@ const StoryCreateModal = ({ onClose }) => {
 				formData.append(key, post[key]);
 			}
 
-			const response = await postApi('stories', formData);
-			console.log(response.data);
+			const res = await postApi('stories', formData);
+
 			onClose();
-			navigate('/stories');
+			navigate(`/stories/${res.data._id}`);
 		} catch (e) {
 			console.error(e);
 		}
