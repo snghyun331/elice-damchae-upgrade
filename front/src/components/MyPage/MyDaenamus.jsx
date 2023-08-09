@@ -40,11 +40,11 @@ const MyDaenamus = () => {
 							</Link>
 						</span>
 					) : null}
-					<div className="my-8 flex flex-wrap justify-center md:justify-center">
+					<div className="my-8 flex flex-wrap justify-start md:justify-start">
 						{forests.slice(0, 3).map((forest) => (
 							<div
 								key={forest._id}
-								className={`w-full md:w-1/3 mb-4 px-1 md:px-2 mx-auto`}
+								className={`w-full md:w-1/3 mb-4 px-1 md:px-2`}
 							>
 								<MyDaenamuCard forest={forest} />
 							</div>
