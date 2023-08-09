@@ -77,7 +77,6 @@ export const mbtiList = [
 	{ value: 'ESFJ', label: 'ESFJ' },
 	{ value: 'ENFJ', label: 'ENFJ' },
 	{ value: 'ENTJ', label: 'ENTJ' },
-	{ value: '', label: '미설정' },
 ];
 
 export const truncateString = (string, length) => {

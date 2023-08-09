@@ -6,7 +6,7 @@ import { delApi, getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
 import { useUserId } from '../../store/useUserStore';
 import StoryComment from './StoryComment';
-import  BackButton  from '../Global/BackButton';
+import BackButton from '../Global/BackButton';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
 
@@ -155,7 +155,7 @@ const StoryRead = () => {
 							<div className="w-12 h-12 mx-auto -mt-24 rounded-full overflow-hidden">
 								<img
 									className="w-full h-full object-cover"
-									src={isDataLoading && story.userInfo.profileImg}
+									src={isDataLoading && story.userInfo.mbtiImg}
 									alt="작성자 프로필 이미지"
 								/>
 							</div>

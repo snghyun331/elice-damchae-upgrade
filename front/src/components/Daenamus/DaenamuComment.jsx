@@ -4,7 +4,7 @@ import CommentBox from '../Global/CommentBox';
 import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../Global/Pagination';
-import toast from 'react-hot-toast'
+import toast from 'react-hot-toast';
 import useForestStore from '../../store/useForestStore';
 
 const DaenamuComment = ({ forestId }) => {
@@ -107,7 +107,7 @@ const DaenamuComment = ({ forestId }) => {
 				{commentCount === 0 ? (
 					<p>등록된 댓글이 없습니다.</p>
 				) : (
-					commentList.map((commentData) => (
+					commentList?.map((commentData) => (
 						<div key={commentData._id}>
 							<CommentBox
 								fetchComment={fetchComment}

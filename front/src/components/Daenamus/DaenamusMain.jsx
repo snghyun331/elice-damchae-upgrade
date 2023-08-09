@@ -78,7 +78,7 @@ const DaenamusMain = () => {
 					data-aos="fade-right"
 					className="font-bold md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
 				>
-					<div className="flex justify-between items-center mb-4 text-3xl font-semibold text-zinc-700">
+					<div className="flex justify-between items-center mb-4 text-2xl md:text-3xl font-semibold text-zinc-700">
 						<div>대나무숲</div>
 						<button
 							onClick={
@@ -96,8 +96,8 @@ const DaenamusMain = () => {
 						</button>
 					</div>
 					<div className="text-sm font-medium text-zinc-600">
-						다양한 주제의 토론에 참가하고 나와 같은 유형이나 나와 다른 유형이
-						어떻게 반응하는지 알아보아요.
+						다양한 주제의 토론에 참가하고 다양한 유형의 사람들이 어떻게
+						반응하는지 알아보아요.
 					</div>
 				</div>
 				<div className="mt-8 mb-4">
