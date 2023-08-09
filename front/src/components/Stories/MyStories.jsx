@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Search from '../Global/Search';
 import StoryCreateModal from './StoryCreateModal';
 import StoryCardMap from '../Global/StoryCardMap';
 import useStoryStore from '../../store/useStoryStore';
@@ -32,11 +31,12 @@ const MyStories = () => {
 
 	const handleCheckLog = async () => {
 		const res = await postApi('stories/isAlreadyWrote');
+		console.log('haha', res);
 
 		if (res.data.result) {
-			toast.error('스토리는 하루에 한번만 작성이 가능합니다.');
-			setStoryModal(false);
+			return true;
 		}
+		return false;
 	};
 
 	return (
@@ -46,19 +46,26 @@ const MyStories = () => {
 					data-aos="fade-right"
 					className="font-bold md:p-10 block p-6 bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
 				>
-					<div className="flex justify-between items-center mb-4 text-3xl font-semibold text-zinc-700">
+					<div className="flex justify-between items-center mb-4 text-2xl md:text-3xl font-semibold text-zinc-700">
 						<div>내 스토리</div>
 						<button
 							onClick={
 								isLoggedIn
-									? () => {
-											setStoryModal(true);
-											handleCheckLog();
+									? async () => {
+											const isWritten = await handleCheckLog();
+											console.log('isWritten', isWritten);
+											if (!isWritten) {
+												setStoryModal(true);
+											} else {
+												toast.error(
+													'스토리는 하루에 한번만 작성이 가능합니다.',
+												);
+											}
 									  }
 									: () => navigate('/login')
 							}
 							type="button"
-							className="rounded-xl w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+							className="rounded-xl w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
 						>
 							스토리 쓰기
 						</button>

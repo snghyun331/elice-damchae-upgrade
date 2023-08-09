@@ -30,7 +30,7 @@ const StoryCard = ({
 	return (
 		<>
 			<div
-				className={`border border-[0.2rem] border-neutral-200 border-solid rounded-2xl pt-5 px-5 pb-6 my-3 mx-2 relative h-full`}
+				className={`bg-[#ECF2FF] border border-[0.1rem] border-neutral-200 border-solid rounded-2xl pt-5 px-5 pb-6 my-3 mx-2 relative h-full`}
 			>
 				<Link to={`/stories/${_id}`}>
 					<div className="flex items-center justify-center">
@@ -40,7 +40,7 @@ const StoryCard = ({
 								src={imageSrc}
 								alt="스토리 이미지"
 								onError={(e) => {
-									e.target.src = 'images/default-image.jpg';
+									e.target.src = '/images/default-image.jpg';
 								}}
 							/>
 						</figure>

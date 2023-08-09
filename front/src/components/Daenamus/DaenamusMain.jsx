@@ -5,28 +5,50 @@ import { mbtiList } from '../Util/Util';
 import { useNavigate } from 'react-router-dom';
 import { useIsLoggedIn } from '../../store/useUserStore';
 import useForestStore from '../../store/useForestStore';
-import { getApi } from '../../services/api';
 
 const DaenamusMain = () => {
-	const { reset } = useForestStore();
+	const {
+		reset,
+		fetchFilteredForests,
+		fetchForests,
+		fetchPopularFilteredForests,
+		fetchPopularForests,
+	} = useForestStore();
+
 	const isLoggedIn = useIsLoggedIn();
 	const [selectedMBTI, setSelectedMBTI] = useState([]);
+
 	const [selectedTab, setSelectedTab] = useState('전체글');
+
+	const [isDataLoading, setIsDataLoading] = useState(false);
 	const navigate = useNavigate();
 
-	useEffect(() => {
+	const fetchData = (page = 1) => {
 		const mbtiFilter = selectedMBTI.join(',');
-		console.log(mbtiFilter);
-		const fetchFilteredForests = async (page = 1) => {
-			try {
-				const res = await getApi(`forest/mbti?filter=${mbtiFilter}`);
-				console.log(res);
-			} catch (error) {
-				console.error('Failed to fetch data:', error);
+		if (selectedTab === '전체글') {
+			console.log(mbtiFilter);
+			if (selectedMBTI.length > 0) {
+				fetchFilteredForests(mbtiFilter, page);
+			} else {
+				fetchForests(page);
 			}
-		};
-		fetchFilteredForests();
-	}, [selectedMBTI]);
+		} else if (selectedTab === '인기글') {
+			if (selectedMBTI.length > 0) {
+				fetchPopularFilteredForests(mbtiFilter, page);
+			} else {
+				fetchPopularForests(page);
+			}
+		}
+	};
+
+	useEffect(() => {
+		fetchData();
+		setIsDataLoading(true);
+	}, []);
+
+	useEffect(() => {
+		fetchData();
+	}, [selectedMBTI, selectedTab]);
 
 	const select = (value) => {
 		setSelectedMBTI([...selectedMBTI, value]);
@@ -56,7 +78,7 @@ const DaenamusMain = () => {
 					data-aos="fade-right"
 					className="font-bold md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
 				>
-					<div className="flex justify-between items-center mb-4 text-3xl font-semibold text-zinc-700">
+					<div className="flex justify-between items-center mb-4 text-2xl md:text-3xl font-semibold text-zinc-700">
 						<div>대나무숲</div>
 						<button
 							onClick={
@@ -74,8 +96,8 @@ const DaenamusMain = () => {
 						</button>
 					</div>
 					<div className="text-sm font-medium text-zinc-600">
-						다양한 주제의 토론에 참가하고 나와 같은 유형이나 나와 다른 유형이
-						어떻게 반응하는지 알아보아요.
+						다양한 주제의 토론에 참가하고 다양한 유형의 사람들이 어떻게
+						반응하는지 알아보아요.
 					</div>
 				</div>
 				<div className="mt-8 mb-4">
@@ -123,7 +145,7 @@ const DaenamusMain = () => {
 					})}
 				</div>
 
-				<DaenamuCardMap />
+				<DaenamuCardMap fetchData={fetchData} isDataLoading={isDataLoading} />
 			</div>
 		</>
 	);

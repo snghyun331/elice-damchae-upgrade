@@ -9,9 +9,12 @@ class ForestController {
       const { content } = req.body;
       const pureContent = content.replace(/<[^>]+>/g, ' '); // content에 html태그가 섞여오기 때문에 태그 제거하기
       // flask에서 'text': pureContent 형태로 request로 들어감
-      const obj = await axios.post('http://127.0.0.1:5000/predict', {
-        text: pureContent,
-      });
+      const obj = await axios.post(
+        process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL,
+        {
+          text: pureContent,
+        },
+      );
       // console.log(obj.data)  ->  (예) { mood : 'pleasure' }
       return res.status(201).json(obj.data);
     } catch (error) {
@@ -62,7 +65,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -85,7 +88,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -113,7 +116,7 @@ class ForestController {
 
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -133,7 +136,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'userInfo',
         );
 
         result = {
@@ -280,26 +283,16 @@ class ForestController {
         page,
         limit,
       });
-      console.log('MBTI List:', mbtiList);
-      console.log('Page:', page);
-      console.log('Limit:', limit);
-      console.log('Total Posts Count:', count);
-      console.log('Total Page:', totalPage);
-      console.log('Fetched Posts:', posts);
+
       if (!mbtiList) {
         throw new Error('스토리를 찾을 수 없습니다.');
       }
-
-      const populateResult = await forestCommentService.populateForestComment(
-        posts,
-        'userInfo',
-      );
 
       result = {
         currentPage: page,
         totalPage: totalPage,
         totalForestsCount: count,
-        forests: populateResult,
+        forests: posts,
       };
 
       return res.status(200).json(result);
@@ -335,6 +328,37 @@ class ForestController {
       return res.status(200).json(result);
     } catch (error) {
       next(error);
+    }
+  }
+
+  static async getForestMBTIByPopularity(req, res, next) {
+    try {
+      const mbtiList = req.query.filter.split(',');
+
+      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
+      const limit = 12; // 한페이지에 들어갈 스토리 수
+      let result;
+      const { posts, totalPage, count } =
+        await ForestService.findByForestMbtiPopular({
+          mbtiList,
+          page,
+          limit,
+        });
+
+      if (!mbtiList) {
+        throw new Error('스토리를 찾을 수 없습니다.');
+      }
+
+      result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
+        forests: posts,
+      };
+
+      return res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 }

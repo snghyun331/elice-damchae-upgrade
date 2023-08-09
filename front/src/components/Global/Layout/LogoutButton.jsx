@@ -1,6 +1,7 @@
 import { useUserActions } from '@/store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
+import { toast } from 'react-hot-toast';
 
 const LogoutButton = () => {
 	const { logout } = useUserActions();
@@ -10,6 +11,7 @@ const LogoutButton = () => {
 			<button
 				onClick={() => {
 					logout();
+					toast.success('로그아웃 하였습니다.');
 					navigate('/');
 				}}
 				type="button"

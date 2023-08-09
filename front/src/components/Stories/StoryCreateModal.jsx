@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { postApi } from '../../services/api';
 import './StoryCreateModal.css';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const StoryCreateModal = ({ onClose }) => {
 	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
@@ -15,6 +16,8 @@ const StoryCreateModal = ({ onClose }) => {
 	const [isPublic, setIsPublic] = useState(false);
 
 	const dimmedRef = useRef(null);
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		document.body.style.overflow = 'hidden';
@@ -26,9 +29,7 @@ const StoryCreateModal = ({ onClose }) => {
 
 	const currentDate = moment().format('YYYY년 M월 D일');
 
-	const postStory = async (e) => {
-		e.preventDefault();
-
+	const postStory = async () => {
 		try {
 			const post = { title, content, thumbnail, isPublic, mood, music };
 			console.log(post);
@@ -37,18 +38,13 @@ const StoryCreateModal = ({ onClose }) => {
 				formData.append(key, post[key]);
 			}
 
-			const response = await postApi('stories', formData);
-			console.log(response.data);
-			onClose();
+			const res = await postApi('stories', formData);
 
-			setTimeout(() => {
-				window.location.href = '/stories';
-			}, 100);
+			onClose();
+			navigate(`/stories/${res.data._id}`);
 		} catch (e) {
 			console.error(e);
 		}
-
-		//TODO:모달로 바꾸기
 	};
 	const handleConfirm = () => {
 		toast((t) => (
@@ -60,7 +56,10 @@ const StoryCreateModal = ({ onClose }) => {
 				</div>
 				<div className="flex justify-end">
 					<button
-						onClick={postStory}
+						onClick={() => {
+							toast.dismiss(t.id);
+							postStory();
+						}}
 						className="text-white px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600"
 					>
 						예
@@ -165,7 +164,7 @@ const StoryCreateModal = ({ onClose }) => {
 									{!isFormValid && (
 										<div className="mr-3 items-center">
 											<p className="self-end text-red-500 text-sm mt-2">
-												빈 칸을 채워주세요.
+												글 작성 후 감정분석이 완료되어야 업로드가 가능합니다.
 											</p>
 										</div>
 									)}

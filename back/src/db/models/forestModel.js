@@ -46,9 +46,13 @@ class forestModel {
 
   // 조회수 1증가
   static async findAndIncreaseView({ forestId }) {
-    await ForestPost.updateOne({ _id: forestId }, { $inc: { views: 1 } });
-    const forest = await ForestPost.findOne({ _id: forestId }).lean();
-    return forest;
+    const updatedForest = await ForestPost.findOneAndUpdate(
+      { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
+      { $inc: { views: 1 } }, // 업데이트할 필드와 값
+      { new: true }, // 업데이트 후 업데이트된 문서 반환
+    ).lean();
+
+    return updatedForest;
   }
 
   static async findAndCountAll(skip, limit) {
@@ -94,10 +98,18 @@ class forestModel {
 
   static async findByForestMbti({ mbtiList, skip, limit }) {
     try {
-      // const readMbti = { ...mbtiList };
       console.log('Finding posts with MBTI:', mbtiList);
       console.log('Skip:', skip);
       console.log('Limit:', limit);
+
+      let matchQuery = {};
+      if (mbtiList && mbtiList.length > 0 && mbtiList[0] !== '') {
+        matchQuery = {
+          'userInfo.mbti': {
+            $in: mbtiList,
+          },
+        };
+      }
 
       const posts = await ForestPost.aggregate([
         {
@@ -105,18 +117,17 @@ class forestModel {
             from: 'users',
             localField: 'userInfo',
             foreignField: '_id',
-            as: 'user',
+            as: 'userInfo',
           },
         },
         {
-          $unwind: '$user',
+          $unwind: '$userInfo',
         },
         {
-          $match: {
-            'user.mbti': {
-              $in: mbtiList,
-            },
-          },
+          $sort: { createdAt: -1 },
+        },
+        {
+          $match: matchQuery,
         },
         {
           $skip: skip,
@@ -124,31 +135,38 @@ class forestModel {
         {
           $limit: limit,
         },
+      ]);
+
+      let countQuery = matchQuery;
+      if (!mbtiList || mbtiList.length === 0 || mbtiList[0] === '') {
+        countQuery = {};
+      }
+
+      const countResults = await ForestPost.aggregate([
         {
-          $group: {
-            _id: null,
-            mbtiCount: {
-              $sum: 1,
-            },
-            posts: {
-              $push: '$$ROOT',
-            },
+          $lookup: {
+            from: 'users',
+            localField: 'userInfo',
+            foreignField: '_id',
+            as: 'userInfo',
           },
         },
         {
-          $project: {
-            _id: 0,
-            mbtiCount: 1,
-            posts: {
-              $slice: ['$posts', skip, limit],
-            },
+          $unwind: '$userInfo',
+        },
+        {
+          $match: countQuery,
+        },
+        {
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
           },
         },
       ]);
 
-      const count = await ForestPost.countDocuments(mbtiList);
-      console.log('Found Posts:', posts);
-      console.log('Total Count:', count);
+      const count = countResults.length > 0 ? countResults[0].count : 0;
+
       return { posts, count };
     } catch (error) {
       throw new Error(
@@ -166,6 +184,81 @@ class forestModel {
 
     const count = await ForestPost.countDocuments();
     return { forest, count };
+  }
+
+  static async findByForestMbtiPopular({ mbtiList, skip, limit }) {
+    try {
+      let matchQuery = {};
+      if (mbtiList && mbtiList.length > 0 && mbtiList[0] !== '') {
+        matchQuery = {
+          'userInfo.mbti': {
+            $in: mbtiList,
+          },
+        };
+      }
+
+      const posts = await ForestPost.aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userInfo',
+            foreignField: '_id',
+            as: 'userInfo',
+          },
+        },
+        {
+          $unwind: '$userInfo',
+        },
+        {
+          $match: matchQuery,
+        },
+        {
+          $sort: { likeCount: -1 },
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
+
+      let countQuery = matchQuery;
+      if (!mbtiList || mbtiList.length === 0 || mbtiList[0] === '') {
+        countQuery = {};
+      }
+
+      const countResults = await ForestPost.aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userInfo',
+            foreignField: '_id',
+            as: 'userInfo',
+          },
+        },
+        {
+          $unwind: '$userInfo',
+        },
+        {
+          $match: countQuery,
+        },
+        {
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
+      const count = countResults.length > 0 ? countResults[0].count : 0;
+
+      return { posts, count };
+    } catch (error) {
+      throw new Error(
+        `Error finding blog posts by author's MBTI: ${error.message}`,
+      );
+    }
   }
 }
 

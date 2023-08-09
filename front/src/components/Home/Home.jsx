@@ -10,6 +10,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { postApi } from '../../services/api';
 import toast from 'react-hot-toast';
+import { Element } from 'react-scroll';
 
 const Home = () => {
 	useEffect(() => {
@@ -43,6 +44,16 @@ const Home = () => {
 		reset();
 	};
 
+	const handleCheckLog = async () => {
+		const res = await postApi('stories/isAlreadyWrote');
+		console.log('haha', res);
+
+		if (res.data.result) {
+			return true;
+		}
+		return false;
+	};
+
 	const messageDiv = (
 		<>
 			<span className="text-2xl">
@@ -63,9 +74,16 @@ const Home = () => {
 				<button
 					onClick={
 						isLoggedIn
-							? () => {
-									setStoryModal(true);
-									handleCheckLog();
+							? async () => {
+									const isWritten = await handleCheckLog();
+									console.log('isWritten', isWritten);
+									if (!isWritten) {
+										setStoryModal(true);
+									} else {
+										toast.error('스토리는 하루에 한번만 작성이 가능합니다.', {
+											duration: 1000, // 3000 milliseconds (3 seconds)
+										});
+									}
 							  }
 							: () => navigate('/login')
 					}
@@ -78,27 +96,17 @@ const Home = () => {
 		</>
 	);
 
-	const handleCheckLog = async () => {
-		const res = await postApi('stories/isAlreadyWrote');
-
-		if (res.data.result) {
-			toast.error('스토리는 하루에 한번만 작성이 가능합니다.');
-			setStoryModal(false);
-		}
-	};
-
 	return (
 		<div>
 			<div className="z-50">
-				<div className="space-y-5">
-					{/* <div className="px-3 border-t border-gray-200 dark:border-gray-600">
-						<HomeMusicVideo music={'FAMKcwTBh7Q'} />
-					</div> */}
-					<BannerCarousel />
+				<div className="space-y-5 lg:pt-12">
+					<div data-aos="flip-left">
+						<BannerCarousel />
+					</div>
 
 					<div
 						data-aos="zoom-in"
-						className="p-6 md:p-10 mt-16 mb-16 flex justify-center items-center flex-col"
+						className="p-6 text-md md:text-lg md:p-10 mt-16 mb-16 flex justify-center items-center flex-col"
 					>
 						{messageDiv}
 					</div>
@@ -107,7 +115,9 @@ const Home = () => {
 				<hr className="mt-10" />
 
 				<div className="mx-4 sm:mx-10 md:mx-20 lg:mx-40" data-aos="fade-right">
-					<div className="mt-10 text-3xl font-semibold">우리들의 스토리</div>
+					<div className="mt-10 text-3xl font-semibold">
+						<Element name="scrollToThisDiv">우리들의 스토리</Element>
+					</div>
 					<div className="mt-20 items-center">
 						<Search endpoint="stories" />
 					</div>

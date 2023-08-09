@@ -4,6 +4,7 @@ import useStoryStore from '../../store/useStoryStore';
 import { postApi } from '../../services/api';
 import RadioOption from '../Global/RadioOption';
 import useImageUpload from '../../hooks/useImageUpload';
+import toast from 'react-hot-toast';
 
 const StoryEditor = () => {
 	const {
@@ -50,15 +51,20 @@ const StoryEditor = () => {
 		const body = editorRef.current?.getInstance().getHTML() || '';
 		setContent(body);
 		try {
-			const response = await postApi('image/stable', { content });
+			const response = await toast.promise(
+				postApi('image/stable', { content }),
+				{
+					loading: <b>이미지를 생성하고 있습니다.</b>,
+					success: <b>이미지 생성이 완료되었습니다.</b>,
+					error: <b>이미지 생성에 실패하였습니다.</b>,
+				},
+			);
 			console.log(response.data);
 			setStableThumbnail(response.data);
 		} catch (error) {
 			console.log(error);
 		}
 	};
-
-	//TODO: 로딩중 걸기
 
 	const editorRef = useRef();
 	const fileRef = useRef();
@@ -190,7 +196,7 @@ const StoryEditor = () => {
 							<button
 								onClick={generateImage}
 								disabled={content?.length <= 16}
-								className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+								className="w-full h-10 bg-blue-400 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
 							>
 								이미지 생성하기
 							</button>
@@ -241,7 +247,7 @@ const StoryEditor = () => {
 					<button
 						onClick={recommend}
 						disabled={content?.length <= 16}
-						className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+						className="w-full h-10 bg-blue-400 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
 					>
 						감정 분석하고 음악 추천받기
 					</button>
