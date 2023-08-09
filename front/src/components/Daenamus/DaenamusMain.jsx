@@ -28,13 +28,13 @@ const DaenamusMain = () => {
 
 	const fetchData = (page = 1) => {
 		if (selectedTab === '전체글') {
-			if (mbtiFilter.length > 0) {
+			if (selectedMBTI.length > 0) {
 				fetchFilteredForests(mbtiFilter, page);
 			} else {
 				fetchForests(page);
 			}
 		} else if (selectedTab === '인기글') {
-			if (mbtiFilter.length > 0) {
+			if (selectedMBTI.length > 0) {
 				fetchPopularFilteredForests(mbtiFilter, page);
 			} else {
 				fetchPopularForests(page);
@@ -54,10 +54,12 @@ const DaenamusMain = () => {
 
 	const select = (value) => {
 		setSelectedMBTI([...selectedMBTI, value]);
+		console.log('선택');
 	};
 
 	const deselect = (value) => {
 		setSelectedMBTI(selectedMBTI.filter((item) => item !== value));
+		console.log('언세팅');
 	};
 
 	const toggleMBTI = (value) => {
