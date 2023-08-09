@@ -428,15 +428,15 @@ const InfoChange = () => {
 									>
 										수정하기
 									</button>
-									<hr className="my-8" />
-									<button
-										onClick={handleConfirm}
-										className="text-sm text-red-600 underline ml-auto"
-									>
-										회원 탈퇴
-									</button>
+									<hr className="mt-8" />
 								</div>
 							</form>
+							<button
+								onClick={handleConfirm}
+								className="text-sm text-red-600 underline flex ml-auto"
+							>
+								회원 탈퇴
+							</button>
 						</div>
 					</div>
 				</div>
