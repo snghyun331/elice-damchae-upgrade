@@ -157,24 +157,23 @@ const InfoChange = () => {
 
 	const handleConfirm = () => {
 		toast((t) => (
-			<div className="rounded p-4">
+			<div className="rounded p-8">
 				<div>정말로 탈퇴하시겠습니까?</div>
-				<div className="mt-3 flex justify-end">
+				<div className="mt-5 flex justify-center">
 					<button
 						onClick={() => {
 							handleOut();
 							toast.dismiss(t.id);
 						}}
-						className="text-white px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600"
+						className="text-white w-16 px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600 text-sm"
 					>
 						예
 					</button>
 					<button
 						onClick={() => {
 							toast.dismiss(t.id);
-							// 필요한 후속 동작 수행
 						}}
-						className="text-white px-2 py-1 rounded bg-red-500 hover:bg-red-600"
+						className="text-white w-16 px-2 py-1 rounded bg-red-500 hover:bg-red-600 text-sm"
 					>
 						아니오
 					</button>
