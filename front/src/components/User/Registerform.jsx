@@ -110,8 +110,10 @@ const RegisterForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			console.log(user);
 			await register(user);
+			toast(`${user.nickname} 님, DAMCHAE 회원가입을 축하합니다!`, {
+				icon: '👏',
+			});
 			navigate('/login');
 		} catch (error) {
 			setErrMsg(error.response?.data?.errorMessage);
@@ -121,10 +123,11 @@ const RegisterForm = () => {
 	const handleEmailSend = async () => {
 		try {
 			setEmailButtonDisabled(true);
-			const response = await postApi('auth/sendEmailCode', { email: email });
-			if (response.status === 200) {
-				toast.success('이메일로 인증코드가 발송 되었습니다.');
-			}
+			await toast.promise(postApi('auth/sendEmailCode', { email: email }), {
+				loading: <b>이메일을 발송중입니다.</b>,
+				success: <b>이메일로 인증코드가 발송 되었습니다.</b>,
+				error: <b>이메일 발송에 실패하였습니다.</b>,
+			});
 			setEmailButtonDisabled(false);
 		} catch (error) {
 			setEmailButtonDisabled(false);
@@ -135,7 +138,6 @@ const RegisterForm = () => {
 	const handleCodeCheck = async () => {
 		try {
 			const response = await postApi('auth/checkEmailCode', { string: code });
-			console.log(response);
 			if (response.status === 200) {
 				setIsCodeConfirmed(true);
 				toast.success('이메일 인증이 완료되었습니다.');
@@ -148,8 +150,6 @@ const RegisterForm = () => {
 	const handleNicknameCheck = async () => {
 		try {
 			const response = await getApi(`auth/checkNickname?nickname=${nickname}`);
-			console.log(response.data);
-
 			if (response.data.nicknameState == 'usableNickname') {
 				toast.success(response.data.usableNickname);
 				setNicknameCheck(true);

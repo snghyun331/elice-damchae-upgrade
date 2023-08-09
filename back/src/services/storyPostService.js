@@ -117,6 +117,29 @@ class storyPostService {
     }
   }
 
+  static async extractOnlyMood(myStories) {
+    let allMoods = [];
+    myStories.forEach((myStory) => {
+      allMoods.push(myStory.mood);
+    });
+
+    const valueCount = allMoods.reduce((counts, value) => {
+      if (!counts[value]) {
+        counts[value] = 1;
+      } else {
+        counts[value]++;
+      }
+      return counts;
+    }, {});
+
+    let valuePercentage = {};
+    const totalCount = allMoods.length;
+    for (const value in valueCount) {
+      valuePercentage[value] = (valueCount[value] / totalCount) * 100;
+    }
+    return valuePercentage;
+  }
+
   // static async deleteUploadedImage({ storyId }) {
   //   const story = await storyPostModel.findOneByStoryId({ storyId });
   //   const uploadImage = await imageModel.findOneByImageId({

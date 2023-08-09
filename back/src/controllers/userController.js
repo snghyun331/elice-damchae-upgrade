@@ -23,17 +23,15 @@ class userAuthController {
         nickname,
         mbti,
         mbtiImg,
-        isGoogleLogin: isGoogleLoginRaw,
+        // isGoogleLogin: isGoogleLoginRaw,
       } = await req.body;
       const file = req.file ?? null;
-      const isGoogleLogin = isGoogleLoginRaw.toLowerCase() === 'true';
-
+      // const isGoogleLogin = isGoogleLoginRaw.toLowerCase() === 'true';
       const existingUser = await userService.readUserNickname({ nickname });
 
       if (existingUser.nicknameState == 'unusableNickname') {
         return res.status(400).json(existingUser.unusableNickname);
       }
-
       if (!file) {
         const newUser = await userService.createUser({
           profileImg: null,
@@ -42,12 +40,12 @@ class userAuthController {
           nickname,
           mbti,
           mbtiImg,
-          isGoogleLogin,
+          // isGoogleLogin,
         });
         return res.status(201).json(newUser);
       } else {
         const profile = await imageService.uploadImageInS3({ file });
-        const profileId = profile._id;
+        const profileId = profile._id; 
 
         // 위 데이터를 유저 db에 추가하기
         const newUser = await userService.createUser({
@@ -57,7 +55,7 @@ class userAuthController {
           nickname,
           mbti,
           mbtiImg: null,
-          isGoogleLogin,
+          // isGoogleLogin,
         });
 
         const result = await userService.populateUserProfile(

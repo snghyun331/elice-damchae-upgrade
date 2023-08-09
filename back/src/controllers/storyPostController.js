@@ -374,25 +374,7 @@ class storyPostController {
       }
 
       // 감정만 모두 추출
-      let allMoods = [];
-      myStories.forEach((myStory) => {
-        allMoods.push(myStory.mood);
-      });
-
-      const valueCount = allMoods.reduce((counts, value) => {
-        if (!counts[value]) {
-          counts[value] = 1;
-        } else {
-          counts[value]++;
-        }
-        return counts;
-      }, {});
-
-      let valuePercentage = {};
-      const totalCount = allMoods.length;
-      for (const value in valueCount) {
-        valuePercentage[value] = (valueCount[value] / totalCount) * 100;
-      }
+      const valuePercentage = await storyPostService.extractOnlyMood(myStories);
       return res.status(200).json({ result: 'Success', valuePercentage });
     } catch (error) {
       next(error);
