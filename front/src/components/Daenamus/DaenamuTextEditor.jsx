@@ -1,11 +1,15 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useEffect, useMemo, useState } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import { postApi } from '../../services/api';
 import useImageUpload from '../../hooks/useImageUpload';
 import useForestStore from '../../store/useForestStore';
 import { textToIcon, textToKorean } from '../Util/Util';
-
+import './Modal.css';
 const DaenamuTextEditor = () => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [showEmojis, setShowEmojis] = useState(false);
+
+	const emojis = ['📄', '🔜', '🖥️', '🔜', '😊'];
 	const {
 		title,
 		content,
@@ -37,6 +41,14 @@ const DaenamuTextEditor = () => {
 
 	const { handleImageUpload, loading } = useImageUpload();
 
+	useEffect(() => {
+		if (isModalOpen) {
+			setTimeout(() => {
+				setIsModalOpen(false);
+				handleSubmit();
+			}, 3000);
+		}
+	}, [isModalOpen]);
 	return (
 		<>
 			<h3 className="font-semibold">제목</h3>
@@ -79,18 +91,21 @@ const DaenamuTextEditor = () => {
 
 				{loading && <div>이미지 업로드 중...</div>}
 				<div className="flex flex-col space-y-2">
-					<div className="justify-end flex flex-row space-x-2">
+					<div className="items-end justify-end flex flex-row space-x-2">
 						{mood && (
-							<div className="text-lg">
+							<div className="mb-2 text-sm md:text-lg">
 								게시글 분석 결과 : {textToKorean[mood]}
 								{textToIcon[mood]}
 							</div>
 						)}
 						<div className="flex flex-col">
 							<button
-								onClick={handleSubmit}
+								onClick={() => {
+									setIsModalOpen(true);
+									setShowEmojis(true);
+								}}
 								disabled={content?.length <= 16}
-								className="mt-3 w-40 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								className="mt-3 w-40 bg-blue-400 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 							>
 								감정 분석하기
 							</button>
@@ -98,6 +113,20 @@ const DaenamuTextEditor = () => {
 								<p className="text-right text-red-400 text-sm mb-2">
 									10자 이상 입력해주세요.
 								</p>
+							)}
+
+							{isModalOpen && (
+								<div className="modal-overlay">
+									<div className="modal-content">
+										<div className="emoji-container">
+											{emojis.map((emoji, index) => (
+												<span key={index} className={`emoji delay-${index}`}>
+													{emoji}
+												</span>
+											))}
+										</div>
+									</div>
+								</div>
 							)}
 						</div>
 					</div>

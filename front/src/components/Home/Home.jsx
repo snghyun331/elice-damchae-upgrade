@@ -10,6 +10,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { postApi } from '../../services/api';
 import toast from 'react-hot-toast';
+import { Element } from 'react-scroll';
 
 const Home = () => {
 	useEffect(() => {
@@ -99,7 +100,9 @@ const Home = () => {
 		<div>
 			<div className="z-50">
 				<div className="space-y-5 lg:pt-12">
-					<BannerCarousel />
+					<div data-aos="flip-left">
+						<BannerCarousel />
+					</div>
 
 					<div
 						data-aos="zoom-in"
@@ -112,7 +115,9 @@ const Home = () => {
 				<hr className="mt-10" />
 
 				<div className="mx-4 sm:mx-10 md:mx-20 lg:mx-40" data-aos="fade-right">
-					<div className="mt-10 text-3xl font-semibold">우리들의 스토리</div>
+					<div className="mt-10 text-3xl font-semibold">
+						<Element name="scrollToThisDiv">우리들의 스토리</Element>
+					</div>
 					<div className="mt-20 items-center">
 						<Search endpoint="stories" />
 					</div>

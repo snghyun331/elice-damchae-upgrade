@@ -41,9 +41,9 @@ const CommentBox = ({ fetchComment, commentData, onDelete, onEdit }) => {
 	};
 
 	return (
-		<article className="p-5 mb-6 text-sm bg-white rounded-lg dark:bg-gray-900">
+		<article className="p-3 md:p-5 mb-6 text-sm bg-white rounded-lg dark:bg-gray-900">
 			<footer className="flex justify-between mb-2">
-				<div className="space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 dark:text-white">
+				<div className="whitespace-nowrap space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 dark:text-white">
 					<div className="relative">
 						{' '}
 						<img
@@ -71,20 +71,20 @@ const CommentBox = ({ fetchComment, commentData, onDelete, onEdit }) => {
 				</div>
 
 				{commentData.writerId._id === id && (
-					<div className="justify-end">
+					<div className="flex flex-col md:flex-row justify-end">
 						{editMode ? (
 							<>
 								<button
 									onClick={handleCancelEdit}
 									type="button"
-									className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+									className="whitespace-nowrap py-1 px-3 mr-2 mb-2 text-xs md:text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 								>
 									취소
 								</button>
 								<button
 									onClick={handleSaveEdit}
 									type="button"
-									className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+									className="whitespace-nowrap py-1 px-3 mr-2 mb-2 text-xs md:text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 								>
 									저장
 								</button>
@@ -94,14 +94,14 @@ const CommentBox = ({ fetchComment, commentData, onDelete, onEdit }) => {
 								<button
 									onClick={handleEdit}
 									type="button"
-									className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+									className="whitespace-nowrap py-1 px-3 mr-2 mb-2 text-xs md:text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 								>
 									수정
 								</button>
 								<button
 									onClick={handleDelete}
 									type="button"
-									className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+									className="whitespace-nowrap py-1 px-3 mr-2 mb-2 text-xs md:text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 								>
 									삭제
 								</button>

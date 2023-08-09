@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useForestStore from '../../store/useForestStore';
 import DaenamuTextEditor from './DaenamuTextEditor';
 import { postApi } from '../../services/api';
 
 const DaenamusWrite = () => {
+	const navigate = useNavigate();
 	const { title, content, mood } = useForestStore();
 
 	const isFormValid = useMemo(
@@ -17,11 +19,9 @@ const DaenamusWrite = () => {
 		try {
 			const post = { title, content, mood };
 
-			const response = await postApi('forest', post);
-			console.log(response.data);
-			setTimeout(() => {
-				window.location.href = '/daenamus';
-			}, 50);
+			const res = await postApi('forest', post);
+			console.log(res.data);
+			navigate(`/daenamus/${res.data._id}`);
 		} catch (e) {
 			console.error(e);
 		}
@@ -40,7 +40,7 @@ const DaenamusWrite = () => {
 							disabled={!isFormValid}
 							onClick={postForest}
 							type="button"
-							className="w-40 self-end bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+							className="w-40 self-end bg-blue-400 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 						>
 							작성 완료
 						</button>

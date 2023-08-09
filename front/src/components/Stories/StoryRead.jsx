@@ -130,7 +130,7 @@ const StoryRead = () => {
 								<>
 									<button
 										onClick={handleConfirm}
-										className="ml-2 text-white underline underline-offset-2 text-red-400"
+										className="py-1 px-3 mt-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 									>
 										삭제
 									</button>

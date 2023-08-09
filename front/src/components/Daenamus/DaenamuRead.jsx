@@ -76,7 +76,7 @@ const DaenamuRead = () => {
 		setEditMode(true);
 		setTitle(forest.title);
 		setContent(forest.content);
-		setMood(forest.mood);
+		setMood('');
 	};
 
 	const handleCancelEdit = () => {
@@ -127,13 +127,20 @@ const DaenamuRead = () => {
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleCancelEdit}
-										className="underline underline-offset-2 text-red-400"
+										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 									>
 										취소
 									</button>
 									<button
-										onClick={handleSaveEdit}
-										className="ml-2 underline underline-offset-2 text-blue-400"
+										onClick={
+											mood
+												? () => handleSaveEdit()
+												: () =>
+														toast.error(
+															'글 수정 후 감정분석을 마쳐야 저장할 수 있습니다.',
+														)
+										}
+										className="disabled:bg-gray-100 py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 									>
 										저장
 									</button>
@@ -142,13 +149,13 @@ const DaenamuRead = () => {
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleEdit}
-										className="justify-end underline underline-offset-2 text-black"
+										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 									>
 										수정
 									</button>
 									<button
 										onClick={handleConfirm}
-										className="justify-end ml-2 underline underline-offset-2 text-black"
+										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 									>
 										삭제
 									</button>
@@ -219,7 +226,7 @@ const DaenamuRead = () => {
 				</div>
 				<div className="flex flex-col">
 					<DaenamuLikeSection forestId={forest._id} userId={id} />
-					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
+					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
 					{commentList && commentList.length > 0 ? (
 						<div>
 							<ReactionChart commentList={commentList} forestId={forestId} />
@@ -227,8 +234,7 @@ const DaenamuRead = () => {
 					) : (
 						<div></div>
 					)}
-
-					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
+					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
 					<div>
 						<DaenamuComment forestId={forestId} />
 					</div>
