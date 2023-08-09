@@ -5,13 +5,10 @@ import { mbtiList } from '../Util/Util';
 import { useNavigate } from 'react-router-dom';
 import { useIsLoggedIn } from '../../store/useUserStore';
 import useForestStore from '../../store/useForestStore';
-import { getApi } from '../../services/api';
 
 const DaenamusMain = () => {
 	const {
 		reset,
-		forests,
-		setForests,
 		fetchFilteredForests,
 		fetchForests,
 		fetchPopularFilteredForests,

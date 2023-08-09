@@ -1,6 +1,6 @@
 import MyDaenamuCard from './MyDaenamuCard';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
-import PropTypes from 'prop-types';
+
 import { getApi } from '../../services/api';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 
 const MyLikedDaenamus = () => {
 	const [forests, setForests] = useState([]);
-	const [isDataLoading, setIsDataLoading] = useState(false);
 
 	const fetchDaenamus = async () => {
 		try {
@@ -17,7 +16,6 @@ const MyLikedDaenamus = () => {
 				.filter((forest) => forest.postId !== null)
 				.map((forest) => forest.postId);
 			setForests(postIdForests);
-			setIsDataLoading(true);
 		} catch (err) {
 			console.log(err);
 		}
