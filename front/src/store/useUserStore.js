@@ -56,7 +56,6 @@ const useUserStore = create((set) => {
 					profileImg: response.data.profileImg,
 					mbtiImg: response.data.mbtiImg,
 				};
-
 				localStorage.setItem('userData', JSON.stringify(userData));
 
 				set(userData);
