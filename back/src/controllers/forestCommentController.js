@@ -50,25 +50,24 @@ class forestCommentController {
         'writerId',
       );
 
-      const calculateMbtisCounts = (mood) => {
-        const writers = populated
-          .filter((doc) => doc.mood === mood)
-          .map((doc) => doc.writerId);
-
-        const allMbtis = writers.map((writer) => writer.mbti);
-
-        return allMbtis.reduce((count, mbti) => {
-          count[mbti] = (count[mbti] || 0) + 1;
-          return count;
-        }, {});
-      };
-
-      const pleasureMbtiCounts = calculateMbtisCounts('pleasure');
-      const insecureMbtiCounts = calculateMbtisCounts('insecure');
-      const sadMbtiCounts = calculateMbtisCounts('sad');
-      const neutralMbtiCounts = calculateMbtisCounts('neutral');
-      const surpriseMbtiCounts = calculateMbtisCounts('surprise');
-      const angerMbtiCounts = calculateMbtisCounts('anger');
+      const pleasureMbtiCounts =
+        await forestCommentService.calculateMbtisCounts('pleasure', populated);
+      const insecureMbtiCounts =
+        await forestCommentService.calculateMbtisCounts('insecure', populated);
+      const sadMbtiCounts = await forestCommentService.calculateMbtisCounts(
+        'sad',
+        populated,
+      );
+      const neutralMbtiCounts = await forestCommentService.calculateMbtisCounts(
+        'neutral',
+        populated,
+      );
+      const surpriseMbtiCounts =
+        await forestCommentService.calculateMbtisCounts('surprise', populated);
+      const angerMbtiCounts = await forestCommentService.calculateMbtisCounts(
+        'anger',
+        populated,
+      );
 
       const result = {
         pleasure: pleasureMbtiCounts,
