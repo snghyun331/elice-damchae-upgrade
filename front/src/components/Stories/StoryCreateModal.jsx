@@ -29,9 +29,7 @@ const StoryCreateModal = ({ onClose }) => {
 
 	const currentDate = moment().format('YYYY년 M월 D일');
 
-	const postStory = async (e) => {
-		e.preventDefault();
-
+	const postStory = async () => {
 		try {
 			const post = { title, content, thumbnail, isPublic, mood, music };
 			console.log(post);
@@ -40,10 +38,10 @@ const StoryCreateModal = ({ onClose }) => {
 				formData.append(key, post[key]);
 			}
 
-			const response = await postApi('stories', formData);
-			console.log(response.data);
+			const res = await postApi('stories', formData);
+
 			onClose();
-			navigate('/stories');
+			navigate(`/stories/${res.data._id}`);
 		} catch (e) {
 			console.error(e);
 		}
@@ -60,7 +58,10 @@ const StoryCreateModal = ({ onClose }) => {
 				</div>
 				<div className="flex justify-end">
 					<button
-						onClick={postStory}
+						onClick={() => {
+							toast.dismiss(t.id);
+							postStory();
+						}}
 						className="text-white px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600"
 					>
 						예

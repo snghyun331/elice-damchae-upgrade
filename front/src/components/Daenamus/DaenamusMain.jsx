@@ -55,12 +55,10 @@ const DaenamusMain = () => {
 
 	const select = (value) => {
 		setSelectedMBTI([...selectedMBTI, value]);
-		console.log('선택');
 	};
 
 	const deselect = (value) => {
 		setSelectedMBTI(selectedMBTI.filter((item) => item !== value));
-		console.log('언세팅');
 	};
 
 	const toggleMBTI = (value) => {
