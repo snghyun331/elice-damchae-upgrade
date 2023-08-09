@@ -67,7 +67,7 @@ const LoginForm = () => {
 							<div className="text-center cursor-pointer">
 								<img
 									onClick={() => navigate('/')}
-									src="images/loginlogo.png"
+									src="/images/loginlogo.png"
 									alt="Login"
 								/>
 							</div>
