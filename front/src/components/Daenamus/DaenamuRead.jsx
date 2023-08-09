@@ -178,7 +178,13 @@ const DaenamuRead = () => {
 										<div className="flex flex-row space-x-2">
 											<img
 												className="rounded-full w-10 h-10 object-cover"
-												src={isDataLoading && forest.userInfo.mbtiImg}
+												src={
+													isDataLoading && forest.userInfo.profileImg
+														? forest.userInfo.profileImg
+														: isDataLoading && forest.userInfo.mbtiImg
+														? forest.userInfo.mbtiImg
+														: '/images/default-image.jpg'
+												}
 												alt=""
 											/>
 											<div className="flex flex-col ">
