@@ -151,7 +151,7 @@ const InfoChange = () => {
 			nicknameToChange,
 			passwordToChange,
 			profileImgToChange,
-			tempMbtiImg
+			tempMbtiImg,
 		],
 	);
 
@@ -234,6 +234,12 @@ const InfoChange = () => {
 
 		setPreview(imageUrl);
 	}, [profileImg, mbtiImg, tempMbtiImg]);
+
+	useEffect(() => {
+		return () => {
+			setTempMbtiImg('');
+		};
+	}, []);
 
 	return (
 		<>
