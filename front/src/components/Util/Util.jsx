@@ -5,13 +5,23 @@ export const classNames = (...classes) => {
 };
 
 //배경색용, 연한 버전
+
+export const textToBorderColor = {
+	insecure: 'border-[#F1E3FF]',
+	surprise: 'border-[#fcf7de]',
+	pleasure: 'border-[#e1f2e2]',
+	sad: 'border-[#ECF1FF]',
+	anger: 'border-[#F9EBDE]',
+	neutral: 'border-[#f5f5f5]',
+};
+
 export const textToColor = {
 	insecure: '#F1E3FF',
-	surprise: '#FFFBB8',
-	pleasure: '#d6f0d7',
+	surprise: '#fcf7de',
+	pleasure: '#e1f2e2',
 	sad: '#ECF1FF',
 	anger: '#F9EBDE',
-	neutral: '#E0E0E0',
+	neutral: '#f5f5f5',
 };
 
 export const textEngToDeepColor = {

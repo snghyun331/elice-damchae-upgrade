@@ -92,17 +92,16 @@ const RegisterForm = () => {
 			isPasswordSame &&
 			isNicknameValid &&
 			nicknameCheck &&
-			Boolean(mbti) &&
-			// isCodeConfirmed,
-		[
-			isEmailValid,
-			isPasswordValid,
-			isPasswordSame,
-			isNicknameValid,
-			nicknameCheck,
-			mbti,
-			code,
-		],
+			Boolean(mbti) && [
+				// isCodeConfirmed,
+				isEmailValid,
+				isPasswordValid,
+				isPasswordSame,
+				isNicknameValid,
+				nicknameCheck,
+				mbti,
+				code,
+			],
 	);
 
 	const user = { email, password, nickname, mbti, mbtiImg: tempMbtiImg };
@@ -187,7 +186,7 @@ const RegisterForm = () => {
 											type="email"
 											name="email"
 											id="email"
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 											placeholder="name@company.com"
 											required=""
 										/>
@@ -200,7 +199,7 @@ const RegisterForm = () => {
 												isCodeConfirmed ||
 												emailButtonDisabled
 											}
-											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-xs"
+											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-lg focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-xs"
 											style={{ height: '45px' }}
 										>
 											인증코드 발송
@@ -227,7 +226,7 @@ const RegisterForm = () => {
 											name="code"
 											id="verification-code"
 											placeholder="인증번호 입력"
-											className="-mt-5 h-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+											className="-mt-5 h-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 											required=""
 										/>
 
@@ -235,7 +234,7 @@ const RegisterForm = () => {
 											type="button"
 											onClick={handleCodeCheck}
 											disabled={!code || isCodeConfirmed}
-											className="-mt-5 flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+											className="-mt-5 flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-lg focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
 											style={{ height: '45px' }}
 										>
 											확인
@@ -270,7 +269,7 @@ const RegisterForm = () => {
 										name="password"
 										id="password"
 										placeholder="••••••••"
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 									/>
 									<p
@@ -299,7 +298,7 @@ const RegisterForm = () => {
 										name="confirmPassword"
 										id="confirm-password"
 										placeholder="••••••••"
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										required=""
 									/>
 
@@ -332,14 +331,14 @@ const RegisterForm = () => {
 											name="nickname"
 											id="nickname"
 											placeholder="강아지"
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 										/>
 
 										<button
 											type="button"
 											onClick={handleNicknameCheck}
 											disabled={!isNicknameValid}
-											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+											className="flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-lg focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
 											style={{ height: '45px' }}
 										>
 											중복 확인
@@ -371,7 +370,7 @@ const RegisterForm = () => {
 										options={mbtiList}
 										placeholder="MBTI 선택"
 										classNamePrefix="react-select"
-										className='mb-3'
+										className="mb-3"
 									/>
 									<ProfilePicker />
 								</div>
@@ -379,7 +378,7 @@ const RegisterForm = () => {
 									<button
 										type="submit"
 										disabled={!isFormValid}
-										className="my-4 w-full flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-sm focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
+										className="my-4 w-full flex items-center justify-center self-end bg-blue-500 text-white font-bold py-2 px-4 h-full rounded-lg focus:outline-none focus:shadow-outline disabled:bg-blue-200 hover:bg-blue-600 w-1/3 text-sm"
 										style={{ height: '45px' }}
 									>
 										가입하기
