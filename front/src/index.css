@@ -14,6 +14,6 @@ body {
 .toastui-editor-contents h5,
 .toastui-editor-contents h6 {
 	margin: 0px !important;
-	font-family: 'Noto Sans KR';
+	font-family: 'Noto Sans KR', 'sans-serif';
 	font-size: 1.0rem;
 }

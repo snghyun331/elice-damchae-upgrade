@@ -146,7 +146,7 @@ const StoryRead = () => {
 							</div>
 						</div>
 
-						<div className="relative -top-20 p-10">
+						<div className="relative -top-20 p-10 my-8">
 							{isDataLoading && <Viewer initialValue={story.content} />}
 						</div>
 
