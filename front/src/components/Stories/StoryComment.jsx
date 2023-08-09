@@ -104,8 +104,8 @@ const StoryComment = ({ storyId }) => {
 
 			<div>
 				{commentCount === 0 ? (
-					<p>등록된 댓글이 없습니다.</p>
-				) : (
+					<p className="text-center text-sm">등록된 댓글이 없습니다.</p>
+					) : (
 					commentList.map((commentData) => (
 						<div key={commentData._id}>
 							<CommentBox
@@ -118,15 +118,17 @@ const StoryComment = ({ storyId }) => {
 				)}
 			</div>
 
-			<div className="flex justify-center mt-10">
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPage}
-					prev={prev}
-					next={next}
-					go={go}
-				/>
-			</div>
+			{commentCount !== 0 ? (
+				<div className="flex justify-center mt-10">
+					<Pagination
+						currentPage={currentPage}
+						totalPages={totalPage}
+						prev={prev}
+						next={next}
+						go={go}
+					/>
+				</div>
+			) : null}
 		</div>
 	);
 };
