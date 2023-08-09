@@ -124,6 +124,9 @@ class forestModel {
           $unwind: '$userInfo',
         },
         {
+          $sort: { createdAt: -1 },
+        },
+        {
           $match: matchQuery,
         },
         {

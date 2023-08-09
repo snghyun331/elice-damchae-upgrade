@@ -234,7 +234,10 @@ class ForestController {
         throw new Error('스토리를 찾을 수 없습니다');
       }
 
-      const result = await ForestService.populateForestPost(forestInfo, 'user');
+      const result = await ForestService.populateForestPost(
+        forestInfo,
+        'userInfo',
+      );
       return res.status(200).json(result);
     } catch (error) {
       next(error);
