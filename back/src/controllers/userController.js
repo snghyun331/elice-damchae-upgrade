@@ -60,10 +60,12 @@ class userAuthController {
           isGoogleLogin,
         });
 
-        const result = await userService.populateUserProfile(
-          newUser,
-          'profileImg',
-        );
+        const options = {
+          path: 'profileImg',
+          select: 'path',
+        };
+
+        const result = await userService.populateUserProfile(newUser, options);
 
         return res.status(201).json(result);
       }
@@ -129,7 +131,14 @@ class userAuthController {
           isGoogleLogin,
         });
 
-        return res.status(201).json(newUser);
+        const options = {
+          path: 'profileImg',
+          select: 'path',
+        };
+
+        const result = await userService.populateUserProfile(newUser, options);
+
+        return res.status(201).json(result);
       }
     } catch (error) {
       res
@@ -155,7 +164,14 @@ class userAuthController {
         throw new Error('Google 로그인으로 진행하세요.');
       }
 
-      return res.status(200).send(user);
+      const options = {
+        path: 'profileImg',
+        select: 'path',
+      };
+
+      const result = await userService.populateUserProfile(user, options);
+
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
@@ -173,7 +189,14 @@ class userAuthController {
         throw new Error(user.errorMessage);
       }
 
-      return res.status(200).send(user);
+      const options = {
+        path: 'profileImg',
+        select: 'path',
+      };
+
+      const result = await userService.populateUserProfile(user, options);
+
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
@@ -255,9 +278,14 @@ class userAuthController {
         };
         const updatedUser = await userService.updateUser({ userId, toUpdate });
 
+        const options = {
+          path: 'profileImg',
+          select: 'path',
+        };
+
         const result = await userService.populateUserProfile(
           updatedUser,
-          'profileImg',
+          options,
         );
 
         return res.status(200).json(result);

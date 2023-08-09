@@ -142,10 +142,18 @@ class storyPostController {
         throw new Error('스토리를 찾을 수 없습니다');
       }
 
-      const result = await storyPostService.populateStoryPost(
+      // const result = await storyPostService.populateStoryPost(
+      //   storyInfo,
+      //   'userInfo thumbnail',
+      // );
+
+      const result = await storyPostService.populateStoryPostInfo(
         storyInfo,
-        'userInfo thumbnail',
+        'userInfo',
+        'profileImg',
+        'thumbnail',
       );
+
       return res.status(200).json(result);
     } catch (error) {
       next(error);

@@ -303,9 +303,10 @@ class userService {
     return loginUser;
   }
 
-  static async populateUserProfile(user, path) {
-    const field = { path: path };
-    const result = User.populateUserImg(user, field);
+  static async populateUserProfile(user, options) {
+    const { path, select } = options;
+    const field = { path: path, select: select };
+    const result = await User.populateUserImg(user, field);
     return result;
   }
 }

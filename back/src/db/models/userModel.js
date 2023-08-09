@@ -72,8 +72,8 @@ class User {
     return users;
   }
 
-  static async populateUserImg(user, field) {
-    const result = UserModel.populate(user, field);
+  static async populateUserImg(user, options) {
+    const result = UserModel.populate(user, options);
     return result;
   }
 }
