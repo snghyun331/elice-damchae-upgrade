@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Search from '../Global/Search';
 import StoryCreateModal from './StoryCreateModal';
 import StoryCardMap from '../Global/StoryCardMap';
 import useStoryStore from '../../store/useStoryStore';

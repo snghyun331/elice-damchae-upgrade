@@ -3,6 +3,7 @@ import usePagination from '../../hooks/usePagination';
 import StoryCard from './StoryCard';
 import Pagination from './Pagination';
 import { getApi } from '../../services/api';
+import PropTypes from 'prop-types';
 
 const StoryCardMap = ({ endpoint }) => {
 	const [stories, setStories] = useState([]);
@@ -61,6 +62,10 @@ const StoryCardMap = ({ endpoint }) => {
 			</div>
 		</>
 	);
+};
+
+StoryCardMap.propTypes = {
+	endpoint: PropTypes.string.isRequired, // endpoint는 문자열이고 필수
 };
 
 export default StoryCardMap;
