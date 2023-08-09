@@ -2,7 +2,7 @@ import MyCalendar from './MyCalendar';
 import MyMainMood from './MyMainMood';
 import MyMoodStat from './MyMoodStat';
 import MyDaenamus from './MyDaenamus';
-import MyLikedDaenamus  from './MyLikedDaenamus'
+import MyLikedDaenamus from './MyLikedDaenamus';
 import MyComments from './MyComments';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
@@ -16,7 +16,6 @@ const MyPage = () => {
 	];
 
 	const [posts, setPosts] = useState([]);
-
 	const fetchData = async () => {
 		try {
 			const response = await getApi('stories/my/calendar');
@@ -56,7 +55,7 @@ const MyPage = () => {
 					<div className="md:w-1/2 lg:w-1/2 px-3">
 						<div className="md:flex md:flex-col md:h-full">
 							<div className="pt-5">
-								{posts && <MyMainMood posts={posts} />}
+								<MyMainMood posts={posts} />
 							</div>
 							<div className="pt-4">
 								<MyMoodStat />

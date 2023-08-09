@@ -161,3 +161,7 @@ export const passwordRegex =
 	/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
 
 export const nicknameRegex = /^[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,16}$/;
+
+export const isEmpty = (obj) => {
+	return Object.keys(obj).length === 0;
+};
