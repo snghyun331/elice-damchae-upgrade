@@ -21,7 +21,7 @@ const RegisterForm = () => {
 		code,
 		errMsg,
 		nicknameCheck,
-		mbtiImg,
+		tempMbtiImg,
 
 		setEmail,
 		setPassword,
@@ -105,13 +105,13 @@ const RegisterForm = () => {
 		],
 	);
 
-	const user = { email, password, nickname, mbti, mbtiImg };
+	const user = { email, password, nickname, mbti, mbtiImg: tempMbtiImg };
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
 			await register(user);
-			toast(`${user.nickname} 님, DAMCHAE 회원가입을 축하합니다!`, {
+			toast(`${user.nickname} 님, 회원가입을 축하합니다!`, {
 				icon: '👏',
 			});
 			navigate('/login');
@@ -172,7 +172,6 @@ const RegisterForm = () => {
 							<h1 className="text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
 								회원가입
 							</h1>
-							<ProfilePicker />
 							<form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
 								<div className="flex flex-col">
 									<label
@@ -372,7 +371,9 @@ const RegisterForm = () => {
 										options={mbtiList}
 										placeholder="MBTI 선택"
 										classNamePrefix="react-select"
+										className='mb-3'
 									/>
+									<ProfilePicker />
 								</div>
 								<div className="flex flex-col">
 									<button

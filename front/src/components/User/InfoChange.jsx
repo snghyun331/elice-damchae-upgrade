@@ -24,14 +24,17 @@ const InfoChange = () => {
 		mbti,
 		isGoogleLogin,
 		profileImg,
+		mbtiImg,
+		tempMbtiImg,
+
 		setNickname,
 		setMbti,
 		setProfileImg,
+		setMbtiImg,
+		setTempMbtiImg,
 	} = useUserStore();
 
-	console.log(profileImg);
-
-	const [preview, setPreview] = useState(profileImg);
+	const [preview, setPreview] = useState(profileImg ? profileImg : mbtiImg);
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
@@ -106,7 +109,6 @@ const InfoChange = () => {
 		}
 	}, [nicknameToChange]);
 
-	console.log(preview);
 	const handleSubmit = useCallback(
 		async (e) => {
 			e.preventDefault();
@@ -114,6 +116,7 @@ const InfoChange = () => {
 				email,
 				...(passwordToChange !== '' && { password: passwordToChange }),
 				profileImg: profileImgToChange,
+				mbtiImg: tempMbtiImg,
 				nickname: nicknameToChange,
 				mbti: mbtiToChange.value,
 			};
@@ -148,29 +151,29 @@ const InfoChange = () => {
 			nicknameToChange,
 			passwordToChange,
 			profileImgToChange,
+			tempMbtiImg,
 		],
 	);
 
 	const handleConfirm = () => {
 		toast((t) => (
-			<div className="rounded p-4">
+			<div className="rounded p-8">
 				<div>정말로 탈퇴하시겠습니까?</div>
-				<div className="mt-3 flex justify-end">
+				<div className="mt-5 flex justify-center">
 					<button
 						onClick={() => {
 							handleOut();
 							toast.dismiss(t.id);
 						}}
-						className="text-white px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600"
+						className="text-white w-16 px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600 text-sm"
 					>
 						예
 					</button>
 					<button
 						onClick={() => {
 							toast.dismiss(t.id);
-							// 필요한 후속 동작 수행
 						}}
-						className="text-white px-2 py-1 rounded bg-red-500 hover:bg-red-600"
+						className="text-white w-16 px-2 py-1 rounded bg-red-500 hover:bg-red-600 text-sm"
 					>
 						아니오
 					</button>
@@ -215,6 +218,26 @@ const InfoChange = () => {
 		}
 	}, [profileImg]);
 
+	useEffect(() => {
+		let imageUrl;
+
+		if (tempMbtiImg) {
+			imageUrl = tempMbtiImg;
+		} else if (profileImg) {
+			imageUrl = profileImg;
+		} else {
+			imageUrl = defaultUser;
+		}
+
+		setPreview(imageUrl);
+	}, [profileImg, mbtiImg, tempMbtiImg]);
+
+	useEffect(() => {
+		return () => {
+			setTempMbtiImg('');
+		};
+	}, []);
+
 	return (
 		<>
 			<section className="">
@@ -228,7 +251,7 @@ const InfoChange = () => {
 								<div className="flex justify-center">
 									<img
 										className="w-32 h-32 rounded-full border -mb-2"
-										src={preview !== '' ? preview : defaultUser}
+										src={preview ? preview : defaultUser}
 										alt="Rounded avatar"
 									/>
 								</div>
@@ -404,15 +427,15 @@ const InfoChange = () => {
 									>
 										수정하기
 									</button>
-									<hr className="my-8" />
-									<button
-										onClick={handleConfirm}
-										className="text-sm text-red-600 underline ml-auto"
-									>
-										회원 탈퇴
-									</button>
+									<hr className="mt-8" />
 								</div>
 							</form>
+							<button
+								onClick={handleConfirm}
+								className="text-sm text-red-600 underline flex ml-auto"
+							>
+								회원 탈퇴
+							</button>
 						</div>
 					</div>
 				</div>

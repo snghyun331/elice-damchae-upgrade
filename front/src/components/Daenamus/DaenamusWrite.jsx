@@ -31,9 +31,9 @@ const DaenamusWrite = () => {
 			<header>{/* 헤더 컴포넌트 */}</header>
 
 			<div className="container mx-auto px-4">
-				<h2 className="text-3xl font-bold mb-4">글쓰기</h2>
+				<h2 className="text-3xl font-bold mb-4 my-16">대나무숲 작성하기</h2>
 
-				<div className="mt-8">
+				<div className="mt-12">
 					<DaenamuTextEditor />
 					<div className="mt-3 justify-end flex flex-col">
 						<button
@@ -46,7 +46,7 @@ const DaenamusWrite = () => {
 						</button>
 						{!isFormValid && (
 							<p className="self-end text-red-400 text-sm">
-								빈 칸을 채워주세요.
+								제목 · 본문을 작성한 후 '감정 분석하기'를 눌러주세요.
 							</p>
 						)}
 					</div>

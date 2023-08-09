@@ -36,9 +36,16 @@ const MyMainMood = ({ posts }) => {
 			<h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 				{currentMonth}월의 주요 감정
 			</h5>
-			<p className="text-7xl text-gray-700 dark:text-gray-400">
-				{textToIcon[mainMood]}
-			</p>
+			{!posts ? (
+									<p className="px-10 py-12 text-center text-sm text-gray-600 dark:text-gray-200">
+									아직 스토리를 쓰지 않았습니다. <br />
+									스토리를 쓰고 나의 주요 감정을 확인해보세요.
+								</p>
+			) : (
+				<p className="text-7xl text-gray-700 dark:text-gray-400">
+					{textToIcon[mainMood]}
+				</p>
+			)}
 		</div>
 	);
 };
