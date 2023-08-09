@@ -40,7 +40,7 @@ const DaenamusWrite = () => {
 							disabled={!isFormValid}
 							onClick={postForest}
 							type="button"
-							className="w-40 self-end bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+							className="w-40 self-end bg-blue-400 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 						>
 							작성 완료
 						</button>

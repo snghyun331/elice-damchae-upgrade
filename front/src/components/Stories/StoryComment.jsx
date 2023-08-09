@@ -4,7 +4,7 @@ import CommentBox from '../Global/CommentBox';
 import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../Global/Pagination';
-import toast from 'react-hot-toast'
+import toast from 'react-hot-toast';
 
 const StoryComment = ({ storyId }) => {
 	const [commentList, setCommentList] = useState('');
@@ -73,7 +73,7 @@ const StoryComment = ({ storyId }) => {
 			fetchComment();
 		} catch (error) {
 			console.log(error.response.data.errorMessage);
-			toast.error(error.response.data)
+			toast.error(error.response.data);
 		}
 	};
 	return (
@@ -95,7 +95,7 @@ const StoryComment = ({ storyId }) => {
 
 				<button
 					disabled={!comment}
-					className="h-16 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-500 disabled:bg-neutral-300 rounded-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+					className="whitespace-nowrap h-16 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-500 disabled:bg-neutral-300 rounded-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 					onClick={handleSubmit}
 				>
 					등록
@@ -105,7 +105,7 @@ const StoryComment = ({ storyId }) => {
 			<div>
 				{commentCount === 0 ? (
 					<p className="text-center text-sm">등록된 댓글이 없습니다.</p>
-					) : (
+				) : (
 					commentList.map((commentData) => (
 						<div key={commentData._id}>
 							<CommentBox
