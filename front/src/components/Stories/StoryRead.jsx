@@ -105,37 +105,37 @@ const StoryRead = () => {
 							}
 							alt=""
 						/>
-						<div className="absolute inset-0 bg-black opacity-60">
-							<div className="ms-4 mt-4 absolute top-1 left-1 p-4 z-10 max-w-md">
-								<p className="text-white mb-1">
-									{isDataLoading && formatDate(story.createdAt)}
-								</p>
-								<h5 className="leading-loose text-white text-2xl font-bold">
-									{story.title}
-								</h5>
-							</div>
-							<div className="text-sm text-end absolute top-1 right-1 mt-4 me-4">
-								<p className="text-white mb-1">
-									{isDataLoading && story.isPublic && <>조회 {story.views}</>}
-									{isDataLoading && !story.isPublic && (
-										<LockClosedIcon
-											data-tooltip-id="tooltip"
-											data-tooltip-content="나만 볼 수 있는 스토리입니다."
-											className="w-4 inline mb-0.5"
-										/>
-									)}
-								</p>
-								{isDataLoading && story.userInfo._id == id && (
-									<>
-										<button
-											onClick={handleConfirm}
-											className="ml-2 text-white underline underline-offset-2 text-red-400"
-										>
-											삭제
-										</button>
-									</>
+						<div className="absolute inset-0 bg-black opacity-50"></div>
+
+						<div className="ms-4 mt-4 absolute top-1 left-1 p-4 z-10 max-w-md">
+							<p className="text-white mb-1">
+								{isDataLoading && formatDate(story.createdAt)}
+							</p>
+							<h5 className="leading-loose text-white text-2xl font-bold">
+								{story.title}
+							</h5>
+						</div>
+						<div className="text-sm text-end absolute top-1 right-1 mt-4 me-4">
+							<p className="text-white mb-1">
+								{isDataLoading && story.isPublic && <>조회 {story.views}</>}
+								{isDataLoading && !story.isPublic && (
+									<LockClosedIcon
+										data-tooltip-id="tooltip"
+										data-tooltip-content="나만 볼 수 있는 스토리입니다."
+										className="w-4 inline mb-0.5"
+									/>
 								)}
-							</div>
+							</p>
+							{isDataLoading && story.userInfo._id == id && (
+								<>
+									<button
+										onClick={handleConfirm}
+										className="ml-2 text-white underline underline-offset-2 text-red-400"
+									>
+										삭제
+									</button>
+								</>
+							)}
 						</div>
 					</div>
 
