@@ -42,7 +42,6 @@ const ProfilePicker = () => {
 	const handleProfileClick = (imageURL) => {
 		setTempMbtiImg(imageURL);
 	};
-	console.log(tempMbtiImg);
 	if (!mbti) {
 		return (
 			<div>

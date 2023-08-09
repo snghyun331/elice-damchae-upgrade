@@ -151,6 +151,7 @@ const InfoChange = () => {
 			nicknameToChange,
 			passwordToChange,
 			profileImgToChange,
+			tempMbtiImg
 		],
 	);
 
