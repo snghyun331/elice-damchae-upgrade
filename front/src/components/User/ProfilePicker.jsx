@@ -29,7 +29,6 @@ const profileData = {
 	INFJ: getImages('INFJ'),
 	ENFP: getImages('ENFP'),
 };
-console.log(profileData);
 const ProfilePicker = () => {
 	const { mbti, tempMbtiImg, setTempMbtiImg } = useUserStore();
 	useEffect(() => {
@@ -41,7 +40,7 @@ const ProfilePicker = () => {
 	const handleProfileClick = (imageURL) => {
 		setTempMbtiImg(imageURL);
 	};
-	if (!mbti) {
+	if (!mbti || mbti === '미설정') {
 		return (
 			<div>
 				<label
@@ -56,9 +55,6 @@ const ProfilePicker = () => {
 			</div>
 		);
 	}
-
-	console.log(mbti);
-
 	return (
 		<div>
 			<label
