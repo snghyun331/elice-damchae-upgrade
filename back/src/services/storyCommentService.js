@@ -1,21 +1,33 @@
 import { storyCommentModel } from '../db/models/storyCommentModel.js';
 import { storyPostModel } from '../db/models/storyPostModel.js';
+import mongoose from 'mongoose';
 
 class storyCommentService {
   static async createStoryComment({ storyId, writerId, comment, mood }) {
-    if (!comment) {
-      throw new Error('댓글을 입력해주세요');
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      if (!comment) {
+        throw new Error('댓글을 입력해주세요');
+      }
+
+      const newComment = { storyId, writerId, comment, mood };
+
+      storyPostModel.findAndIncreaseCommentCount({ storyId });
+
+      const createdNewComment = await storyCommentModel.createStoryComment({
+        newComment,
+      });
+
+      // 트랜잭션 커밋
+      await session.commitTransaction();
+      session.endSession();
+      return createdNewComment;
+    } catch (error) {
+      // 트랜잭션 롤백
+      await session.abortTransaction();
+      session.endSession();
     }
-
-    const newComment = { storyId, writerId, comment, mood };
-
-    storyPostModel.findAndIncreaseCommentCount({ storyId });
-
-    const createdNewComment = await storyCommentModel.createStoryComment({
-      newComment,
-    });
-
-    return createdNewComment;
   }
 
   static async updateStoryComment({ commentId, toUpdate }) {
@@ -49,17 +61,29 @@ class storyCommentService {
   }
 
   static async deleteStoryComment({ commentId }) {
-    const commentInfo = await storyCommentModel.findOneByCommentId({
-      commentId,
-    });
-    const storyId = commentInfo.storyId;
-    storyPostModel.findAndDecreaseCommentCount({ storyId });
-    let isDeleted = await storyCommentModel.deleteOneByCommentId({ commentId });
-    if (!isDeleted) {
-      throw new Error('삭제할 댓글 정보가 없습니다.');
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const commentInfo = await storyCommentModel.findOneByCommentId({
+        commentId,
+      });
+      const storyId = commentInfo.storyId;
+      storyPostModel.findAndDecreaseCommentCount({ storyId });
+      let isDeleted = await storyCommentModel.deleteOneByCommentId({
+        commentId,
+      });
+      if (!isDeleted) {
+        throw new Error('삭제할 댓글 정보가 없습니다.');
+      }
+      // 트랜잭션 커밋
+      await session.commitTransaction();
+      session.endSession();
+      return { result: 'Success' };
+    } catch (error) {
+      // 트랜잭션 롤백
+      await session.abortTransaction();
+      session.endSession();
     }
-
-    return { result: 'Success' };
   }
 
   static async populateStoryComment(info, path) {
@@ -84,11 +108,7 @@ class storyCommentService {
 
     const commentWriterId = comments.writerId;
 
-    if (loginUserId == commentWriterId) {
-      return true;
-    } else {
-      return false;
-    }
+    return loginUserId == commentWriterId;
   }
 }
 
