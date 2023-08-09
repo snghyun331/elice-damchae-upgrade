@@ -121,7 +121,7 @@ const DaenamuRead = () => {
 			>
 				{' '}
 				<div className="justify-end">
-					{isDataLoading && forest.userInfo == id && (
+					{isDataLoading && forest.userInfo._id == id && (
 						<>
 							{editMode ? (
 								<div className="mr-4 mt-4 flex flex-row justify-end">
@@ -177,11 +177,8 @@ const DaenamuRead = () => {
 									<div className="w-full justify-between space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 dark:text-white">
 										<div className="flex flex-row space-x-2">
 											<img
-												className="w-10 h-10 object-cover"
-												// src={isDataLoading && forest.userInfo.profileImg}
-												src={
-													'https://png.pngtree.com/png-vector/20191115/ourmid/pngtree-beautiful-profile-line-vector-icon-png-image_1990469.jpg'
-												}
+												className="rounded-full w-10 h-10 object-cover"
+												src={isDataLoading && forest.userInfo.mbtiImg}
 												alt=""
 											/>
 											<div className="flex flex-col ">

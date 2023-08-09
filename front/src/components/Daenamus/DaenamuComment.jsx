@@ -107,7 +107,7 @@ const DaenamuComment = ({ forestId }) => {
 				{commentCount === 0 ? (
 					<p className="text-center text-sm">등록된 댓글이 없습니다.</p>
 				) : (
-					commentList.map((commentData) => (
+					commentList?.map((commentData) => (
 						<div key={commentData._id}>
 							<CommentBox
 								fetchComment={fetchComment}

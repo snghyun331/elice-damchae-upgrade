@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useUserId } from '../../store/useUserStore';
 import StoryComment from './StoryComment';
 import BackButton from '../Global/BackButton';
+import BackButton from '../Global/BackButton';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
 
@@ -154,6 +155,7 @@ const StoryRead = () => {
 							<div className="w-12 h-12 mx-auto -mt-24 rounded-full overflow-hidden">
 								<img
 									className="w-full h-full object-cover"
+<<<<<<< HEAD
 									src={
 										isDataLoading && story.userInfo.profileImg
 											? story.userInfo.profileImg
@@ -161,6 +163,9 @@ const StoryRead = () => {
 											? story.userInfo.mbtiImg
 											: '/images/default-image.jpg'
 									}
+=======
+									src={isDataLoading && story.userInfo.mbtiImg}
+>>>>>>> 77f34b16e8ad9115b008e2de9ed9c4d11d014c06
 									alt="작성자 프로필 이미지"
 								/>
 							</div>

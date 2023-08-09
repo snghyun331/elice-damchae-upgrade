@@ -45,8 +45,6 @@ const StoryCreateModal = ({ onClose }) => {
 		} catch (e) {
 			console.error(e);
 		}
-
-		//TODO:모달로 바꾸기
 	};
 	const handleConfirm = () => {
 		toast((t) => (
@@ -166,7 +164,7 @@ const StoryCreateModal = ({ onClose }) => {
 									{!isFormValid && (
 										<div className="mr-3 items-center">
 											<p className="self-end text-red-500 text-sm mt-2">
-												빈 칸을 채워주세요.
+												글 작성 후 감정분석이 완료되어야 업로드가 가능합니다.
 											</p>
 										</div>
 									)}
