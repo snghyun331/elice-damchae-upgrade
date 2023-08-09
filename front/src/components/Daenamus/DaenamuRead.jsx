@@ -114,7 +114,7 @@ const DaenamuRead = () => {
 		<div className={`w-4/5 max-w-2xl mx-auto dark:bg-gray-800`}>
 			<BackButton />
 			<div
-				className={`w-full max-w-2xl border border-gray-200 rounded-lg shadow mx-auto bg-white dark:bg-gray-800`}
+				className={`w-full max-w-2xl border border-gray-400 rounded-lg shadow mx-auto bg-white dark:bg-gray-800`}
 				style={{
 					backgroundColor: isDataLoading ? textToColor[forest.mood] : '#FFFFFF',
 				}}

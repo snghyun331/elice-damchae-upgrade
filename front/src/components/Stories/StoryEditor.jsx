@@ -196,7 +196,7 @@ const StoryEditor = () => {
 							<button
 								onClick={generateImage}
 								disabled={content?.length <= 16}
-								className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+								className="w-full h-10 bg-blue-400 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
 							>
 								이미지 생성하기
 							</button>
@@ -247,7 +247,7 @@ const StoryEditor = () => {
 					<button
 						onClick={recommend}
 						disabled={content?.length <= 16}
-						className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+						className="w-full h-10 bg-blue-400 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
 					>
 						감정 분석하고 음악 추천받기
 					</button>

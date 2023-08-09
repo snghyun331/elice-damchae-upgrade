@@ -103,7 +103,7 @@ const Home = () => {
 
 					<div
 						data-aos="zoom-in"
-						className="p-6 md:p-10 mt-16 mb-16 flex justify-center items-center flex-col"
+						className="p-6 text-md md:text-lg md:p-10 mt-16 mb-16 flex justify-center items-center flex-col"
 					>
 						{messageDiv}
 					</div>

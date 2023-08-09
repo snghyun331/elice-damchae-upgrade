@@ -9,6 +9,7 @@ import {
 
 import {
 	textToIcon,
+	textToBorderColor,
 	truncateString,
 	formatRelativeTime,
 	removeTag,
@@ -31,7 +32,9 @@ const DaenamuCard = ({
 		<div className="rounded-xl h-full">
 			{/* 클릭 시 해당 카드의 상세 페이지로 이동하는 Link 컴포넌트로 감싸기 */}
 			<Link to={`/daenamus/${_id}`}>
-				<div className="h-full flex flex-col max-w-sm p-6 bg-white border-[0.2rem] border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+				<div
+					className={`h-full flex flex-col max-w-sm p-6 ${textToBorderColor[mood]} border-[0.2rem] rounded-lg dark:bg-gray-800 dark:border-gray-700`}
+				>
 					<span className="-ml-3 text-6xl">{textToIcon[mood]}</span>
 
 					<h5 className="mt-5 mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
