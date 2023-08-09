@@ -28,7 +28,7 @@ const MyDaenamusAll = () => {
 	}, [location.state]);
 
 	return (
-		<div className="max-w-4xl mx-auto pt-8">
+		<div className="max-w-4xl mx-auto pt-8" style={{ minHeight: '71.2vh' }}>
 			<BackButton />
 			<h3 className="text-2xl text-gray-700 font-semibold mt-4 mb-12">
 				내가 작성한 모든 대나무숲
@@ -55,8 +55,8 @@ const MyDaenamusAll = () => {
 								</h4>
 							</div>
 							<div className="text-gray-500 my-1.5">
-								<div>{formatDate(forest.createdAt)}</div>
-								<div className="text-right text-xs mt-1">
+								<div className="w-24">{formatDate(forest.createdAt)}</div>
+								<div className="text-right text-xs mt-1 pr-1.5">
 									<EyeIcon className="w-3 mb-0.5 inline" /> {forest.views}
 								</div>
 							</div>

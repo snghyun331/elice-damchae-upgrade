@@ -41,17 +41,19 @@ const DaenamuTextEditor = () => {
 		<>
 			<h3 className="font-semibold">제목</h3>
 			<input
-				className="my-5 w-1/2 border"
+				className="mb-12 mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				onChange={(e) => {
 					setTitle(e.target.value);
 				}}
 				type="text"
 				id="title"
 				value={title}
+				maxLength={50}
 			/>
+
 			<h3 className="font-semibold">본문</h3>
 			<div className="text-editor">
-				<div className="mt-5">
+				<div className="mt-3">
 					<Editor
 						initialValue={content}
 						placeholder="내용을 입력하세요."
@@ -88,12 +90,12 @@ const DaenamuTextEditor = () => {
 							<button
 								onClick={handleSubmit}
 								disabled={content?.length <= 16}
-								className="w-40 h-8 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								className="mt-3 w-40 bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 							>
 								감정 분석하기
 							</button>
 							{content?.length <= 16 && (
-								<p className="text-right text-red-400 text-sm mt-2">
+								<p className="text-right text-red-400 text-sm mb-2">
 									10자 이상 입력해주세요.
 								</p>
 							)}
