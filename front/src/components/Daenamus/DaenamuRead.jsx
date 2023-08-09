@@ -226,7 +226,7 @@ const DaenamuRead = () => {
 				</div>
 				<div className="flex flex-col">
 					<DaenamuLikeSection forestId={forest._id} userId={id} />
-					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
+					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
 					{commentList && commentList.length > 0 ? (
 						<div>
 							<ReactionChart commentList={commentList} forestId={forestId} />
@@ -234,8 +234,7 @@ const DaenamuRead = () => {
 					) : (
 						<div></div>
 					)}
-
-					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
+					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
 					<div>
 						<DaenamuComment forestId={forestId} />
 					</div>
