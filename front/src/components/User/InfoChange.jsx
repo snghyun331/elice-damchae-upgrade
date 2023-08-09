@@ -24,14 +24,17 @@ const InfoChange = () => {
 		mbti,
 		isGoogleLogin,
 		profileImg,
+		mbtiImg,
+		tempMbtiImg,
+
 		setNickname,
 		setMbti,
 		setProfileImg,
+		setMbtiImg,
+		setTempMbtiImg,
 	} = useUserStore();
 
-	console.log(profileImg);
-
-	const [preview, setPreview] = useState(profileImg);
+	const [preview, setPreview] = useState(profileImg ? profileImg : mbtiImg);
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
@@ -106,7 +109,6 @@ const InfoChange = () => {
 		}
 	}, [nicknameToChange]);
 
-	console.log(preview);
 	const handleSubmit = useCallback(
 		async (e) => {
 			e.preventDefault();
@@ -114,6 +116,7 @@ const InfoChange = () => {
 				email,
 				...(passwordToChange !== '' && { password: passwordToChange }),
 				profileImg: profileImgToChange,
+				mbtiImg: tempMbtiImg,
 				nickname: nicknameToChange,
 				mbti: mbtiToChange.value,
 			};
@@ -215,6 +218,22 @@ const InfoChange = () => {
 		}
 	}, [profileImg]);
 
+	useEffect(() => {
+		let imageUrl;
+
+		if (profileImg) {
+			imageUrl = profileImg;
+		} else if (tempMbtiImg) {
+			imageUrl = tempMbtiImg;
+		} else if (mbtiImg) {
+			imageUrl = mbtiImg;
+		} else {
+			imageUrl = defaultUser;
+		}
+
+		setPreview(imageUrl);
+	}, [profileImg, mbtiImg, tempMbtiImg]);
+
 	return (
 		<>
 			<section className="">
@@ -228,7 +247,7 @@ const InfoChange = () => {
 								<div className="flex justify-center">
 									<img
 										className="w-32 h-32 rounded-full border -mb-2"
-										src={preview !== '' ? preview : defaultUser}
+										src={preview ? preview : defaultUser}
 										alt="Rounded avatar"
 									/>
 								</div>
