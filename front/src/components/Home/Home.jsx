@@ -79,7 +79,9 @@ const Home = () => {
 									if (!isWritten) {
 										setStoryModal(true);
 									} else {
-										toast.error('스토리는 하루에 한번만 작성이 가능합니다.');
+										toast.error('스토리는 하루에 한번만 작성이 가능합니다.', {
+											duration: 1000, // 3000 milliseconds (3 seconds)
+										});
 									}
 							  }
 							: () => navigate('/login')
