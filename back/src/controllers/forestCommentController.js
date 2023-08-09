@@ -39,45 +39,7 @@ class forestCommentController {
   static async readCommentStats(req, res, next) {
     try {
       const forestId = req.params.forestId;
-      const allComments = await forestCommentModel.findCommentsByForestId({
-        forestId,
-      });
-      if (!allComments) {
-        return res.status(200).json({ result: 'No Comments' });
-      }
-      const populated = await forestCommentService.populateForestComment(
-        allComments,
-        'writerId',
-      );
-
-      const calculateMbtisCounts = (mood) => {
-        const writers = populated
-          .filter((doc) => doc.mood === mood)
-          .map((doc) => doc.writerId);
-
-        const allMbtis = writers.map((writer) => writer.mbti);
-
-        return allMbtis.reduce((count, mbti) => {
-          count[mbti] = (count[mbti] || 0) + 1;
-          return count;
-        }, {});
-      };
-
-      const pleasureMbtiCounts = calculateMbtisCounts('pleasure');
-      const insecureMbtiCounts = calculateMbtisCounts('insecure');
-      const sadMbtiCounts = calculateMbtisCounts('sad');
-      const neutralMbtiCounts = calculateMbtisCounts('neutral');
-      const surpriseMbtiCounts = calculateMbtisCounts('surprise');
-      const angerMbtiCounts = calculateMbtisCounts('anger');
-
-      const result = {
-        pleasure: pleasureMbtiCounts,
-        insecure: insecureMbtiCounts,
-        sad: sadMbtiCounts,
-        neutral: neutralMbtiCounts,
-        surprise: surpriseMbtiCounts,
-        anger: angerMbtiCounts,
-      };
+      const result = await forestCommentService.readCommentStats(forestId);
       return res.status(200).send(result);
     } catch (error) {
       next(error);

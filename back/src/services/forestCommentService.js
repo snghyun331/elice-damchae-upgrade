@@ -51,31 +51,6 @@ class forestCommentService {
       throw new Error(error);
     }
   }
-  // static async updateForestComment({ commentId, userId, updatedComment }) {
-  //   try {
-  //     const updateComment = await forestCommentModel.readOneByCommentId(
-  //       commentId,
-  //     );
-
-  //     if (!updateComment) {
-  //       throw new Error('수정할 댓글을 찾을 수 없습니다.');
-  //     }
-
-  //     const updatedCommentData = await forestCommentModel.updateForestComment(
-  //       commentId,
-  //       userId,
-  //       updatedComment,
-  //     );
-
-  //     return {
-  //       statusCode: 200,
-  //       message: '댓글을 수정하였습니다.',
-  //       updatedComment: updatedCommentData,
-  //     };
-  //   } catch (error) {
-  //     throw new Error(error);
-  //   }
-  // }
 
   static async deleteForestComment(commentId) {
     try {
@@ -111,6 +86,54 @@ class forestCommentService {
     const field = { path: path };
     const result = forestCommentModel.populateForestComment(info, field);
     return result;
+  }
+
+  static async readCommentStats(forestId) {
+    try {
+      const allComments = await forestCommentModel.findCommentsByForestId({
+        forestId,
+      });
+      if (!allComments) {
+        return { result: 'No Comments' };
+      }
+      const populated = await forestCommentService.populateForestComment(
+        allComments,
+        'writerId',
+      );
+
+      const calculateMbtisCounts = (mood) => {
+        const writers = populated
+          .filter((doc) => doc.mood === mood)
+          .map((doc) => doc.writerId);
+
+        const allMbtis = writers.map((writer) => writer.mbti);
+
+        return allMbtis.reduce((count, mbti) => {
+          count[mbti] = (count[mbti] || 0) + 1;
+          return count;
+        }, {});
+      };
+
+      const pleasureMbtiCounts = calculateMbtisCounts('pleasure');
+      const insecureMbtiCounts = calculateMbtisCounts('insecure');
+      const sadMbtiCounts = calculateMbtisCounts('sad');
+      const neutralMbtiCounts = calculateMbtisCounts('neutral');
+      const surpriseMbtiCounts = calculateMbtisCounts('surprise');
+      const angerMbtiCounts = calculateMbtisCounts('anger');
+
+      const result = {
+        pleasure: pleasureMbtiCounts,
+        insecure: insecureMbtiCounts,
+        sad: sadMbtiCounts,
+        neutral: neutralMbtiCounts,
+        surprise: surpriseMbtiCounts,
+        anger: angerMbtiCounts,
+      };
+
+      return result;
+    } catch (error) {
+      console.error('MBTI 카운팅에 문제가 발생하였습니다:', error);
+    }
   }
 }
 export { forestCommentService };
