@@ -124,6 +124,7 @@ CommentBox.propTypes = {
 		comment: PropTypes.string.isRequired,
 		updatedAt: PropTypes.string.isRequired,
 	}).isRequired,
+	fetchComment: PropTypes.func.isRequired,
 	onDelete: PropTypes.func.isRequired,
 	onEdit: PropTypes.func.isRequired,
 };

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
 import DaenamuCard from '../Global/DaenamuCard';
 import Pagination from '../Global/Pagination';
@@ -56,6 +57,11 @@ const DaenamuCardMap = ({ fetchData, isDataLoading }) => {
 			</div>
 		</>
 	);
+};
+
+DaenamuCardMap.propTypes = {
+	fetchData: PropTypes.func.isRequired,
+	isDataLoading: PropTypes.bool.isRequired,
 };
 
 export default DaenamuCardMap;

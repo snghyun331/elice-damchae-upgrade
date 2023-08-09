@@ -88,7 +88,7 @@ const DaenamuRead = () => {
 
 	const handleSaveEdit = async () => {
 		try {
-			const res = await putApi(`forest/${forestId}`, {
+			await putApi(`forest/${forestId}`, {
 				title,
 				content,
 				mood,

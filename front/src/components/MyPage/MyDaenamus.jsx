@@ -1,6 +1,5 @@
 import MyDaenamuCard from './MyDaenamuCard';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
-import PropTypes from 'prop-types';
 import { getApi } from '../../services/api';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
