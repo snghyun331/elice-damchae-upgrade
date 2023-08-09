@@ -6,7 +6,7 @@ import { delApi, getApi } from '../../services/api';
 import { useEffect, useState } from 'react';
 import { useUserId } from '../../store/useUserStore';
 import StoryComment from './StoryComment';
-import  BackButton  from '../Global/BackButton';
+import BackButton from '../Global/BackButton';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
 
@@ -25,7 +25,6 @@ const StoryRead = () => {
 			console.log(res);
 			setStory(res.data);
 			setIsDataLoading(true);
-
 			setIsPublicStory(res.data.userInfo._id === id || res.data.isPublic);
 		} catch (error) {
 			console.log(error);
@@ -155,7 +154,13 @@ const StoryRead = () => {
 							<div className="w-12 h-12 mx-auto -mt-24 rounded-full overflow-hidden">
 								<img
 									className="w-full h-full object-cover"
-									src={isDataLoading && story.userInfo.profileImg}
+									src={
+										isDataLoading && story.userInfo.profileImg
+											? story.userInfo.profileImg
+											: isDataLoading && story.userInfo.mbtiImg
+											? story.userInfo.mbtiImg
+											: '/images/default-image.jpg'
+									}
 									alt="작성자 프로필 이미지"
 								/>
 							</div>
