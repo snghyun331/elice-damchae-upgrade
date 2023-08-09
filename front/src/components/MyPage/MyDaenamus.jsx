@@ -32,12 +32,14 @@ const MyDaenamus = () => {
 					건
 				</div>
 				<div className="text-base mt-4 mb-4 text-gray-700">
-					<ChevronRightIcon className="w-4 inline mb-1" />
-					<span className="inline">
-						<Link to="MyDaenamusAll" state={{ forests: forests }}>
-							전체보기
-						</Link>
-					</span>
+					{forests.length !== 0 ? (
+						<span className="inline">
+							<ChevronRightIcon className="w-4 inline mb-1" />
+							<Link to="MyDaenamusAll" state={{ forests: forests }}>
+								전체보기
+							</Link>
+						</span>
+					) : null}
 					<div className="my-8 flex flex-wrap justify-center md:justify-center">
 						{forests.slice(0, 3).map((forest) => (
 							<div

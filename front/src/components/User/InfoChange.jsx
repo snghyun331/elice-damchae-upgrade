@@ -222,12 +222,10 @@ const InfoChange = () => {
 	useEffect(() => {
 		let imageUrl;
 
-		if (profileImg) {
-			imageUrl = profileImg;
-		} else if (tempMbtiImg) {
+		if (tempMbtiImg) {
 			imageUrl = tempMbtiImg;
-		} else if (mbtiImg) {
-			imageUrl = mbtiImg;
+		} else if (profileImg) {
+			imageUrl = profileImg;
 		} else {
 			imageUrl = defaultUser;
 		}
