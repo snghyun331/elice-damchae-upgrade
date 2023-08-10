@@ -1,4 +1,9 @@
-import { textToIcon, textToColor, formatRelativeTime } from '../Util/Util';
+import {
+	textToIcon,
+	textToColor,
+	formatRelativeTime,
+	textToKorean,
+} from '../Util/Util';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
 import BackButton from '../Global/BackButton';
@@ -51,7 +56,6 @@ const DaenamuRead = () => {
 					<button
 						onClick={() => {
 							toast.dismiss(t.id);
-							// 필요한 후속 동작 수행
 						}}
 						className="text-white px-2 py-1 rounded bg-red-500 hover:bg-red-600"
 					>
@@ -92,7 +96,6 @@ const DaenamuRead = () => {
 				content,
 				mood,
 			});
-			//TODO:mood추가해야함
 			fetchForest();
 
 			setEditMode(false);
@@ -113,7 +116,7 @@ const DaenamuRead = () => {
 		<div className={`w-4/5 max-w-2xl mx-auto `}>
 			<BackButton />
 			<div
-				className={`w-full max-w-2xl border border-gray-400 rounded-lg shadow mx-auto bg-white `}
+				className={`w-full max-w-2xl border border-gray-400 rounded-lg shadow mx-auto bg-white pt-4 `}
 				style={{
 					backgroundColor: isDataLoading ? textToColor[forest.mood] : '#FFFFFF',
 				}}
@@ -165,23 +168,30 @@ const DaenamuRead = () => {
 				</div>
 				<div className="relative top-0 px-5 md:px-10">
 					{editMode ? (
-						//TODO:제목 길어지면 박스무너짐
 						<DaenamuTextEditor />
 					) : (
 						<div className="view-mode">
 							<div className="relative h-40 rounded-t-lg">
 								<div className="flex flex-col absolute h-full w-full p-4">
 									<div className="flex flex-row items-center">
-										<div className="text-2xl">
+										<div
+											className="text-3xl mr-1"
+											data-tooltip-id="tooltip"
+											data-tooltip-content={
+												isDataLoading
+													? `AI가 분석한 주요감정 : ${textToKorean[forest.mood]}`
+													: ''
+											}
+										>
 											{isDataLoading && textToIcon[forest.mood]}
 										</div>
-										<h5 className="py-5 leading-loose text-lg md:text-2xl font-bold">
+										<h5 className="py-2 leading-loose text-lg md:text-2xl font-bold">
 											{forest.title}
 										</h5>
 									</div>
 
 									<div className="w-full justify-between space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 ">
-										<div className="flex flex-row space-x-2">
+										<div className="flex flex-row space-x-2 mt-5">
 											<img
 												className="rounded-full w-10 h-10 object-cover bg-white"
 												src={
@@ -197,14 +207,17 @@ const DaenamuRead = () => {
 												<p className="w-20 text-sm ">
 													{isDataLoading && forest.userInfo.nickname}
 												</p>
-												<p className="text-sm ">
+												<p className="text-xs text-gray-500">
 													{isDataLoading && forest.userInfo.mbti}
 												</p>
 											</div>
 										</div>
 										<div className="justify-end flex flex-col">
 											<p className="mb-1">
-												조회수 {isDataLoading && forest.views}
+												조회{' '}
+												<span className="text-blue-600 font-semibold">
+													{isDataLoading && forest.views}
+												</span>
 											</p>
 											<p className="self-end text-xs mb-1">
 												{isDataLoading && formatRelativeTime(forest.updatedAt)}
@@ -214,6 +227,7 @@ const DaenamuRead = () => {
 								</div>
 							</div>
 							<div>
+								<hr className="border-gray-300 my-3" />
 								<div className="relative p-10">
 									{isDataLoading && (
 										<Viewer key={viewerKey} initialValue={forest.content} />

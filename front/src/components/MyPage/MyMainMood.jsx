@@ -33,7 +33,7 @@ const MyMainMood = ({ posts }) => {
 				data-tooltip-content="이번 달에 가장 많이 느낀 감정이에요."
 				className="absolute top-3 right-3 h-5 w-5 text-slate-400"
 			/>{' '}
-			<h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
+			<h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 text-center">
 				{currentMonth}월의 주요 감정
 			</h5>
 			{!posts ? (
@@ -42,7 +42,9 @@ const MyMainMood = ({ posts }) => {
 					스토리를 쓰고 나의 주요 감정을 확인해보세요.
 				</p>
 			) : (
-				<p className="text-7xl text-gray-700">{textToIcon[mainMood]}</p>
+				<p className="text-7xl text-gray-700 text-center">
+					{textToIcon[mainMood]}
+				</p>
 			)}
 		</div>
 	);

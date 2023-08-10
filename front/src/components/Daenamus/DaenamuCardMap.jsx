@@ -8,7 +8,6 @@ import useForestStore from '../../store/useForestStore';
 
 const DaenamuCardMap = ({ fetchData, isDataLoading }) => {
 	const { forests, totalPage } = useForestStore();
-
 	const { currentPage, prev, next, go } = usePagination(
 		isDataLoading ? forests : [],
 		totalPage,
@@ -28,7 +27,7 @@ const DaenamuCardMap = ({ fetchData, isDataLoading }) => {
 			<div className="font-bold mb-8 md:p-10 block bg-white rounded-lg ">
 				{isDataLoading ? (
 					<>
-						{forests && forests.length > 0 ? ( // Check if forests is not empty
+						{forests && forests.length > 0 ? (
 							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-base font-medium">
 								{forests?.map((forest) => (
 									<div key={forest._id}>

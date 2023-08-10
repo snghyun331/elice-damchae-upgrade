@@ -15,7 +15,7 @@ const MyDaenamuCard = ({
 			<Link to={`/daenamus/${_id}`}>
 				<div className="flex flex-col h-full">
 					<h5 className="mb-2 text-md font-bold tracking-tight text-gray-900">
-						{truncateString(title, 25)}
+						{truncateString(title, 50)}
 						{commentCount ? (
 							<span className="text-blue-600 text-sm"> ({commentCount})</span>
 						) : (
