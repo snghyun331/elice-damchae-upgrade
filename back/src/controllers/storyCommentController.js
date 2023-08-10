@@ -100,9 +100,15 @@ class storyCommentController {
       const limit = 6;
       const { comments, totalPage, count } =
         await storyCommentService.readComments(limit, page, storyId);
-      const populageResult = await storyCommentService.populateStoryComment(
+      // const populageResult = await storyCommentService.populateStoryComment(
+      //   comments,
+      //   'writerId',
+      // );
+
+      const populageResult = await storyCommentService.populateStoryCommentInfo(
         comments,
         'writerId',
+        'profileImg',
       );
       const result = {
         currentPage: page,

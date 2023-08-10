@@ -88,10 +88,19 @@ class forestCommentController {
       const limit = 6;
       const { comments, totalPage, count } =
         await forestCommentService.readForestComment(limit, page, forestId);
-      const populageResult = await forestCommentService.populateForestComment(
-        comments,
-        'writerId',
-      );
+
+      // const populageResult = await forestCommentService.populateForestComment(
+      //   comments,
+      //   'writerId',
+      // );
+
+      const populageResult =
+        await forestCommentService.populateForestCommentInfo(
+          comments,
+          'writerId',
+          'profileImg',
+        );
+
       const result = {
         currentPage: page,
         totalPage: totalPage,
