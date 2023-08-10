@@ -179,7 +179,7 @@ const DaenamuRead = () => {
 											data-tooltip-id="tooltip"
 											data-tooltip-content={
 												isDataLoading
-													? `주요감정 : ${textToKorean[forest.mood]}`
+													? `AI가 분석한 주요감정 : ${textToKorean[forest.mood]}`
 													: ''
 											}
 										>
