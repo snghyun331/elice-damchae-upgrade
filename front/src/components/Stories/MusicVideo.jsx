@@ -11,7 +11,7 @@ const MusicVideo = ({ music, phrase, mood }) => {
 		if (window.innerWidth >= 680) {
 			setVideoWidth('560');
 		} else {
-			setVideoWidth(window.innerWidth * 0.7);
+			setVideoWidth(window.innerWidth * 0.65);
 		}
 	};
 
