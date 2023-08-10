@@ -26,6 +26,7 @@ const DaenamuCard = ({
 		commentCount,
 		likeCount,
 		dislikeCount,
+		userInfo,
 	},
 }) => {
 	return (
@@ -37,22 +38,22 @@ const DaenamuCard = ({
 					<span className="-ml-3 text-6xl">{textToIcon[mood]}</span>
 
 					<h5 className="mt-5 mb-2 text-xl font-semibold tracking-tight text-gray-900 ">
-						{truncateString(title, 25)}
+						{truncateString(title, 50)}
 					</h5>
 
-					<p className="mb-3 h-full font-normal text-gray-500  text-sm">
+					<p className="mb-3 h-full font-normal text-gray-600  text-sm">
 						{truncateString(removeTag(content), 63)}
 					</p>
-					<div className="text-sm text-gray-500">
-						{/* {userInfo ? userInfo.nickname : '알 수 없는 유저'} */}
+					<div className="text-sm text-gray-600 mb-5 mt-3">
+						{userInfo ? userInfo.nickname : '알 수 없는 유저'}
 						<span className="text-xs ml-2">
 							{formatRelativeTime(updatedAt)}
 						</span>
 					</div>
 
-					<div className="w-full flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 ">
+					<div className=" text-gray-600 w-full flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 ">
 						<div className="flex items-center">
-							<ChevronRightIcon className="w-4 mt-1" />
+							<ChevronRightIcon className="w-4 mt-1 " />
 							<span className="ml-1">더보기</span>
 						</div>
 						<div className=" flex flex-row space-x-2">
