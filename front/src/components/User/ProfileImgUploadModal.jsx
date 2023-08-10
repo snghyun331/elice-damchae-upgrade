@@ -32,8 +32,8 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 			const res = await putApi(`auth/update`, formData);
 			if (res.status === 200) {
 				toast.success('프로필 사진을 수정하였습니다.');
-				setProfileImg(URL.createObjectURL(selectedFile));
-				infoChange({ profileImg: URL.createObjectURL(selectedFile) });
+				setProfileImg(res.data.profileImg.path);
+				infoChange({ profileImg: res.data.profileImg.path, mbtiImg: null });
 				closeModal();
 			} else {
 				toast.error('프로필 사진 수정에 실패했습니다.');
@@ -44,10 +44,11 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 	};
 
 	useEffect(() => {
-		return () => {
+		if (!isVisible) {
 			setSelectedFile(null);
-		};
-	}, []);
+			setPreview('');
+		}
+	}, [isVisible]);
 
 	return (
 		<div className={`${isVisible ? 'block' : 'hidden'}`}>
@@ -127,8 +128,9 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 							<button
 								data-modal-hide="small-modal"
 								type="button"
-								className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								className="text-white bg-blue-700 disabled:bg-gray-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 								onClick={handleSubmit}
+								disabled={!selectedFile}
 							>
 								수정하기
 							</button>

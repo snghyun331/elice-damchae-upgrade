@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { textToIcon, formatCreatedAt, formatRelativeTime } from '../Util/Util';
+import { textToIcon, formatRelativeTime } from '../Util/Util';
 import { useUserId } from '../../store/useUserStore';
 import PropTypes from 'prop-types';
 
@@ -54,7 +54,7 @@ const CommentBox = ({ fetchComment, commentData, onDelete, onEdit }) => {
 									? commentData.writerId.mbtiImg
 									: '/images/default-image.jpg'
 							}
-							className="w-11 rounded-full"
+							className="w-11 h-11 rounded-full bg-white border"
 						/>
 						<p className="text-xl absolute top-5 left-6">
 							{textToIcon[commentData.mood]}
@@ -94,14 +94,14 @@ const CommentBox = ({ fetchComment, commentData, onDelete, onEdit }) => {
 								<button
 									onClick={handleEdit}
 									type="button"
-									className="whitespace-nowrap py-1 px-3 mr-2 mb-2 text-xs md:text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+									className="whitespace-nowrap px-3 mr-2 mb-2 text-xs md:text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 								>
 									수정
 								</button>
 								<button
 									onClick={handleDelete}
 									type="button"
-									className="whitespace-nowrap py-1 px-3 mr-2 mb-2 text-xs md:text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+									className="whitespace-nowrap px-3 mr-2 mb-2 text-xs md:text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 								>
 									삭제
 								</button>
