@@ -30,7 +30,6 @@ const StoryRead = () => {
 			console.log(error);
 		}
 	};
-	console.log(story.userInfo.profileImg?.path);
 	const handleConfirm = () => {
 		toast((t) => (
 			<div className="rounded p-4">
