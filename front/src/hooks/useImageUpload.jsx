@@ -12,12 +12,10 @@ const useImageUpload = () => {
 		try {
 			const formData = new FormData();
 			formData.append('image', blob);
-			console.log(blob);
 
 			const response = await postApi('image/upload', formData);
 
 			const imageUrl = `${response.data.path}`;
-			console.log(imageUrl);
 
 			callback(imageUrl, '사진 대체 텍스트 입력');
 		} catch (error) {

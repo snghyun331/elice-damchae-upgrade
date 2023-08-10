@@ -17,7 +17,6 @@ const DaenamuCardMap = ({ fetchData, isDataLoading }) => {
 
 	useEffect(() => {
 		fetchData();
-		console.log(forests, totalPage);
 	}, []);
 
 	useEffect(() => {
@@ -26,7 +25,7 @@ const DaenamuCardMap = ({ fetchData, isDataLoading }) => {
 
 	return (
 		<>
-			<div className="font-bold mb-8 md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+			<div className="font-bold mb-8 md:p-10 block bg-white rounded-lg ">
 				{isDataLoading ? (
 					<>
 						{forests && forests.length > 0 ? ( // Check if forests is not empty

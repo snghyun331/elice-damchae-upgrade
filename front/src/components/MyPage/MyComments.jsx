@@ -38,7 +38,7 @@ const MyComments = () => {
 			fetchComments(currentPage);
 		}
 	}, [currentPage]);
-	console.log(comments);
+
 	return (
 		<div>
 			<h3 className="text-2xl text-gray-700 font-semibold">내가 쓴 댓글</h3>
@@ -52,11 +52,11 @@ const MyComments = () => {
 
 			<div className="flex justify-center mt-10">
 				{comments.length > 0 ? (
-					<ul className="w-full max-w-6xl text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+					<ul className="w-full max-w-6xl text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200">
 						{comments.map((comment, index) => (
 							<li
 								key={index}
-								className="text-gray-700 w-full px-6 py-3 border-b border-gray-200 dark:border-gray-600 bg-slate-100"
+								className="text-gray-700 w-full px-6 py-3 border-b border-gray-200 bg-slate-100"
 							>
 								<span className="font-bold text-gray-900">댓글</span>{' '}
 								{comment.comment}{' '}

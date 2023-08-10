@@ -8,7 +8,7 @@ const ReactionChart = ({ commentList, forestId }) => {
 	const fetchReaction = async () => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments/statistics`);
-			console.log(res.data);
+
 			setReaction(res.data);
 		} catch (error) {
 			console.log(error);
@@ -57,7 +57,7 @@ const ReactionChart = ({ commentList, forestId }) => {
 				vertical: 15,
 			},
 			fontFamily: 'Noto Sans KR',
-			fontSize: '14px'
+			fontSize: '14px',
 		},
 		chart: {
 			height: 350,
@@ -80,7 +80,7 @@ const ReactionChart = ({ commentList, forestId }) => {
 			style: {
 				fontFamily: 'Noto Sans KR',
 			},
-		}
+		},
 	};
 
 	return (

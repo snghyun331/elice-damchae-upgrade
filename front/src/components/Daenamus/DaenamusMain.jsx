@@ -26,7 +26,6 @@ const DaenamusMain = () => {
 	const fetchData = (page = 1) => {
 		const mbtiFilter = selectedMBTI.join(',');
 		if (selectedTab === '전체글') {
-			console.log(mbtiFilter);
 			if (selectedMBTI.length > 0) {
 				fetchFilteredForests(mbtiFilter, page);
 			} else {
@@ -76,7 +75,7 @@ const DaenamusMain = () => {
 			<div className="p-10 container mx-auto px-4">
 				<div
 					data-aos="fade-right"
-					className="font-bold md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+					className="font-bold md:p-10 block bg-white rounded-lg "
 				>
 					<div className="flex justify-between items-center mb-4 text-2xl md:text-3xl font-semibold text-zinc-700">
 						<div>대나무숲</div>
@@ -90,7 +89,7 @@ const DaenamusMain = () => {
 									: () => navigate('/login')
 							}
 							type="button"
-							className="rounded-xl w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+							className="rounded-xl w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2"
 						>
 							글쓰기
 						</button>
@@ -104,7 +103,7 @@ const DaenamusMain = () => {
 					<Search endpoint="daenamus" />
 				</div>
 
-				<div className="mb-8 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+				<div className="mb-8 text-sm font-medium text-center text-gray-500 border-b border-gray-200">
 					<ul className="flex flex-wrap -mb-px">
 						{['전체글', '인기글'].map((tab) => (
 							<li key={tab} className="mr-2">
@@ -112,8 +111,8 @@ const DaenamusMain = () => {
 									onClick={() => handleTabClick(tab)}
 									className={`inline-block p-4 rounded-t-lg focus:outline-none ${
 										selectedTab === tab
-											? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500'
-											: 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
+											? 'text-blue-600 border-b-2 border-blue-600'
+											: 'hover:text-gray-600 hover:border-gray-300 '
 									}`}
 								>
 									{tab}
@@ -135,9 +134,7 @@ const DaenamusMain = () => {
 									isSelected
 										? 'border-blue-600 text-blue-600'
 										: 'border-gray-400 text-gray-400'
-								} dark:bg-white ${
-									isSelected ? 'dark:text-blue-300' : 'dark:text-gray-400'
-								}`}
+								} ${isSelected ? 'dark:text-blue-300' : 'dark:text-gray-400'}`}
 							>
 								{item.label} {isSelected && <span>×</span>}
 							</span>

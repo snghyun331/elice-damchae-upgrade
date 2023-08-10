@@ -22,7 +22,7 @@ const StoryRead = () => {
 	const fetchStory = async () => {
 		try {
 			const res = await getApi(`stories/${storyId}`);
-			console.log(res);
+
 			setStory(res.data);
 			setIsDataLoading(true);
 			setIsPublicStory(res.data.userInfo._id === id || res.data.isPublic);

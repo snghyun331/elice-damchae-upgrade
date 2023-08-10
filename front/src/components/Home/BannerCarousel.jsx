@@ -16,7 +16,7 @@ const BannerCarousel = () => {
 			modules={[Autoplay, Navigation]}
 			className="mySwiper max-w-6xl"
 			autoplay={{
-				delay: 3500,
+				delay: 5000,
 				disableOnInteraction: false,
 			}}
 		>
