@@ -255,7 +255,7 @@ const RegisterForm = () => {
 										</span>{' '}
 										<span className="text-xs text-red-500">
 											{isEmailValid && !isCodeConfirmed
-												? '이메일 인증을 진행해주세요.'
+												? '이메일 인증을 진행해주세요.메일이 오지 않았다면,스팸 메일함을 확인해주세요.'
 												: ''}
 										</span>
 									</div>
