@@ -52,11 +52,13 @@ const useUserStore = create((set) => {
 					email: response.data.email,
 					nickname: response.data.nickname,
 					mbti: response.data.mbti,
-					profileImg: response.data.profileImg,
+					profileImg: response.data.profileImg.path,
 					mbtiImg: response.data.mbtiImg,
 				};
+				localStorage.setItem('userData', JSON.stringify(userData));
 
 				set(userData);
+				console.log('전역설정된 데이터', userData);
 			},
 
 			register: async (user) => {
@@ -67,7 +69,7 @@ const useUserStore = create((set) => {
 				await postApi('auth/googleRegister', user);
 				const response = await postApi('auth/googleLogin', user);
 				const jwtToken = response.data.token;
-
+				console.log(response);
 				localStorage.setItem('accessToken', jwtToken);
 
 				const userData = {
@@ -76,17 +78,19 @@ const useUserStore = create((set) => {
 					email: response.data.email,
 					nickname: response.data.nickname,
 					mbti: response.data.mbti,
-					profileImg: response.data.profileImg,
+					profileImg: response.data.profileImg.path,
 					mbtiImg: response.data.mbtiImg,
 					isGoogleLogin: true,
 				};
+
+				localStorage.setItem('userData', JSON.stringify(userData));
 
 				set(userData);
 			},
 
 			logout: () => {
 				localStorage.removeItem('accessToken');
-
+				localStorage.removeItem('userData');
 				set({
 					id: '',
 					email: '',
@@ -107,9 +111,6 @@ const useUserStore = create((set) => {
 
 export const useUserActions = () => useUserStore((state) => state.actions);
 export const useIsLoggedIn = () => useUserStore((state) => state.isLoggedIn);
-export const useSetIsLoggedIn = () =>
-	useUserStore((state) => state.setIsLoggedIn);
-
 export const useUserId = () => useUserStore((state) => state.id);
 export const useUserProfileImg = () =>
 	useUserStore((state) =>
