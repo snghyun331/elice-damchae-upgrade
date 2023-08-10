@@ -184,7 +184,6 @@ class userAuthController {
       const idToken = req.body.idToken;
 
       const user = await userService.readGoogleUser({ email, idToken });
-
       if (user.errorMessage) {
         throw new Error(user.errorMessage);
       }

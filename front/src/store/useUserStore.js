@@ -69,7 +69,7 @@ const useUserStore = create((set) => {
 				await postApi('auth/googleRegister', user);
 				const response = await postApi('auth/googleLogin', user);
 				const jwtToken = response.data.token;
-
+				console.log(response);
 				localStorage.setItem('accessToken', jwtToken);
 
 				const userData = {
