@@ -115,7 +115,7 @@ const InfoChange = () => {
 			const toUpdate = {
 				email,
 				...(passwordToChange !== '' && { password: passwordToChange }),
-				profileImg: profileImgToChange,
+				profileImg: tempMbtiImg ? null : profileImgToChange,
 				mbtiImg: tempMbtiImg,
 				nickname: nicknameToChange,
 				mbti: mbtiToChange.value,
@@ -132,12 +132,15 @@ const InfoChange = () => {
 
 			try {
 				const res = await putApi(`auth/update`, formData);
+				console.log(res.data);
 				if (res.status === 200) {
 					toast.success('정보를 수정하였습니다.');
 					setNickname(toUpdate.nickname);
 					setMbti(toUpdate.mbti);
-					setProfileImg(toUpdate.profileImg);
+					setProfileImg(res.data.profileImg);
+					setMbtiImg(res.data.mbtiImg);
 					infoChange(toUpdate);
+					console.log(profileImg);
 				} else {
 					toast.error('정보 수정에 실패하였습니다.');
 				}
@@ -224,7 +227,7 @@ const InfoChange = () => {
 			imageUrl = tempMbtiImg;
 		} else if (profileImg) {
 			imageUrl = profileImg;
-		} else if (mbtiImg){
+		} else if (mbtiImg) {
 			imageUrl = mbtiImg;
 		} else {
 			imageUrl = defaultUser;
