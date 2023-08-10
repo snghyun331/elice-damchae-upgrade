@@ -30,7 +30,6 @@ const StoryRead = () => {
 			console.log(error);
 		}
 	};
-
 	const handleConfirm = () => {
 		toast((t) => (
 			<div className="rounded p-4">
@@ -155,8 +154,8 @@ const StoryRead = () => {
 								<img
 									className="w-full h-full object-cover"
 									src={
-										isDataLoading && story.userInfo.profileImg?.path
-											? story.userInfo.profileImg
+										isDataLoading && story.userInfo.profileImg
+											? story.userInfo.profileImg.path
 											: isDataLoading && story.userInfo.mbtiImg
 											? story.userInfo.mbtiImg
 											: '/images/default-image.jpg'

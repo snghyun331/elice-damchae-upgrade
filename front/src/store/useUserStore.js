@@ -25,12 +25,21 @@ const useUserStore = create((set) => {
 	};
 
 	const updateUserData = (updatedUserData) => {
-		console.log(updatedUserData);
 		const newUserData = { ...userData, ...updatedUserData };
+	
+		if (updatedUserData.mbtiImg === null) {
+			newUserData.mbtiImg = null;
+		}
+		if (updatedUserData.profileImg === null) {
+			newUserData.profileImg = null;
+		}
+	
 		saveUserDataToLocalStorage(newUserData);
 		set(newUserData);
-	};
 
+		console.log('업데이트후 유저데이터', userData)
+	};
+	
 	return {
 		...userData,
 
