@@ -107,6 +107,15 @@ class storyPostService {
     return result;
   }
 
+  static async populateStoryPostInfo(info, field1, field2, field3) {
+    const fieldA = { path: field1, populate: { path: field2, select: 'path' } };
+    const fieldB = { path: field3 };
+
+    const result = await storyPostModel.populateStoryAll(info, fieldA, fieldB);
+
+    return result;
+  }
+
   static async isSameUser(loginUserId, storyId) {
     const stories = await storyPostModel.findOneByStoryId({ storyId });
     const storyUserId = stories.userInfo;

@@ -23,15 +23,17 @@ class userAuthController {
         nickname,
         mbti,
         mbtiImg,
-        // isGoogleLogin: isGoogleLoginRaw,
+        isGoogleLogin: isGoogleLoginRaw,
       } = await req.body;
       const file = req.file ?? null;
-      // const isGoogleLogin = isGoogleLoginRaw.toLowerCase() === 'true';
+      const isGoogleLogin = isGoogleLoginRaw.toLowerCase() === 'true';
+
       const existingUser = await userService.readUserNickname({ nickname });
 
       if (existingUser.nicknameState == 'unusableNickname') {
         return res.status(400).json(existingUser.unusableNickname);
       }
+
       if (!file) {
         const newUser = await userService.createUser({
           profileImg: null,
@@ -40,12 +42,12 @@ class userAuthController {
           nickname,
           mbti,
           mbtiImg,
-          // isGoogleLogin,
+          isGoogleLogin,
         });
         return res.status(201).json(newUser);
       } else {
         const profile = await imageService.uploadImageInS3({ file });
-        const profileId = profile._id; 
+        const profileId = profile._id;
 
         // 위 데이터를 유저 db에 추가하기
         const newUser = await userService.createUser({
@@ -55,13 +57,15 @@ class userAuthController {
           nickname,
           mbti,
           mbtiImg: null,
-          // isGoogleLogin,
+          isGoogleLogin,
         });
 
-        const result = await userService.populateUserProfile(
-          newUser,
-          'profileImg',
-        );
+        const options = {
+          path: 'profileImg',
+          select: 'path',
+        };
+
+        const result = await userService.populateUserProfile(newUser, options);
 
         return res.status(201).json(result);
       }
@@ -127,7 +131,14 @@ class userAuthController {
           isGoogleLogin,
         });
 
-        return res.status(201).json(newUser);
+        const options = {
+          path: 'profileImg',
+          select: 'path',
+        };
+
+        const result = await userService.populateUserProfile(newUser, options);
+
+        return res.status(201).json(result);
       }
     } catch (error) {
       res
@@ -153,7 +164,14 @@ class userAuthController {
         throw new Error('Google 로그인으로 진행하세요.');
       }
 
-      return res.status(200).send(user);
+      const options = {
+        path: 'profileImg',
+        select: 'path',
+      };
+
+      const result = await userService.populateUserProfile(user, options);
+
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
@@ -166,12 +184,18 @@ class userAuthController {
       const idToken = req.body.idToken;
 
       const user = await userService.readGoogleUser({ email, idToken });
-
       if (user.errorMessage) {
         throw new Error(user.errorMessage);
       }
 
-      return res.status(200).send(user);
+      const options = {
+        path: 'profileImg',
+        select: 'path',
+      };
+
+      const result = await userService.populateUserProfile(user, options);
+
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
@@ -253,9 +277,14 @@ class userAuthController {
         };
         const updatedUser = await userService.updateUser({ userId, toUpdate });
 
+        const options = {
+          path: 'profileImg',
+          select: 'path',
+        };
+
         const result = await userService.populateUserProfile(
           updatedUser,
-          'profileImg',
+          options,
         );
 
         return res.status(200).json(result);
@@ -278,14 +307,14 @@ class userAuthController {
 
   static async deleteUser(req, res, next) {
     try {
-      const userId = req.body.userId;
+      const userId = req.currentUserId;
       // 사용자를 비활성화 처리하기 위해 `isOut` 필드를 `true`로 설정
       const user = await userService.deleteUser({ userId });
 
       if (!user) {
         return res.status(404).json({ error: '존재하지 않는 유저입니다.' });
       }
-      return res.status(200).json({ errorMessage: '회원 탈퇴 완료' });
+      return res.status(200).json({ message: '회원 탈퇴 완료' });
     } catch (error) {
       next(error);
     }

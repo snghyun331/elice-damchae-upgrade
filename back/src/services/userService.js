@@ -287,14 +287,15 @@ class userService {
 
     const secretKey = process.env.JWT_SECRET_KEY;
     const token = jwt.sign({ userId: user.id }, secretKey);
-
-    const { id, mbti, nickname, isOut } = user;
+    const { id, mbti, nickname, isOut, profileImg, mbtiImg } = user;
 
     const loginUser = {
       token,
       id,
       email,
       mbti,
+      profileImg,
+      mbtiImg,
       nickname,
       isOut,
       errorMessage: null,
@@ -303,9 +304,10 @@ class userService {
     return loginUser;
   }
 
-  static async populateUserProfile(user, path) {
-    const field = { path: path };
-    const result = User.populateUserImg(user, field);
+  static async populateUserProfile(user, options) {
+    const { path, select } = options;
+    const field = { path: path, select: select };
+    const result = await User.populateUserImg(user, field);
     return result;
   }
 }

@@ -38,7 +38,7 @@ const useUserStore = create((set) => {
 		setMbti: (mbti) => set({ mbti }),
 		setProfileImg: (profileImg) => set({ profileImg }),
 		setMbtiImg: (mbtiImg) => set({ mbtiImg }),
-		setTempMbtiImg: (tempMbtiImg) => set ({tempMbtiImg}),
+		setTempMbtiImg: (tempMbtiImg) => set({ tempMbtiImg }),
 		setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 
 		actions: {
@@ -52,13 +52,13 @@ const useUserStore = create((set) => {
 					email: response.data.email,
 					nickname: response.data.nickname,
 					mbti: response.data.mbti,
-					profileImg: response.data.profileImg,
+					profileImg: response.data.profileImg.path,
 					mbtiImg: response.data.mbtiImg,
 				};
 				localStorage.setItem('userData', JSON.stringify(userData));
 
 				set(userData);
-				console.log('전역설정된 데이터', userData)
+				console.log('전역설정된 데이터', userData);
 			},
 
 			register: async (user) => {
@@ -69,7 +69,7 @@ const useUserStore = create((set) => {
 				await postApi('auth/googleRegister', user);
 				const response = await postApi('auth/googleLogin', user);
 				const jwtToken = response.data.token;
-
+				console.log(response);
 				localStorage.setItem('accessToken', jwtToken);
 
 				const userData = {
@@ -78,7 +78,7 @@ const useUserStore = create((set) => {
 					email: response.data.email,
 					nickname: response.data.nickname,
 					mbti: response.data.mbti,
-					profileImg: response.data.profileImg,
+					profileImg: response.data.profileImg.path,
 					mbtiImg: response.data.mbtiImg,
 					isGoogleLogin: true,
 				};
@@ -100,7 +100,6 @@ const useUserStore = create((set) => {
 					isGoogleLogin: false,
 					isLoggedIn: false,
 				});
-
 			},
 
 			infoChange: (updatedUserData) => {
@@ -114,6 +113,8 @@ export const useUserActions = () => useUserStore((state) => state.actions);
 export const useIsLoggedIn = () => useUserStore((state) => state.isLoggedIn);
 export const useUserId = () => useUserStore((state) => state.id);
 export const useUserProfileImg = () =>
-	useUserStore((state) => state.profileImg ? state.profileImg : state.mbtiImg);
+	useUserStore((state) =>
+		state.profileImg ? state.profileImg : state.mbtiImg,
+	);
 
 export default useUserStore;
