@@ -5,27 +5,27 @@ import { forestCommentController } from '../controllers/forestCommentController.
 const forestCommentRouter = Router();
 
 forestCommentRouter.post(
-  '/forest/:forestId/comments',
+  '/:forestId/comments',
   loginRequired,
   forestCommentController.createForestComment,
 );
 
 forestCommentRouter.get(
-  '/forest/:forestId/comments/statistics',
+  '/:forestId/comments/statistics',
   forestCommentController.readCommentStats,
 );
 forestCommentRouter.put(
-  '/forest/comments/:commentId',
+  '/comments/:commentId',
   loginRequired,
   forestCommentController.updateForestComment,
 );
 forestCommentRouter.delete(
-  '/forest/:forestId/comments/:commentId',
+  '/:forestId/comments/:commentId',
   loginRequired,
   forestCommentController.deleteForestComment,
 );
 forestCommentRouter.get(
-  '/forest/:forestId/comments',
+  '/:forestId/comments',
   forestCommentController.readForestComment,
 );
 
