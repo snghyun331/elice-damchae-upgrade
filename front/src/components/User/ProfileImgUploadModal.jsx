@@ -128,8 +128,9 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 							<button
 								data-modal-hide="small-modal"
 								type="button"
-								className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								className="text-white bg-blue-700 disabled:bg-gray-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 								onClick={handleSubmit}
+								disabled={!selectedFile}
 							>
 								수정하기
 							</button>
