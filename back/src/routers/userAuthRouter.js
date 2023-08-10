@@ -7,38 +7,34 @@ import { uploadS3 } from '../utills/multer.js';
 const userAuthRouter = Router();
 
 userAuthRouter.post(
-  '/auth/register',
+  '/register',
   uploadS3.single('profileImg'),
   userAuthController.registerUser,
 );
 
-userAuthRouter.post('/auth/googleRegister', userAuthController.googleRegister);
+userAuthRouter.post('/googleRegister', userAuthController.googleRegister);
+
+userAuthRouter.post('/login', outUserValidation, userAuthController.userLogin);
 
 userAuthRouter.post(
-  '/auth/login',
-  outUserValidation,
-  userAuthController.userLogin,
-);
-
-userAuthRouter.post(
-  '/auth/googleLogin',
+  '/googleLogin',
   outUserValidation,
   userAuthController.googleLogin,
 );
 
 userAuthRouter.put(
-  '/auth/update',
+  '/update',
   loginRequired,
   uploadS3.single('profileImg'),
   userAuthController.updateUser,
 );
 
-userAuthRouter.get('/auth/checkNickname', userAuthController.checkNickname);
+userAuthRouter.get('/checkNickname', userAuthController.checkNickname);
 
-userAuthRouter.put('/auth/out', loginRequired, userAuthController.deleteUser);
+userAuthRouter.put('/out', loginRequired, userAuthController.deleteUser);
 
-userAuthRouter.post('/auth/sendEmailCode', userAuthController.sendAuthCode);
+userAuthRouter.post('/sendEmailCode', userAuthController.sendAuthCode);
 
-userAuthRouter.post('/auth/checkEmailCode', userAuthController.validateString);
+userAuthRouter.post('/checkEmailCode', userAuthController.validateString);
 
 export { userAuthRouter };

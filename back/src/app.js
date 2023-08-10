@@ -2,14 +2,15 @@ import cors from 'cors';
 import morgan from 'morgan';
 import express from 'express';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
-import { userAuthRouter } from './routers/userAuthRouter.js';
-import { storyPostRouter } from './routers/storyPostRouter.js';
-import forestRouter from './routers/forestPostRouter.js';
-import { imageRouter } from './routers/imageRouter.js';
-import { storyCommentRouter } from './routers/storyCommentRouter.js';
-import { forestLikeDislikeRouter } from './routers/forestLikeDislikeRouter.js';
-import { forestCommentRouter } from './routers/forestCommentRouter.js';
-import { myPageRouter } from './routers/myPageRouter.js';
+// import { userAuthRouter } from './routers/userAuthRouter.js';
+// import { storyPostRouter } from './routers/storyPostRouter.js';
+// import { forestPostRouter } from './routers/forestPostRouter.js';
+// import { imageRouter } from './routers/imageRouter.js';
+// import { storyCommentRouter } from './routers/storyCommentRouter.js';
+// import { forestLikeDislikeRouter } from './routers/forestLikeDislikeRouter.js';
+// import { forestCommentRouter } from './routers/forestCommentRouter.js';
+// import { myPageRouter } from './routers/myPageRouter.js';
+import { router } from './routers/index.js';
 
 const app = express();
 app.use('/uploads', express.static('uploads'));
@@ -26,15 +27,15 @@ app.use(express.urlencoded({ extended: false }));
 app.get('/', (req, res) => {
   res.send('안녕하세요, 레이서 프로젝트 API 입니다.');
 });
-
-app.use(userAuthRouter);
-app.use(storyPostRouter);
-app.use('/forest', forestRouter);
-app.use(imageRouter);
-app.use(storyCommentRouter);
-app.use(forestLikeDislikeRouter);
-app.use(forestCommentRouter);
-app.use(myPageRouter);
+app.use('/api', router);
+// app.use(userAuthRouter);
+// app.use(storyPostRouter);
+// app.use('/forest', forestPostRouter);
+// app.use(imageRouter);
+// app.use(storyCommentRouter);
+// app.use(forestLikeDislikeRouter);
+// app.use(forestCommentRouter);
+// app.use(myPageRouter);
 app.use(errorMiddleware);
 
 export { app };

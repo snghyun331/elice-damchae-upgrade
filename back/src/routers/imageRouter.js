@@ -7,16 +7,12 @@ import { uploadS3 } from '../utills/multer.js';
 const imageRouter = Router();
 
 imageRouter.post(
-  '/image/upload',
+  '/upload',
   loginRequired,
   uploadS3.single('image'),
   imageController.createImageSingle,
 );
 
-imageRouter.post(
-  '/image/stable',
-  loginRequired,
-  imageController.createStableImage,
-);
+imageRouter.post('/stable', loginRequired, imageController.createStableImage);
 
 export { imageRouter };

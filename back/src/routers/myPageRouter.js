@@ -5,13 +5,13 @@ import { myPageController } from '../controllers/myPageController.js';
 const myPageRouter = Router();
 
 myPageRouter.get(
-  '/my/allComments',
+  '/allComments',
   loginRequired,
   myPageController.readMyStoryAndForestComments,
 );
 
 myPageRouter.get(
-  '/my/likeForestPosts',
+  '/likeForestPosts',
   loginRequired,
   myPageController.readLikeForestPosts,
 );

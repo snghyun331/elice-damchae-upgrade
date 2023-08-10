@@ -5,24 +5,24 @@ import { storyCommentController } from '../controllers/storyCommentController.js
 const storyCommentRouter = Router();
 
 storyCommentRouter.post(
-  '/stories/:storyId/comments',
+  '/:storyId/comments',
   loginRequired,
   storyCommentController.createStoryComment,
 );
 
 storyCommentRouter.get(
-  '/stories/:storyId/comments',
+  '/:storyId/comments',
   storyCommentController.readStoryComment,
 );
 
 storyCommentRouter.patch(
-  '/stories/comments/:commentId',
+  '/comments/:commentId',
   loginRequired,
   storyCommentController.updateStoryComment,
 );
 
 storyCommentRouter.delete(
-  '/stories/comments/:commentId',
+  '/comments/:commentId',
   loginRequired,
   storyCommentController.deleteStoryComment,
 );
