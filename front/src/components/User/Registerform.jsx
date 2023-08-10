@@ -1,6 +1,6 @@
 import useRegisterStore from '../../hooks/useRegisterStore';
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Select from 'react-select';
 import { mbtiList } from '../Util/Util';
 
@@ -377,6 +377,16 @@ const RegisterForm = () => {
 										classNamePrefix="react-select"
 										className="mb-3"
 									/>
+									<div className="mb-3">
+										<Link
+											className="self-end underline text-blue-400"
+											to="https://www.16personalities.com/ko/%EB%AC%B4%EB%A3%8C-%EC%84%B1%EA%B2%A9-%EC%9C%A0%ED%98%95-%EA%B2%80%EC%82%AC"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											MBTI 테스트 하러 가기
+										</Link>
+									</div>
 									<ProfilePicker />
 								</div>
 								<div className="flex flex-col">
