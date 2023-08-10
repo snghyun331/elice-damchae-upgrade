@@ -9,12 +9,12 @@ const MyDaenamuCard = ({
 	const moodColor = textToColor[mood];
 	return (
 		<div
-			className="h-full block max-w-sm p-6 bg-white border border-gray-200 rounded-2xl hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+			className="h-full block max-w-sm p-6 bg-white border border-gray-200 rounded-2xl hover:bg-gray-100"
 			style={{ borderColor: moodColor }}
 		>
 			<Link to={`/daenamus/${_id}`}>
 				<div className="flex flex-col h-full">
-					<h5 className="mb-2 text-md font-bold tracking-tight text-gray-900 dark:text-white">
+					<h5 className="mb-2 text-md font-bold tracking-tight text-gray-900">
 						{truncateString(title, 25)}
 						{commentCount ? (
 							<span className="text-blue-600 text-sm"> ({commentCount})</span>
@@ -22,10 +22,10 @@ const MyDaenamuCard = ({
 							''
 						)}
 					</h5>
-					<p className="text-sm font-normal text-gray-700 dark:text-gray-400 flex-grow">
+					<p className="text-sm font-normal text-gray-700 flex-grow">
 						{truncateString(removeTag(content), 40)}
 					</p>
-					<div className="flex w-16 items-center text-xs font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-auto self-end pt-4">
+					<div className="flex w-16 items-center text-xs font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 mt-auto self-end pt-4">
 						<ChevronRightIcon className="w-4 mt-1" />
 						<span className="ml-1">더보기</span>
 					</div>

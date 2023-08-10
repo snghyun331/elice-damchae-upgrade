@@ -2,12 +2,16 @@ import axios from 'axios';
 
 const serverUrl = import.meta.env.VITE_SERVER_HOST;
 
+import { useUserActions } from '../store/useUserStore';
+import { useNavigate } from 'react-router-dom';
+
 const getToken = () => {
 	return localStorage.getItem('accessToken') || null;
 };
 
 const instance = axios.create({
 	baseURL: serverUrl,
+	timeout: 15000,
 });
 
 instance.interceptors.request.use(
@@ -15,10 +19,8 @@ instance.interceptors.request.use(
 		const accessToken = getToken();
 
 		if (config.data instanceof FormData) {
-			console.log('폼데이터');
 			config.headers['Content-Type'] = 'multipart/form-data';
 		} else if (config.data instanceof Object) {
-			console.log('json데이터');
 			config.headers['Content-Type'] = 'application/json';
 		}
 		config.headers['Authorization'] = `Bearer ${accessToken}`;
@@ -34,17 +36,15 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
 	(response) => {
 		if (response.status === 404) {
-			console.log('404 페이지로 넘어가야 함!');
+			console.log('404에러');
 		}
 		return response;
 	},
 	(error) => {
 		console.error(error);
-		if (
-			error.response.data.message ===
-			('토큰이 만료되었습니다' || '토큰이 유효하지 않습니다')
-		) {
-			localStorage.removeItem('accessToken');
+		if (error.response.status === 401) {
+			const { logout } = useUserActions();
+			logout();
 		}
 		return Promise.reject(error);
 	},

@@ -90,7 +90,6 @@ const InfoChange = () => {
 		setMbti(selectedOption.value);
 	};
 
-	console.log(profileImg, mbtiImg);
 	const handleNicknameCheck = useCallback(async () => {
 		try {
 			const response = await getApi(
@@ -225,7 +224,7 @@ const InfoChange = () => {
 			imageUrl = tempMbtiImg;
 		} else if (profileImg) {
 			imageUrl = profileImg;
-		} else if (mbtiImg){
+		} else if (mbtiImg) {
 			imageUrl = mbtiImg;
 		} else {
 			imageUrl = defaultUser;

@@ -18,7 +18,7 @@ const DaenamuComment = ({ forestId }) => {
 	const fetchComment = async (page = 1) => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments?page=${page}`);
-			console.log(res.data.comments);
+
 			setCommentList(res.data.comments);
 			setCommentCount(res.data.totalCommentsCount);
 			setTotalPage(res.data.totalPage);
@@ -65,12 +65,11 @@ const DaenamuComment = ({ forestId }) => {
 	}, [currentPage]);
 
 	const handleSubmit = async () => {
-		console.log(comment);
 		try {
-			const res = await postApi(`forest/${forestId}/comments`, {
+			await postApi(`forest/${forestId}/comments`, {
 				comment,
 			});
-			console.log(res);
+
 			setComment('');
 			fetchComment();
 		} catch (error) {
@@ -96,7 +95,7 @@ const DaenamuComment = ({ forestId }) => {
 
 				<button
 					disabled={!comment}
-					className="whitespace-nowrap h-16 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-500 disabled:bg-neutral-300 rounded-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+					className="whitespace-nowrap h-16 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-500 disabled:bg-neutral-300 rounded-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200  "
 					onClick={handleSubmit}
 				>
 					등록
@@ -110,7 +109,6 @@ const DaenamuComment = ({ forestId }) => {
 					commentList?.map((commentData) => (
 						<div key={commentData._id}>
 							<CommentBox
-								fetchComment={fetchComment}
 								commentData={commentData}
 								onDelete={deleteComment}
 								onEdit={editComment}

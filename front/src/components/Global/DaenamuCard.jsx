@@ -33,15 +33,15 @@ const DaenamuCard = ({
 			{/* 클릭 시 해당 카드의 상세 페이지로 이동하는 Link 컴포넌트로 감싸기 */}
 			<Link to={`/daenamus/${_id}`}>
 				<div
-					className={`h-full flex flex-col max-w-sm p-6 ${textToBorderColor[mood]} border-[0.2rem] rounded-lg dark:bg-gray-800 dark:border-gray-700`}
+					className={`h-full flex flex-col max-w-sm p-6 ${textToBorderColor[mood]} border-[0.2rem] rounded-lg `}
 				>
 					<span className="-ml-3 text-6xl">{textToIcon[mood]}</span>
 
-					<h5 className="mt-5 mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+					<h5 className="mt-5 mb-2 text-xl font-semibold tracking-tight text-gray-900 ">
 						{truncateString(title, 25)}
 					</h5>
 
-					<p className="mb-3 h-full font-normal text-gray-500 dark:text-gray-400 text-sm">
+					<p className="mb-3 h-full font-normal text-gray-500  text-sm">
 						{truncateString(removeTag(content), 63)}
 					</p>
 					<div className="text-sm text-gray-500">
@@ -51,7 +51,7 @@ const DaenamuCard = ({
 						</span>
 					</div>
 
-					<div className="w-full flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+					<div className="w-full flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 ">
 						<div className="flex items-center">
 							<ChevronRightIcon className="w-4 mt-1" />
 							<span className="ml-1">더보기</span>

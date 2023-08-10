@@ -13,14 +13,14 @@ const MyMoodStat = () => {
 	const chartRef = useRef(null);
 
 	const [moods, setMoods] = useState({});
-	console.log(moods);
+
 	const [isDataLoading, setIsDataLoading] = useState(false);
 
 	const fetchMoodStat = async () => {
 		try {
 			const response = await getApi('stories/my/moodStat');
 			setIsDataLoading(true);
-			console.log(objectToKorean(response.data.valuePercentage));
+
 			setMoods(objectToKorean(response.data.valuePercentage));
 		} catch (error) {
 			console.log(error);
@@ -70,18 +70,18 @@ const MyMoodStat = () => {
 	}, [moods]);
 
 	return (
-		<div className="relative block pt-4 bg-slate-50 border border-gray-200 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col items-center justify-center">
+		<div className="relative block pt-4 bg-slate-50 border border-gray-200 rounded-lg hover:bg-gray-100 flex flex-col items-center justify-center">
 			<InformationCircleIcon
 				data-tooltip-id="tooltip"
 				data-tooltip-content="나의 모든 스토리를 바탕으로 집계됩니다."
 				className="absolute top-3 right-3 h-5 w-5 text-slate-400"
 			/>{' '}
-			<h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+			<h5 className="text-xl font-bold tracking-tight text-gray-900">
 				나의 감정 통계
 			</h5>
 			<div>
 				{isDataLoading && Object.keys(moods).length === 0 ? (
-					<p className="px-14 py-8 text-center text-sm text-gray-600 dark:text-gray-200">
+					<p className="px-14 py-8 text-center text-sm text-gray-600">
 						아직 스토리를 쓰지 않았습니다. <br />
 						스토리를 쓰고 나의 감정 통계를 확인해보세요.
 					</p>
