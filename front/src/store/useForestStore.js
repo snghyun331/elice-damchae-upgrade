@@ -29,8 +29,6 @@ const useForestStore = create((set) => ({
 			const res = await getApi(`forest/mbti?filter=${mbtiFilter}&page=${page}`);
 			set({ forests: res.data.forests });
 			set({ totalPage: res.data.totalPage });
-			console.log('필터');
-			console.log(res.data);
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
 		}
@@ -42,7 +40,6 @@ const useForestStore = create((set) => ({
 
 			set({ forests: res.data.forests });
 			set({ totalPage: res.data.totalPage });
-			console.log('전체');
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
 		}
@@ -56,7 +53,6 @@ const useForestStore = create((set) => ({
 
 			set({ forests: res.data.forests });
 			set({ totalPage: res.data.totalPage });
-			console.log('인기필터');
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
 		}
@@ -68,7 +64,6 @@ const useForestStore = create((set) => ({
 
 			set({ forests: res.data.forests });
 			set({ totalPage: res.data.totalPage });
-			console.log('인기');
 		} catch (error) {
 			console.error('Failed to fetch data:', error);
 		}

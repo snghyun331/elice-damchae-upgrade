@@ -58,6 +58,6 @@ SearchResultBox.propTypes = {
 		}),
 		_id: PropTypes.string,
 	}),
-	searchCategory: PropTypes.string
+	searchCategory: PropTypes.string,
 };
 export default SearchResultBox;

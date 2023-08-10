@@ -22,7 +22,7 @@ const StoryRead = () => {
 	const fetchStory = async () => {
 		try {
 			const res = await getApi(`stories/${storyId}`);
-			console.log(res);
+
 			setStory(res.data);
 			setIsDataLoading(true);
 			setIsPublicStory(res.data.userInfo._id === id || res.data.isPublic);
@@ -140,7 +140,7 @@ const StoryRead = () => {
 
 					<div className="flex flex-col">
 						<div className="relative -top-16 left-6 max-w-md">
-							<div className="text-9xl">
+							<div className="text-7xl md:text-9xl">
 								{isDataLoading && textToIcon[story.mood]}
 							</div>
 						</div>

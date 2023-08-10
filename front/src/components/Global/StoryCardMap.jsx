@@ -32,7 +32,7 @@ const StoryCardMap = ({ endpoint }) => {
 
 	return (
 		<>
-			<div className="font-bold mb-8 md:p-10 block bg-white rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+			<div className="font-bold mb-8 md:p-10 block bg-white rounded-lg ">
 				{isDataLoading ? (
 					<>
 						{stories && stories.length > 0 ? ( // Check if stories is not empty

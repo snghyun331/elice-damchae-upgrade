@@ -25,8 +25,6 @@ const StoryEditor = () => {
 	const [preview, setPreview] = useState('');
 	const [selectedOption, setSelectedOption] = useState('');
 
-	console.log(selectedOption);
-
 	const handleThumbnailUpload = async (e) => {
 		e.preventDefault();
 		const file = e.target.files[0];
@@ -38,7 +36,6 @@ const StoryEditor = () => {
 		try {
 			const response = await postApi('stories/recommend', { content });
 
-			console.log(response);
 			setMood(response.data.mood);
 			setMusic(response.data.music);
 			setPhrase(response.data.phrase);
@@ -59,7 +56,7 @@ const StoryEditor = () => {
 					error: <b>이미지 생성에 실패하였습니다.</b>,
 				},
 			);
-			console.log(response.data);
+
 			setStableThumbnail(response.data);
 		} catch (error) {
 			console.log(error);
@@ -78,11 +75,9 @@ const StoryEditor = () => {
 
 	return (
 		<>
-			<label className="block font-semibold text-gray-900 dark:text-white -mb-3">
-				제목
-			</label>
+			<label className="block font-semibold text-gray-900 -mb-3">제목</label>
 			<input
-				className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 				onChange={(e) => {
 					setTitle(e.target.value);
 				}}
@@ -92,9 +87,7 @@ const StoryEditor = () => {
 				maxLength={50}
 			/>
 
-			<label className="block font-semibold text-gray-900 dark:text-white">
-				본문
-			</label>
+			<label className="block font-semibold text-gray-900">본문</label>
 
 			<div>
 				<Editor
@@ -127,21 +120,19 @@ const StoryEditor = () => {
 				</div>
 			</div>
 			<div className="flex flex-col space-y-2">
-				<label className="block font-semibold text-gray-900 dark:text-white">
-					썸네일 선택
-				</label>
+				<label className="block font-semibold text-gray-900">썸네일 선택</label>
 				<div className="flex flex-row space-x-2 mb-5">
 					<div className="w-1/2 px-3 pr-5 border-r">
 						<h3 className="text-center mb-2 text-sm">
 							{' '}
-							<span className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+							<span className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full">
 								직접 업로드
 							</span>
 						</h3>
 
 						<div className="h-1/5 items-end">
 							<input
-								className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5"
 								id="file_input"
 								type="file"
 								ref={fileRef}
@@ -241,7 +232,7 @@ const StoryEditor = () => {
 					</div>
 				</div>
 				{loading && <div>이미지 업로드 중...</div>}
-				<label className="block font-semibold text-gray-900 dark:text-white pt-3">
+				<label className="block font-semibold text-gray-900 pt-3">
 					감정 분석
 				</label>
 				<div className="relative">

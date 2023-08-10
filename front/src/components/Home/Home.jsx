@@ -46,7 +46,6 @@ const Home = () => {
 
 	const handleCheckLog = async () => {
 		const res = await postApi('stories/isAlreadyWrote');
-		console.log('haha', res);
 
 		if (res.data.result) {
 			return true;
@@ -56,7 +55,7 @@ const Home = () => {
 
 	const messageDiv = (
 		<>
-			<span className="text-2xl">
+			<span className="text-xl md:text-2xl">
 				{nickname ? nickname + ' 님, ' : ''}
 				{randomMessage}
 			</span>
@@ -67,7 +66,7 @@ const Home = () => {
 						isLoggedIn ? () => navigate('/stories') : () => navigate('/login')
 					}
 					type="button"
-					className="rounded-xl w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+					className="rounded-xl w-36 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2"
 				>
 					내 스토리
 				</button>
@@ -76,7 +75,7 @@ const Home = () => {
 						isLoggedIn
 							? async () => {
 									const isWritten = await handleCheckLog();
-									console.log('isWritten', isWritten);
+
 									if (!isWritten) {
 										setStoryModal(true);
 									} else {
@@ -115,7 +114,7 @@ const Home = () => {
 				<hr className="mt-10" />
 
 				<div className="mx-4 sm:mx-10 md:mx-20 lg:mx-40" data-aos="fade-right">
-					<div className="mt-10 text-3xl font-semibold">
+					<div className="mt-10 text-2xl md:text-3xl font-semibold">
 						<Element name="scrollToThisDiv">우리들의 스토리</Element>
 					</div>
 					<div className="mt-20 items-center">

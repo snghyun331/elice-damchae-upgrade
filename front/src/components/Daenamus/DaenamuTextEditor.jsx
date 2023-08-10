@@ -25,7 +25,6 @@ const DaenamuTextEditor = () => {
 		try {
 			const response = await postApi('forest/senti-predict', { content });
 
-			console.log(response);
 			setMood(response.data.mood);
 		} catch (error) {
 			console.log(error);
@@ -53,7 +52,7 @@ const DaenamuTextEditor = () => {
 		<>
 			<h3 className="font-semibold">제목</h3>
 			<input
-				className="mb-12 mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				className="mb-12 mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 				onChange={(e) => {
 					setTitle(e.target.value);
 				}}
@@ -105,7 +104,7 @@ const DaenamuTextEditor = () => {
 									setShowEmojis(true);
 								}}
 								disabled={content?.length <= 16}
-								className="mt-3 w-40 bg-blue-400 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								className="mt-3 w-40 bg-blue-400 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center"
 							>
 								감정 분석하기
 							</button>

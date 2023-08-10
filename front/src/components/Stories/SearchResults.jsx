@@ -12,7 +12,7 @@ const SearchResults = () => {
 	if (searchCategory === 'daenamus') {
 		searchCategory = 'forest';
 	}
-	console.log(searchCategory);
+
 	const [errorMessage, setErrorMessage] = useState('');
 	const [results, setResults] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
@@ -27,7 +27,7 @@ const SearchResults = () => {
 			);
 			setResults(response.data);
 			setTotalPage(response.data.totalPage);
-			console.log(results);
+
 			setErrorMessage('');
 			setIsDataLoading(true);
 		} catch (err) {
@@ -59,7 +59,11 @@ const SearchResults = () => {
 
 		if (resultsArray && resultsArray.length > 0) {
 			return resultsArray.map((result) => (
-				<SearchResultBox key={result._id} data={result} searchCategory={searchCategory} />
+				<SearchResultBox
+					key={result._id}
+					data={result}
+					searchCategory={searchCategory}
+				/>
 			));
 		}
 		return null;
@@ -67,12 +71,16 @@ const SearchResults = () => {
 
 	return (
 		<div className="text-gray-500 dark:text-gray-400">
-			<Search endpoint={searchCategory === 'forest' ? 'daenamus' : 'stories'} onSearch={handleSearch} />
+			<Search
+				endpoint={searchCategory === 'forest' ? 'daenamus' : 'stories'}
+				onSearch={handleSearch}
+			/>
 			<h1 className="mt-10 mb-12 text-2xl">
 				<span className="text-blue-600 font-semibold">
 					{searchQuery.searchQuery}
 				</span>{' '}
-				에 대한 {searchCategory === 'forest' ? <>대나무숲</> : <>스토리</>} 검색 결과{' '}
+				에 대한 {searchCategory === 'forest' ? <>대나무숲</> : <>스토리</>} 검색
+				결과{' '}
 				<span className="text-lg">
 					{results.totalCount ? results.totalCount : '0'}건
 				</span>

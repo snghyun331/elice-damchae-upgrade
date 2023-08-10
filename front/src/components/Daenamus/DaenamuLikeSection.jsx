@@ -23,8 +23,6 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 				getApi(`forest/${forestId}/getLikes`),
 				getApi(`forest/${forestId}/getDislikes`),
 			]);
-			console.log(likes);
-			console.log(dislikes);
 			setLikes(likes.data.likes.length);
 			setDislikes(dislikes.data.dislikes.length);
 
@@ -70,7 +68,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 			const response = await (likeType === type
 				? delApi(unUrl)
 				: postApi(upUrl, {}));
-			console.log(response);
+
 			if (response.error) {
 				toast.error(response.error.message);
 			} else {

@@ -32,11 +32,11 @@ const Header = () => {
 	};
 
 	return (
-		<nav className="bg-blue-400 border-gray-200 dark:bg-gray-900">
+		<nav className="bg-blue-400 border-gray-200">
 			<div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 				<Link
 					to="/"
-					className="self-center text-2xl text-white font-semibold whitespace-nowrap dark:text-white"
+					className="self-center text-2xl text-white font-semibold whitespace-nowrap"
 				>
 					<img
 						className="self-end w-46 h-16 object-cover"
@@ -63,11 +63,11 @@ const Header = () => {
 					className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
 					id="navbar-sticky"
 				>
-					<ul className="self-center flex flex-col p-4 md:p-0 mt-4 font-medium border md:flex-row md:space-x-8 md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+					<ul className="self-center flex flex-col p-4 md:p-0 mt-4 font-medium border md:flex-row md:space-x-8 md:mt-0 md:border-0">
 						<li>
 							<button
 								onClick={navigateAndScroll}
-								className="font-bold text-lg text-white block py-2 pl-3 mr-4 pr-4 text-gray-900 rounded md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+								className="font-bold text-lg text-white block py-2 pl-3 mr-4 pr-4 text-gray-900 rounded md:hover:text-blue-700 md:p-0"
 							>
 								우리들의 스토리
 							</button>
@@ -78,7 +78,7 @@ const Header = () => {
 								onClick={() => {
 									navigate('/daenamus');
 								}}
-								className="font-bold text-lg text-white block py-2 pl-3 mr-4 pr-4 text-gray-900 rounded md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+								className="font-bold text-lg text-white block py-2 pl-3 mr-4 pr-4 text-gray-900 rounded md:hover:text-blue-700 md:p-0"
 							>
 								대나무숲
 							</button>
@@ -86,7 +86,7 @@ const Header = () => {
 						<li>
 							<button
 								onClick={handleGuestClick}
-								className="font-bold text-lg text-white block py-2 pl-3 pr-4 text-gray-900 rounded md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+								className="font-bold text-lg text-white block py-2 pl-3 pr-4 text-gray-900 rounded md:hover:text-blue-700 md:p-0"
 							>
 								내 스토리
 							</button>

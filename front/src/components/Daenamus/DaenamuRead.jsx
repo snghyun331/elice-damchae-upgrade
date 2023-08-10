@@ -110,10 +110,10 @@ const DaenamuRead = () => {
 	}, [forest.content]);
 
 	return (
-		<div className={`w-4/5 max-w-2xl mx-auto dark:bg-gray-800`}>
+		<div className={`w-4/5 max-w-2xl mx-auto `}>
 			<BackButton />
 			<div
-				className={`w-full max-w-2xl border border-gray-400 rounded-lg shadow mx-auto bg-white dark:bg-gray-800`}
+				className={`w-full max-w-2xl border border-gray-400 rounded-lg shadow mx-auto bg-white `}
 				style={{
 					backgroundColor: isDataLoading ? textToColor[forest.mood] : '#FFFFFF',
 				}}
@@ -126,7 +126,7 @@ const DaenamuRead = () => {
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleCancelEdit}
-										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
 									>
 										취소
 									</button>
@@ -139,7 +139,7 @@ const DaenamuRead = () => {
 															'글 수정 후 감정분석을 마쳐야 저장할 수 있습니다.',
 														)
 										}
-										className="disabled:bg-gray-100 py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+										className="disabled:bg-gray-100 py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
 									>
 										저장
 									</button>
@@ -148,13 +148,13 @@ const DaenamuRead = () => {
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleEdit}
-										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
 									>
 										수정
 									</button>
 									<button
 										onClick={handleConfirm}
-										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
 									>
 										삭제
 									</button>
@@ -180,7 +180,7 @@ const DaenamuRead = () => {
 										</h5>
 									</div>
 
-									<div className="w-full justify-between space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 dark:text-white">
+									<div className="w-full justify-between space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 ">
 										<div className="flex flex-row space-x-2">
 											<img
 												className="rounded-full w-10 h-10 object-cover bg-white"
@@ -194,10 +194,10 @@ const DaenamuRead = () => {
 												alt=""
 											/>
 											<div className="flex flex-col ">
-												<p className="w-20 text-sm dark:text-gray-400">
+												<p className="w-20 text-sm ">
 													{isDataLoading && forest.userInfo.nickname}
 												</p>
-												<p className="text-sm dark:text-gray-400">
+												<p className="text-sm ">
 													{isDataLoading && forest.userInfo.mbti}
 												</p>
 											</div>
@@ -225,7 +225,7 @@ const DaenamuRead = () => {
 				</div>
 				<div className="flex flex-col">
 					<DaenamuLikeSection forestId={forest._id} userId={id} />
-					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
+					<hr className="h-px bg-gray-300 border-0 mx-6" />
 					{commentList && commentList.length > 0 ? (
 						<div>
 							<ReactionChart commentList={commentList} forestId={forestId} />
@@ -233,7 +233,7 @@ const DaenamuRead = () => {
 					) : (
 						<div></div>
 					)}
-					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
+					<hr className="h-px bg-gray-300 border-0 mx-6" />
 					<div>
 						<DaenamuComment forestId={forestId} />
 					</div>
