@@ -155,7 +155,7 @@ const StoryRead = () => {
 								<img
 									className="w-full h-full object-cover"
 									src={
-										isDataLoading && story.userInfo.profileImg
+										isDataLoading && story.userInfo.profileImg?.path
 											? story.userInfo.profileImg
 											: isDataLoading && story.userInfo.mbtiImg
 											? story.userInfo.mbtiImg

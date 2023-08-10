@@ -90,7 +90,6 @@ const InfoChange = () => {
 		setMbti(selectedOption.value);
 	};
 
-	console.log(profileImg, mbtiImg);
 	const handleNicknameCheck = useCallback(async () => {
 		try {
 			const response = await getApi(
