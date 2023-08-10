@@ -126,13 +126,8 @@ const InfoChange = () => {
 				formData.append(key, toUpdate[key]);
 			}
 
-			for (let key of formData.keys()) {
-				console.log(key, ':', formData.get(key));
-			}
-
 			try {
 				const res = await putApi(`auth/update`, formData);
-				console.log(res.data);
 				if (res.status === 200) {
 					toast.success('정보를 수정하였습니다.');
 					setNickname(toUpdate.nickname);
@@ -140,7 +135,6 @@ const InfoChange = () => {
 					setProfileImg(res.data.profileImg);
 					setMbtiImg(res.data.mbtiImg);
 					infoChange(toUpdate);
-					console.log(profileImg);
 				} else {
 					toast.error('정보 수정에 실패하였습니다.');
 				}
@@ -253,9 +247,10 @@ const InfoChange = () => {
 							<form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
 								<div className="flex justify-center">
 									<img
-										className="w-32 h-32 rounded-full border -mb-2"
+										className="w-32 h-32 rounded-full border -mb-2 cursor-pointer"
 										src={preview ? preview : defaultUser}
 										alt="Rounded avatar"
+										onClick={() => setShowModal(true)}
 									/>
 								</div>
 

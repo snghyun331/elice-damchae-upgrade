@@ -25,19 +25,18 @@ const useUserStore = create((set) => {
 	};
 
 	const updateUserData = (updatedUserData) => {
-		const newUserData = { ...userData, ...updatedUserData };
+		const newUserData = { ...JSON.parse(localStorage.getItem('userData')), ...updatedUserData };
 	
 		if (updatedUserData.mbtiImg === null) {
 			newUserData.mbtiImg = null;
 		}
+
 		if (updatedUserData.profileImg === null) {
 			newUserData.profileImg = null;
 		}
 	
 		saveUserDataToLocalStorage(newUserData);
 		set(newUserData);
-
-		console.log('업데이트후 유저데이터', userData)
 	};
 	
 	return {
@@ -66,9 +65,9 @@ const useUserStore = create((set) => {
 					mbtiImg: response.data.mbtiImg,
 				};
 				localStorage.setItem('userData', JSON.stringify(userData));
+				userData.id = response.data.id;
 
 				set(userData);
-				console.log('전역설정된 데이터', userData);
 			},
 
 			register: async (user) => {
@@ -79,7 +78,6 @@ const useUserStore = create((set) => {
 				await postApi('auth/googleRegister', user);
 				const response = await postApi('auth/googleLogin', user);
 				const jwtToken = response.data.token;
-				console.log(response);
 				localStorage.setItem('accessToken', jwtToken);
 
 				const userData = {
