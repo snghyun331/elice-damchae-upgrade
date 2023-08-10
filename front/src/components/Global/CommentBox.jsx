@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { textToIcon, formatCreatedAt, formatRelativeTime } from '../Util/Util';
+import { textToIcon, formatRelativeTime } from '../Util/Util';
 import { useUserId } from '../../store/useUserStore';
 import PropTypes from 'prop-types';
 
@@ -53,7 +53,7 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 									? commentData.writerId.mbtiImg
 									: '/images/default-image.jpg'
 							}
-							className="w-11 rounded-full"
+							className="w-11 h-11 rounded-full bg-white border"
 						/>
 						<p className="text-xl absolute top-5 left-6">
 							{textToIcon[commentData.mood]}

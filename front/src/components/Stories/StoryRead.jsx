@@ -152,7 +152,7 @@ const StoryRead = () => {
 						<div>
 							<div className="w-12 h-12 mx-auto -mt-24 rounded-full overflow-hidden">
 								<img
-									className="w-full h-full object-cover"
+									className="w-full h-full object-cover bg-white"
 									src={
 										isDataLoading && story.userInfo.profileImg
 											? story.userInfo.profileImg.path

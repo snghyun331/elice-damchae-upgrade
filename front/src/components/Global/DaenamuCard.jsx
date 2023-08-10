@@ -30,7 +30,6 @@ const DaenamuCard = ({
 }) => {
 	return (
 		<div className="rounded-xl h-full">
-			{/* 클릭 시 해당 카드의 상세 페이지로 이동하는 Link 컴포넌트로 감싸기 */}
 			<Link to={`/daenamus/${_id}`}>
 				<div
 					className={`h-full flex flex-col max-w-sm p-6 ${textToBorderColor[mood]} border-[0.2rem] rounded-lg `}
