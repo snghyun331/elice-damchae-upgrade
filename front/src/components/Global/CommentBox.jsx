@@ -53,8 +53,8 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 						<img
 							src={
 								commentData.writerId.profileImg &&
-								commentData.writerId.profileImg.path
-									? commentData.writerId.profileImg.path
+								commentData.writerId.profileImg?.path
+									? commentData.writerId.profileImg?.path
 									: commentData.writerId.mbtiImg
 							}
 							className="w-11 h-11 rounded-full bg-white border"
