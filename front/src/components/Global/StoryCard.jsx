@@ -50,7 +50,7 @@ const StoryCard = ({
 					<div className="pl-2 pt-10 flex flex-col justify-between">
 						<div>
 							<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-								{truncateString(title, 32)}
+								{truncateString(title, 50)}
 								{!isPublic ? (
 									<LockClosedIcon
 										data-tooltip-id="tooltip"
