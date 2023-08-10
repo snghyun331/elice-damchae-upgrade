@@ -92,6 +92,16 @@ class storyCommentService {
     return result;
   }
 
+  static async populateStoryCommentInfo(info, field1, field2) {
+    const field = {
+      path: field1,
+      populate: { path: field2, select: 'path' },
+    };
+
+    const result = storyCommentModel.populateStoryComment(info, field);
+    return result;
+  }
+
   static async readComments(limit, page, storyId) {
     const skip = (page - 1) * limit;
     const { comments, count } = await storyCommentModel.findAndCountAll(

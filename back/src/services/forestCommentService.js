@@ -88,6 +88,16 @@ class forestCommentService {
     return result;
   }
 
+  static async populateForestCommentInfo(info, field1, field2) {
+    const field = {
+      path: field1,
+      populate: { path: field2, select: 'path' },
+    };
+
+    const result = forestCommentModel.populateForestComment(info, field);
+    return result;
+  }
+
   static async readCommentStats(forestId) {
     try {
       const allComments = await forestCommentModel.findCommentsByForestId({

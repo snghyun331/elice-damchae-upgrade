@@ -234,9 +234,15 @@ class ForestController {
         throw new Error('스토리를 찾을 수 없습니다');
       }
 
-      const result = await ForestService.populateForestPost(
+      // const result = await ForestService.populateForestPost(
+      //   forestInfo,
+      //   'userInfo',
+      // );
+
+      const result = await ForestService.populateForestInfo(
         forestInfo,
         'userInfo',
+        'profileImg',
       );
       return res.status(200).json(result);
     } catch (error) {

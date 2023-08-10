@@ -120,6 +120,13 @@ class ForestService {
     return forest;
   }
 
+  static async populateForestInfo(info, field1, field2) {
+    const field = { path: field1, populate: { path: field2, select: 'path' } };
+    const result = await forestModel.populateForestPost(info, field);
+
+    return result;
+  }
+
   static async findById(forestId) {
     try {
       return await forestModel.readOneById(forestId);

@@ -186,6 +186,12 @@ class forestModel {
     return { forest, count };
   }
 
+  static async populateForestAll(info, field1, field2) {
+    const result1 = await ForestPost.populate(info, field1);
+    const result2 = await ForestPost.populate(result1, field2);
+    return result2;
+  }
+
   static async findByForestMbtiPopular({ mbtiList, skip, limit }) {
     try {
       let matchQuery = {};
