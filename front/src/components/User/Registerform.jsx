@@ -129,6 +129,7 @@ const RegisterForm = () => {
 			});
 			setEmailButtonDisabled(false);
 		} catch (error) {
+			setErrMsg(error.response.data);
 			setEmailButtonDisabled(false);
 			toast.error(error.response.data.errorMessage);
 		}
@@ -190,6 +191,7 @@ const RegisterForm = () => {
 											placeholder="name@company.com"
 											required=""
 										/>
+
 										<button
 											type="button"
 											onClick={handleEmailSend}
@@ -205,6 +207,9 @@ const RegisterForm = () => {
 											인증코드 발송
 										</button>
 									</div>
+									{errMsg && (
+										<p className="text-red-500 text--500 text-xs">{errMsg}</p>
+									)}
 									<p
 										className={`mb-3 text-xs ${
 											!isEmailValid && email
@@ -383,7 +388,6 @@ const RegisterForm = () => {
 									>
 										가입하기
 									</button>
-									{errMsg && <p className="text--500 text-xs">{errMsg}</p>}
 
 									<p className="mt-3 self-center text-sm font-light text-gray-500 dark:text-gray-400">
 										이미 계정이 있습니까?{' '}
