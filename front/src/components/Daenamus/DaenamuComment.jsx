@@ -109,7 +109,6 @@ const DaenamuComment = ({ forestId }) => {
 					commentList?.map((commentData) => (
 						<div key={commentData._id}>
 							<CommentBox
-								fetchComment={fetchComment}
 								commentData={commentData}
 								onDelete={deleteComment}
 								onEdit={editComment}

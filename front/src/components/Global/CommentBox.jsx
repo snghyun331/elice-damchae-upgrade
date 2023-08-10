@@ -3,7 +3,7 @@ import { textToIcon, formatCreatedAt, formatRelativeTime } from '../Util/Util';
 import { useUserId } from '../../store/useUserStore';
 import PropTypes from 'prop-types';
 
-const CommentBox = ({ fetchComment, commentData, onDelete, onEdit }) => {
+const CommentBox = ({ commentData, onDelete, onEdit }) => {
 	const id = useUserId();
 	const [editMode, setEditMode] = useState(false);
 	const [editedComment, setEditedComment] = useState(commentData.comment);
@@ -27,7 +27,6 @@ const CommentBox = ({ fetchComment, commentData, onDelete, onEdit }) => {
 	const handleSaveEdit = async () => {
 		try {
 			await onEdit(commentData._id, editedComment);
-			fetchComment();
 
 			setEditMode(false);
 		} catch (error) {
@@ -136,7 +135,7 @@ CommentBox.propTypes = {
 		comment: PropTypes.string.isRequired,
 		updatedAt: PropTypes.string.isRequired,
 	}).isRequired,
-	fetchComment: PropTypes.func.isRequired,
+
 	onDelete: PropTypes.func.isRequired,
 	onEdit: PropTypes.func.isRequired,
 };
