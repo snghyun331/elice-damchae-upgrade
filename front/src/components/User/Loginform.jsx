@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import useUserStore, { useUserActions } from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
-// import GoogleLoginButton from '../Global/Layout/GoogleLoginButton';
 import GoogleButton from '../Global/Layout/GoogleButton';
 import toast from 'react-hot-toast';
+
 const LoginForm = () => {
 	const navigate = useNavigate();
 	const { email, setEmail } = useUserStore();
@@ -29,6 +29,7 @@ const LoginForm = () => {
 			await login(user);
 			navigate('/');
 		} catch (error) {
+			console.log(error.response)
 			setErrMsg(error.response?.data?.message);
 			if (error.response.data.error) {
 				toast.error(error.response?.data?.error);

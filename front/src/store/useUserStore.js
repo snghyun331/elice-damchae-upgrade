@@ -25,6 +25,7 @@ const useUserStore = create((set) => {
 	};
 
 	const updateUserData = (updatedUserData) => {
+		console.log(updatedUserData);
 		const newUserData = { ...userData, ...updatedUserData };
 		saveUserDataToLocalStorage(newUserData);
 		set(newUserData);
@@ -52,7 +53,7 @@ const useUserStore = create((set) => {
 					email: response.data.email,
 					nickname: response.data.nickname,
 					mbti: response.data.mbti,
-					profileImg: response.data.profileImg.path,
+					profileImg: response.data.profileImg?.path,
 					mbtiImg: response.data.mbtiImg,
 				};
 				localStorage.setItem('userData', JSON.stringify(userData));
@@ -78,7 +79,7 @@ const useUserStore = create((set) => {
 					email: response.data.email,
 					nickname: response.data.nickname,
 					mbti: response.data.mbti,
-					profileImg: response.data.profileImg.path,
+					profileImg: response.data.profileImg?.path,
 					mbtiImg: response.data.mbtiImg,
 					isGoogleLogin: true,
 				};

@@ -129,6 +129,12 @@ class storyPostModel {
     return result;
   }
 
+  static async populateStoryAll(info, field1, field2) {
+    const result1 = await storyPost.populate(info, field1);
+    const result2 = await storyPost.populate(result1, field2);
+    return result2;
+  }
+
   static async findStoriesById({ userId }) {
     const stories = await storyPost.find({ userInfo: userId });
     return stories;
