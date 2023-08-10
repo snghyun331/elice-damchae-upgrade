@@ -184,7 +184,7 @@ const DaenamuRead = () => {
 									<div className="w-full justify-between space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 dark:text-white">
 										<div className="flex flex-row space-x-2">
 											<img
-												className="rounded-full w-10 h-10 object-cover"
+												className="rounded-full w-10 h-10 object-cover bg-white"
 												src={
 													isDataLoading && forest.userInfo.profileImg
 														? forest.userInfo.profileImg

@@ -89,6 +89,7 @@ const StoryEditor = () => {
 				type="text"
 				id="title"
 				value={title}
+				maxLength={50}
 			/>
 
 			<label className="block font-semibold text-gray-900 dark:text-white">
