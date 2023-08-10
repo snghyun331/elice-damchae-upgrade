@@ -44,7 +44,7 @@ def generate_image():
         "Accept": "application/json",
         "Content-Type": "application/json",
         # Replace with your actual API key
-        "Authorization": "Bearer sk-Kow2vKHNCVOgla0EZbZR8yjcDjgHU2L0us5mw4S7e7y79bSH",
+        "Authorization": "Bearer sk-eujbG4gnATTujZ9k1UxehW9LCJMUmGNFiRZNehsHyhLupI9Z",
     }
 
     response = requests.post(url, headers=headers, json=body)
