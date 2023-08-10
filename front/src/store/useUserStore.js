@@ -55,7 +55,6 @@ const useUserStore = create((set) => {
 					profileImg: response.data.profileImg,
 					mbtiImg: response.data.mbtiImg,
 				};
-				localStorage.setItem('userData', JSON.stringify(userData));
 
 				set(userData);
 			},
@@ -82,14 +81,12 @@ const useUserStore = create((set) => {
 					isGoogleLogin: true,
 				};
 
-				localStorage.setItem('userData', JSON.stringify(userData));
-
 				set(userData);
 			},
 
 			logout: () => {
 				localStorage.removeItem('accessToken');
-				localStorage.removeItem('userData');
+
 				set({
 					id: '',
 					email: '',
@@ -110,6 +107,9 @@ const useUserStore = create((set) => {
 
 export const useUserActions = () => useUserStore((state) => state.actions);
 export const useIsLoggedIn = () => useUserStore((state) => state.isLoggedIn);
+export const useSetIsLoggedIn = () =>
+	useUserStore((state) => state.setIsLoggedIn);
+
 export const useUserId = () => useUserStore((state) => state.id);
 export const useUserProfileImg = () =>
 	useUserStore((state) =>
