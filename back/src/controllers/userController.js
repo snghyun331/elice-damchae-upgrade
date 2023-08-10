@@ -17,16 +17,8 @@ class userAuthController {
       // 1. 80개 이미지를 모두 몽고디비에 업로드, objectID 생성 2. 80개에 대한 예외처리
 
       // req (request) 에서 데이터 가져오기
-      const {
-        email,
-        password,
-        nickname,
-        mbti,
-        mbtiImg,
-        isGoogleLogin: isGoogleLoginRaw,
-      } = await req.body;
+      const { email, password, nickname, mbti, mbtiImg } = await req.body;
       const file = req.file ?? null;
-      const isGoogleLogin = isGoogleLoginRaw.toLowerCase() === 'true';
 
       const existingUser = await userService.readUserNickname({ nickname });
 
@@ -42,7 +34,6 @@ class userAuthController {
           nickname,
           mbti,
           mbtiImg,
-          isGoogleLogin,
         });
         return res.status(201).json(newUser);
       } else {
