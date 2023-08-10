@@ -42,11 +42,11 @@ instance.interceptors.response.use(
 	},
 	(error) => {
 		console.error(error);
-		if (error.response.status === 401) {
-			localStorage.removeItem('accessToken');
-			const { logout } = useUserActions();
-			logout();
-		}
+		// if (error.response.status === 401) {
+		// 	localStorage.removeItem('accessToken');
+		// 	const { logout } = useUserActions();
+		// 	logout();
+		// }
 		return Promise.reject(error);
 	},
 );
