@@ -9,6 +9,8 @@ import StoryComment from './StoryComment';
 import BackButton from '../Global/BackButton';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
+import MusicVideo from './MusicVideo';
+import { MusicalNoteIcon } from '@heroicons/react/24/solid';
 
 const StoryRead = () => {
 	const { storyId } = useParams();
@@ -70,6 +72,12 @@ const StoryRead = () => {
 	useEffect(() => {
 		fetchStory();
 	}, []);
+
+	const [showMusicVideo, setShowMusicVideo] = useState(false);
+
+	const handleMusicClick = () => {
+		setShowMusicVideo(!showMusicVideo);
+	};
 
 	return (
 		<div className={`w-4/5 max-w-2xl mx-auto dark:bg-gray-800`}>
@@ -170,6 +178,15 @@ const StoryRead = () => {
 								{isDataLoading && story.userInfo.mbti}
 							</p>
 						</div>
+						<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
+						<button onClick={handleMusicClick} className="w-full">
+							<div className="p-5 flex flex-row">
+								<img className="w-10 " src="/images/MusicIcon2.png" />
+								<p className="rounded-lg p-2 bg-white ml-2 mt-2">▶️ BGM ON</p>
+							</div>
+						</button>
+						{showMusicVideo && <MusicVideo music={story.music} />}
+
 						<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />
 						<div>
 							<StoryComment storyId={storyId} />

@@ -99,9 +99,7 @@ const Home = () => {
 		<div>
 			<div className="z-50">
 				<div className="space-y-5 lg:pt-12">
-					<div data-aos="flip-left">
-						<BannerCarousel />
-					</div>
+					<BannerCarousel />
 
 					<div
 						data-aos="zoom-in"
