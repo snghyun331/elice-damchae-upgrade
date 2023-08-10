@@ -140,7 +140,7 @@ const StoryRead = () => {
 
 					<div className="flex flex-col">
 						<div className="relative -top-16 left-6 max-w-md">
-							<div className="text-9xl">
+							<div className="text-7xl md:text-9xl">
 								{isDataLoading && textToIcon[story.mood]}
 							</div>
 						</div>

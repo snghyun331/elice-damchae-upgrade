@@ -43,7 +43,7 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 		<article className="p-3 md:p-5 mb-6 text-sm bg-white rounded-lg">
 			<footer className="flex justify-between mb-2">
 				<div className="whitespace-nowrap space-x-2 items-center inline-flex mr-3 text-sm text-gray-900">
-					<div className="relative">
+					<div className="hidden md:block relative">
 						{' '}
 						<img
 							src={
@@ -117,7 +117,9 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 					className="w-full h-10 p-2 mt-2 text-base text-gray-900 placeholder-gray-500 border rounded-lg appearance-none focus:outline-none focus:ring focus:ring-blue-200"
 				/>
 			) : (
-				<p className="mt-3 text-gray-500">{commentData.comment}</p>
+				<p className="text-sm md:text-md m-3 text-gray-500">
+					{commentData.comment}
+				</p>
 			)}
 		</article>
 	);
