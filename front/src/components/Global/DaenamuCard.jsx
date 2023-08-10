@@ -30,7 +30,6 @@ const DaenamuCard = ({
 }) => {
 	return (
 		<div className="rounded-xl h-full">
-			{/* 클릭 시 해당 카드의 상세 페이지로 이동하는 Link 컴포넌트로 감싸기 */}
 			<Link to={`/daenamus/${_id}`}>
 				<div
 					className={`h-full flex flex-col max-w-sm p-6 ${textToBorderColor[mood]} border-[0.2rem] rounded-lg dark:bg-gray-800 dark:border-gray-700`}
@@ -38,7 +37,7 @@ const DaenamuCard = ({
 					<span className="-ml-3 text-6xl">{textToIcon[mood]}</span>
 
 					<h5 className="mt-5 mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-						{truncateString(title, 25)}
+						{truncateString(title, 50)}
 					</h5>
 
 					<p className="mb-3 h-full font-normal text-gray-500 dark:text-gray-400 text-sm">

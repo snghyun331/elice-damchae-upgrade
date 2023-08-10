@@ -93,7 +93,7 @@ const RegisterForm = () => {
 			isNicknameValid &&
 			nicknameCheck &&
 			Boolean(mbti) && [
-				// isCodeConfirmed,
+				isCodeConfirmed,
 				isEmailValid,
 				isPasswordValid,
 				isPasswordSame,
