@@ -4,6 +4,12 @@ import { useUserId } from '../../store/useUserStore';
 import PropTypes from 'prop-types';
 
 const CommentBox = ({ commentData, onDelete, onEdit }) => {
+	// console.log(
+	// 	'이미지소스',
+	// 	commentData.writerId.profileImg && commentData.writerId.profileImg.path
+	// 		? commentData.writerId.profileImg.path
+	// 		: commentData.writerId.mbtiImg,
+	// );
 	const id = useUserId();
 	const [editMode, setEditMode] = useState(false);
 	const [editedComment, setEditedComment] = useState(commentData.comment);
@@ -27,7 +33,6 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 	const handleSaveEdit = async () => {
 		try {
 			await onEdit(commentData._id, editedComment);
-
 			setEditMode(false);
 		} catch (error) {
 			console.log(error);
@@ -47,11 +52,10 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 						{' '}
 						<img
 							src={
-								commentData.writerId.profileImg
-									? commentData.writerId.profileImg
+								commentData.writerId.profileImg &&
+								commentData.writerId.profileImg.path
+									? commentData.writerId.profileImg.path
 									: commentData.writerId.mbtiImg
-									? commentData.writerId.mbtiImg
-									: '/images/default-image.jpg'
 							}
 							className="w-11 h-11 rounded-full bg-white border"
 						/>
