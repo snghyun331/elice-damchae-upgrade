@@ -32,8 +32,8 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 			const res = await putApi(`auth/update`, formData);
 			if (res.status === 200) {
 				toast.success('프로필 사진을 수정하였습니다.');
-				setProfileImg(res.data.profileImg.path);
-				infoChange({ profileImg: res.data.profileImg.path, mbtiImg: null });
+				setProfileImg(res.data.profileImg?.path);
+				infoChange({ profileImg: res.data.profileImg?.path, mbtiImg: null });
 				closeModal();
 			} else {
 				toast.error('프로필 사진 수정에 실패했습니다.');

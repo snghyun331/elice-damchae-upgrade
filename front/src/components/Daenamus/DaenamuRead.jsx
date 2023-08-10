@@ -199,7 +199,7 @@ const DaenamuRead = () => {
 												className="rounded-full w-10 h-10 object-cover bg-white"
 												src={
 													isDataLoading && forest.userInfo.profileImg
-														? forest.userInfo.profileImg.path
+														? forest.userInfo.profileImg?.path
 														: isDataLoading && forest.userInfo.mbtiImg
 														? forest.userInfo.mbtiImg
 														: '/images/default-image.jpg'
