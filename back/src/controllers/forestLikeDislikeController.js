@@ -1,6 +1,7 @@
 import { forestLike } from '../db/schemas/forestLike.js';
 import { forestDislike } from '../db/schemas/forestDislike.js';
 import { forestLikeDislikeModel } from '../db/models/forestLikeDisLikeModel.js';
+import { forestLikeDislikeService } from '../services/forestLikeDislikeService.js';
 import mongoose from 'mongoose';
 
 class forestLikeDislikeController {
@@ -24,51 +25,72 @@ class forestLikeDislikeController {
     }
   }
 
+  // static async createForestPostLike(req, res, next) {
+  //   const session = await mongoose.startSession();
+  //   session.startTransaction();
+  //   try {
+  //     // 좋아요를 클릭했을 때, 좋아요 누른 사용자ID와 포스트ID가 받아와짐
+  //     const postId = req.params.postId;
+  //     const userId = req.currentUserId;
+
+  //     // 좋아요를 이미 눌렀을 경우 에러처리
+  //     const likeInfo = await forestLike.findOne({
+  //       userId,
+  //       postId,
+  //     });
+  //     if (likeInfo) {
+  //       throw new Error('좋아요를 이미 눌렀습니다');
+  //     }
+
+  //     // forestLike collection에 좋아요 클릭 정보를 저장
+  //     await forestLike.create([{ userId, postId }], { session });
+
+  //     // 만약 싫어요가 이미 클릭되어 있다면, 싫어요가 클릭 정보를 삭제
+  //     const dislikeInfo = await forestDislike.findOneAndDelete(
+  //       {
+  //         userId,
+  //         postId,
+  //       },
+  //       { session },
+  //     );
+  //     // 싫어요 정보가 있었던 경우에는 싫어요 클릭 수도 1 감소 (좋아요 수는 1증가)
+  //     if (dislikeInfo) {
+  //       await forestLikeDislikeModel.updateClickCounts(postId, 1, -1);
+  //     } else {
+  //       // 싫어요 정보가 없었던 경우에는 좋아요 클릭 수만 업데이트 (+1)
+  //       await forestLikeDislikeModel.updateClickCounts(postId, 1, 0);
+  //     }
+
+  //     // 트랜잭션 커밋
+  //     await session.commitTransaction();
+  //     session.endSession();
+
+  //     return res.status(201).json({ result: 'Success' });
+  //   } catch (error) {
+  //     // 트랜잭션 롤백
+  //     await session.abortTransaction();
+  //     session.endSession();
+  //     next(error);
+  //   }
+  // }
+
   static async createForestPostLike(req, res, next) {
-    const session = await mongoose.startSession();
-    session.startTransaction();
     try {
       // 좋아요를 클릭했을 때, 좋아요 누른 사용자ID와 포스트ID가 받아와짐
       const postId = req.params.postId;
       const userId = req.currentUserId;
 
-      // 좋아요를 이미 눌렀을 경우 에러처리
-      const likeInfo = await forestLike.findOne({
+      const result = await forestLikeDislikeService.createForestPostLike(
         userId,
         postId,
-      });
-      if (likeInfo) {
-        throw new Error('좋아요를 이미 눌렀습니다');
-      }
-
-      // forestLike collection에 좋아요 클릭 정보를 저장
-      await forestLike.create([{ userId, postId }], { session });
-
-      // 만약 싫어요가 이미 클릭되어 있다면, 싫어요가 클릭 정보를 삭제
-      const dislikeInfo = await forestDislike.findOneAndDelete(
-        {
-          userId,
-          postId,
-        },
-        { session },
       );
-      // 싫어요 정보가 있었던 경우에는 싫어요 클릭 수도 1 감소 (좋아요 수는 1증가)
-      if (dislikeInfo) {
-        await forestLikeDislikeModel.updateClickCounts(postId, 1, -1);
-      } else {
-        // 싫어요 정보가 없었던 경우에는 좋아요 클릭 수만 업데이트 (+1)
-        await forestLikeDislikeModel.updateClickCounts(postId, 1, 0);
+
+      if (result.errorMessage) {
+        throw new Error(result.errorMessage);
       }
 
-      // 트랜잭션 커밋
-      await session.commitTransaction();
-      session.endSession();
-
-      return res.status(201).json({ result: 'Success' });
+      return res.status(201).json(result);
     } catch (error) {
-      // 트랜잭션 롤백
-      await session.abortTransaction();
-      session.endSession();
       next(error);
     }
   }

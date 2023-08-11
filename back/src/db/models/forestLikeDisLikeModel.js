@@ -1,7 +1,24 @@
 import ForestPost from '../schemas/forestPost.js';
 import { forestLike } from '../schemas/forestLike.js';
+import { forestDislike } from '../schemas/forestDislike.js';
 
 class forestLikeDislikeModel {
+  static async createLike(session, userId, postId) {
+    await forestLike.create([{ userId, postId }], { session });
+    return;
+  }
+
+  static async deleteLike(session, userId, postId) {
+    const dislikeInfo = await forestDislike.findOneAndDelete(
+      {
+        userId,
+        postId,
+      },
+      { session },
+    );
+    return dislikeInfo;
+  }
+
   static async updateClickCounts(postId, likeIncrement, dislikeIncrement) {
     await ForestPost.updateOne(
       { _id: postId },
@@ -11,8 +28,13 @@ class forestLikeDislikeModel {
   }
 
   static async findLikeForestsByUserId({ userId }) {
-    const allLikeForests = await forestLike.find({ userId: userId });
+    const allLikeForests = await forestLike.find({ userId }); // userId : userId
     return allLikeForests;
+  }
+
+  static async findLikeInfo(userId, postId) {
+    const likeInfo = await forestLike.findOne({ userId, postId });
+    return likeInfo;
   }
 
   static async populateForestLike(info, field) {
