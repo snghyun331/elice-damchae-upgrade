@@ -259,7 +259,7 @@ class userService {
 
     if (!user.isGoogleLogin) {
       const errorMessage =
-        '이메일 로그인으로 진행하세요. Google 로그인 계정이 아닙니다.';
+        '일반 로그인으로 진행하세요. 이미 이 주소로 일반 회원가입을 진행하였습니다.';
       return { errorMessage };
     }
 
