@@ -6,8 +6,22 @@
 # 기술 스택
 ## FrontEnd
 
-<a href="https://reactjs.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="react" width="60" height="60"/> </a>
-<img src="https://cdn-icons-png.flaticon.com/512/919/919827.png" width="60" height="60"/>
+<div>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=JavaScript&logoColor=white"/>
+<img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/>
+<img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=flat-square&logo=TailwindCSS&logoColor=white"/>
+<img src="https://img.shields.io/badge/Chart.Js-FF6384?style=flat-square&logo=Chart.Js&logoColor=white"/>
+<img src="https://img.shields.io/badge/Axios-5A29E4?style=flat-square&logo=Axios&logoColor=white"/>
+<img src="https://img.shields.io/badge/ContextAPI-764ABC?style=flat-square&logo=Redux&logoColor=white"/>
+<img src="https://img.shields.io/badge/JWT-41454A?style=flat-square&logo=JSON%20web%20tokens&logoColor=white"/>
+
+</div>
+
+- 리액트를 사용하여 클라이언트를 구성.
+- Tailwind의 클래스 제어를 통해 CSS 구현.
+- Context API를 통해 전역 상태 관리.
+- Axios의 인스턴스를 통해 서버와의 통신.
+- React-ChartJS2 를 통해 그래프 시각화.
 
 ## BackEnd
 
