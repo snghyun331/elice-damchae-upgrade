@@ -23,14 +23,15 @@
 - React-ChartJS2,ApexCharts 를 통해 그래프 시각화.
 
 ## BackEnd
+<img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white"/>
+<img src="https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white"/>
+<img src="https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white"/>
+<img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=flask&logoColor=white"/>
+<img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=flask&logoColor=white"/>
 
-<img src="https://cdn.iconscout.com/icon/free/png-256/free-aws-1869025-1583149.png" width="60" height="60"/>
-<img src="https://www.bairesdev.com/wp-content/uploads//2021/07/Expressjs.svg" width="100" height="60"/>
-<img src="https://cdn.icon-icons.com/icons2/2699/PNG/512/pocoo_flask_logo_icon_168045.png" width="120" height="60"/>
+## AI
+<img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white"/>
 
-## DataBase
-
-<a href="https://www.mongodb.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg" alt="mongodb" width="90" height="60"/></a>
 
 # 담채란?
 - 감정을 나누고 공유하는 감정일기 플랫폼과 MBTI기반 감정분석 커뮤니티
