@@ -48,6 +48,16 @@ class forestLikeDislikeModel {
     return allLikeForests;
   }
 
+  static async findLikesByPostId({ postId }) {
+    const allLikeForests = await forestLike.find({ postId });
+    return allLikeForests;
+  }
+
+  static async findDislikesByPostId({ postId }) {
+    const allDislikeForests = await forestDislike.find({ postId });
+    return allDislikeForests;
+  }
+
   static async findLikeInfo(userId, postId) {
     const likeInfo = await forestLike.findOne({ userId, postId });
     return likeInfo;

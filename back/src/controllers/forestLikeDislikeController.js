@@ -1,12 +1,11 @@
-import { forestLike } from '../db/schemas/forestLike.js';
-import { forestDislike } from '../db/schemas/forestDislike.js';
+import { forestLikeDislikeModel } from '../db/models/forestLikeDisLikeModel.js';
 import { forestLikeDislikeService } from '../services/forestLikeDislikeService.js';
 
 class forestLikeDislikeController {
   static async readForestPostLikes(req, res, next) {
     try {
       const postId = req.params.postId;
-      const likes = await forestLike.find({ postId });
+      const likes = await forestLikeDislikeModel.findLikesByPostId({ postId });
       return res.status(200).json({ result: 'Success', likes });
     } catch (error) {
       next(error);
@@ -16,7 +15,9 @@ class forestLikeDislikeController {
   static async readForestPostDisikes(req, res, next) {
     try {
       const postId = req.params.postId;
-      const dislikes = await forestDislike.find({ postId });
+      const dislikes = await forestLikeDislikeModel.findDislikesByPostId({
+        postId,
+      });
       return res.status(200).json({ result: 'Success', dislikes });
     } catch (error) {
       next(error);
