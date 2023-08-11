@@ -13,6 +13,8 @@ storyPostRouter.post(
   storyPostController.createStoryPost,
 );
 
+storyPostRouter.get('/', storyPostController.readAllStories);
+
 storyPostRouter.post(
   '/isAlreadyWrote',
   loginRequired,
@@ -23,12 +25,6 @@ storyPostRouter.post(
   '/recommend',
   loginRequired,
   storyPostController.getPredict,
-);
-
-storyPostRouter.delete(
-  '/:storyId',
-  loginRequired,
-  storyPostController.deleteStoryPost,
 );
 
 // 감정 통계
@@ -50,8 +46,10 @@ storyPostRouter.get('/my', loginRequired, storyPostController.readUserStory);
 
 storyPostRouter.get('/:storyId', storyPostController.readStoryDetail);
 
-storyPostRouter.get('/', storyPostController.readAllStories);
-
-// storyPostRouter.get('/user/stories/:userId', storyPostController.readUserStory);
+storyPostRouter.delete(
+  '/:storyId',
+  loginRequired,
+  storyPostController.deleteStoryPost,
+);
 
 export { storyPostRouter };
