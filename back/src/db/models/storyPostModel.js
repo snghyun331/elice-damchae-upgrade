@@ -54,15 +54,20 @@ class storyPostModel {
     return story;
   }
 
-  static async findAndIncreaseCommentCount({ storyId }) {
-    await storyPost.updateOne({ _id: storyId }, { $inc: { commentCount: 1 } });
+  static async findAndIncreaseCommentCount(session, { storyId }) {
+    await storyPost
+      .updateOne({ _id: storyId }, { $inc: { commentCount: 1 } })
+      .session(session);
+    return;
   }
 
-  static async findAndDecreaseCommentCount({ storyId }) {
-    await storyPost.updateOne(
-      { _id: storyId, commentCount: { $gt: 0 } },
-      { $inc: { commentCount: -1 } },
-    );
+  static async findAndDecreaseCommentCount(session, { storyId }) {
+    await storyPost
+      .updateOne(
+        { _id: storyId, commentCount: { $gt: 0 } },
+        { $inc: { commentCount: -1 } },
+      )
+      .session(session);
   }
 
   static async deleteOneByStoryId({ storyId }) {

@@ -5,35 +5,35 @@ import { forestLikeDislikeController } from '../controllers/forestLikeDislikeCon
 const forestLikeDislikeRouter = Router();
 
 forestLikeDislikeRouter.post(
-  '/forest/:postId/upLike',
+  '/:postId/upLike',
   loginRequired,
   forestLikeDislikeController.createForestPostLike,
 );
 
 forestLikeDislikeRouter.get(
-  '/forest/:postId/getLikes',
+  '/:postId/getLikes',
   forestLikeDislikeController.readForestPostLikes,
 );
 
 forestLikeDislikeRouter.post(
-  '/forest/:postId/upDislike',
+  '/:postId/upDislike',
   loginRequired,
   forestLikeDislikeController.createForestPostDislike,
 );
 
 forestLikeDislikeRouter.get(
-  '/forest/:postId/getDislikes',
+  '/:postId/getDislikes',
   forestLikeDislikeController.readForestPostDisikes,
 );
 
 forestLikeDislikeRouter.delete(
-  '/forest/:postId/unLike',
+  '/:postId/unLike',
   loginRequired,
   forestLikeDislikeController.deleteForestPostLike,
 );
 
 forestLikeDislikeRouter.delete(
-  '/forest/:postId/unDislike',
+  '/:postId/unDislike',
   loginRequired,
   forestLikeDislikeController.deleteForestPostDislike,
 );

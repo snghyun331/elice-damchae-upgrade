@@ -7,13 +7,9 @@ class storyCommentService {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      if (!comment) {
-        throw new Error('댓글을 입력해주세요');
-      }
-
       const newComment = { storyId, writerId, comment, mood };
 
-      storyPostModel.findAndIncreaseCommentCount({ storyId });
+      await storyPostModel.findAndIncreaseCommentCount(session, { storyId });
 
       const createdNewComment = await storyCommentModel.createStoryComment({
         newComment,
@@ -21,11 +17,13 @@ class storyCommentService {
 
       // 트랜잭션 커밋
       await session.commitTransaction();
-      session.endSession();
+
       return createdNewComment;
     } catch (error) {
       // 트랜잭션 롤백
       await session.abortTransaction();
+      console.error('Transaction aborted:', error);
+    } finally {
       session.endSession();
     }
   }
@@ -68,7 +66,7 @@ class storyCommentService {
         commentId,
       });
       const storyId = commentInfo.storyId;
-      storyPostModel.findAndDecreaseCommentCount({ storyId });
+      await storyPostModel.findAndDecreaseCommentCount(session, { storyId });
       let isDeleted = await storyCommentModel.deleteOneByCommentId({
         commentId,
       });
@@ -77,11 +75,11 @@ class storyCommentService {
       }
       // 트랜잭션 커밋
       await session.commitTransaction();
-      session.endSession();
       return { result: 'Success' };
     } catch (error) {
       // 트랜잭션 롤백
       await session.abortTransaction();
+    } finally {
       session.endSession();
     }
   }

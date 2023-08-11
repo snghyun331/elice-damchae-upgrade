@@ -7,55 +7,51 @@ import { uploadS3 } from '../utills/multer.js';
 const storyPostRouter = Router();
 
 storyPostRouter.post(
-  '/stories',
+  '/',
   loginRequired,
   uploadS3.single('thumbnail'),
   storyPostController.createStoryPost,
 );
 
 storyPostRouter.post(
-  '/stories/isAlreadyWrote',
+  '/isAlreadyWrote',
   loginRequired,
   storyPostController.checkAlreadyWrite,
 );
 
 storyPostRouter.post(
-  '/stories/recommend',
+  '/recommend',
   loginRequired,
   storyPostController.getPredict,
 );
 
 storyPostRouter.delete(
-  '/stories/:storyId',
+  '/:storyId',
   loginRequired,
   storyPostController.deleteStoryPost,
 );
 
 // 감정 통계
 storyPostRouter.get(
-  '/stories/my/moodStat',
+  '/my/moodStat',
   loginRequired,
   storyPostController.readMyMoodStatistic,
 );
 
 // 한달치 내 스토리별 감정 조회 (감정 정보만 return)
 storyPostRouter.get(
-  '/stories/my/calendar',
+  '/my/calendar',
   loginRequired,
   storyPostController.readMyCalender,
 );
 
 // 내 스토리 전체 조회 (스토리 전체 정보 return)
-storyPostRouter.get(
-  '/stories/my',
-  loginRequired,
-  storyPostController.readUserStory,
-);
+storyPostRouter.get('/my', loginRequired, storyPostController.readUserStory);
 
-storyPostRouter.get('/stories/:storyId', storyPostController.readStoryDetail);
+storyPostRouter.get('/:storyId', storyPostController.readStoryDetail);
 
-storyPostRouter.get('/stories', storyPostController.readAllStories);
+storyPostRouter.get('/', storyPostController.readAllStories);
 
-storyPostRouter.get('/user/stories/:userId', storyPostController.readUserStory);
+// storyPostRouter.get('/user/stories/:userId', storyPostController.readUserStory);
 
 export { storyPostRouter };
