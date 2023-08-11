@@ -33,7 +33,7 @@ const DaenamuRead = () => {
 		try {
 			const res = await getApi(`forest/${forestId}`);
 			setForest(res.data);
-			console.log(res.data);
+
 			setIsDataLoading(true);
 		} catch (error) {
 			console.log(error);
