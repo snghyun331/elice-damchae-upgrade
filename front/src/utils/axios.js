@@ -2,8 +2,7 @@ import axios from 'axios';
 
 const serverUrl = import.meta.env.VITE_SERVER_HOST;
 
-import { useUserActions } from '../store/useUserStore';
-import { useNavigate } from 'react-router-dom';
+import useUserStore from '../store/useUserStore';
 
 const getToken = () => {
 	return localStorage.getItem('accessToken') || null;
@@ -43,8 +42,7 @@ instance.interceptors.response.use(
 	(error) => {
 		console.error(error);
 		if (error.response.status === 401) {
-			const { logout } = useUserActions();
-			logout();
+			useUserStore.getState().actions.logout();
 		}
 		return Promise.reject(error);
 	},

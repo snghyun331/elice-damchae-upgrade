@@ -27,7 +27,7 @@ const StoryRead = () => {
 
 			setStory(res.data);
 			setIsDataLoading(true);
-			setIsPublicStory(res.data.userInfo._id === id || res.data.isPublic);
+			setIsPublicStory(res.data.userInfo?._id === id || res.data.isPublic);
 		} catch (error) {
 			console.log(error);
 		}
@@ -133,7 +133,7 @@ const StoryRead = () => {
 									/>
 								)}
 							</p>
-							{isDataLoading && story.userInfo._id == id && (
+							{isDataLoading && story.userInfo?._id == id && (
 								<>
 									<button
 										onClick={handleConfirm}
@@ -153,7 +153,7 @@ const StoryRead = () => {
 							</div>
 						</div>
 
-						<div className="relative -top-20 p-10 my-8">
+						<div className="relative -top-20 p-6 md:p-10 my-8">
 							{isDataLoading && <Viewer initialValue={story.content} />}
 						</div>
 
@@ -162,20 +162,22 @@ const StoryRead = () => {
 								<img
 									className="w-full h-full object-cover bg-white"
 									src={
-										isDataLoading && story.userInfo.profileImg
-											? story.userInfo.profileImg?.path
-											: isDataLoading && story.userInfo.mbtiImg
-											? story.userInfo.mbtiImg
+										isDataLoading && story.userInfo?.profileImg
+											? story.userInfo?.profileImg?.path
+											: isDataLoading && story.userInfo?.mbtiImg
+											? story.userInfo?.mbtiImg
 											: '/images/default-image.jpg'
 									}
 									alt="작성자 프로필 이미지"
 								/>
 							</div>
 							<h5 className="text-center text-gray-700 mx-auto mt-2">
-								{isDataLoading && story.userInfo.nickname}
+								{isDataLoading && story.userInfo
+									? story.userInfo.nickname
+									: '알 수 없는 유저'}
 							</h5>
 							<p className="text-gray-400 text-xs text-center mt-1 mb-5">
-								{isDataLoading && story.userInfo.mbti}
+								{isDataLoading && story.userInfo?.mbti}
 							</p>
 						</div>
 						<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700 mx-6" />

@@ -8,6 +8,7 @@ const ReactionChart = ({ commentList, forestId }) => {
 	const fetchReaction = async () => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments/statistics`);
+			console.log(res);
 
 			setReaction(res.data);
 		} catch (error) {

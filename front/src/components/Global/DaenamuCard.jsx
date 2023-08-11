@@ -33,7 +33,7 @@ const DaenamuCard = ({
 		<div className="rounded-xl h-full">
 			<Link to={`/daenamus/${_id}`}>
 				<div
-					className={`h-full flex flex-col max-w-sm p-6 ${textToBorderColor[mood]} border-[0.2rem] rounded-lg `}
+					className={`h-full flex flex-col max-w-sm p-4 lg:p-6 ${textToBorderColor[mood]} border-[0.2rem] rounded-lg `}
 				>
 					<span className="-ml-3 text-6xl">{textToIcon[mood]}</span>
 
@@ -52,11 +52,11 @@ const DaenamuCard = ({
 					</div>
 
 					<div className=" text-gray-600 w-full flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 ">
-						<div className="flex items-center">
-							<ChevronRightIcon className="w-4 mt-1 " />
-							<span className="ml-1">더보기</span>
+						<div className="flex flex-row items-center">
+							<ChevronRightIcon className="w-3 mt-1 " />
+							<span>더보기</span>
 						</div>
-						<div className=" flex flex-row space-x-2">
+						<div className="items-center flex flex-row space-x-2">
 							<EyeIcon className="w-4 mt-1" />
 							<p>{views}</p>
 							<HandThumbUpIcon className="w-4 mt-1" />

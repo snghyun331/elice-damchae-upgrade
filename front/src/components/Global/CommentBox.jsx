@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 const CommentBox = ({ commentData, onDelete, onEdit }) => {
 	// console.log(
 	// 	'이미지소스',
-	// 	commentData.writerId.profileImg && commentData.writerId.profileImg.path
-	// 		? commentData.writerId.profileImg.path
-	// 		: commentData.writerId.mbtiImg,
+	// 	commentData.writerId?.profileImg && commentData.writerId?.profileImg.path
+	// 		? commentData.writerId?.profileImg.path
+	// 		: commentData.writerId?.mbtiImg,
 	// );
 	const id = useUserId();
 	const [editMode, setEditMode] = useState(false);
@@ -52,10 +52,10 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 						{' '}
 						<img
 							src={
-								commentData.writerId.profileImg &&
-								commentData.writerId.profileImg?.path
-									? commentData.writerId.profileImg?.path
-									: commentData.writerId.mbtiImg
+								commentData.writerId?.profileImg &&
+								commentData.writerId?.profileImg?.path
+									? commentData.writerId?.profileImg?.path
+									: commentData.writerId?.mbtiImg
 							}
 							className="w-11 h-11 rounded-full bg-white border"
 						/>
@@ -64,14 +64,18 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 						</p>
 					</div>
 					<div></div>
-					<p className="font-gray-800">{commentData.writerId.nickname}</p>
-					<p className="text-sm text-gray-600">{commentData.writerId.mbti}</p>
+					<p className="font-gray-800">
+						{commentData.writerId
+							? commentData.writerId.nickname
+							: '알 수 없는 유저'}
+					</p>
+					<p className="text-sm text-gray-600">{commentData.writerId?.mbti}</p>
 					<p className="text-xs text-gray-600">
 						{formatRelativeTime(commentData.updatedAt)}
 					</p>
 				</div>
 
-				{commentData.writerId._id === id && (
+				{commentData.writerId?._id === id && (
 					<div className="flex flex-col md:flex-row justify-end">
 						{editMode ? (
 							<>
