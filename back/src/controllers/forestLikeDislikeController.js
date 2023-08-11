@@ -69,33 +69,22 @@ class forestLikeDislikeController {
 
   // 좋아요를 취소하는 콜백 함수
   static async deleteForestPostLike(req, res, next) {
-    const session = await mongoose.startSession();
-    session.startTransaction();
     try {
       // 좋아요를 취소했을 때, 취소한 사용자ID와 포스트ID가 받아와짐
       const postId = req.params.postId;
       const userId = req.currentUserId;
 
-      const likeInfo = await forestLike.findOneAndDelete(
-        {
-          userId,
-          postId,
-        },
-        { session },
+      const result = await forestLikeDislikeService.deleteForestPostLike(
+        userId,
+        postId,
       );
-      if (likeInfo) {
-        await forestLikeDislikeModel.updateClickCounts(postId, -1, 0);
+
+      if (result.errorMessage) {
+        throw new Error(result.errorMessage);
       }
 
-      // 트랜잭션 커밋
-      await session.commitTransaction();
-      session.endSession();
-
-      return res.status(200).json({ result: 'Success' });
+      return res.status(200).json(result);
     } catch (error) {
-      // 트랜잭션 롤백
-      await session.abortTransaction();
-      session.endSession();
       next(error);
     }
   }
