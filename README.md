@@ -65,4 +65,214 @@
 | 정소현 | 프론트엔드 |
 | 양희태 | 프론트엔드 |
 
+## 5. Folder Tree
+📦mbti-agora
+ ┣ 📂back
+ ┃ ┣ 📂src
+ ┃ ┃ ┣ 📂ai
+ ┃ ┃ ┃ ┣ 📜ai.sh
+ ┃ ┃ ┃ ┣ 📜app.py
+ ┃ ┃ ┃ ┣ 📜app3.py
+ ┃ ┃ ┃ ┣ 📜bertModelClass.py
+ ┃ ┃ ┃ ┣ 📜best_model.h5
+ ┃ ┃ ┃ ┣ 📜requirements.txt
+ ┃ ┃ ┃ ┗ 📜requirements2.txt
+ ┃ ┃ ┣ 📂controllers
+ ┃ ┃ ┃ ┣ 📜forestCommentController.js
+ ┃ ┃ ┃ ┣ 📜forestController.js
+ ┃ ┃ ┃ ┣ 📜forestLikeDislikeController.js
+ ┃ ┃ ┃ ┣ 📜imageController.js
+ ┃ ┃ ┃ ┣ 📜myPageController.js
+ ┃ ┃ ┃ ┣ 📜storyCommentController.js
+ ┃ ┃ ┃ ┣ 📜storyPostController.js
+ ┃ ┃ ┃ ┗ 📜userController.js
+ ┃ ┃ ┣ 📂db
+ ┃ ┃ ┃ ┣ 📂models
+ ┃ ┃ ┃ ┃ ┣ 📜forestCommentModel.js
+ ┃ ┃ ┃ ┃ ┣ 📜forestLikeDisLikeModel.js
+ ┃ ┃ ┃ ┃ ┣ 📜forestModel.js
+ ┃ ┃ ┃ ┃ ┣ 📜imageModel.js
+ ┃ ┃ ┃ ┃ ┣ 📜myPageModel.js
+ ┃ ┃ ┃ ┃ ┣ 📜storyCommentModel.js
+ ┃ ┃ ┃ ┃ ┣ 📜storyPostModel.js
+ ┃ ┃ ┃ ┃ ┗ 📜userModel.js
+ ┃ ┃ ┃ ┗ 📂schemas
+ ┃ ┃ ┃ ┃ ┣ 📜authString.js
+ ┃ ┃ ┃ ┃ ┣ 📜forestComment.js
+ ┃ ┃ ┃ ┃ ┣ 📜forestDislike.js
+ ┃ ┃ ┃ ┃ ┣ 📜forestLike.js
+ ┃ ┃ ┃ ┃ ┣ 📜forestPost.js
+ ┃ ┃ ┃ ┃ ┣ 📜image.js
+ ┃ ┃ ┃ ┃ ┣ 📜storyComment.js
+ ┃ ┃ ┃ ┃ ┣ 📜storyPost.js
+ ┃ ┃ ┃ ┃ ┣ 📜storyRandomMusic.js
+ ┃ ┃ ┃ ┃ ┣ 📜storyRandomPhrase.js
+ ┃ ┃ ┃ ┃ ┗ 📜user.js
+ ┃ ┃ ┣ 📂middlewares
+ ┃ ┃ ┃ ┣ 📂error
+ ┃ ┃ ┃ ┃ ┣ 📜badRequest.js
+ ┃ ┃ ┃ ┃ ┗ 📜methodNotAllowed.js
+ ┃ ┃ ┃ ┣ 📜errorMiddleware.js
+ ┃ ┃ ┃ ┣ 📜loginRequired.js
+ ┃ ┃ ┃ ┗ 📜outUserValidation.js
+ ┃ ┃ ┣ 📂routers
+ ┃ ┃ ┃ ┣ 📜forestCommentRouter.js
+ ┃ ┃ ┃ ┣ 📜forestLikeDislikeRouter.js
+ ┃ ┃ ┃ ┣ 📜forestPostRouter.js
+ ┃ ┃ ┃ ┣ 📜imageRouter.js
+ ┃ ┃ ┃ ┣ 📜index.js
+ ┃ ┃ ┃ ┣ 📜myPageRouter.js
+ ┃ ┃ ┃ ┣ 📜storyCommentRouter.js
+ ┃ ┃ ┃ ┣ 📜storyPostRouter.js
+ ┃ ┃ ┃ ┗ 📜userAuthRouter.js
+ ┃ ┃ ┣ 📂services
+ ┃ ┃ ┃ ┣ 📜forestCommentService.js
+ ┃ ┃ ┃ ┣ 📜forestLikeDislikeService.js
+ ┃ ┃ ┃ ┣ 📜forestService.js
+ ┃ ┃ ┃ ┣ 📜imageService.js
+ ┃ ┃ ┃ ┣ 📜myPageService.js
+ ┃ ┃ ┃ ┣ 📜storyCommentService.js
+ ┃ ┃ ┃ ┣ 📜storyPostService.js
+ ┃ ┃ ┃ ┗ 📜userService.js
+ ┃ ┃ ┣ 📂utills
+ ┃ ┃ ┃ ┣ 📜constant.js
+ ┃ ┃ ┃ ┣ 📜emailAuth.js
+ ┃ ┃ ┃ ┣ 📜multer.js
+ ┃ ┃ ┃ ┣ 📜path.js
+ ┃ ┃ ┃ ┗ 📜statusCode.js
+ ┃ ┃ ┗ 📜app.js
+ ┃ ┣ 📂uploads
+ ┃ ┃ ┗ 📜stable-1690950996636.png
+ ┃ ┣ 📜.config
+ ┃ ┣ 📜.env
+ ┃ ┣ 📜.eslintrc.json
+ ┃ ┣ 📜.gitignore
+ ┃ ┣ 📜.prettierrc
+ ┃ ┣ 📜index.js
+ ┃ ┣ 📜jsconfig.json
+ ┃ ┣ 📜package.json
+ ┃ ┗ 📜yarn.lock
+ ┣ 📂front
+ ┃ ┣ 📂public
+ ┃ ┃ ┣ 📂images
+ ┃ ┃ ┃ ┣ 📜banner1.png
+ ┃ ┃ ┃ ┣ 📜banner2.png
+ ┃ ┃ ┃ ┣ 📜banner3.png
+ ┃ ┃ ┃ ┣ 📜banner4.png
+ ┃ ┃ ┃ ┣ 📜bannermain.jpg
+ ┃ ┃ ┃ ┣ 📜default-image.jpg
+ ┃ ┃ ┃ ┣ 📜default-user.png
+ ┃ ┃ ┃ ┣ 📜favicon.png
+ ┃ ┃ ┃ ┣ 📜forest.gif
+ ┃ ┃ ┃ ┣ 📜loginimg.jpg
+ ┃ ┃ ┃ ┣ 📜loginlogo.png
+ ┃ ┃ ┃ ┣ 📜logo1.png
+ ┃ ┃ ┃ ┣ 📜MusicIcon.png
+ ┃ ┃ ┃ ┣ 📜MusicIcon2.png
+ ┃ ┃ ┃ ┣ 📜story.gif
+ ┃ ┃ ┃ ┗ 📜thumbnail.jpg
+ ┃ ┃ ┗ 📜vite.svg
+ ┃ ┣ 📂src
+ ┃ ┃ ┣ 📂assets
+ ┃ ┃ ┃ ┗ 📜react.svg
+ ┃ ┃ ┣ 📂components
+ ┃ ┃ ┃ ┣ 📂Daenamus
+ ┃ ┃ ┃ ┃ ┣ 📜DaenamuCardMap.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜DaenamuComment.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜DaenamuLikeSection.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜DaenamuRead.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜DaenamusMain.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜DaenamusWrite.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜DaenamuTextEditor.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜Modal.css
+ ┃ ┃ ┃ ┃ ┗ 📜Reaction.jsx
+ ┃ ┃ ┃ ┣ 📂Global
+ ┃ ┃ ┃ ┃ ┣ 📂Layout
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜Footer.jsx
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜GoogleButton.jsx
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜Header.jsx
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜Layout.jsx
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜LoadingSpinner.jsx
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜LoginButton.jsx
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜LogoutButton.jsx
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜MobileHeader.jsx
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜ProfileButton.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜BackButton.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜CommentBox.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜DaenamuCard.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜Pagination.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜RadioOption.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜Search.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜StoryCard.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜StoryCardMap.jsx
+ ┃ ┃ ┃ ┃ ┗ 📜TextViewer.jsx
+ ┃ ┃ ┃ ┣ 📂Home
+ ┃ ┃ ┃ ┃ ┣ 📜BannerCarousel.jsx
+ ┃ ┃ ┃ ┃ ┗ 📜Home.jsx
+ ┃ ┃ ┃ ┣ 📂MyPage
+ ┃ ┃ ┃ ┃ ┣ 📜MyCalendar.css
+ ┃ ┃ ┃ ┃ ┣ 📜MyCalendar.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyComments.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyDaenamuCard.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyDaenamus.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyDaenamusAll.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyLikedDaenamus.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyLikedDaenamusAll.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyMainMood.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyMoodStat.jsx
+ ┃ ┃ ┃ ┃ ┗ 📜MyPage.jsx
+ ┃ ┃ ┃ ┣ 📂Stories
+ ┃ ┃ ┃ ┃ ┣ 📜ModalPortal.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜MusicVideo.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyStories.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜SearchResultBox.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜SearchResults.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜StoryComment.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜StoryCreateModal.css
+ ┃ ┃ ┃ ┃ ┣ 📜StoryCreateModal.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜StoryEditor.jsx
+ ┃ ┃ ┃ ┃ ┗ 📜StoryRead.jsx
+ ┃ ┃ ┃ ┣ 📂User
+ ┃ ┃ ┃ ┃ ┣ 📜InfoChange.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜Loginform.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜ProfileImgUploadModal.jsx
+ ┃ ┃ ┃ ┃ ┣ 📜ProfilePicker.jsx
+ ┃ ┃ ┃ ┃ ┗ 📜Registerform.jsx
+ ┃ ┃ ┃ ┗ 📂Util
+ ┃ ┃ ┃ ┃ ┗ 📜Util.jsx
+ ┃ ┃ ┣ 📂hooks
+ ┃ ┃ ┃ ┣ 📜useImageUpload.jsx
+ ┃ ┃ ┃ ┣ 📜usePagination.jsx
+ ┃ ┃ ┃ ┗ 📜useRegisterStore.js
+ ┃ ┃ ┣ 📂routes
+ ┃ ┃ ┃ ┗ 📜Router.jsx
+ ┃ ┃ ┣ 📂services
+ ┃ ┃ ┃ ┗ 📜api.js
+ ┃ ┃ ┣ 📂store
+ ┃ ┃ ┃ ┣ 📜useForestStore.js
+ ┃ ┃ ┃ ┣ 📜useStoryStore.js
+ ┃ ┃ ┃ ┗ 📜useUserStore.js
+ ┃ ┃ ┣ 📂utils
+ ┃ ┃ ┃ ┗ 📜axios.js
+ ┃ ┃ ┣ 📜App.jsx
+ ┃ ┃ ┣ 📜index.css
+ ┃ ┃ ┗ 📜main.jsx
+ ┃ ┣ 📜.env
+ ┃ ┣ 📜.eslintrc.cjs
+ ┃ ┣ 📜.gitignore
+ ┃ ┣ 📜index.html
+ ┃ ┣ 📜package.json
+ ┃ ┣ 📜postcss.config.js
+ ┃ ┣ 📜tailwind.config.js
+ ┃ ┣ 📜vite.config.js
+ ┃ ┣ 📜vite.config.js.timestamp-1689928538241-13348d1e57969.mjs
+ ┃ ┣ 📜vite.config.js.timestamp-1690910568181-9fb2a409a378b.mjs
+ ┃ ┣ 📜vite.config.js.timestamp-1691136412797-906a9228c45c1.mjs
+ ┃ ┗ 📜yarn.lock
+ ┣ 📜.gitattributes
+ ┣ 📜.gitignore
+ ┣ 📜.prettierrc
+ ┣ 📜package.json
+ ┣ 📜README.md
+ ┗ 📜yarn.lock
 
