@@ -27,7 +27,7 @@
 <img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white"/>
 <img src="https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white"/>
 <img src="https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white"/>
-<img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=aws&logoColor=white"/>
+<img src="https://img.shields.io/badge/AmazonAWS-232F3E?style=flat-square&logo=aws&logoColor=white"/>
 
 
 ## AI
