@@ -72,6 +72,7 @@ const useUserStore = create((set) => {
 				userData.id = response.data.id;
 
 				set(userData);
+
 			},
 
 			register: async (user) => {
@@ -94,10 +95,10 @@ const useUserStore = create((set) => {
 					mbtiImg: response.data.mbtiImg,
 					isGoogleLogin: true,
 				};
-
 				localStorage.setItem('userData', JSON.stringify(userData));
-
 				set(userData);
+				
+				return userData.mbti !== '미설정' ? '/' : '/infoChange';
 			},
 
 			logout: () => {

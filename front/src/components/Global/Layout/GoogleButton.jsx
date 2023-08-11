@@ -66,8 +66,8 @@ const GoogleButton = () => {
 			const user = { email, idToken, nickname, mbti, isGoogleLogin: true };
 
 			try {
-				await googleLogin(user);
-				navigate('/');
+				const navigateURL = await googleLogin(user);
+				navigate(navigateURL);
 			} catch (error) {
 				toast.error('구글 로그인에 실패했습니다.');
 				if (error.response.data.message) {
