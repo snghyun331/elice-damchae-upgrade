@@ -1,14 +1,12 @@
 import { forestLike } from '../db/schemas/forestLike.js';
 import { forestDislike } from '../db/schemas/forestDislike.js';
-import { forestLikeDislikeModel } from '../db/models/forestLikeDisLikeModel.js';
 import { forestLikeDislikeService } from '../services/forestLikeDislikeService.js';
-import mongoose from 'mongoose';
 
 class forestLikeDislikeController {
   static async readForestPostLikes(req, res, next) {
     try {
       const postId = req.params.postId;
-      const likes = await forestLike.find({ postId: postId });
+      const likes = await forestLike.find({ postId });
       return res.status(200).json({ result: 'Success', likes });
     } catch (error) {
       next(error);
@@ -18,7 +16,7 @@ class forestLikeDislikeController {
   static async readForestPostDisikes(req, res, next) {
     try {
       const postId = req.params.postId;
-      const dislikes = await forestDislike.find({ postId: postId });
+      const dislikes = await forestDislike.find({ postId });
       return res.status(200).json({ result: 'Success', dislikes });
     } catch (error) {
       next(error);
@@ -91,33 +89,22 @@ class forestLikeDislikeController {
 
   // 싫어요를 취소하는 콜백 함수
   static async deleteForestPostDislike(req, res, next) {
-    const session = await mongoose.startSession();
-    session.startTransaction();
     try {
       // 싫어요를 취소했을 때, 취소한 사용자ID와 포스트ID가 받아와짐
       const postId = req.params.postId;
       const userId = req.currentUserId;
 
-      const dislikeInfo = await forestDislike.findOneAndDelete(
-        {
-          userId,
-          postId,
-        },
-        { session },
+      const result = await forestLikeDislikeService.deleteForestPostDislike(
+        userId,
+        postId,
       );
-      if (dislikeInfo) {
-        await forestLikeDislikeModel.updateClickCounts(postId, 0, -1);
+
+      if (result.errorMessage) {
+        throw new Error(result.errorMessage);
       }
 
-      // 트랜잭션 커밋
-      await session.commitTransaction();
-      session.endSession();
-
-      return res.status(200).json({ result: 'Success' });
+      return res.status(200).json(result);
     } catch (error) {
-      // 트랜잭션 롤백
-      await session.abortTransaction();
-      session.endSession();
       next(error);
     }
   }

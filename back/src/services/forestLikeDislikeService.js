@@ -116,6 +116,36 @@ class forestLikeDislikeService {
       session.endSession();
     }
   }
+
+  static async deleteForestPostDislike(userId, postId) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const dislikeInfo = await forestLikeDislikeModel.deleteDislike(
+        session,
+        userId,
+        postId,
+      );
+      if (dislikeInfo) {
+        await forestLikeDislikeModel.updateClickCounts(postId, 0, -1);
+      }
+
+      if (!dislikeInfo) {
+        const errorMessage = '싫어요를 이미 취소했습니다';
+        return { errorMessage };
+      }
+
+      // 트랜잭션 커밋
+      await session.commitTransaction();
+
+      return { result: 'Success' };
+    } catch (error) {
+      await session.abortTransaction();
+      console.error('Transaction aborted:', error);
+    } finally {
+      session.endSession();
+    }
+  }
 }
 
 export { forestLikeDislikeService };
