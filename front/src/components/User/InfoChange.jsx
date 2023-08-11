@@ -1,4 +1,6 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
+import { InformationCircleIcon } from '@heroicons/react/24/solid';
+
 import {
 	mbtiList,
 	defaultUser,
@@ -244,6 +246,19 @@ const InfoChange = () => {
 							<h1 className="mb-10 text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
 								회원정보 수정
 							</h1>
+							{mbti === '미설정' && (
+								<div
+									className="flex items-center p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+									role="alert"
+								>
+									<InformationCircleIcon className="w-5 mr-2" />
+									<span className="sr-only"></span>
+									<div>
+										즐거운 커뮤니티 이용을 위해 MBTI 설정을 완료해주세요.
+									</div>
+								</div>
+							)}
+
 							<form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
 								<div className="flex justify-center">
 									<img
