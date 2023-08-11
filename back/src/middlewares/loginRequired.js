@@ -36,7 +36,7 @@ function loginRequired(req, res, next) {
   } catch (error) {
     res.status(403).send({
       message: '정상적인 토큰이 아닙니다. 다시 한 번 확인해 주세요.',
-      errorCode: 401,
+      errorCode: 403,
     });
     return;
   }
