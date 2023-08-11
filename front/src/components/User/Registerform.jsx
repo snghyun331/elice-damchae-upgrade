@@ -1,6 +1,6 @@
 import useRegisterStore from '../../hooks/useRegisterStore';
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Select from 'react-select';
 import { mbtiList } from '../Util/Util';
 
@@ -129,6 +129,7 @@ const RegisterForm = () => {
 			});
 			setEmailButtonDisabled(false);
 		} catch (error) {
+			setErrMsg(error.response.data);
 			setEmailButtonDisabled(false);
 			toast.error(error.response.data.errorMessage);
 		}
@@ -190,6 +191,7 @@ const RegisterForm = () => {
 											placeholder="name@company.com"
 											required=""
 										/>
+
 										<button
 											type="button"
 											onClick={handleEmailSend}
@@ -205,6 +207,9 @@ const RegisterForm = () => {
 											인증코드 발송
 										</button>
 									</div>
+									{errMsg && (
+										<p className="text-red-500 text--500 text-xs">{errMsg}</p>
+									)}
 									<p
 										className={`mb-3 text-xs ${
 											!isEmailValid && email
@@ -250,7 +255,7 @@ const RegisterForm = () => {
 										</span>{' '}
 										<span className="text-xs text-red-500">
 											{isEmailValid && !isCodeConfirmed
-												? '이메일 인증을 진행해주세요.'
+												? '이메일 인증을 진행해주세요.메일이 오지 않았다면,스팸 메일함을 확인해주세요.'
 												: ''}
 										</span>
 									</div>
@@ -372,6 +377,16 @@ const RegisterForm = () => {
 										classNamePrefix="react-select"
 										className="mb-3"
 									/>
+									<div className="mb-3">
+										<Link
+											className="self-end underline text-blue-400"
+											to="https://www.16personalities.com/ko/%EB%AC%B4%EB%A3%8C-%EC%84%B1%EA%B2%A9-%EC%9C%A0%ED%98%95-%EA%B2%80%EC%82%AC"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											MBTI 테스트 하러 가기
+										</Link>
+									</div>
 									<ProfilePicker />
 								</div>
 								<div className="flex flex-col">
@@ -383,7 +398,6 @@ const RegisterForm = () => {
 									>
 										가입하기
 									</button>
-									{errMsg && <p className="text--500 text-xs">{errMsg}</p>}
 
 									<p className="mt-3 self-center text-sm font-light text-gray-500 dark:text-gray-400">
 										이미 계정이 있습니까?{' '}

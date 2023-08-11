@@ -179,7 +179,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다.');
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
@@ -199,7 +199,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다.');
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
@@ -224,7 +224,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다.');
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
@@ -245,7 +245,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          return res.status(200).json({ result: 'No Stories' });
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
@@ -292,7 +292,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다.');
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
@@ -310,7 +310,7 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          return res.status(200).json({ result: 'No Stories' });
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
@@ -378,7 +378,7 @@ class storyPostController {
       const myStories = await storyPostModel.findByUserId({ userId });
 
       if (!myStories) {
-        return res.status(200).json({ result: 'No Stories' });
+        return res.status(204).json({ result: 'No Stories' });
       }
 
       // 감정만 모두 추출
