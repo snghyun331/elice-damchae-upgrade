@@ -12,16 +12,15 @@
 <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=flat-square&logo=TailwindCSS&logoColor=white"/>
 <img src="https://img.shields.io/badge/Chart.Js-FF6384?style=flat-square&logo=Chart.Js&logoColor=white"/>
 <img src="https://img.shields.io/badge/Axios-5A29E4?style=flat-square&logo=Axios&logoColor=white"/>
-<img src="https://img.shields.io/badge/ContextAPI-764ABC?style=flat-square&logo=Redux&logoColor=white"/>
 <img src="https://img.shields.io/badge/JWT-41454A?style=flat-square&logo=JSON%20web%20tokens&logoColor=white"/>
 
 </div>
 
 - 리액트를 사용하여 클라이언트를 구성.
-- Tailwind의 클래스 제어를 통해 CSS 구현.
-- Context API를 통해 전역 상태 관리.
+- Zustand 를 통해 전역 상태 관리.
 - Axios의 인스턴스를 통해 서버와의 통신.
-- React-ChartJS2 를 통해 그래프 시각화.
+- Tailwind의 클래스 제어를 통해 CSS 구현.
+- React-ChartJS2,ApexCharts 를 통해 그래프 시각화.
 
 ## BackEnd
 
