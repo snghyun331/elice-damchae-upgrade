@@ -70,7 +70,9 @@ const GoogleButton = () => {
 				navigate('/');
 			} catch (error) {
 				toast.error('구글 로그인에 실패했습니다.');
-				console.log(error.response?.data?.errorMessage);
+				if (error.response.data.message) {
+					toast.error(error.response.data.message);
+				}
 			}
 		}
 	};

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const useUserStore = create((set) => {
 	const initialUserData = {
@@ -25,8 +26,11 @@ const useUserStore = create((set) => {
 	};
 
 	const updateUserData = (updatedUserData) => {
-		const newUserData = { ...JSON.parse(localStorage.getItem('userData')), ...updatedUserData };
-	
+		const newUserData = {
+			...JSON.parse(localStorage.getItem('userData')),
+			...updatedUserData,
+		};
+
 		if (updatedUserData.mbtiImg === null) {
 			newUserData.mbtiImg = null;
 		}
@@ -34,11 +38,11 @@ const useUserStore = create((set) => {
 		if (updatedUserData.profileImg === null) {
 			newUserData.profileImg = null;
 		}
-	
+
 		saveUserDataToLocalStorage(newUserData);
 		set(newUserData);
 	};
-	
+
 	return {
 		...userData,
 
