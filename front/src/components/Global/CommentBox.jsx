@@ -137,11 +137,6 @@ CommentBox.propTypes = {
 	commentData: PropTypes.shape({
 		_id: PropTypes.string.isRequired,
 		mood: PropTypes.string.isRequired,
-		writerId: PropTypes.shape({
-			_id: PropTypes.string.isRequired,
-			nickname: PropTypes.string.isRequired,
-			mbti: PropTypes.string.isRequired,
-		}).isRequired,
 		comment: PropTypes.string.isRequired,
 		updatedAt: PropTypes.string.isRequired,
 	}).isRequired,

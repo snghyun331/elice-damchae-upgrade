@@ -10,7 +10,6 @@ import BackButton from '../Global/BackButton';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
 import MusicVideo from './MusicVideo';
-import { MusicalNoteIcon } from '@heroicons/react/24/solid';
 
 const StoryRead = () => {
 	const { storyId } = useParams();
