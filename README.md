@@ -23,11 +23,12 @@
 - React-ChartJS2,ApexCharts 를 통해 그래프 시각화.
 
 ## BackEnd
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=JavaScript&logoColor=white"/>
 <img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white"/>
 <img src="https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white"/>
 <img src="https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white"/>
-<img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=flask&logoColor=white"/>
-<img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=flask&logoColor=white"/>
+<img src="https://img.shields.io/badge/AmazonAWS-232F3E?style=flat-square&logo=aws&logoColor=white"/>
+
 
 ## AI
 <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white"/>
