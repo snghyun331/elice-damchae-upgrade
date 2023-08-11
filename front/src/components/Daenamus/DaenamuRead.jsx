@@ -167,7 +167,7 @@ const DaenamuRead = () => {
 						</>
 					)}
 				</div>
-				<div className="relative top-0 px-5 md:px-10">
+				<div className="relative top-0 md:px-10">
 					{editMode ? (
 						<DaenamuTextEditor />
 					) : (
@@ -231,7 +231,7 @@ const DaenamuRead = () => {
 							</div>
 							<div>
 								<hr className="border-gray-300 my-3" />
-								<div className="relative p-10">
+								<div className="relative p-6 md:p-10">
 									{isDataLoading && (
 										<Viewer key={viewerKey} initialValue={forest.content} />
 									)}
