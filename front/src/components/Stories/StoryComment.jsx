@@ -71,8 +71,7 @@ const StoryComment = ({ storyId }) => {
 			setComment('');
 			fetchComment();
 		} catch (error) {
-			console.log(error.response.data.errorMessage);
-			toast.error(error.response.data);
+			toast.error(error.response.data.message);
 		}
 	};
 	return (

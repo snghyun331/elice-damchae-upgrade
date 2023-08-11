@@ -73,7 +73,7 @@ const DaenamuComment = ({ forestId }) => {
 			setComment('');
 			fetchComment();
 		} catch (error) {
-			toast.error(error.response.data);
+			toast.error(error.response.data.message);
 		}
 	};
 	return (
