@@ -66,6 +66,8 @@
 | 양희태 | 프론트엔드 |
 
 ## 5. Folder Tree
+
+```
 📦mbti-agora
  ┣ 📂back
  ┃ ┣ 📂src
@@ -275,4 +277,4 @@
  ┣ 📜package.json
  ┣ 📜README.md
  ┗ 📜yarn.lock
-
+```
