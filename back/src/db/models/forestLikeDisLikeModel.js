@@ -8,7 +8,12 @@ class forestLikeDislikeModel {
     return;
   }
 
-  static async deleteLike(session, userId, postId) {
+  static async createDislike(session, userId, postId) {
+    await forestDislike.create([{ userId, postId }], { session });
+    return;
+  }
+
+  static async deleteDislike(session, userId, postId) {
     const dislikeInfo = await forestDislike.findOneAndDelete(
       {
         userId,
@@ -17,6 +22,17 @@ class forestLikeDislikeModel {
       { session },
     );
     return dislikeInfo;
+  }
+
+  static async deleteLike(session, userId, postId) {
+    const likeInfo = await forestLike.findOneAndDelete(
+      {
+        userId,
+        postId,
+      },
+      { session },
+    );
+    return likeInfo;
   }
 
   static async updateClickCounts(postId, likeIncrement, dislikeIncrement) {
@@ -35,6 +51,11 @@ class forestLikeDislikeModel {
   static async findLikeInfo(userId, postId) {
     const likeInfo = await forestLike.findOne({ userId, postId });
     return likeInfo;
+  }
+
+  static async findDislikeInfo(userId, postId) {
+    const disLikeInfo = await forestDislike.findOne({ userId, postId });
+    return disLikeInfo;
   }
 
   static async populateForestLike(info, field) {
