@@ -34,12 +34,12 @@
 <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white"/>
 
 사용한 데이터셋
+
 1. [AI Hub]한국어 단발성 대화 데이터셋  
     - 행복, 슬픔, 분노, 놀람, 공포, 혐오, 중립
     - 38600건
 
 2. [AI Hub] 감성 대화 말뭉치  
-    - json 파일은 필요 없을 것 같음
     - 기쁨, 슬픔, 분노, 당황, 불안, 상처
     - training 51600건, validation 6600건
 
