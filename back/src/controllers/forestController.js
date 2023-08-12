@@ -1,6 +1,6 @@
 import ForestService from '../services/forestService.js';
 import axios from 'axios';
-
+import { pageDefault, pageLimit } from '../utills/constant.js';
 class ForestController {
   // 대나무숲 글 등록 전 감정분석 수행하기
   static async getPredict(req, res, next) {
@@ -48,8 +48,8 @@ class ForestController {
 
   static async findByForest(req, res, next) {
     try {
-      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
-      const limit = 12; // 한페이지에 들어갈 스토리 수
+      const page = parseInt(req.query.page || pageDefault); // 몇 번째 페이지인지
+      const limit = pageLimit; // 한페이지에 들어갈 스토리 수
 
       const { option, searchword } = req.query;
       let getAlls = {};
@@ -225,8 +225,8 @@ class ForestController {
     try {
       const userId = req.currentUserId; // 로그인한 사용자의 ID
 
-      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
-      const limit = 12; // 한페이지에 들어갈 스토리 수
+      const page = parseInt(req.query.page || pageDefault); // 몇 번째 페이지인지
+      const limit = pageLimit; // 한페이지에 들어갈 스토리 수
 
       const { forests, totalPage, count } = await ForestService.findByUserPosts(
         userId,
@@ -253,8 +253,8 @@ class ForestController {
     try {
       const mbtiList = req.query.filter.split(',');
 
-      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
-      const limit = 12; // 한페이지에 들어갈 스토리 수
+      const page = parseInt(req.query.page || pageDefault); // 몇 번째 페이지인지
+      const limit = pageLimit; // 한페이지에 들어갈 스토리 수
       let result;
       const { posts, totalPage, count } = await ForestService.findByForestMbti({
         mbtiList,
@@ -281,8 +281,8 @@ class ForestController {
 
   static async getForestsByPopularity(req, res, next) {
     try {
-      const page = parseInt(req.query.page || 1);
-      const limit = 12;
+      const page = parseInt(req.query.page || pageDefault);
+      const limit = pageLimit;
 
       const { forest, totalPage, count } = await ForestService.readPopularPosts(
         limit,
@@ -313,8 +313,8 @@ class ForestController {
     try {
       const mbtiList = req.query.filter.split(',');
 
-      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
-      const limit = 12; // 한페이지에 들어갈 스토리 수
+      const page = parseInt(req.query.page || pageDefault); // 몇 번째 페이지인지
+      const limit = pageLimit; // 한페이지에 들어갈 스토리 수
       let result;
       const { posts, totalPage, count } =
         await ForestService.findByForestMbtiPopular({
