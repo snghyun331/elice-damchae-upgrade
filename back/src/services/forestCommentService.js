@@ -52,9 +52,20 @@ class forestCommentService {
     }
   }
 
-  static async deleteForestComment(commentId) {
+  static async deleteForestComment(commentId, userId) {
     try {
+      const comment = await forestCommentModel.readOneByCommentId(commentId);
+
+      if (!comment) {
+        throw new Error('수정할 댓글을 찾을 수 없습니다.');
+      }
+
+      if (comment.writerId.toString() !== userId) {
+        throw new Error('작성자만 댓글을 삭제할 수 있습니다');
+      }
+
       const deletedComment = await forestCommentModel.deleteComment(commentId);
+
       return {
         statusCode: 200,
         message: '댓글 삭제에 성공하셨습니다.',

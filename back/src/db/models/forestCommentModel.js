@@ -41,9 +41,12 @@ class forestCommentModel {
   //   }
   // }
 
-  static async deleteComment(commentId) {
+  static async deleteComment(commentId, userId) {
     try {
-      const comment = await forestComment.findOneAndDelete({ _id: commentId });
+      const comment = await forestComment.findOneAndDelete({
+        _id: commentId,
+        userId,
+      });
       return comment;
     } catch (error) {
       throw new Error(error);
