@@ -15,7 +15,7 @@ import { Element } from 'react-scroll';
 const Home = () => {
 	useEffect(() => {
 		AOS.init({
-			duration: 1000,
+			duration: 300,
 		});
 	});
 	const { nickname } = useUserStore();
@@ -99,7 +99,7 @@ const Home = () => {
 		<div>
 			<div className="z-50">
 				<div className="space-y-5 lg:pt-12">
-					<div data-aos="zoom-in">
+					<div data-aos="flip-left">
 						<BannerCarousel />
 					</div>
 

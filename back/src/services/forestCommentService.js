@@ -113,7 +113,7 @@ class forestCommentService {
 
       const calculateMbtisCounts = (mood) => {
         const writers = populated
-          .filter((doc) => doc.mood === mood)
+          .filter((doc) => doc.mood === mood && doc.writerId !== null)
           .map((doc) => doc.writerId);
 
         const allMbtis = writers.map((writer) => writer.mbti);
