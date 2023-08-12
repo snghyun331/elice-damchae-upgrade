@@ -7,12 +7,20 @@ class forestModel {
     return createdForest;
   }
 
-  static async findOneAndUpdate({ forestId, title, content }) {
+  static async findOneAndUpdate({ forestId, title, content, mood }) {
     const updatedPost = await ForestPost.updateOne(
       { _id: forestId }, // 업데이트할 문서의 조건
-      { title, content }, // 업데이트할 필드 및 값);
+      { title: title, content: content, mood: mood }, // 업데이트할 필드 및 값);
+      { new: true },
     );
-    return updatedPost;
+
+    if (!updatedPost) {
+      return null;
+    }
+    // 여기서 population을 수행하여 필요한 필드를 채워줍니다.
+    const populatedPost = await ForestPost.populate(updatedPost, 'userInfo');
+
+    return populatedPost;
   }
 
   static async findOneAndDelete({ forestId }) {

@@ -1,5 +1,4 @@
 import { forestCommentService } from '../services/forestCommentService.js';
-import { forestCommentModel } from '../db/models/forestCommentModel.js';
 import axios from 'axios';
 
 class forestCommentController {

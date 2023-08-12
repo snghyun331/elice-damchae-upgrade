@@ -52,13 +52,11 @@ class ForestService {
   }
 
   static async updatePost({ forestId, title, content, mood }) {
-    const updatedPost = await ForestPost.findOneAndUpdate(
-      { _id: forestId }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
-      { title: title, content: content, mood: mood }, // 업데이트할 필드와 값
-      { new: true }, // 업데이트 후 업데이트된 문서 반환
+    const updatedPost = await forestModel.findOneAndUpdate(
+      { forestId, title, content, mood }, // 업데이트할 문서를 찾는 조건으로 _id 필드 사용
     );
     if (!updatedPost) {
-      throw new Error('수정할 게시글 정보가 없습니다.');
+      return null; // 수정된 게시글이 없는 경우 null 반환
     }
     return updatedPost;
   }

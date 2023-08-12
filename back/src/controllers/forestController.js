@@ -1,6 +1,5 @@
 import ForestService from '../services/forestService.js';
 import axios from 'axios';
-import { forestCommentService } from '../services/forestCommentService.js';
 
 class ForestController {
   // 대나무숲 글 등록 전 감정분석 수행하기
@@ -153,47 +152,23 @@ class ForestController {
     }
   }
 
-  // static async findById(req, res, next) {
-  //   try {
-  //     const forestId = req.currentUserId;
-  //     const post = await ForestService.findById({ forestId });
-  //     if (!post) {
-  //       throw new Error('존재하지 않는 글입니다');
-  //     }
-  //     return res.status(201).json(post);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
   static async updatePost(req, res, next) {
     try {
       const forestId = req.params.id;
-      const userId = req.currentUserId;
-
-      const postUser = await ForestService.readForestDetail({ forestId });
-
-      if (!postUser) {
-        throw new Error('해당 게시물이 존재하지 않습니다.');
-      }
-
-      if (!postUser || !userId) {
-        throw new Error('스토리 수정 권한이 없습니다.');
-      }
-
       const { title, content, mood } = req.body;
-      if (postUser.userInfo.toString() === userId) {
-        const post = await ForestService.updatePost({
-          forestId,
-          title,
-          content,
-          mood,
-        });
 
-        const result = await ForestService.populateForestPost(post, 'userInfo');
-        return res.status(200).send(result);
-      } else {
-        throw new Error('스토리 수정 권한이 없습니다.');
+      const updatedPost = await ForestService.updatePost({
+        forestId,
+        title,
+        content,
+        mood,
+      });
+
+      if (!updatedPost) {
+        return res.status(404).send('수정할 게시글 정보가 없습니다.');
       }
+
+      return res.status(200).send(updatedPost);
     } catch (error) {
       next(error);
     }
@@ -201,9 +176,6 @@ class ForestController {
 
   static async deletePost(req, res, next) {
     try {
-      console.log('Request Params:', req.params); // 로그 추가
-      console.log('Request Body:', req.body); // 로그 추가
-
       const forestId = req.params.id;
       const userId = req.currentUserId; // 로그인한 사용자의 ID
       const postUser = await ForestService.readForestDetail({ forestId });
