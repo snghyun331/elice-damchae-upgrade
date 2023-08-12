@@ -64,7 +64,7 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 						</p>
 					</div>
 					<div></div>
-					<p className="font-gray-800">{commentData.writerId.nickname ? commentData.writerId.nickname : '알 수 없는 유저'}</p>
+					<p className="font-gray-800">{commentData.writerId.nickname ? commentData.writerId.nickname : '알 수 없음'}</p>
 					<p className="text-sm text-gray-600">{commentData.writerId.mbti}</p>
 					<p className="text-xs text-gray-600">
 						{formatRelativeTime(commentData.updatedAt)}

@@ -45,7 +45,7 @@ const DaenamuCard = ({
 						{truncateString(removeTag(content), 63)}
 					</p>
 					<div className="text-sm text-gray-600 mb-5 mt-3">
-						{userInfo ? userInfo.nickname : '알 수 없는 유저'}
+						{userInfo ? userInfo.nickname : '알 수 없음'}
 						<span className="text-xs ml-2">
 							{formatRelativeTime(updatedAt)}
 						</span>
