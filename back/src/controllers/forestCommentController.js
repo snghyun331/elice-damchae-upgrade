@@ -71,8 +71,10 @@ class forestCommentController {
   static async deleteForestComment(req, res, next) {
     try {
       const commentId = req.params.commentId;
+      const userId = req.currentUserId;
       const { deletedComment } = await forestCommentService.deleteForestComment(
         commentId,
+        userId,
       );
       return res.status(200).send({ result: deletedComment });
     } catch (error) {
