@@ -4,17 +4,6 @@ import { storyCommentController } from '../controllers/storyCommentController.js
 
 const storyCommentRouter = Router();
 
-storyCommentRouter.post(
-  '/:storyId/comments',
-  loginRequired,
-  storyCommentController.createStoryComment,
-);
-
-storyCommentRouter.get(
-  '/:storyId/comments',
-  storyCommentController.readStoryComment,
-);
-
 storyCommentRouter.patch(
   '/comments/:commentId',
   loginRequired,
@@ -25,6 +14,17 @@ storyCommentRouter.delete(
   '/comments/:commentId',
   loginRequired,
   storyCommentController.deleteStoryComment,
+);
+
+storyCommentRouter.post(
+  '/:storyId/comments',
+  loginRequired,
+  storyCommentController.createStoryComment,
+);
+
+storyCommentRouter.get(
+  '/:storyId/comments',
+  storyCommentController.readStoryComment,
 );
 
 export { storyCommentRouter };

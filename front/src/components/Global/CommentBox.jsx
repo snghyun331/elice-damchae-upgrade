@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 const CommentBox = ({ commentData, onDelete, onEdit }) => {
 	// console.log(
 	// 	'이미지소스',
-	// 	commentData.writerId.profileImg && commentData.writerId.profileImg.path
-	// 		? commentData.writerId.profileImg.path
-	// 		: commentData.writerId.mbtiImg,
+	// 	commentData.writerId?.profileImg && commentData.writerId?.profileImg.path
+	// 		? commentData.writerId?.profileImg.path
+	// 		: commentData.writerId?.mbtiImg,
 	// );
 	const id = useUserId();
 	const [editMode, setEditMode] = useState(false);
@@ -52,10 +52,10 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 						{' '}
 						<img
 							src={
-								commentData.writerId.profileImg &&
-								commentData.writerId.profileImg?.path
-									? commentData.writerId.profileImg?.path
-									: commentData.writerId.mbtiImg
+								commentData.writerId?.profileImg &&
+								commentData.writerId?.profileImg?.path
+									? commentData.writerId?.profileImg?.path
+									: commentData.writerId?.mbtiImg
 							}
 							className="w-11 h-11 rounded-full bg-white border"
 						/>
@@ -71,7 +71,7 @@ const CommentBox = ({ commentData, onDelete, onEdit }) => {
 					</p>
 				</div>
 
-				{commentData.writerId._id === id && (
+				{commentData.writerId?._id === id && (
 					<div className="flex flex-col md:flex-row justify-end">
 						{editMode ? (
 							<>
@@ -133,11 +133,6 @@ CommentBox.propTypes = {
 	commentData: PropTypes.shape({
 		_id: PropTypes.string.isRequired,
 		mood: PropTypes.string.isRequired,
-		writerId: PropTypes.shape({
-			_id: PropTypes.string.isRequired,
-			nickname: PropTypes.string.isRequired,
-			mbti: PropTypes.string.isRequired,
-		}).isRequired,
 		comment: PropTypes.string.isRequired,
 		updatedAt: PropTypes.string.isRequired,
 	}).isRequired,

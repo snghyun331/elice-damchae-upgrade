@@ -11,11 +11,6 @@ class userAuthController {
           'headers의 Content-Type을 application/json으로 설정해주세요',
         );
       }
-
-      // 기본 프로필 사진
-      // 1. user에 새로운 프로필 도큐먼트를 만듦 2. 프론트에서 받아온 path를 거기에 넣음 3. 저장
-      // 1. 80개 이미지를 모두 몽고디비에 업로드, objectID 생성 2. 80개에 대한 예외처리
-
       // req (request) 에서 데이터 가져오기
       const { email, password, nickname, mbti, mbtiImg } = await req.body;
       const file = req.file ?? null;
@@ -199,11 +194,11 @@ class userAuthController {
       const sendEmail = await userService.sendAuthEmail({ email });
 
       if (sendEmail.state === 'Duplicated User') {
-        return res.status(400).json(sendEmail.message);
+        return res.status(409).json(sendEmail.message);
       } else if (sendEmail.state === 'Fail') {
         return res.status(400).json(sendEmail.message);
       } else if (sendEmail.state === 'Success') {
-        return res.status(200).json(sendEmail.message);
+        return res.status(201).json(sendEmail.message);
       } else {
         return res.status(500);
       }
@@ -219,7 +214,7 @@ class userAuthController {
       const isVerified = await userService.readAuthString({ string });
 
       if (isVerified === null) {
-        return res.status(400).json({
+        return res.status(401).json({
           errorMessage: '잘못된 인증코드입니다. 다시 한 번 확인해주세요.',
         });
       } else if (isVerified === string) {
@@ -292,7 +287,7 @@ class userAuthController {
 
       return res.json(existingUser);
     } catch (error) {
-      res.status(500).json();
+      res.status(400).json();
     }
   }
 

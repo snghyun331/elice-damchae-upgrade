@@ -70,7 +70,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 				: postApi(upUrl, {}));
 
 			if (response.error) {
-				toast.error(response.error.message);
+				toast.error(response.error.response.data.message);
 			} else {
 				updateFunc(updateCount);
 			}
@@ -97,7 +97,7 @@ const DaenamuLikeSection = ({ forestId, userId }) => {
 					: '싫어요를 선택했습니다.';
 			toast(likeToast);
 		} catch (err) {
-			toast.error(err.response.data);
+			toast.error(err.response.data.message);
 		}
 	};
 

@@ -60,7 +60,7 @@ class User {
   static async delete({ userId }) {
     const user = await UserModel.findByIdAndUpdate(
       { _id: userId },
-      { isOut: true, nickname: '알 수 없음' },
+      { isOut: true, nickname: null },
       { new: true },
     );
     return user;

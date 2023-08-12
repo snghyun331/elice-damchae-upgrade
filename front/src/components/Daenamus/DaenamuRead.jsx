@@ -33,7 +33,7 @@ const DaenamuRead = () => {
 		try {
 			const res = await getApi(`forest/${forestId}`);
 			setForest(res.data);
-			console.log(res.data);
+
 			setIsDataLoading(true);
 		} catch (error) {
 			console.log(error);
@@ -124,7 +124,7 @@ const DaenamuRead = () => {
 			>
 				{' '}
 				<div className="justify-end">
-					{isDataLoading && forest.userInfo._id == id && (
+					{isDataLoading && forest.userInfo?._id == id && (
 						<>
 							{editMode ? (
 								<div className="mr-4 mt-4 flex flex-row justify-end">
@@ -167,7 +167,7 @@ const DaenamuRead = () => {
 						</>
 					)}
 				</div>
-				<div className="relative top-0 px-5 md:px-10">
+				<div className="relative top-0 md:px-10">
 					{editMode ? (
 						<DaenamuTextEditor />
 					) : (
@@ -198,10 +198,10 @@ const DaenamuRead = () => {
 											<img
 												className="rounded-full w-10 h-10 object-cover bg-white"
 												src={
-													isDataLoading && forest.userInfo.profileImg
-														? forest.userInfo.profileImg?.path
-														: isDataLoading && forest.userInfo.mbtiImg
-														? forest.userInfo.mbtiImg
+													isDataLoading && forest.userInfo?.profileImg
+														? forest.userInfo?.profileImg?.path
+														: isDataLoading && forest.userInfo?.mbtiImg
+														? forest.userInfo?.mbtiImg
 														: '/images/default-image.jpg'
 												}
 												alt=""
@@ -211,7 +211,7 @@ const DaenamuRead = () => {
 													{isDataLoading && forest.userInfo.nickname ? forest.userInfo.nickname : '알 수 없는 유저' }
 												</p>
 												<p className="text-xs text-gray-500">
-													{isDataLoading && forest.userInfo.mbti}
+													{isDataLoading && forest.userInfo?.mbti}
 												</p>
 											</div>
 										</div>
@@ -231,7 +231,7 @@ const DaenamuRead = () => {
 							</div>
 							<div>
 								<hr className="border-gray-300 my-3" />
-								<div className="relative p-10">
+								<div className="relative p-6 md:p-10">
 									{isDataLoading && (
 										<Viewer key={viewerKey} initialValue={forest.content} />
 									)}
