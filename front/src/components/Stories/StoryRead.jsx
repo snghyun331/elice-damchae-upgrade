@@ -171,9 +171,7 @@ const StoryRead = () => {
 								/>
 							</div>
 							<h5 className="text-center text-gray-700 mx-auto mt-2">
-								{isDataLoading && story.userInfo
-									? story.userInfo.nickname
-									: '알 수 없음'}
+								{isDataLoading && story.userInfo.nickname ? story.userInfo.nickname : '알 수 없음'}
 							</h5>
 							<p className="text-gray-400 text-xs text-center mt-1 mb-5">
 								{isDataLoading && story.userInfo?.mbti}

@@ -207,13 +207,9 @@ const DaenamuRead = () => {
 												alt=""
 											/>
 											<div className="flex flex-col ">
-												<div className="w-20 text-sm">
-													{isDataLoading && forest.userInfo ? (
-														<p>{forest.userInfo.nickname}</p>
-													) : (
-														<p className="text-sm">알 수 없음</p>
-													)}
-												</div>
+												<p className="w-20 text-sm ">
+													{isDataLoading && forest.userInfo.nickname ? forest.userInfo.nickname : '알 수 없음' }
+												</p>
 												<p className="text-xs text-gray-500">
 													{isDataLoading && forest.userInfo?.mbti}
 												</p>
