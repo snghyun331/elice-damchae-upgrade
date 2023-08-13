@@ -1,7 +1,6 @@
 import is from '@sindresorhus/is';
 import { userService } from '../services/userService.js';
 import { OAuth2Client } from 'google-auth-library';
-import smtpTransport from '../utills/emailAuth.js';
 import { imageService } from '../services/imageService.js';
 
 class userAuthController {
@@ -12,9 +11,8 @@ class userAuthController {
           'headers의 Content-Type을 application/json으로 설정해주세요',
         );
       }
-
       // req (request) 에서 데이터 가져오기
-      const { email, password, nickname, mbti, isGoogleLogin } = await req.body;
+      const { email, password, nickname, mbti, mbtiImg } = await req.body;
       const file = req.file ?? null;
 
       const existingUser = await userService.readUserNickname({ nickname });
@@ -30,11 +28,11 @@ class userAuthController {
           password,
           nickname,
           mbti,
-          isGoogleLogin,
+          mbtiImg,
         });
         return res.status(201).json(newUser);
       } else {
-        const profile = await imageService.uploadImage({ file });
+        const profile = await imageService.uploadImageInS3({ file });
         const profileId = profile._id;
 
         // 위 데이터를 유저 db에 추가하기
@@ -44,10 +42,18 @@ class userAuthController {
           password,
           nickname,
           mbti,
+          mbtiImg: null,
           isGoogleLogin,
         });
 
-        return res.status(201).json(newUser);
+        const options = {
+          path: 'profileImg',
+          select: 'path',
+        };
+
+        const result = await userService.populateUserProfile(newUser, options);
+
+        return res.status(201).json(result);
       }
     } catch (error) {
       res.status(500);
@@ -66,7 +72,8 @@ class userAuthController {
         );
       }
 
-      const { email, idToken, nickname, mbti, isGoogleLogin } = await req.body;
+      const { email, idToken, nickname, mbti, mbtiImg, isGoogleLogin } =
+        await req.body;
       const file = req.file;
 
       // Google ID 토큰을 검증합니다.
@@ -92,6 +99,7 @@ class userAuthController {
           password: null,
           nickname,
           mbti,
+          mbtiImg,
           isGoogleLogin,
         });
         return res.status(201).json(newUser);
@@ -105,10 +113,18 @@ class userAuthController {
           password: null,
           nickname,
           mbti,
+          mbtiImg,
           isGoogleLogin,
         });
 
-        return res.status(201).json(newUser);
+        const options = {
+          path: 'profileImg',
+          select: 'path',
+        };
+
+        const result = await userService.populateUserProfile(newUser, options);
+
+        return res.status(201).json(result);
       }
     } catch (error) {
       res
@@ -134,7 +150,14 @@ class userAuthController {
         throw new Error('Google 로그인으로 진행하세요.');
       }
 
-      return res.status(200).send(user);
+      const options = {
+        path: 'profileImg',
+        select: 'path',
+      };
+
+      const result = await userService.populateUserProfile(user, options);
+
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
@@ -147,12 +170,18 @@ class userAuthController {
       const idToken = req.body.idToken;
 
       const user = await userService.readGoogleUser({ email, idToken });
-
       if (user.errorMessage) {
         throw new Error(user.errorMessage);
       }
 
-      return res.status(200).send(user);
+      const options = {
+        path: 'profileImg',
+        select: 'path',
+      };
+
+      const result = await userService.populateUserProfile(user, options);
+
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
@@ -162,35 +191,17 @@ class userAuthController {
   static async sendAuthCode(req, res, next) {
     try {
       const email = req.body.email;
-      const isDuplicated = await userService.readUserEmail({ email });
-      const emailString = await userService.createAuthString();
+      const sendEmail = await userService.sendAuthEmail({ email });
 
-      if (isDuplicated) {
-        return res
-          .status(400)
-          .json({ errorMessage: '이미 가입내역이 존재하는 이메일입니다.' });
+      if (sendEmail.state === 'Duplicated User') {
+        return res.status(409).json(sendEmail.message);
+      } else if (sendEmail.state === 'Fail') {
+        return res.status(400).json(sendEmail.message);
+      } else if (sendEmail.state === 'Success') {
+        return res.status(201).json(sendEmail.message);
+      } else {
+        return res.status(500);
       }
-
-      const mailOptions = {
-        from: 'MBTI 커뮤니티',
-        to: email,
-        subject: '[MBTI 커뮤니티] 이메일 확인 인증코드 안내',
-        text: `아래 코드를 인증코드란에 입력해주세요.\n
-            인증코드 👉 ${emailString}\n
-            인증코드는 3분 후에 만료됩니다.`,
-      };
-
-      smtpTransport.sendMail(mailOptions, (error) => {
-        if (error) {
-          res.status(500).json({
-            message: `${email}로 보내는 인증메일 전송에 실패하였습니다.`,
-          });
-        } else {
-          res.status(200).json({
-            message: `${email} 로 인증메일 전송에 성공했습니다.`,
-          });
-        }
-      });
     } catch (error) {
       next(error);
     }
@@ -203,13 +214,13 @@ class userAuthController {
       const isVerified = await userService.readAuthString({ string });
 
       if (isVerified === null) {
-        return res.status(400).json({
+        return res.status(401).json({
           errorMessage: '잘못된 인증코드입니다. 다시 한 번 확인해주세요.',
         });
       } else if (isVerified === string) {
         return res
           .status(200)
-          .json({ message: '이메일 인증에 성공하였습니다.' });
+          .json({ errorMessage: '이메일 인증에 성공하였습니다.' });
       }
     } catch (error) {
       next(error);
@@ -224,21 +235,45 @@ class userAuthController {
       const password = req.body.password ?? null;
       const nickname = req.body.nickname ?? null;
       const mbti = req.body.mbti ?? null;
+      const mbtiImg = req.body.mbtiImg ?? null;
+
       const file = req.file ?? null;
 
       if (!file) {
-        const toUpdate = { password, nickname, mbti };
+        const toUpdate = {
+          profileImg: null,
+          password,
+          nickname,
+          mbti,
+          mbtiImg,
+        };
         const updatedUser = await userService.updateUser({ userId, toUpdate });
 
         return res.status(200).json(updatedUser);
       } else {
-        const profile = await imageService.uploadImage({ file });
+        const profile = await imageService.uploadImageInS3({ file });
         const profileId = profile._id;
 
-        const toUpdate = { profileImg: profileId, password, nickname, mbti };
+        const toUpdate = {
+          profileImg: profileId,
+          password,
+          nickname,
+          mbti,
+          mbtiImg: null,
+        };
         const updatedUser = await userService.updateUser({ userId, toUpdate });
 
-        return res.status(200).json(updatedUser);
+        const options = {
+          path: 'profileImg',
+          select: 'path',
+        };
+
+        const result = await userService.populateUserProfile(
+          updatedUser,
+          options,
+        );
+
+        return res.status(200).json(result);
       }
     } catch (error) {
       next(error);
@@ -252,13 +287,13 @@ class userAuthController {
 
       return res.json(existingUser);
     } catch (error) {
-      res.status(500).json();
+      res.status(400).json();
     }
   }
 
   static async deleteUser(req, res, next) {
     try {
-      const userId = req.body.userId;
+      const userId = req.currentUserId;
       // 사용자를 비활성화 처리하기 위해 `isOut` 필드를 `true`로 설정
       const user = await userService.deleteUser({ userId });
 
@@ -272,6 +307,4 @@ class userAuthController {
   }
 }
 
-class userServiceController {}
-
-export { userAuthController, userServiceController };
+export { userAuthController };

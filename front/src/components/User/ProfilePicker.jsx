@@ -1,47 +1,46 @@
 import { useEffect } from 'react';
 import useUserStore from '../../store/useUserStore';
 
-const getImages = (mbti) => {
-	const images = [];
-	for (let i = 1; i <= 5; i++) {
-		const imageURL = `images/characters/${mbti.toLowerCase()}/${mbti.toLowerCase()}${i}.jpg`;
-		images.push(imageURL);
-	}
-	return images;
+const getImages = (mbti) =>
+	Array(5)
+		.fill()
+		.map(
+			(_, i) =>
+				`https://damchae.s3.ap-northeast-2.amazonaws.com/characters/${mbti.toLowerCase()}${
+					i + 1
+				}.jpg`,
+		);
+
+const profileData = {
+	INFP: getImages('INFP'),
+	ENFJ: getImages('ENFJ'),
+	INTJ: getImages('INTJ'),
+	ENTJ: getImages('ENTJ'),
+	INTP: getImages('INTP'),
+	ENTP: getImages('ENTP'),
+	ISFP: getImages('ISFP'),
+	ESFP: getImages('ESFP'),
+	ISTP: getImages('ISTP'),
+	ESTP: getImages('ESTP'),
+	ISFJ: getImages('ISFJ'),
+	ESFJ: getImages('ESFJ'),
+	ISTJ: getImages('ISTJ'),
+	ESTJ: getImages('ESTJ'),
+	INFJ: getImages('INFJ'),
+	ENFP: getImages('ENFP'),
 };
-
 const ProfilePicker = () => {
-	const { mbti, profileImg, setProfileImg } = useUserStore();
-	const profileData = {
-		INFP: getImages('INFP'),
-		ENFJ: getImages('ENFJ'),
-		INTJ: getImages('INTJ'),
-		ENTJ: getImages('ENTJ'),
-		INTP: getImages('INTP'),
-		ENTP: getImages('ENTP'),
-		ISFP: getImages('ISFP'),
-		ESFP: getImages('ESFP'),
-		ISTP: getImages('ISTP'),
-		ESTP: getImages('ESTP'),
-		ISFJ: getImages('ISFJ'),
-		ESFJ: getImages('ESFJ'),
-		ISTJ: getImages('ISTJ'),
-		ESTJ: getImages('ESTJ'),
-		INFJ: getImages('INFJ'),
-		ENFP: getImages('ENFP'),
-	};
-
+	const { mbti, tempMbtiImg, setTempMbtiImg } = useUserStore();
 	useEffect(() => {
 		if (mbti && typeof profileImg == 'string') {
-			setProfileImg(null);
+			setTempMbtiImg(null);
 		}
 	}, [mbti]);
 
 	const handleProfileClick = (imageURL) => {
-		setProfileImg(imageURL);
+		setTempMbtiImg(imageURL);
 	};
-
-	if (!mbti) {
+	if (!mbti || mbti === '미설정') {
 		return (
 			<div>
 				<label
@@ -50,11 +49,12 @@ const ProfilePicker = () => {
 				>
 					프로필 이미지 선택
 				</label>
-				<div>선택된 MBTI가 없습니다.</div>
+				<div className="text-center text-sm border rounded-md bg-gray-100 py-7">
+					먼저 MBTI를 선택해주세요.
+				</div>
 			</div>
 		);
 	}
-
 	return (
 		<div>
 			<label
@@ -68,28 +68,18 @@ const ProfilePicker = () => {
 					return (
 						<img
 							className={`mx-0.5 rounded object-cover ${
-								profileImg === image ? 'border-4 border-blue-500' : ''
+								tempMbtiImg === image ? 'border-4 border-blue-500' : ''
 							}`}
 							style={{ width: '19%' }}
 							key={`${mbti}-${index}`}
 							src={image}
-							alt={`Profile ${mbti}-${index + 1}`}
+							alt={`Profile ${mbti}${index + 1}`}
 							onClick={() => handleProfileClick(image)} // Pass the image URL to the handler
 						/>
 					);
 				})}
 			</div>
-			<div>
-				{/* {profileImg && ( // Only display if a selected image exists
-					<div className="mt-5">
-						<img
-							className="border-4 border-neutral-300 w-36 h-36 rounded-full object-cover"
-							src={profileImg}
-							alt={`Selected Profile`}
-						/>
-					</div>
-				)} */}
-			</div>
+			<div></div>
 		</div>
 	);
 };

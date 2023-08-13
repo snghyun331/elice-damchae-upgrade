@@ -7,6 +7,8 @@ import { useEffect, useRef, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { postApi } from '../../services/api';
 import './StoryCreateModal.css';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const StoryCreateModal = ({ onClose }) => {
 	const { title, content, thumbnail, mood, music, phrase } = useStoryStore();
@@ -15,42 +17,65 @@ const StoryCreateModal = ({ onClose }) => {
 
 	const dimmedRef = useRef(null);
 
+	const navigate = useNavigate();
+
 	useEffect(() => {
-		// Prevent scrolling of the background content when the modal is open
 		document.body.style.overflow = 'hidden';
 
 		return () => {
-			// Re-enable scrolling when the modal is closed
 			document.body.style.overflow = 'auto';
 		};
 	}, []);
 
 	const currentDate = moment().format('YYYY년 M월 D일');
 
-	const postStory = async (e) => {
-		e.preventDefault();
+	const postStory = async () => {
+		try {
+			const post = { title, content, thumbnail, isPublic, mood, music };
 
-		if (confirm('스토리는 수정이 불가합니다. 등록하시겠습니까?')) {
-			try {
-				const post = { title, content, thumbnail, isPublic, mood, music };
-				console.log(post);
-				const formData = new FormData();
-				for (const key in post) {
-					formData.append(key, post[key]);
-				}
-
-				const response = await postApi('stories', formData);
-				console.log(response.data);
-				onClose();
-
-				setTimeout(() => {
-					window.location.href = '/stories';
-				}, 100);
-			} catch (e) {
-				console.error(e);
+			const formData = new FormData();
+			for (const key in post) {
+				formData.append(key, post[key]);
 			}
+
+			const res = await postApi('stories', formData);
+
+			onClose();
+			navigate(`/stories/${res.data._id}`);
+		} catch (e) {
+			console.error(e);
 		}
-		//TODO:모달로 바꾸기
+	};
+	const handleConfirm = () => {
+		toast((t) => (
+			<div className="rounded p-4">
+				<div>
+					📒스토리는 수정이 불가합니다.
+					<br />
+					등록하시겠습니까?
+				</div>
+				<div className="flex justify-end">
+					<button
+						onClick={() => {
+							toast.dismiss(t.id);
+							postStory();
+						}}
+						className="text-white px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600"
+					>
+						예
+					</button>
+					<button
+						onClick={() => {
+							toast.dismiss(t.id);
+							// 필요한 후속 동작 수행
+						}}
+						className="text-white px-2 py-1 rounded bg-red-500 hover:bg-red-600"
+					>
+						아니오
+					</button>
+				</div>
+			</div>
+		));
 	};
 
 	const isFormValid = useMemo(
@@ -76,15 +101,16 @@ const StoryCreateModal = ({ onClose }) => {
 					aria-hidden="true"
 					className="relative w-full max-w-2xl p-4 overflow-x-hidden overflow-y-auto max-h-screen modal-content"
 				>
-					<div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-						<div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-							<h3 className="text-xl font-semibold text-gray-900 dark:text-white my-2">
+					<div className="relative bg-white rounded-lg shadow">
+						<div className="flex flex-col items-start justify-between p-4 border-b rounded-t">
+							<h3 className="text-xl font-semibold text-gray-900">
 								{currentDate}의 스토리 작성하기
 							</h3>
+
 							<button
 								type="button"
 								onClick={onClose}
-								className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+								className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center"
 								data-modal-hide="staticModal"
 							>
 								<svg
@@ -113,40 +139,39 @@ const StoryCreateModal = ({ onClose }) => {
 								<input
 									onChange={() => {
 										setIsPublic(!isPublic);
-										console.log(isPublic);
 									}}
 									type="checkbox"
 									value={isPublic}
 									className="sr-only peer"
 								/>
-								<div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-								<span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+								<div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+								<span className="ml-3 text-sm font-medium text-gray-900">
 									공개 스토리
 								</span>
 							</label>
 						</div>
 
 						{music && (
-							<div className="px-3 border-t border-gray-200 dark:border-gray-600">
+							<div className="px-3 border-t border-gray-200">
 								<MusicVideo music={music} phrase={phrase} mood={mood} />
 							</div>
 						)}
 
-						<div className="flex-row p-6 border-t border-gray-200 rounded-b dark:border-gray-600">
+						<div className="flex-row p-6 border-t border-gray-200 rounded-b">
 							<div className="flex flex-col">
 								<div className="justify-end flex flex-row">
 									{!isFormValid && (
 										<div className="mr-3 items-center">
 											<p className="self-end text-red-500 text-sm mt-2">
-												빈 칸을 채워주세요.
+												글 작성 후 감정분석이 완료되어야 업로드가 가능합니다.
 											</p>
 										</div>
 									)}
 									<button
 										disabled={!isFormValid}
-										onClick={postStory}
+										onClick={handleConfirm}
 										type="button"
-										className="bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+										className="bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-md text-sm px-5 py-2.5 text-center"
 									>
 										작성 완료
 									</button>

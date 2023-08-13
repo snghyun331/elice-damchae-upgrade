@@ -142,10 +142,18 @@ class storyPostController {
         throw new Error('스토리를 찾을 수 없습니다');
       }
 
-      const result = await storyPostService.populateStoryPost(
+      // const result = await storyPostService.populateStoryPost(
+      //   storyInfo,
+      //   'userInfo thumbnail',
+      // );
+
+      const result = await storyPostService.populateStoryPostInfo(
         storyInfo,
-        'userInfo thumbnail',
+        'userInfo',
+        'profileImg',
+        'thumbnail',
       );
+
       return res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -171,13 +179,13 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다.');
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
         // 내용만 검색
@@ -191,13 +199,13 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다.');
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
         // 제목 + 내용 검색
@@ -216,13 +224,13 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다.');
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
         // 모든 스토리 검색
@@ -237,13 +245,13 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          return res.status(200).json({ result: 'No Stories' });
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
       }
@@ -284,13 +292,13 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          throw new Error('검색 결과가 없습니다.');
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
       } else {
@@ -302,13 +310,13 @@ class storyPostController {
         );
 
         if (populateResult.length === 0) {
-          return res.status(200).json({ result: 'No Stories' });
+          return res.status(204).json({ result: 'No Stories' });
         }
 
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           stories: populateResult,
         };
       }
@@ -370,30 +378,38 @@ class storyPostController {
       const myStories = await storyPostModel.findByUserId({ userId });
 
       if (!myStories) {
-        return res.status(200).json({ result: 'No Stories' });
+        return res.status(204).json({ result: 'No Stories' });
       }
 
       // 감정만 모두 추출
-      let allMoods = [];
-      myStories.forEach((myStory) => {
-        allMoods.push(myStory.mood);
-      });
-
-      const valueCount = allMoods.reduce((counts, value) => {
-        if (!counts[value]) {
-          counts[value] = 1;
-        } else {
-          counts[value]++;
-        }
-        return counts;
-      }, {});
-
-      let valuePercentage = {};
-      const totalCount = allMoods.length;
-      for (const value in valueCount) {
-        valuePercentage[value] = (valueCount[value] / totalCount) * 100;
-      }
+      const valuePercentage = await storyPostService.extractOnlyMood(myStories);
       return res.status(200).json({ result: 'Success', valuePercentage });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async checkAlreadyWrite(req, res, next) {
+    try {
+      // const { userId } = req.body;
+      const userId = req.currentUserId;
+      const seoulTime = moment().utcOffset(9);
+      const seoulTimeStartOfDay = seoulTime.startOf('day').utcOffset(9);
+      const seoulTimeEndOfDay = moment(seoulTimeStartOfDay)
+        .endOf('day')
+        .utcOffset(9);
+
+      const existingPost = await storyPostModel.isAlreadyWriteOnce(
+        userId,
+        seoulTimeStartOfDay,
+        seoulTimeEndOfDay,
+      );
+
+      if (existingPost.length === 0) {
+        return res.status(201).json({ result: false });
+      } else {
+        return res.status(201).json({ result: true });
+      }
     } catch (error) {
       next(error);
     }

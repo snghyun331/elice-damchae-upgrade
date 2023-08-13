@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react';
-import { postApi, getApi, delApi, patchApi } from '../../services/api';
+import { postApi, getApi, delApi, putApi } from '../../services/api';
 import CommentBox from '../Global/CommentBox';
 import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../Global/Pagination';
+import toast from 'react-hot-toast';
+import useForestStore from '../../store/useForestStore';
 
 const DaenamuComment = ({ forestId }) => {
-	const [commentList, setCommentList] = useState('');
+	const { commentList, setCommentList } = useForestStore();
 	const [comment, setComment] = useState('');
 	const [isDataLoading, setIsDataLoading] = useState(false);
 
 	const [totalPage, setTotalPage] = useState(0);
 	const [commentCount, setCommentCount] = useState(0);
 
-	const fetchData = async (page = 1) => {
+	const fetchComment = async (page = 1) => {
 		try {
 			const res = await getApi(`forest/${forestId}/comments?page=${page}`);
-			console.log(res.data);
+
 			setCommentList(res.data.comments);
 			setCommentCount(res.data.totalCommentsCount);
 			setTotalPage(res.data.totalPage);
@@ -27,19 +29,19 @@ const DaenamuComment = ({ forestId }) => {
 	};
 
 	useEffect(() => {
-		fetchData(currentPage);
+		fetchComment(currentPage);
 	}, []);
 
 	const { currentPage, prev, next, go } = usePagination(
 		isDataLoading ? commentList : [],
 		totalPage,
-		{ onChange: ({ targetPage }) => fetchData(targetPage) },
+		{ onChange: ({ targetPage }) => fetchComment(targetPage) },
 	);
 
 	const deleteComment = async (commentId) => {
 		try {
-			await delApi(`forest/comments/${commentId}`);
-			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
+			await delApi(`forest/${forestId}/comments/${commentId}`);
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -47,10 +49,10 @@ const DaenamuComment = ({ forestId }) => {
 
 	const editComment = async (commentId, editedComment) => {
 		try {
-			await patchApi(`forest/comments/${commentId}`, {
-				comment: editedComment,
+			await putApi(`forest/comments/${commentId}`, {
+				updatedComment: editedComment,
 			});
-			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -58,21 +60,20 @@ const DaenamuComment = ({ forestId }) => {
 
 	useEffect(() => {
 		if (isDataLoading) {
-			fetchData(currentPage);
+			fetchComment(currentPage);
 		}
 	}, [currentPage]);
 
 	const handleSubmit = async () => {
-		console.log(comment);
 		try {
-			const res = await postApi(`forest/${forestId}/comments`, {
+			await postApi(`forest/${forestId}/comments`, {
 				comment,
 			});
-			console.log(res);
+
 			setComment('');
-			fetchData();
+			fetchComment();
 		} catch (error) {
-			console.log(error.response.data.errorMessage);
+			toast.error(error.response.data.message);
 		}
 	};
 	return (
@@ -87,25 +88,25 @@ const DaenamuComment = ({ forestId }) => {
 						setComment(e.target.value);
 					}}
 					id="comment"
-					maxLength={200} // Add this line
+					maxLength={200}
 					value={comment}
 					placeholder="댓글을 입력하세요."
 				/>
 
 				<button
 					disabled={!comment}
-					className="h-16 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-500 disabled:bg-neutral-300 rounded-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+					className="whitespace-nowrap h-16 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-500 disabled:bg-neutral-300 rounded-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200  "
 					onClick={handleSubmit}
 				>
 					등록
 				</button>
 			</div>
 
-			{/* <div>
-				{commentList.length === 0 ? (
-					<p>등록된 댓글이 없습니다.</p>
+			<div>
+				{commentCount === 0 ? (
+					<p className="text-center text-sm">등록된 댓글이 없습니다.</p>
 				) : (
-					commentList.map((commentData) => (
+					commentList?.map((commentData) => (
 						<div key={commentData._id}>
 							<CommentBox
 								commentData={commentData}
@@ -115,17 +116,19 @@ const DaenamuComment = ({ forestId }) => {
 						</div>
 					))
 				)}
-			</div> */}
+			</div>
 
-			{/* <div className="flex justify-center mt-10">
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPage}
-					prev={prev}
-					next={next}
-					go={go}
-				/>
-			</div> */}
+			{commentCount !== 0 ? (
+				<div className="flex justify-center mt-10">
+					<Pagination
+						currentPage={currentPage}
+						totalPages={totalPage}
+						prev={prev}
+						next={next}
+						go={go}
+					/>
+				</div>
+			) : null}
 		</div>
 	);
 };

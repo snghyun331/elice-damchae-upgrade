@@ -1,11 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useUserStore, { useUserActions } from '../../store/useUserStore';
 import PropTypes from 'prop-types';
 import { putApi } from '../../services/api';
 import toast from 'react-hot-toast';
-
-//프로파일 이미지 업로드 기능의 경우 백 저장 방식이 미확정인 바, 수정의 여지가 있는 점 참고 부탁 드립니다!
-//유저가 이미지를 업로드하거나 캐릭터 그림을 고르면 response에 해당 이미지의 S3 웹 주소가 담겨 오고, 해당 주소로 유저 스토어의 setProfileImg 및 유저 액션 스토어의 infoChange를 수행하게 될 것 같습니다.
 
 const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 	const [selectedFile, setSelectedFile] = useState(null);
@@ -23,7 +20,6 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (selectedFile) {
-			console.log('셋프로파일이미지');
 			setProfileImg(selectedFile);
 		} else {
 			console.log('No file selected');
@@ -36,8 +32,8 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 			const res = await putApi(`auth/update`, formData);
 			if (res.status === 200) {
 				toast.success('프로필 사진을 수정하였습니다.');
-				setProfileImg(URL.createObjectURL(selectedFile));
-				infoChange({ profileImg: URL.createObjectURL(selectedFile) });
+				setProfileImg(res.data.profileImg?.path);
+				infoChange({ profileImg: res.data.profileImg?.path, mbtiImg: null });
 				closeModal();
 			} else {
 				toast.error('프로필 사진 수정에 실패했습니다.');
@@ -46,6 +42,13 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 			console.log(err);
 		}
 	};
+
+	useEffect(() => {
+		if (!isVisible) {
+			setSelectedFile(null);
+			setPreview('');
+		}
+	}, [isVisible]);
 
 	return (
 		<div className={`${isVisible ? 'block' : 'hidden'}`}>
@@ -125,8 +128,9 @@ const ProfileImgUploadModal = ({ isVisible, closeModal }) => {
 							<button
 								data-modal-hide="small-modal"
 								type="button"
-								className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								className="text-white bg-blue-700 disabled:bg-gray-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 								onClick={handleSubmit}
+								disabled={!selectedFile}
 							>
 								수정하기
 							</button>

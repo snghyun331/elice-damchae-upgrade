@@ -1,20 +1,27 @@
-import { textToIcon, textToColor, formatRelativeTime } from '../Util/Util';
+import {
+	textToIcon,
+	textToColor,
+	formatRelativeTime,
+	textToKorean,
+} from '../Util/Util';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
-import { BackButton } from '../Global/BackButton';
+import BackButton from '../Global/BackButton';
 import { useNavigate, useParams } from 'react-router-dom';
 import { delApi, getApi, putApi } from '../../services/api';
 import { useEffect, useState } from 'react';
 import { useUserId } from '../../store/useUserStore';
+import { toast } from 'react-hot-toast';
 
 import ReactionChart from './Reaction';
 import DaenamuLikeSection from './DaenamuLikeSection';
 import DaenamuTextEditor from './DaenamuTextEditor';
-import useStoryStore from '../../store/useStoryStore';
+import useForestStore from '../../store/useForestStore';
 import DaenamuComment from './DaenamuComment';
 
 const DaenamuRead = () => {
-	const { title, content, setTitle, setContent, setMood } = useStoryStore();
+	const { title, content, mood, setTitle, setContent, setMood, commentList } =
+		useForestStore();
 	const { forestId } = useParams();
 	const [forest, setForest] = useState([]);
 	const [isDataLoading, setIsDataLoading] = useState(false);
@@ -22,16 +29,42 @@ const DaenamuRead = () => {
 	const [viewerKey, setViewerKey] = useState(0);
 	const navigate = useNavigate();
 	const id = useUserId();
-
-	const fetchData = async () => {
+	const fetchForest = async () => {
 		try {
 			const res = await getApi(`forest/${forestId}`);
-			console.log(res);
 			setForest(res.data);
+
 			setIsDataLoading(true);
 		} catch (error) {
 			console.log(error);
 		}
+	};
+
+	const handleConfirm = () => {
+		toast((t) => (
+			<div className="rounded p-4">
+				<div>정말로 삭제하시겠습니까?</div>
+				<div className="mt-3 flex justify-end">
+					<button
+						onClick={() => {
+							handleDelete();
+							toast.dismiss(t.id);
+						}}
+						className="text-white px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600"
+					>
+						예
+					</button>
+					<button
+						onClick={() => {
+							toast.dismiss(t.id);
+						}}
+						className="text-white px-2 py-1 rounded bg-red-500 hover:bg-red-600"
+					>
+						아니오
+					</button>
+				</div>
+			</div>
+		));
 	};
 
 	const handleDelete = async () => {
@@ -47,27 +80,24 @@ const DaenamuRead = () => {
 		setEditMode(true);
 		setTitle(forest.title);
 		setContent(forest.content);
-		setMood(forest.mood);
+		setMood('');
 	};
 
 	const handleCancelEdit = () => {
-		// Reset the edited comment and disable edit mode when canceling the edit
 		setTitle(forest.title);
 		setContent(forest.content);
-		setMood;
+		setMood('');
 		setEditMode(false);
 	};
 
 	const handleSaveEdit = async () => {
 		try {
-			// Call the onEdit function with the edited comment and the commentData._id
-			const res = await putApi(`forest/${forestId}`, {
+			await putApi(`forest/${forestId}`, {
 				title,
 				content,
+				mood,
 			});
-			//TODO:mood추가해야함
-			console.log(res);
-			fetchData();
+			fetchForest();
 
 			setEditMode(false);
 		} catch (error) {
@@ -76,7 +106,7 @@ const DaenamuRead = () => {
 	};
 
 	useEffect(() => {
-		fetchData();
+		fetchForest();
 	}, []);
 
 	useEffect(() => {
@@ -84,46 +114,51 @@ const DaenamuRead = () => {
 	}, [forest.content]);
 
 	return (
-		<div className={`w-4/5 max-w-2xl mx-auto dark:bg-gray-800`}>
+		<div className={`w-4/5 max-w-2xl mx-auto `}>
 			<BackButton />
 			<div
-				className={`w-full max-w-2xl border border-gray-200 rounded-lg shadow mx-auto bg-white dark:bg-gray-800`}
+				className={`w-full max-w-2xl border border-gray-400 rounded-lg shadow mx-auto bg-white pt-4 `}
 				style={{
 					backgroundColor: isDataLoading ? textToColor[forest.mood] : '#FFFFFF',
 				}}
 			>
 				{' '}
 				<div className="justify-end">
-					{isDataLoading && forest.userInfo._id == id && (
+					{isDataLoading && forest.userInfo?._id == id && (
 						<>
 							{editMode ? (
-								// Show Save and Cancel buttons in edit mode
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleCancelEdit}
-										className="underline underline-offset-2 text-red-400"
+										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
 									>
 										취소
 									</button>
 									<button
-										onClick={handleSaveEdit}
-										className="ml-2 underline underline-offset-2 text-blue-400"
+										onClick={
+											mood
+												? () => handleSaveEdit()
+												: () =>
+														toast.error(
+															'글 수정 후 감정분석을 마쳐야 저장할 수 있습니다.',
+														)
+										}
+										className="disabled:bg-gray-100 py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
 									>
 										저장
 									</button>
 								</div>
 							) : (
-								// Show Edit button in view mode
 								<div className="mr-4 mt-4 flex flex-row justify-end">
 									<button
 										onClick={handleEdit}
-										className="justify-end underline underline-offset-2 text-red-400"
+										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-blue-200 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
 									>
 										수정
 									</button>
 									<button
-										onClick={handleDelete}
-										className="justify-end ml-2 underline underline-offset-2 text-red-400"
+										onClick={handleConfirm}
+										className="py-1 px-3 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-red-300 rounded-full  hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
 									>
 										삭제
 									</button>
@@ -132,45 +167,60 @@ const DaenamuRead = () => {
 						</>
 					)}
 				</div>
-				(//TODO:제목 길어지면 박스무너짐..)
-				<div className="relative top-0 px-10">
+				<div className="relative top-0 md:px-10">
 					{editMode ? (
 						<DaenamuTextEditor />
 					) : (
 						<div className="view-mode">
-							<div className="relative h-40 overflow-hidden rounded-t-lg">
-								<div className="absolute w-full p-4">
+							<div className="relative h-40 rounded-t-lg">
+								<div className="flex flex-col absolute h-full w-full p-4">
 									<div className="flex flex-row items-center">
-										<div className="text-2xl">
+										<div
+											className="text-3xl mr-1"
+											data-tooltip-id="tooltip"
+											data-tooltip-content={
+												isDataLoading
+													? `AI가 분석한 주요감정 : ${
+															textToKorean[forest.mood]
+													  }`
+													: ''
+											}
+										>
 											{isDataLoading && textToIcon[forest.mood]}
 										</div>
-										<h5 className="p-5 leading-loose text-2xl font-bold">
+										<h5 className="py-2 leading-loose text-lg md:text-2xl font-bold">
 											{forest.title}
 										</h5>
 									</div>
 
-									<div className="w-full justify-between space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 dark:text-white">
-										<div className="flex flex-row space-x-2">
+									<div className="w-full justify-between space-x-2 items-center inline-flex mr-3 text-sm text-gray-900 ">
+										<div className="flex flex-row space-x-2 mt-5">
 											<img
-												className="w-10 h-10 object-cover"
-												// src={isDataLoading && forest.userInfo.profileImg}
+												className="rounded-full w-10 h-10 object-cover bg-white"
 												src={
-													'https://png.pngtree.com/png-vector/20191115/ourmid/pngtree-beautiful-profile-line-vector-icon-png-image_1990469.jpg'
+													isDataLoading && forest.userInfo?.profileImg
+														? forest.userInfo?.profileImg?.path
+														: isDataLoading && forest.userInfo?.mbtiImg
+														? forest.userInfo?.mbtiImg
+														: '/images/default-image.jpg'
 												}
 												alt=""
 											/>
 											<div className="flex flex-col ">
-												<p className="w-20 text-sm dark:text-gray-400">
-													{isDataLoading && forest.userInfo.nickname}
+												<p className="w-20 text-sm ">
+													{isDataLoading && forest.userInfo.nickname ? forest.userInfo.nickname : '알 수 없음' }
 												</p>
-												<p className="text-sm dark:text-gray-400">
-													{isDataLoading && forest.userInfo.mbti}
+												<p className="text-xs text-gray-500">
+													{isDataLoading && forest.userInfo?.mbti}
 												</p>
 											</div>
 										</div>
 										<div className="justify-end flex flex-col">
 											<p className="mb-1">
-												조회수 {isDataLoading && forest.views}
+												조회{' '}
+												<span className="text-blue-600 font-semibold">
+													{isDataLoading && forest.views}
+												</span>
 											</p>
 											<p className="self-end text-xs mb-1">
 												{isDataLoading && formatRelativeTime(forest.updatedAt)}
@@ -180,7 +230,8 @@ const DaenamuRead = () => {
 								</div>
 							</div>
 							<div>
-								<div className="relative p-10">
+								<hr className="border-gray-300 my-3" />
+								<div className="relative p-6 md:p-10">
 									{isDataLoading && (
 										<Viewer key={viewerKey} initialValue={forest.content} />
 									)}
@@ -191,15 +242,17 @@ const DaenamuRead = () => {
 				</div>
 				<div className="flex flex-col">
 					<DaenamuLikeSection forestId={forest._id} userId={id} />
-
-					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
-					<ReactionChart />
-					<hr className="h-px bg-gray-300 border-0 dark:bg-gray-700" />
+					<hr className="h-px bg-gray-300 border-0 mx-6" />
+					{commentList && commentList.length > 0 ? (
+						<div>
+							<ReactionChart commentList={commentList} forestId={forestId} />
+						</div>
+					) : (
+						<div></div>
+					)}
+					<hr className="h-px bg-gray-300 border-0 mx-6" />
 					<div>
-						<DaenamuComment
-							forestId={forestId}
-							// commentList={forest.commentList}
-						/>
+						<DaenamuComment forestId={forestId} />
 					</div>
 				</div>
 			</div>

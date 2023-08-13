@@ -1,4 +1,6 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
+import { InformationCircleIcon } from '@heroicons/react/24/solid';
+
 import {
 	mbtiList,
 	defaultUser,
@@ -24,14 +26,17 @@ const InfoChange = () => {
 		mbti,
 		isGoogleLogin,
 		profileImg,
+		mbtiImg,
+		tempMbtiImg,
+
 		setNickname,
 		setMbti,
 		setProfileImg,
+		setMbtiImg,
+		setTempMbtiImg,
 	} = useUserStore();
 
-	console.log(profileImg);
-
-	const [preview, setPreview] = useState(profileImg);
+	const [preview, setPreview] = useState(profileImg ? profileImg : mbtiImg);
 	const [passwordToChange, setPasswordToChange] = useState('');
 	const [nicknameToChange, setNicknameToChange] = useState(nickname);
 	const [mbtiToChange, setMbtiToChange] = useState(
@@ -106,24 +111,21 @@ const InfoChange = () => {
 		}
 	}, [nicknameToChange]);
 
-	console.log(preview);
 	const handleSubmit = useCallback(
 		async (e) => {
 			e.preventDefault();
 			const toUpdate = {
 				email,
 				...(passwordToChange !== '' && { password: passwordToChange }),
-				profileImg: profileImgToChange,
+				profileImg: tempMbtiImg ? null : profileImgToChange,
+				mbtiImg: tempMbtiImg,
 				nickname: nicknameToChange,
 				mbti: mbtiToChange.value,
+				isGoogleLogin: isGoogleLogin,
 			};
 			const formData = new FormData();
 			for (const key in toUpdate) {
 				formData.append(key, toUpdate[key]);
-			}
-
-			for (let key of formData.keys()) {
-				console.log(key, ':', formData.get(key));
 			}
 
 			try {
@@ -132,7 +134,8 @@ const InfoChange = () => {
 					toast.success('정보를 수정하였습니다.');
 					setNickname(toUpdate.nickname);
 					setMbti(toUpdate.mbti);
-					setProfileImg(toUpdate.profileImg);
+					setProfileImg(res.data.profileImg);
+					setMbtiImg(res.data.mbtiImg);
 					infoChange(toUpdate);
 				} else {
 					toast.error('정보 수정에 실패하였습니다.');
@@ -148,22 +151,47 @@ const InfoChange = () => {
 			nicknameToChange,
 			passwordToChange,
 			profileImgToChange,
+			tempMbtiImg,
 		],
 	);
 
+	const handleConfirm = () => {
+		toast((t) => (
+			<div className="rounded p-8">
+				<div>정말로 탈퇴하시겠습니까?</div>
+				<div className="mt-5 flex justify-center">
+					<button
+						onClick={() => {
+							handleOut();
+							toast.dismiss(t.id);
+						}}
+						className="text-white w-16 px-2 py-1 rounded mr-2 bg-green-500 hover:bg-green-600 text-sm"
+					>
+						예
+					</button>
+					<button
+						onClick={() => {
+							toast.dismiss(t.id);
+						}}
+						className="text-white w-16 px-2 py-1 rounded bg-red-500 hover:bg-red-600 text-sm"
+					>
+						아니오
+					</button>
+				</div>
+			</div>
+		));
+	};
+
 	const handleOut = async () => {
-		const confirmResign = window.confirm('정말로 회원 탈퇴를 하시겠습니까?');
-		if (confirmResign) {
-			try {
-				const response = await putApi(`auth/out`, { userId: id });
-				if (response.status === 200) {
-					toast.success('정상적으로 회원탈퇴가 완료되었습니다.');
-					logout();
-					navigate('/');
-				}
-			} catch (error) {
-				console.error('회원탈퇴 오류:', error);
+		try {
+			const response = await putApi(`auth/out`, { userId: id });
+			if (response.status === 200) {
+				toast.success('정상적으로 회원탈퇴가 완료되었습니다.');
+				logout();
+				navigate('/');
 			}
+		} catch (error) {
+			console.error('회원탈퇴 오류:', error);
 		}
 	};
 
@@ -176,9 +204,7 @@ const InfoChange = () => {
 			if (typeof profileImg === 'string') {
 				setPreview(profileImg);
 			} else if (profileImg instanceof File) {
-				console.log('파일변경실행');
 				const imageUrl = URL.createObjectURL(profileImg);
-				console.log(imageUrl);
 				setPreview(imageUrl);
 
 				return () => {
@@ -190,6 +216,27 @@ const InfoChange = () => {
 		}
 	}, [profileImg]);
 
+	useEffect(() => {
+		let imageUrl;
+
+		if (tempMbtiImg) {
+			imageUrl = tempMbtiImg;
+		} else if (profileImg) {
+			imageUrl = profileImg;
+		} else if (mbtiImg) {
+			imageUrl = mbtiImg;
+		} else {
+			imageUrl = defaultUser;
+		}
+
+		setPreview(imageUrl);
+	}, [profileImg, mbtiImg, tempMbtiImg]);
+
+	useEffect(() => {
+		return () => {
+			setTempMbtiImg('');
+		};
+	}, []);
 	return (
 		<>
 			<section className="">
@@ -199,12 +246,26 @@ const InfoChange = () => {
 							<h1 className="mb-10 text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
 								회원정보 수정
 							</h1>
+							{mbti === '미설정' && (
+								<div
+									className="flex items-center p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+									role="alert"
+								>
+									<InformationCircleIcon className="w-5 mr-2" />
+									<span className="sr-only"></span>
+									<div>
+										즐거운 커뮤니티 이용을 위해 MBTI 설정을 완료해주세요.
+									</div>
+								</div>
+							)}
+
 							<form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
 								<div className="flex justify-center">
 									<img
-										className="w-32 h-32 rounded-full border -mb-2"
-										src={preview !== '' ? preview : defaultUser}
+										className="w-32 h-32 rounded-full border -mb-2 cursor-pointer"
+										src={preview ? preview : defaultUser}
 										alt="Rounded avatar"
+										onClick={() => setShowModal(true)}
 									/>
 								</div>
 
@@ -228,7 +289,6 @@ const InfoChange = () => {
 									</label>
 									<div className="flex space-x-2">
 										<div>{email}</div>
-										<div />
 									</div>
 								</div>
 
@@ -380,15 +440,15 @@ const InfoChange = () => {
 									>
 										수정하기
 									</button>
-									<hr className="my-8" />
-									<button
-										onClick={handleOut}
-										className="text-sm text-red-600 underline ml-auto"
-									>
-										회원 탈퇴
-									</button>
+									<hr className="mt-8" />
 								</div>
 							</form>
+							<button
+								onClick={handleConfirm}
+								className="text-sm text-red-600 underline flex ml-auto"
+							>
+								회원 탈퇴
+							</button>
 						</div>
 					</div>
 				</div>

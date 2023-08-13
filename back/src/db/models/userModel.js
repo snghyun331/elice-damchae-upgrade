@@ -47,7 +47,7 @@ class User {
   static async update({ userId, fieldToUpdate, newValue }) {
     const filter = { _id: userId };
     const update = { [fieldToUpdate]: newValue };
-    const option = { returnOriginal: false };
+    const option = { new: true };
 
     const updatedUser = await UserModel.findOneAndUpdate(
       filter,
@@ -60,7 +60,7 @@ class User {
   static async delete({ userId }) {
     const user = await UserModel.findByIdAndUpdate(
       { _id: userId },
-      { isOut: true },
+      { isOut: true, nickname: null },
       { new: true },
     );
     return user;
@@ -68,8 +68,13 @@ class User {
 
   // 탈퇴한 회원조회
   static async findDeletedUsers() {
-    const users = await User.find({ isOut: true });
+    const users = await UserModel.find({ isOut: true });
     return users;
+  }
+
+  static async populateUserImg(user, field) {
+    const result = UserModel.populate(user, field);
+    return result;
   }
 }
 

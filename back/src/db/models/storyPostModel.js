@@ -44,20 +44,30 @@ class storyPostModel {
 
   // 조회수 1증가
   static async findAndIncreaseView({ storyId }) {
-    await storyPost.updateOne({ _id: storyId }, { $inc: { views: 1 } });
-    const story = await storyPost.findOne({ _id: storyId }).lean();
+    const story = await storyPost
+      .findOneAndUpdate(
+        { _id: storyId },
+        { $inc: { views: 1 } },
+        { returnOriginal: false },
+      )
+      .lean();
     return story;
   }
 
-  static async findAndIncreaseCommentCount({ storyId }) {
-    await storyPost.updateOne({ _id: storyId }, { $inc: { commentCount: 1 } });
+  static async findAndIncreaseCommentCount(session, { storyId }) {
+    await storyPost
+      .updateOne({ _id: storyId }, { $inc: { commentCount: 1 } })
+      .session(session);
+    return;
   }
 
-  static async findAndDecreaseCommentCount({ storyId }) {
-    await storyPost.updateOne(
-      { _id: storyId, commentCount: { $gt: 0 } },
-      { $inc: { commentCount: -1 } },
-    );
+  static async findAndDecreaseCommentCount(session, { storyId }) {
+    await storyPost
+      .updateOne(
+        { _id: storyId, commentCount: { $gt: 0 } },
+        { $inc: { commentCount: -1 } },
+      )
+      .session(session);
   }
 
   static async deleteOneByStoryId({ storyId }) {
@@ -90,19 +100,24 @@ class storyPostModel {
     return { stories, count };
   }
 
-  static async findMyAndCountAll(skip, limit, userId) {
-    const stories = await storyPost
-      .find({ userInfo: userId })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .exec();
+  // static async findMyAndCountAll(skip, limit, userId) {
+  //   const stories = await storyPost
+  //     .find({ userInfo: userId })
+  //     .sort({ createdAt: -1 })
+  //     .skip(skip)
+  //     .limit(limit)
+  //     .exec();
 
-    const count = await storyPost.countDocuments({ userInfo: userId });
-    return { stories, count };
-  }
+  //   const count = await storyPost.countDocuments({ userInfo: userId });
+  //   return { stories, count };
+  // }
 
-  static async findMySearchQueryAndCountAll(skip, limit, userId, searchQuery) {
+  static async findMySearchQueryAndCountAll(
+    skip,
+    limit,
+    userId,
+    searchQuery = {},
+  ) {
     const updatedSearchQuery = { ...searchQuery, userInfo: userId };
     const stories = await storyPost
       .find(updatedSearchQuery)
@@ -119,9 +134,31 @@ class storyPostModel {
     return result;
   }
 
+  static async populateStoryAll(info, field1, field2) {
+    const result1 = await storyPost.populate(info, field1);
+    const result2 = await storyPost.populate(result1, field2);
+    return result2;
+  }
+
   static async findStoriesById({ userId }) {
     const stories = await storyPost.find({ userInfo: userId });
     return stories;
+  }
+
+  static async isAlreadyWriteOnce(
+    userId,
+    seoulTimeStartOfDay,
+    seoulTimeEndOfDay,
+  ) {
+    const existingPost = await storyPost.find({
+      userInfo: userId,
+      createdAt: {
+        $gte: seoulTimeStartOfDay.toDate(),
+        $lte: seoulTimeEndOfDay.toDate(),
+      },
+    });
+
+    return existingPost;
   }
 }
 

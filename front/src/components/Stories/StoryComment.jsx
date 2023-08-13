@@ -4,6 +4,7 @@ import CommentBox from '../Global/CommentBox';
 import PropTypes from 'prop-types';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../Global/Pagination';
+import toast from 'react-hot-toast';
 
 const StoryComment = ({ storyId }) => {
 	const [commentList, setCommentList] = useState('');
@@ -13,10 +14,10 @@ const StoryComment = ({ storyId }) => {
 	const [totalPage, setTotalPage] = useState(0);
 	const [commentCount, setCommentCount] = useState(0);
 
-	const fetchData = async (page = 1) => {
+	const fetchComment = async (page = 1) => {
 		try {
 			const res = await getApi(`stories/${storyId}/comments?page=${page}`);
-			console.log(res.data);
+
 			setCommentList(res.data.comments);
 			setCommentCount(res.data.totalCommentsCount);
 			setTotalPage(res.data.totalPage);
@@ -27,19 +28,19 @@ const StoryComment = ({ storyId }) => {
 	};
 
 	useEffect(() => {
-		fetchData(currentPage);
+		fetchComment(currentPage);
 	}, []);
 
 	const { currentPage, prev, next, go } = usePagination(
 		isDataLoading ? commentList : [],
 		totalPage,
-		{ onChange: ({ targetPage }) => fetchData(targetPage) },
+		{ onChange: ({ targetPage }) => fetchComment(targetPage) },
 	);
 
 	const deleteComment = async (commentId) => {
 		try {
 			await delApi(`stories/comments/${commentId}`);
-			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -50,7 +51,7 @@ const StoryComment = ({ storyId }) => {
 			await patchApi(`stories/comments/${commentId}`, {
 				comment: editedComment,
 			});
-			fetchData(); // Assuming you have a function fetchData to fetch updated commentList
+			fetchComment();
 		} catch (error) {
 			console.log(error);
 		}
@@ -58,20 +59,19 @@ const StoryComment = ({ storyId }) => {
 
 	useEffect(() => {
 		if (isDataLoading) {
-			fetchData(currentPage);
+			fetchComment(currentPage);
 		}
 	}, [currentPage]);
 
 	const handleSubmit = async () => {
-		console.log(comment);
 		try {
 			await postApi(`stories/${storyId}/comments`, {
 				comment,
 			});
 			setComment('');
-			fetchData();
+			fetchComment();
 		} catch (error) {
-			console.log(error.response.data.errorMessage);
+			toast.error(error.response.data.message);
 		}
 	};
 	return (
@@ -93,7 +93,7 @@ const StoryComment = ({ storyId }) => {
 
 				<button
 					disabled={!comment}
-					className="h-16 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-500 disabled:bg-neutral-300 rounded-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+					className="whitespace-nowrap h-16 w-[10%] my-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-500 disabled:bg-neutral-300 rounded-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
 					onClick={handleSubmit}
 				>
 					등록
@@ -101,8 +101,8 @@ const StoryComment = ({ storyId }) => {
 			</div>
 
 			<div>
-				{commentList.length === 0 ? (
-					<p>등록된 댓글이 없습니다.</p>
+				{commentCount === 0 ? (
+					<p className="text-center text-sm">등록된 댓글이 없습니다.</p>
 				) : (
 					commentList.map((commentData) => (
 						<div key={commentData._id}>
@@ -116,15 +116,17 @@ const StoryComment = ({ storyId }) => {
 				)}
 			</div>
 
-			<div className="flex justify-center mt-10">
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPage}
-					prev={prev}
-					next={next}
-					go={go}
-				/>
-			</div>
+			{commentCount !== 0 ? (
+				<div className="flex justify-center mt-10">
+					<Pagination
+						currentPage={currentPage}
+						totalPages={totalPage}
+						prev={prev}
+						next={next}
+						go={go}
+					/>
+				</div>
+			) : null}
 		</div>
 	);
 };

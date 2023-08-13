@@ -5,13 +5,32 @@ export const classNames = (...classes) => {
 };
 
 //배경색용, 연한 버전
+
+export const textToBorderColor = {
+	insecure: 'border-[#F1E3FF]',
+	surprise: 'border-[#fcf7de]',
+	pleasure: 'border-[#e1f2e2]',
+	sad: 'border-[#ECF1FF]',
+	anger: 'border-[#F9EBDE]',
+	neutral: 'border-[#f5f5f5]',
+};
+
 export const textToColor = {
 	insecure: '#F1E3FF',
-	surprise: '#FFFBB8',
-	pleasure: '#d6f0d7',
+	surprise: '#fcf7de',
+	pleasure: '#e1f2e2',
 	sad: '#ECF1FF',
 	anger: '#F9EBDE',
-	neutral: '#E0E0E0',
+	neutral: '#f5f5f5',
+};
+
+export const textEngToDeepColor = {
+	pleasure: '#8CD790',
+	insecure: '#A593E0',
+	sad: '#6AAFE6',
+	neutral: '#B8B8B8',
+	surprise: '#F6B352',
+	anger: '#FF7761',
 };
 
 //통계색용, 진한 버전
@@ -68,7 +87,6 @@ export const mbtiList = [
 	{ value: 'ESFJ', label: 'ESFJ' },
 	{ value: 'ENFJ', label: 'ENFJ' },
 	{ value: 'ENTJ', label: 'ENTJ' },
-	{ value: '미설정', label: '미설정' },
 ];
 
 export const truncateString = (string, length) => {
@@ -81,7 +99,7 @@ export const removeTag = (string) => {
 
 export const formatDate = (string) => {
 	const date = moment(string);
-	const formattedDate = date.format('YYYY년 MM월 DD일');
+	const formattedDate = date.format('YYYY년 M월 D일');
 	return formattedDate;
 };
 
@@ -146,10 +164,13 @@ export const calendarDateToString = (date) => {
 		.replaceAll(' ', '');
 };
 
-export const defaultUser =
-	'https://cdn-icons-png.flaticon.com/512/847/847969.png?w=996&t=st=1691066365~exp=1691066965~hmac=8dd84f9bda33d03b36a4fe88d41d137caafb78037d900338c6855d4982fb8c2e';
+export const defaultUser = '/images/default-user.png';
 
 export const passwordRegex =
 	/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
 
 export const nicknameRegex = /^[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,16}$/;
+
+export const isEmpty = (obj) => {
+	return Object.keys(obj).length === 0;
+};

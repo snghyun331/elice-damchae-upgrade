@@ -30,7 +30,7 @@ const StoryCard = ({
 	return (
 		<>
 			<div
-				className={`border border-[0.2rem] border-neutral-200 border-solid rounded-2xl pt-5 px-5 pb-6 my-3 mx-2 relative h-full`}
+				className={`bg-[#ECF2FF] border border-[0.1rem] border-neutral-200 border-solid rounded-2xl pt-5 px-5 pb-6 my-3 mx-2 relative h-full`}
 			>
 				<Link to={`/stories/${_id}`}>
 					<div className="flex items-center justify-center">
@@ -40,16 +40,16 @@ const StoryCard = ({
 								src={imageSrc}
 								alt="스토리 이미지"
 								onError={(e) => {
-									e.target.src = 'images/default-image.jpg';
+									e.target.src = '/images/default-image.jpg';
 								}}
 							/>
 						</figure>
 						<span className="absolute top-36 right-2 text-8xl">{moodIcon}</span>
 					</div>
 
-					<div className="pl-2 pt-10 flex flex-col justify-between">
+					<div className="h-[55%] pl-2 pt-10 flex flex-col justify-between">
 						<div>
-							<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+							<h5 className="mt-2 mb-2 text-xl font-bold tracking-tight text-gray-900">
 								{truncateString(title, 32)}
 								{!isPublic ? (
 									<LockClosedIcon
@@ -62,23 +62,23 @@ const StoryCard = ({
 								)}
 							</h5>
 							<div className="text-sm text-gray-500">
-								{userInfo ? userInfo.nickname : '알 수 없는 유저'}
+								{userInfo ? userInfo.nickname : '알 수 없음'}
 								<span className="text-xs ml-2">
 									{formatRelativeTime(createdAt)}
 								</span>
 							</div>
-							<p className="text-sm my-3 font-normal text-gray-700 dark:text-gray-400">
+							<p className="text-sm my-3 font-normal text-gray-700">
 								{truncateString(removeTag(content), 100)}
 							</p>
 						</div>
 
 						<div className="space-y-2 mt-8">
-							<div className="whitespace-nowrap w-full absolute bottom-8 flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+							<div className="whitespace-nowrap w-full bottom-8 flex justify-between text-sm font-medium text-center text-black focus:ring-4 focus:outline-none focus:ring-blue-300">
 								<div className="flex items-center">
 									<ChevronRightIcon className="w-4 mt-1" />
 									<span className="ml-1">더보기</span>
 								</div>
-								<div className="flex flex-row space-x-2 pr-16">
+								<div className="flex flex-row space-x-2">
 									<EyeIcon className="w-4 mt-1" />
 									<p>{views}</p>
 									<ChatBubbleLeftEllipsisIcon className="w-4 mt-1" />

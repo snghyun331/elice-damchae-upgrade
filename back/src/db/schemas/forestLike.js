@@ -10,7 +10,7 @@ const forestLikeSchema = new Schema(
     postId: {
       type: Schema.Types.ObjectId,
       ref: 'ForestPost',
-      required: false,
+      required: true,
     },
   },
   { collection: 'forestLikes' },

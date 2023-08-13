@@ -1,10 +1,6 @@
-// forestController.js
-// import { forestModel } from '../db/models/forestModel.js';
-import { forestModel } from '../db/models/forestModel.js';
-import User from '../db/models/userModel.js';
 import ForestService from '../services/forestService.js';
 import axios from 'axios';
-
+import { pageDefault, pageLimit } from '../utills/constant.js';
 class ForestController {
   // 대나무숲 글 등록 전 감정분석 수행하기
   static async getPredict(req, res, next) {
@@ -12,9 +8,12 @@ class ForestController {
       const { content } = req.body;
       const pureContent = content.replace(/<[^>]+>/g, ' '); // content에 html태그가 섞여오기 때문에 태그 제거하기
       // flask에서 'text': pureContent 형태로 request로 들어감
-      const obj = await axios.post('http://127.0.0.1:5000/predict', {
-        text: pureContent,
-      });
+      const obj = await axios.post(
+        process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL,
+        {
+          text: pureContent,
+        },
+      );
       // console.log(obj.data)  ->  (예) { mood : 'pleasure' }
       return res.status(201).json(obj.data);
     } catch (error) {
@@ -49,8 +48,8 @@ class ForestController {
 
   static async findByForest(req, res, next) {
     try {
-      const page = parseInt(req.query.page || 1); // 몇 번째 페이지인지
-      const limit = 12; // 한페이지에 들어갈 스토리 수
+      const page = parseInt(req.query.page || pageDefault); // 몇 번째 페이지인지
+      const limit = pageLimit; // 한페이지에 들어갈 스토리 수
 
       const { option, searchword } = req.query;
       let getAlls = {};
@@ -65,7 +64,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -88,7 +87,7 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -98,7 +97,7 @@ class ForestController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalforestsCount: count,
+          totalForestsCount: count,
           forests: populateResult,
         };
       } else if (option === 'title_content') {
@@ -113,9 +112,10 @@ class ForestController {
           page,
           getAlls,
         );
+
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'userInfo',
         );
 
         if (populateResult.length === 0) {
@@ -125,7 +125,7 @@ class ForestController {
         result = {
           currentPage: page,
           totalPage: totalPage,
-          totalStoriesCount: count,
+          totalCount: count,
           forests: populateResult,
         };
       } else {
@@ -135,12 +135,8 @@ class ForestController {
         );
         const populateResult = await ForestService.populateForestPost(
           forests,
-          'userInfo thumbnail',
+          'userInfo',
         );
-
-        if (populateResult.length === 0) {
-          throw new Error('스토리가 없습니다');
-        }
 
         result = {
           currentPage: page,
@@ -156,55 +152,23 @@ class ForestController {
     }
   }
 
-  // static async findById(req, res, next) {
-  //   try {
-  //     const forestId = req.currentUserId;
-  //     const post = await ForestService.findById({ forestId });
-  //     if (!post) {
-  //       throw new Error('존재하지 않는 글입니다');
-  //     }
-  //     return res.status(201).json(post);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
   static async updatePost(req, res, next) {
     try {
-      // console.log('Request Params:', req.params);
-      // console.log('Request Body:', req.body);
-
       const forestId = req.params.id;
-      const userId = req.currentUserId;
+      const { title, content, mood } = req.body;
 
-      // console.log('forestId:', forestId);
-      // console.log('userId:', userId);
+      const updatedPost = await ForestService.updatePost({
+        forestId,
+        title,
+        content,
+        mood,
+      });
 
-      const postUser = await ForestService.readForestDetail({ forestId });
-
-      // console.log('postUser:', postUser);
-
-      if (!postUser) {
-        throw new Error('해당 게시물이 존재하지 않습니다.');
+      if (!updatedPost) {
+        return res.status(404).send('수정할 게시글 정보가 없습니다.');
       }
 
-      if (!postUser || !userId) {
-        throw new Error('스토리 수정 권한이 없습니다.');
-      }
-
-      // Compare the postUser.userInfo with userId using toString() and strict equality
-      const { title, content } = req.body;
-      if (postUser.userInfo.toString() === userId) {
-        const post = await ForestService.updatePost({
-          forestId,
-          title,
-          content,
-        });
-
-        const result = await ForestService.populateForestPost(post, 'userInfo');
-        return res.status(200).send(result);
-      } else {
-        throw new Error('스토리 수정 권한이 없습니다.');
-      }
+      return res.status(200).send(updatedPost);
     } catch (error) {
       next(error);
     }
@@ -212,9 +176,6 @@ class ForestController {
 
   static async deletePost(req, res, next) {
     try {
-      console.log('Request Params:', req.params); // 로그 추가
-      console.log('Request Body:', req.body); // 로그 추가
-
       const forestId = req.params.id;
       const userId = req.currentUserId; // 로그인한 사용자의 ID
       const postUser = await ForestService.readForestDetail({ forestId });
@@ -245,10 +206,41 @@ class ForestController {
         throw new Error('스토리를 찾을 수 없습니다');
       }
 
-      const result = await ForestService.populateForestPost(
+      // const result = await ForestService.populateForestPost(
+      //   forestInfo,
+      //   'userInfo',
+      // );
+
+      const result = await ForestService.populateForestInfo(
         forestInfo,
         'userInfo',
+        'profileImg',
       );
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async getUserPosts(req, res, next) {
+    try {
+      const userId = req.currentUserId; // 로그인한 사용자의 ID
+
+      const page = parseInt(req.query.page || pageDefault); // 몇 번째 페이지인지
+      const limit = pageLimit; // 한페이지에 들어갈 스토리 수
+
+      const { forests, totalPage, count } = await ForestService.findByUserPosts(
+        userId,
+        limit,
+        page,
+      );
+
+      const result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
+        forests: forests,
+      };
+
       return res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -258,15 +250,91 @@ class ForestController {
   static async getPostsByAuthorMBTI(req, res) {
     // api/forests/mbti?filter=ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP
 
-    const mbtiList = req.query.filter.split(',');
-    // const mbti = req.params.mbti; // 라우트에서 MBTI 파라미터를 가져옵니다.
-
     try {
-      console.log('mbtiList확인용 코드:', mbtiList); // 확인용 로그
-      const posts = await ForestService.findByForestMbti(mbtiList);
-      console.log('posts확인용 코드:', posts); // 확인용 로그
-      const result = await ForestService.populateForestPost(posts, 'userInfo');
-      res.json(result);
+      const mbtiList = req.query.filter.split(',');
+
+      const page = parseInt(req.query.page || pageDefault); // 몇 번째 페이지인지
+      const limit = pageLimit; // 한페이지에 들어갈 스토리 수
+      let result;
+      const { posts, totalPage, count } = await ForestService.findByForestMbti({
+        mbtiList,
+        page,
+        limit,
+      });
+
+      if (!mbtiList) {
+        throw new Error('스토리를 찾을 수 없습니다.');
+      }
+
+      result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
+        forests: posts,
+      };
+
+      return res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async getForestsByPopularity(req, res, next) {
+    try {
+      const page = parseInt(req.query.page || pageDefault);
+      const limit = pageLimit;
+
+      const { forest, totalPage, count } = await ForestService.readPopularPosts(
+        limit,
+        page,
+      );
+      const populateResult = await ForestService.populateForestPost(
+        forest,
+        'userInfo',
+      );
+
+      if (populateResult.length === 0) {
+        return res.status(200).json({ result: 'No Posts' });
+      }
+
+      const result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
+        forests: populateResult,
+      };
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getForestMBTIByPopularity(req, res, next) {
+    try {
+      const mbtiList = req.query.filter.split(',');
+
+      const page = parseInt(req.query.page || pageDefault); // 몇 번째 페이지인지
+      const limit = pageLimit; // 한페이지에 들어갈 스토리 수
+      let result;
+      const { posts, totalPage, count } =
+        await ForestService.findByForestMbtiPopular({
+          mbtiList,
+          page,
+          limit,
+        });
+
+      if (!mbtiList) {
+        throw new Error('스토리를 찾을 수 없습니다.');
+      }
+
+      result = {
+        currentPage: page,
+        totalPage: totalPage,
+        totalForestsCount: count,
+        forests: posts,
+      };
+
+      return res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

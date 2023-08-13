@@ -4,14 +4,32 @@ import { forestCommentController } from '../controllers/forestCommentController.
 
 const forestCommentRouter = Router();
 
+forestCommentRouter.put(
+  '/comments/:commentId',
+  loginRequired,
+  forestCommentController.updateForestComment,
+);
+
 forestCommentRouter.post(
-  '/forest/:forestId/comments',
+  '/:forestId/comments',
   loginRequired,
   forestCommentController.createForestComment,
 );
 
 forestCommentRouter.get(
-  '/forest/:forestId/comments/statistics',
+  '/:forestId/comments',
+  forestCommentController.readForestComment,
+);
+
+forestCommentRouter.get(
+  '/:forestId/comments/statistics',
   forestCommentController.readCommentStats,
 );
+
+forestCommentRouter.delete(
+  '/:forestId/comments/:commentId',
+  loginRequired,
+  forestCommentController.deleteForestComment,
+);
+
 export { forestCommentRouter };

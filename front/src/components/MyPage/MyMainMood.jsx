@@ -9,7 +9,7 @@ const MyMainMood = ({ posts }) => {
 	useEffect(() => {
 		const moodFrequency = {};
 
-		posts.forEach((post) => {
+		posts?.forEach((post) => {
 			if (post.mood in moodFrequency) {
 				moodFrequency[post.mood] += 1;
 			} else {
@@ -27,18 +27,25 @@ const MyMainMood = ({ posts }) => {
 
 	const currentMonth = moment().format('M');
 	return (
-		<div className="relative block p-4 pb-5 bg-slate-50 border border-gray-200 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col items-center justify-center">
+		<div className="relative block p-4 pb-5 bg-slate-50 border border-gray-200 rounded-lg hover:bg-gray-100flex flex-col items-center justify-center">
 			<InformationCircleIcon
 				data-tooltip-id="tooltip"
 				data-tooltip-content="이번 달에 가장 많이 느낀 감정이에요."
 				className="absolute top-3 right-3 h-5 w-5 text-slate-400"
 			/>{' '}
-			<h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+			<h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 text-center">
 				{currentMonth}월의 주요 감정
 			</h5>
-			<p className="text-7xl text-gray-700 dark:text-gray-400">
-				{textToIcon[mainMood]}
-			</p>
+			{!posts ? (
+				<p className="px-10 py-12 text-center text-sm text-gray-600">
+					아직 스토리를 쓰지 않았습니다. <br />
+					스토리를 쓰고 나의 주요 감정을 확인해보세요.
+				</p>
+			) : (
+				<p className="text-7xl text-gray-700 text-center">
+					{textToIcon[mainMood]}
+				</p>
+			)}
 		</div>
 	);
 };

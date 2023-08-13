@@ -3,10 +3,12 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 import { generateRandomString } from '../utills/emailAuth.js';
+import smtpTransport from '../utills/emailAuth.js';
 
 class userService {
   static async createUser({
     profileImg,
+    mbtiImg,
     email,
     password,
     mbti,
@@ -22,6 +24,7 @@ class userService {
     }
 
     let hashedPassword;
+
     // 비밀번호 해쉬화 (비밀번호가 제공된 경우에만 수행)
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
@@ -29,6 +32,7 @@ class userService {
 
     const newUser = {
       profileImg,
+      mbtiImg,
       email,
       password: isGoogleLogin ? password : hashedPassword,
       mbti,
@@ -41,11 +45,43 @@ class userService {
     return createdNewUser;
   }
 
-  // 이메일 인증코드 생성
-  static async createAuthString() {
+  // 이메일 인증코드 전송
+  static async sendAuthEmail({ email }) {
+    // 이메일 중복확인
+    const isDuplicated = await User.findByEmail({ email });
+    if (isDuplicated) {
+      const state = 'Duplicated User';
+      const message = '이미 가입내역이 존재하는 이메일입니다.';
+      return { state, message };
+    }
+
+    // 인증코드 생성
     const string = generateRandomString(10);
     const createdString = await User.createAuthString({ string });
-    return createdString.authString;
+    const emailString = createdString.authString;
+
+    const mailOptions = {
+      from: '담채',
+      to: email,
+      subject: '[담채] 이메일 확인 인증코드 안내',
+      text: `인증요청 이메일 [${email}] \n
+            아래 코드를 인증코드란에 입력해주세요.\n
+            인증코드: ${emailString}\n
+            해당 코드는 3분 후에 만료됩니다.`,
+    };
+
+    // 전송
+    try {
+      await smtpTransport.sendMail(mailOptions);
+
+      const state = 'Success';
+      const message = `${email}로 보내는 인증메일 전송에 성공했습니다.`;
+      return { state, message };
+    } catch (error) {
+      const state = 'Fail';
+      const message = `${email}로 보내는 인증메일 전송에 실패하였습니다.`;
+      return { state, message };
+    }
   }
 
   // 이메일 인증코드 확인
@@ -88,7 +124,8 @@ class userService {
     const token = jwt.sign({ userId: user.id }, secretKey);
 
     // 반환할 loginUser 객체를 위한 변수 설정
-    const { id, mbti, nickname, isOut } = user;
+    const { id, mbti, nickname, isGoogleLogin, mbtiImg, profileImg, isOut } =
+      user;
 
     const loginUser = {
       token,
@@ -96,6 +133,9 @@ class userService {
       email,
       mbti,
       nickname,
+      isGoogleLogin,
+      mbtiImg,
+      profileImg,
       isOut,
       errorMessage: null,
     };
@@ -135,9 +175,25 @@ class userService {
       user = await User.update({ userId, fieldToUpdate, newValue });
     }
 
-    if (toUpdate.profileImg) {
+    if (toUpdate.profileImg && toUpdate.mbtiImg == null) {
       const fieldToUpdate = 'profileImg';
       const newValue = toUpdate.profileImg;
+      user = await User.update({
+        userId,
+        fieldToUpdate: 'mbtiImg',
+        newValue: null,
+      });
+      user = await User.update({ userId, fieldToUpdate, newValue });
+    }
+
+    if (toUpdate.mbtiImg && toUpdate.profileImg == null) {
+      const fieldToUpdate = 'mbtiImg';
+      const newValue = toUpdate.mbtiImg;
+      user = await User.update({
+        userId,
+        fieldToUpdate: 'profileImg',
+        newValue: null,
+      });
       user = await User.update({ userId, fieldToUpdate, newValue });
     }
 
@@ -203,7 +259,7 @@ class userService {
 
     if (!user.isGoogleLogin) {
       const errorMessage =
-        '이메일 로그인으로 진행하세요. Google 로그인 계정이 아닙니다.';
+        '일반 로그인으로 진행하세요. 이미 이 주소로 일반 회원가입을 진행하였습니다.';
       return { errorMessage };
     }
 
@@ -231,20 +287,28 @@ class userService {
 
     const secretKey = process.env.JWT_SECRET_KEY;
     const token = jwt.sign({ userId: user.id }, secretKey);
-
-    const { id, mbti, nickname, isOut } = user;
+    const { id, mbti, nickname, isOut, profileImg, mbtiImg } = user;
 
     const loginUser = {
       token,
       id,
       email,
       mbti,
+      profileImg,
+      mbtiImg,
       nickname,
       isOut,
       errorMessage: null,
     };
 
     return loginUser;
+  }
+
+  static async populateUserProfile(user, options) {
+    const { path, select } = options;
+    const field = { path: path, select: select };
+    const result = await User.populateUserImg(user, field);
+    return result;
   }
 }
 

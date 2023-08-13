@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { postApi } from '../services/api';
-import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const useUserStore = create((set) => {
 	const initialUserData = {
@@ -9,6 +9,8 @@ const useUserStore = create((set) => {
 		nickname: '',
 		mbti: '',
 		profileImg: '',
+		mbtiImg: '',
+		tempMbtiImg: '',
 		isGoogleLogin: false,
 		isLoggedIn: Boolean(localStorage.getItem('accessToken')),
 	};
@@ -24,7 +26,19 @@ const useUserStore = create((set) => {
 	};
 
 	const updateUserData = (updatedUserData) => {
-		const newUserData = { ...userData, ...updatedUserData };
+		const newUserData = {
+			...JSON.parse(localStorage.getItem('userData')),
+			...updatedUserData,
+		};
+
+		if (updatedUserData.mbtiImg === null) {
+			newUserData.mbtiImg = null;
+		}
+
+		if (updatedUserData.profileImg === null) {
+			newUserData.profileImg = null;
+		}
+
 		saveUserDataToLocalStorage(newUserData);
 		set(newUserData);
 	};
@@ -36,6 +50,8 @@ const useUserStore = create((set) => {
 		setNickname: (nickname) => set({ nickname }),
 		setMbti: (mbti) => set({ mbti }),
 		setProfileImg: (profileImg) => set({ profileImg }),
+		setMbtiImg: (mbtiImg) => set({ mbtiImg }),
+		setTempMbtiImg: (tempMbtiImg) => set({ tempMbtiImg }),
 		setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 
 		actions: {
@@ -43,18 +59,20 @@ const useUserStore = create((set) => {
 				const response = await postApi('auth/login', user);
 				const jwtToken = response.data.token;
 				localStorage.setItem('accessToken', jwtToken);
-
 				const userData = {
 					isLoggedIn: true,
 					id: response.data.id,
 					email: response.data.email,
 					nickname: response.data.nickname,
 					mbti: response.data.mbti,
+					profileImg: response.data.profileImg?.path,
+					mbtiImg: response.data.mbtiImg,
 				};
-
 				localStorage.setItem('userData', JSON.stringify(userData));
+				userData.id = response.data.id;
 
 				set(userData);
+
 			},
 
 			register: async (user) => {
@@ -65,7 +83,6 @@ const useUserStore = create((set) => {
 				await postApi('auth/googleRegister', user);
 				const response = await postApi('auth/googleLogin', user);
 				const jwtToken = response.data.token;
-
 				localStorage.setItem('accessToken', jwtToken);
 
 				const userData = {
@@ -74,13 +91,14 @@ const useUserStore = create((set) => {
 					email: response.data.email,
 					nickname: response.data.nickname,
 					mbti: response.data.mbti,
+					profileImg: response.data.profileImg?.path,
+					mbtiImg: response.data.mbtiImg,
 					isGoogleLogin: true,
 				};
-
-				// Save the user data in local storage
 				localStorage.setItem('userData', JSON.stringify(userData));
-
 				set(userData);
+				
+				return userData.mbti !== '미설정' ? '/' : '/infoChange';
 			},
 
 			logout: () => {
@@ -95,7 +113,6 @@ const useUserStore = create((set) => {
 					isGoogleLogin: false,
 					isLoggedIn: false,
 				});
-				toast.success('로그아웃 하였습니다.');
 			},
 
 			infoChange: (updatedUserData) => {
@@ -109,6 +126,8 @@ export const useUserActions = () => useUserStore((state) => state.actions);
 export const useIsLoggedIn = () => useUserStore((state) => state.isLoggedIn);
 export const useUserId = () => useUserStore((state) => state.id);
 export const useUserProfileImg = () =>
-	useUserStore((state) => state.profileImg);
+	useUserStore((state) =>
+		state.profileImg ? state.profileImg : state.mbtiImg,
+	);
 
 export default useUserStore;

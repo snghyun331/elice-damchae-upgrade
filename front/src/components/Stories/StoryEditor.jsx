@@ -4,6 +4,7 @@ import useStoryStore from '../../store/useStoryStore';
 import { postApi } from '../../services/api';
 import RadioOption from '../Global/RadioOption';
 import useImageUpload from '../../hooks/useImageUpload';
+import toast from 'react-hot-toast';
 
 const StoryEditor = () => {
 	const {
@@ -24,8 +25,6 @@ const StoryEditor = () => {
 	const [preview, setPreview] = useState('');
 	const [selectedOption, setSelectedOption] = useState('');
 
-	console.log(selectedOption);
-
 	const handleThumbnailUpload = async (e) => {
 		e.preventDefault();
 		const file = e.target.files[0];
@@ -37,7 +36,6 @@ const StoryEditor = () => {
 		try {
 			const response = await postApi('stories/recommend', { content });
 
-			console.log(response);
 			setMood(response.data.mood);
 			setMusic(response.data.music);
 			setPhrase(response.data.phrase);
@@ -50,15 +48,20 @@ const StoryEditor = () => {
 		const body = editorRef.current?.getInstance().getHTML() || '';
 		setContent(body);
 		try {
-			const response = await postApi('image/stable', { content });
-			console.log(response);
-			setStableThumbnail(response.data.path);
+			const response = await toast.promise(
+				postApi('image/stable', { content }),
+				{
+					loading: <b>이미지를 생성하고 있습니다.</b>,
+					success: <b>이미지 생성이 완료되었습니다.</b>,
+					error: <b>이미지 생성에 실패하였습니다.</b>,
+				},
+			);
+
+			setStableThumbnail(response.data);
 		} catch (error) {
 			console.log(error);
 		}
 	};
-
-	//TODO: 로딩중 걸기
 
 	const editorRef = useRef();
 	const fileRef = useRef();
@@ -72,22 +75,19 @@ const StoryEditor = () => {
 
 	return (
 		<>
-			<label className="block font-semibold text-gray-900 dark:text-white -mb-3">
-				제목
-			</label>
+			<label className="block font-semibold text-gray-900 -mb-3">제목</label>
 			<input
-				className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 				onChange={(e) => {
 					setTitle(e.target.value);
 				}}
 				type="text"
 				id="title"
 				value={title}
+				maxLength={50}
 			/>
 
-			<label className="block font-semibold text-gray-900 dark:text-white">
-				본문
-			</label>
+			<label className="block font-semibold text-gray-900">본문</label>
 
 			<div>
 				<Editor
@@ -120,21 +120,19 @@ const StoryEditor = () => {
 				</div>
 			</div>
 			<div className="flex flex-col space-y-2">
-				<label className="block font-semibold text-gray-900 dark:text-white">
-					썸네일 선택
-				</label>
+				<label className="block font-semibold text-gray-900">썸네일 선택</label>
 				<div className="flex flex-row space-x-2 mb-5">
 					<div className="w-1/2 px-3 pr-5 border-r">
 						<h3 className="text-center mb-2 text-sm">
 							{' '}
-							<span className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+							<span className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full">
 								직접 업로드
 							</span>
 						</h3>
 
 						<div className="h-1/5 items-end">
 							<input
-								className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5"
 								id="file_input"
 								type="file"
 								ref={fileRef}
@@ -190,7 +188,7 @@ const StoryEditor = () => {
 							<button
 								onClick={generateImage}
 								disabled={content?.length <= 16}
-								className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+								className="w-full h-10 bg-blue-400 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
 							>
 								이미지 생성하기
 							</button>
@@ -217,7 +215,7 @@ const StoryEditor = () => {
 												? 'border-2 border-blue-600 rounded'
 												: ''
 										}`}
-										src={stableThumbnail}
+										src={stableThumbnail.path}
 										alt="AI로 생성된 이미지"
 									/>
 								</div>
@@ -234,14 +232,14 @@ const StoryEditor = () => {
 					</div>
 				</div>
 				{loading && <div>이미지 업로드 중...</div>}
-				<label className="block font-semibold text-gray-900 dark:text-white pt-3">
+				<label className="block font-semibold text-gray-900 pt-3">
 					감정 분석
 				</label>
 				<div className="relative">
 					<button
 						onClick={recommend}
 						disabled={content?.length <= 16}
-						className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+						className="w-full h-10 bg-blue-400 hover:bg-blue-700 disabled:bg-neutral-300 text-white font-medium rounded-full text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
 					>
 						감정 분석하고 음악 추천받기
 					</button>
