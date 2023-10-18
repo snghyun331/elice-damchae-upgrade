@@ -1,0 +1,20 @@
+version: '3'
+services:
+  backapp:
+    build:
+      context: "./back"
+      dockerfile: Dockerfile
+    container_name: "backapp"
+    working_dir: "/app/back"
+    ports:
+      - "3000:3000"
+    links:
+      - "frontapp"
+  frontapp:
+    build:
+      context: "./front"
+      dockerfile: Dockerfile
+    container_name: "frontapp"
+    working_dir: "/app/front"
+    ports:
+      - "5173:5173"
