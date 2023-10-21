@@ -21,10 +21,20 @@ services:
     links:
       - "kobert"
   kobert:
-    image: "snghyun/kobert2"
+    image: "snghyun/ai2"
     container_name: "kobert"
     volumes:
       - ./back:/app/back
     command: python /app/back/src/ai/app.py
     ports:
       - "5000:5000"
+    links: 
+      - "stable"
+  stable:
+    image: "snghyun/ai2"
+    container_name: "stable"
+    volumes:
+      - ./back:/app/back
+    command: python /app/back/src/ai/app3.py
+    ports:
+      - "5002:5002"
