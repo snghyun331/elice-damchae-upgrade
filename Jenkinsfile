@@ -37,7 +37,7 @@ pipeline{
                 script{
                     // elice-damchae-upgrade 폴더로 이동
                     dir('elice-damchae-upgrade') { 
-                        sh 'docker-compose build' 
+                        sh 'docker-compose up -d --build' 
                     }
 
                 }
