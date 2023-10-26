@@ -3,12 +3,9 @@ def services = [
     'frontapp'
 ]
 
-
-
 pipeline{
     agent any
     environment {
-        GOOGLE_CLIENT_ID = credentials('google_client_id')
         GOOGLE_CLIENT_ID = credentials('google_client_id')
         SMTP_SERVICE = 'gmail'
         SMTP_USER = 'little8867@gmail.com'
@@ -22,24 +19,25 @@ pipeline{
         VITE_SERVER_HOST = credentials('vite_server_host')
         S3_ACCESS_KEY_ID = credentials('s3_access_key_id')
         S3_SECRET_ACCESS_KEY = credentials('s3_secret_access_key')
-        S3_BUCKET_NAME = 'damchae'
+        // S3_BUCKET_NAME = 'damchae'
         S3_REGION = 'ap-northeast-2'
     }
     stages{
-        stage("Checkout") {
+        stage('Git clone') {
             steps{
-                echo "Pulling Repository................."
+                echo 'Cloging dev.................'
                 checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/snghyun331/elice-damchae-upgrade']])
             }
         }
-        
         stage('Deleting latest containers and images') {
             steps{
+                echo 'Deleting .env file...'
+                sh 'rm -f .env || true'
                 script{
                     for (service in services) {
-                        echo "Deleting latest containers for ${service}............."
-                        sh "docker kill ${service} || true"  // 컨테이너가 없을 경우 에러 무시
-                        sh "docker rm ${service} || true"
+                        echo 'Deleting latest containers for ${service}.............'
+                        sh 'docker kill ${service} || true'  // 컨테이너가 없을 경우 에러 무시
+                        sh 'docker rm ${service} || true'    
                     }
                 }
                 
@@ -47,30 +45,30 @@ pipeline{
                 sh 'docker rmi -f $(docker images -q --filter "reference=snghyun/*") || true'
             }
         }
-
-        stage('Build Docker images And Delploy') {
-            steps{
-                script{
-                    echo "inserting env variables......................"
-                        sh '''
-                            touch .env
-                            echo "GOOGLE_CLIENT_ID = ${env.GOOGLE_CLIENT_ID}" >> .env
-                            echo "SMTP_SERVICE = ${env.SMTP_SERVICE}" >> .env
-                            echo "SMTP_USER = ${env.SMTP_USER}" >> .env
-                            echo "JWT_SECRET_KEY = ${env.JWT_SECRET_KEY}" >> .env
-                            echo "SMTP_PASSWORD = ${env.SMTP_PASSWORD}" >> .env
-                            echo "MONGODB_URL = ${env.MONGODB_URL}" >> .env
-                            echo "SENTIMENT_PREDICT_FLASK_SERVER_URL = ${env.SENTIMENT_PREDICT_FLASK_SERVER_URL}" >> .env
-                            echo "STABLE_DIFFUSION_FLASK_SERVER_URL = ${env.STABLE_DIFFUSION_FLASK_SERVER_URL}" >> .env
-                            echo "SERVER_PORT = ${env.SERVER_PORT}" >> .env
-                            echo "VITE_GOOGLE_CLIENT_ID = ${env.VITE_GOOGLE_CLIENT_ID}" >> .env
-                            echo "VITE_SERVER_HOST = ${env.VITE_SERVER_HOST}" >> .env
-                            echo "VITE_GOOGLE_CLIENT_ID = ${env.VITE_GOOGLE_CLIENT_ID}" >> .env
-                            echo "S3_ACCESS_KEY_ID = ${env.S3_ACCESS_KEY_ID}" >> .env
-                            echo "S3_BUCKET_NAME = ${env.S3_BUCKET_NAME}" >> .env
-                            echo "S3_REGION = ${env.S3_REGION}" >> .env              
-                            '''
-                        sh 'docker-compose up -d --build' 
+        
+        stage('Build Docker images And Deploy') {
+            steps {
+                script {
+                    dir('elice-damchae-upgrade') {
+                        echo "inserting env variables......................"
+                    sh '''
+                        echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" > .env
+                        echo "SMTP_SERVICE=${SMTP_SERVICE}" >> .env
+                        echo "SMTP_USER=${SMTP_USER}" >> .env
+                        echo "JWT_SECRET_KEY=${JWT_SECRET_KEY}" >> .env
+                        echo "SMTP_PASSWORD=${SMTP_PASSWORD}" >> .env
+                        echo "MONGODB_URL=${MONGODB_URL}" >> .env
+                        echo "SENTIMENT_PREDICT_FLASK_SERVER_URL=${SENTIMENT_PREDICT_FLASK_SERVER_URL}" >> .env
+                        echo "STABLE_DIFFUSION_FLASK_SERVER_URL=${STABLE_DIFFUSION_FLASK_SERVER_URL}" >> .env
+                        echo "SERVER_PORT=${SERVER_PORT}" >> .env
+                        echo "VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}" >> .env
+                        echo "VITE_SERVER_HOST=${VITE_SERVER_HOST}" >> .env
+                        echo "S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}" >> .env
+                        echo "S3_REGION=${S3_REGION}" >> .env
+                        '''
+                    sh 'docker-compose up -d --build' 
+                    }
+                    
                 }
             }
         }
@@ -97,11 +95,9 @@ pipeline{
                 }   
             }
         }
+
     }
 }
 
-
-
-
-
+                    
 
