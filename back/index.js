@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import { ALTERNATIVE_SERVER_PORT } from './src/utills/constant.js';
 
 const PORT = process.env.SERVER_PORT || ALTERNATIVE_SERVER_PORT;
-const DB_URL = process.env.MONGODB_URL || process.env.MONGODB_ALTERNATIVE_URL;
+const DB_URL = process.env.MONGODB_URL;
 
 mongoose.connect(DB_URL);
 
