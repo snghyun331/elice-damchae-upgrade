@@ -14,14 +14,15 @@ pipeline{
         JWT_SECRET_KEY = credentials('jwt_secret_key')
         MONGODB_ALTERNATIVE_URL = credentials('mongodb_alternative_url')
         MONGODB_URL = credentials('mongodb_url')
-        S3_BUCKET_NAME = 'damchae'
-        S3_REGION = 'ap-northeast-2'
         SENTIMENT_PREDICT_FLASK_SERVER_URL = credentials('sentiment_predict_flask_server_url')
         STABLE_DIFFUSION_FLASK_SERVER_URL = credentials('stable_diffusion_flask_server_url')
         SERVER_PORT = 3000
         VITE_GOOGLE_CLIENT_ID = credentials('vite_google_client_id')
         VITE_SERVER_HOST = credentials('vite_server_host')
-        
+        S3_ACCESS_KEY_ID = credentials('s3_access_key_id')
+        S3_SECRET_ACCESS_KEY = credentials('s3_secret_access_key')
+        S3_BUCKET_NAME = 'damchae'
+        S3_REGION = 'ap-northeast-2'
     }
     stages{
         stage('Checkout') {
@@ -31,14 +32,30 @@ pipeline{
             }
         }
         
-        stage('Build Docker images') {
+        stage('Deleting latest containers and images') {
             steps{
-                echo "Building docker images............."
+                script{
+                    for (service in services) {
+                        echo 'Deleting latest containers for ${service}.............'
+                        sh 'docker kill ${service}'
+                        sh 'docker rm ${service}'
+                    }
+                }
+                
+                echo 'Deleting latest images............'
+                sh 'docker rmi -f $(docker images -q --filter "reference=snghyun/*")'
+            }
+        }
+
+        stage('Build Docker images And Delploy') {
+            steps{
+                echo "Building &  Deploying docker images............."
                 script{
                     // elice-damchae-upgrade 폴더로 이동
-                    dir('elice-damchae-upgrade') { 
-                        sh 'docker-compose up -d --build' 
-                    }
+                    // dir('elice-damchae-upgrade') { 
+                    //     sh 'docker-compose up -d --build' 
+                    // }
+                    sh 'docker-compose up -d --build' 
 
                 }
             }
@@ -54,13 +71,10 @@ pipeline{
                           withCredentials([string(credentialsId: 'docker_pwd', variable: 'docker_hub_pwd')]) {
                               def imageName = "damchae1_${service.toLowerCase()}:latest"
                               def imageTag = "snghyun/damchae_pipeline_${service.toLowerCase()}:${BUILD_NUMBER}"
-                              
                               // 이미지 태깅
                               sh "docker tag ${imageName} ${imageTag}"
-                              
                               // Hub에 로그인
                               sh "docker login -u snghyun331@gmail.com -p ${docker_hub_pwd}"
-                              
                               // 이미지를 허브로 푸쉬
                               sh "docker push ${imageTag}"
                             }
