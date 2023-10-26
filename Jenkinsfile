@@ -21,10 +21,6 @@ def S3_REGION = 'ap-northeast-2'
 
 pipeline{
     agent any
-    
-    environment {
-        
-    }
     stages{
         stage('Checkout') {
             steps{
