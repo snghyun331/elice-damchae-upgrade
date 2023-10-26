@@ -37,13 +37,13 @@ pipeline{
                 script{
                     for (service in services) {
                         echo 'Deleting latest containers for ${service}.............'
-                        sh 'docker kill ${service}'
-                        sh 'docker rm ${service}'
+                        sh 'docker kill ${service} || true'  // 컨테이너가 없을 경우 에러 무시
+                        sh 'docker rm ${service} || true'    
                     }
                 }
                 
                 echo 'Deleting latest images............'
-                sh 'docker rmi -f $(docker images -q --filter "reference=snghyun/*")'
+                sh 'docker rmi -f $(docker images -q --filter "reference=snghyun/*") || true'
             }
         }
 
