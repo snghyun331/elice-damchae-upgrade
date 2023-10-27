@@ -55,7 +55,7 @@ export const s3 = new S3Client({
 export const uploadS3 = multer({
   storage: multerS3({
     s3,
-    bucket: process.env.S3_BUCKET_NAME,
+    bucket: 'damchae',
     acl: 'public-read', // 이미지를 public으로 설정
     contentDisposition: 'inline', // 브라우저 상에서 이미지 바로 띄우기
     contentType: multerS3.AUTO_CONTENT_TYPE,
