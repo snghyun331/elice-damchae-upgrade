@@ -19,20 +19,23 @@ pipeline{
         VITE_SERVER_HOST = credentials('vite_server_host')
         S3_ACCESS_KEY_ID = credentials('s3_access_key_id')
         S3_SECRET_ACCESS_KEY = credentials('s3_secret_access_key')
-        // S3_BUCKET_NAME = 'damchae'
+        S3_BUCKET_NAME = 'damchae'
         S3_REGION = 'ap-northeast-2'
     }
     stages{
-        stage('Git clone') {
+        stage('Checkout') {
             steps{
-                echo 'Cloging dev.................'
+                echo 'Cloning dev.................'
                 checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/snghyun331/elice-damchae-upgrade']])
+                // echo "Git Checkout 위치: ${env.WORKSPACE}" 
+                // sh 'ls -R' 
             }
         }
         stage('Deleting latest containers and images') {
             steps{
-                echo 'Deleting .env file...'
-                sh 'rm -f .env || true'
+                echo 'Deleting .env file......'
+                sh 'rm -f ./back/.env || true'
+                sh 'rm -f ./front/.env || true'
                 script{
                     for (service in services) {
                         echo 'Deleting latest containers for ${service}.............'
@@ -49,27 +52,33 @@ pipeline{
         stage('Build Docker images And Deploy') {
             steps {
                 script {
-                    dir('elice-damchae-upgrade') {
-                        echo "inserting env variables......................"
-                    sh '''
-                        echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" > .env
-                        echo "SMTP_SERVICE=${SMTP_SERVICE}" >> .env
-                        echo "SMTP_USER=${SMTP_USER}" >> .env
-                        echo "JWT_SECRET_KEY=${JWT_SECRET_KEY}" >> .env
-                        echo "SMTP_PASSWORD=${SMTP_PASSWORD}" >> .env
-                        echo "MONGODB_URL=${MONGODB_URL}" >> .env
-                        echo "SENTIMENT_PREDICT_FLASK_SERVER_URL=${SENTIMENT_PREDICT_FLASK_SERVER_URL}" >> .env
-                        echo "STABLE_DIFFUSION_FLASK_SERVER_URL=${STABLE_DIFFUSION_FLASK_SERVER_URL}" >> .env
-                        echo "SERVER_PORT=${SERVER_PORT}" >> .env
-                        echo "VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}" >> .env
-                        echo "VITE_SERVER_HOST=${VITE_SERVER_HOST}" >> .env
-                        echo "S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}" >> .env
-                        echo "S3_REGION=${S3_REGION}" >> .env
-                        '''
-                    sh 'docker-compose up -d --build' 
+                    echo "inserting env variables for back............"
+                    dir('./back') {
+                        sh '''
+                            echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" > .env
+                            echo "SMTP_SERVICE=${SMTP_SERVICE}" >> .env
+                            echo "SMTP_USER=${SMTP_USER}" >> .env
+                            echo "JWT_SECRET_KEY=${JWT_SECRET_KEY}" >> .env
+                            echo "SMTP_PASSWORD=${SMTP_PASSWORD}" >> .env
+                            echo "MONGODB_URL=${MONGODB_URL}" >> .env
+                            echo "SENTIMENT_PREDICT_FLASK_SERVER_URL=${SENTIMENT_PREDICT_FLASK_SERVER_URL}" >> .env
+                            echo "STABLE_DIFFUSION_FLASK_SERVER_URL=${STABLE_DIFFUSION_FLASK_SERVER_URL}" >> .env
+                            echo "SERVER_PORT=${SERVER_PORT}" >> .env
+                            echo "S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}" >> .env
+                            echo "S3_BUCKET_NAME=${S3_BUCKET_NAME}" >> .env
+                            echo "S3_REGION=${S3_REGION}" >> .env
+                            '''
                     }
-                    
+                    echo "inserting env variables for front............"
+                    dir('./front') {
+                        sh '''
+                        echo "VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}" > .env
+                        echo "VITE_SERVER_HOST=${VITE_SERVER_HOST}" >> .env
+                        '''
+                    }
                 }
+                // sh 'find .' 
+                sh 'docker-compose up -d --build' 
             }
         }
         
@@ -95,7 +104,6 @@ pipeline{
                 }   
             }
         }
-
     }
 }
 
