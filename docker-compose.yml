@@ -33,7 +33,7 @@ services:
     container_name: 'kobert'
     volumes:
       - ./back:/app/back
-    command: python app/back/src/ai/app.py
+    command: sh -c "pwd"
     ports:
       - '5000:5000'
     links:
