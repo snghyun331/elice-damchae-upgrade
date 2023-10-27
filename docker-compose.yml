@@ -2,39 +2,40 @@ version: '3'
 services:
   backapp:
     build:
-      context: "./back"
+      context: './back'
       dockerfile: Dockerfile
-    container_name: "backapp"
-    working_dir: "/app/back"
+    container_name: 'backapp'
+    working_dir: '/app/back'
     ports:
-      - "3000:3000"
+      - '3000:3000'
     links:
-      - "frontapp"
+      - 'frontapp'
   frontapp:
     build:
-      context: "./front"
+      context: './front'
       dockerfile: Dockerfile
-    container_name: "frontapp"
-    working_dir: "/app/front"
+    container_name: 'frontapp'
+    working_dir: '/app/front'
     ports:
-      - "5173:5173"
+      - '5173:5173'
     links:
-      - "kobert"
+      - 'kobert'
   kobert:
-    image: "snghyun/ai2"
-    container_name: "kobert"
+    image: 'snghyun/ai2'
+    container_name: 'kobert'
     volumes:
       - ./back:/app/back
-    command: python /app/back/src/ai/app.py
+    # command: python /app/back/src/ai/app.py
+    command: python /src/ai/app.py
     ports:
-      - "5000:5000"
-    links: 
-      - "stable"
+      - '5000:5000'
+    links:
+      - 'stable'
   stable:
-    image: "snghyun/ai2"
-    container_name: "stable"
+    image: 'snghyun/ai2'
+    container_name: 'stable'
     volumes:
       - ./back:/app/back
     command: python /app/back/src/ai/app3.py
     ports:
-      - "5002:5002"
+      - '5002:5002'
