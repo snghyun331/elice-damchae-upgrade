@@ -33,7 +33,7 @@ services:
     container_name: 'kobert'
     volumes:
       - ./back:/app/back
-    command: sh -c "pwd"
+    command: sh -c "pwd && ls -l"
     ports:
       - '5000:5000'
     links:
