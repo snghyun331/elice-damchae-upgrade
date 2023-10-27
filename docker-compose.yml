@@ -20,13 +20,20 @@ services:
       - '5173:5173'
     links:
       - 'kobert'
+  # kobert:
+  #   image: 'snghyun/ai2'
+  #   container_name: 'kobert'
+  #   volumes:
+  #     - ./back:/app/back
+  #   command: python /app/back/src/ai/app.py
+  #   ports:
+  #     - '5000:5000'
   kobert:
     image: 'snghyun/ai2'
     container_name: 'kobert'
     volumes:
       - ./back:/app/back
-    # command: python /app/back/src/ai/app.py
-    command: python /src/ai/app.py
+    command: sh -c "cd /app/back/src/ai && pwd && exit"
     ports:
       - '5000:5000'
     links:
