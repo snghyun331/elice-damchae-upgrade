@@ -24,7 +24,7 @@ services:
     image: 'snghyun/ai2'
     container_name: 'kobert'
     volumes:
-      - ./back:/app/back
+      - /var/jenkins_home/workspace/damchae1/back:/app/back
     command: python /app/back/src/ai/app.py
     ports:
       - '5000:5000'
