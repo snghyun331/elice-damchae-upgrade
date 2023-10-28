@@ -43,7 +43,6 @@ pipeline{
                         sh 'docker rm ${service} || true'    
                     }
                 }
-                
                 echo 'Deleting latest images............'
                 sh 'docker rmi -f $(docker images -q --filter "reference=snghyun/*") || true'
             }
@@ -77,7 +76,6 @@ pipeline{
                         '''
                     }
                 }
-                // sh 'find .' 
                 sh 'docker-compose up -d --build' 
             }
         }
