@@ -24,8 +24,8 @@ services:
     image: 'snghyun/ai2'
     container_name: 'kobert'
     volumes:
-      - ~/back:/app/back
-    command: python /app/back/src/ai/app.py
+      - ./back:/app/back
+    # command: python /app/back/src/ai/app.py
     ports:
       - '5000:5000'
   stable:
