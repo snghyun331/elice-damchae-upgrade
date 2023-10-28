@@ -25,7 +25,7 @@ services:
     container_name: 'kobert'
     volumes:
       - ./back:/app/back
-    # command: python /app/back/src/ai/app.py
+    command: python /app/back/src/ai/app.py
     ports:
       - '5000:5000'
   stable:
