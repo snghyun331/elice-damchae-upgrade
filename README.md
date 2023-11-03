@@ -92,6 +92,10 @@
 
 <img src="https://github.com/snghyun331/project-ReviewAnalysis/assets/108854903/dfabde44-cba4-4487-b45c-9136e389384d" height="75%" width="75%">
 
+### 2-1. CI/CD Pipeline
+
+<img src="https://github.com/snghyun331/imweb/assets/108854903/da71ce3c-840f-4db0-bf0c-b1e8a1ce075d" height="65%" width="65%">
+
 ## 3. 웹 서비스 페이지 구성 소개
 
 ### 1. Main Page
