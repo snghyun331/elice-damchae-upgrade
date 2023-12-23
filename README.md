@@ -2,8 +2,7 @@
 
 - 서비스명: 담채
 - 팀명: 5팀
-- ⚡ 기존 배포 주소(VM가상서버) : https://kdt-ai7-team05.elicecoding.com/
-- ⚡ CI/CD 구현이 완료된 배포 DNS주소 (AWS EC2) : http://elice07-damchae01.duckdns.org/
+- ⚡ 배포 주소: https://kdt-ai7-team05.elicecoding.com/
 
 ## 로컬환경에서 실행
 
