@@ -7,6 +7,8 @@ class ForestController {
     try {
       const { content } = req.body;
       const pureContent = content.replace(/<[^>]+>/g, ' '); // content에 html태그가 섞여오기 때문에 태그 제거하기
+      console.log(pureContent)
+      console.log(process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL)
       // flask에서 'text': pureContent 형태로 request로 들어감
       const obj = await axios.post(
         process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL,

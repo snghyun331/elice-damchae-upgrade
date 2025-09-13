@@ -44,8 +44,7 @@ const MusicVideo = ({ music, phrase, mood }) => {
 		<div className="space-y-3 p-6 border-gray-200 dark:border-gray-600">
 			{/* YouTube 영상을 여기에 표시하는 코드 추가 */}
 			<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-				{textToIcon[mood]}
-				{phrase}
+				{textToIcon[mood]} {phrase}
 			</h3>
 			<div className="justify-center">
 				<YouTube videoId={music} opts={opts} />

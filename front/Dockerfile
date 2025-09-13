@@ -1,7 +1,7 @@
 FROM node:18.14.0
 
-WORKDIR /app    
-COPY . .
+WORKDIR /front/    
+COPY . /front
 RUN yarn install
 
 EXPOSE 5173

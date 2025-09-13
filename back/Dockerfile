@@ -1,7 +1,7 @@
 FROM node:18.14.0
 
-WORKDIR /app
-COPY . .
+WORKDIR /back/
+COPY . /back
 RUN yarn install
 
 EXPOSE 3000

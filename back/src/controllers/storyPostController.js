@@ -67,6 +67,7 @@ class storyPostController {
   static async getPredict(req, res, next) {
     try {
       const { content } = req.body;
+      
       const pureContent = content.replace(/<[^>]+>/g, ' ');
       const obj = await axios.post(
         process.env.SENTIMENT_PREDICT_FLASK_SERVER_URL,
@@ -93,6 +94,7 @@ class storyPostController {
         let Music = Musics[randomIndex];
         return Music;
       };
+      
 
       const phrasePromise = storyPostModel
         .getPhraseData()
@@ -102,7 +104,9 @@ class storyPostController {
       // phrasePromise와 musicPromise를 한번에 처리
       Promise.all([phrasePromise, musicPromise])
         .then(([Phrase, Music]) => {
-          const formattedMusic = Music.slice(32);
+          console.log(Phrase)
+          console.log(Music)
+          const formattedMusic = Music
           const result = { mood: Mood, phrase: Phrase, music: formattedMusic };
           return res.status(201).json(result);
         })

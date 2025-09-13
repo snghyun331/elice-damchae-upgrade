@@ -4,21 +4,39 @@ services:
       context: './back'
       dockerfile: Dockerfile
     container_name: 'backapp'
-    working_dir: '/app/back'
+    deploy:
+      # 자원 정책
+      resources:
+        limits:
+          memory: '1G'
+        reservations:
+          cpus: '1'
+    volumes:
+      - ./back/src:/back/src
+      - ./back/.env:/back/.env
+    env_file:
+      - './back/.env'
+    environment:
+      - TZ=Asia/Seoul
     ports:
       - '3001:3000'
-    links:
-      - 'frontapp'
+
   frontapp:
     build:
       context: './front'
       dockerfile: Dockerfile
     container_name: 'frontapp'
-    working_dir: '/app/front'
+    volumes:
+      - ./front/src:/front/src
+      - ./front/public:/front/public
+      - ./front/.env:/front/.env
+    env_file:
+      - './front/.env'
+    environment:
+      - TZ=Asia/Seoul
     ports:
-      - '3002:5173'
-    links:
-      - 'kobert'
+      - '5173:5173'
+    
   kobert:
     image: 'snghyun/ai2'
     container_name: 'kobert'

@@ -23,18 +23,18 @@ class userService {
       return { errorMessage };
     }
 
-    let hashedPassword;
+    // let hashedPassword;
 
-    // 비밀번호 해쉬화 (비밀번호가 제공된 경우에만 수행)
-    if (password) {
-      hashedPassword = await bcrypt.hash(password, 10);
-    }
+    // // 비밀번호 해쉬화 (비밀번호가 제공된 경우에만 수행)
+    // if (password) {
+    //   hashedPassword = await bcrypt.hash(password, 10);
+    // }
 
     const newUser = {
       profileImg,
       mbtiImg,
       email,
-      password: isGoogleLogin ? password : hashedPassword,
+      password,
       mbti,
       nickname,
       isGoogleLogin: isGoogleLogin || false, // isGoogleLogin 값을 포함하거나 기본값으로 false 설정
@@ -109,8 +109,8 @@ class userService {
       return { errorMessage };
     } else {
       // 비밀번호 일치 여부 확인
-      const correctPasswordHash = user.password;
-      isPasswordCorrect = await bcrypt.compare(password, correctPasswordHash);
+      const correctPassword = user.password;
+      isPasswordCorrect = correctPassword === password
     }
 
     if (!isPasswordCorrect) {
